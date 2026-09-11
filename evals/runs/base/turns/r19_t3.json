@@ -1,0 +1,206 @@
+{
+ "round_id": 19,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "往回看，2025年末的时候它的市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE，Price to Earnings Ratio）\n\n[2] 可能的计算公式：  \n- 市盈率（PE） = 2025年末的公司市值 / 2025年全年的归属于母公司的净利润\n- 或：市盈率（PE） = 2025年末的每股股价 / 2025年每股收益（EPS）\n\n其中，\n- 公司市值 = 2025年末股价 × 总股本\n- 每股收益（EPS） = 2025年归母净利润 / 总股本\n['市盈率', 'PE', 'Price to Earnings Ratio', '公司市值', '每股股价', '每股收益', 'EPS', '归属于母公司的净利润', '归母净利润', '总股本']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务', '主板行情', '主板基本信息']\n['VIEW_STK_BALA_GEN', 'VIEW_CONCEPT_DAILY_QUOTE', 'STK_STOCK', 'STK_PRE_DISCLOSURE', 'ANA_STK_EXPR_IDX', 'STK_LIST_PLAN', 'VIEW_STK_INCOME_GEN_QTR', 'VIEW_STK_CASH_GEN', 'STK_COMSUB_PROFILE', 'ANA_STK_VAL_IDX', 'STK_COM_RELA_NBALA', 'STK_ATCP_LBLT']\n是否命中召回表：False\n生成查询代码\nSELECT \n    INNER_CODE AS `内部参考代码`,\n    STOCKCODE AS `股票代码`,\n    SEC_SNAME AS `股票简称`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(TCAP_1/100000000, 1) AS `总市值(亿)`,\n    ROUND(A_TCAP_1/100000000, 1) AS `A股市值(亿)`\nFROM ANA_STK_VAL_IDX\nWHERE \n    ISVALID = 1\n    AND TRD_DATE = '2025-12-31'\n    AND PE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND SEC_SNAME IS NOT NULL\n\n200\n{table:[['股票代码', '股票简称', '交易日期', '市盈率(倍)', '市净率(倍)', '总市值(亿)', 'A股市值(亿)'], ['002252', '上海莱士', '2025-12-31', '23.04', '1.29', '420.80', '420.80'], ['002253', '*ST智胜', '2025-12-31', '-23.12', '2.39', '25.40', '25.40'], ['000001', '平安银行', '2025-12-31', '5.14', '0.49', '2,214.20', '2,214.20'], ['000002', '万科A', '2025-12-31', '-0.93', '0.32', '554.80', '452.20'], ['000004', '*ST国华', '2025-12-31', '-11.94', '39.70', '14.70', '14.70'], ['000006', '深振业A', '2025-12-31', '-12.77', '2.49', '134.30', '134.30'], ['000007', '全新好', '2025-12-31', '69.95', '21.70', '39.60', '39.60'], ['000008', '神州高铁', '2025-12-31', '-17.10', '2.64', '77.40', '77.40'], ['000009', '中国宝安', '2025-12-31', '360.47', '2.52', '254.10', '254.10'], ['000010', '美丽生态', '2025-12-31', '89.89', '12.43', '40.60', '40.60'], ['000011', '深物业A', '2025-12-31', '-4.94', '1.58', '53.70', '47.60'], ['200011', '深物业B', '2025-12-31', '-1.65', '0.53', '17.90', '-'], ['200012', '南玻B', '202",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    INNER_CODE AS `内部参考代码`,\n    STOCKCODE AS `股票代码`,\n    SEC_SNAME AS `股票简称`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(TCAP_1/100000000, 1) AS `总市值(亿)`,\n    ROUND(A_TCAP_1/100000000, 1) AS `A股市值(亿)`\nFROM ANA_STK_VAL_IDX\nWHERE \n    ISVALID = 1\n    AND TRD_DATE = '2025-12-31'\n    AND PE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND SEC_SNAME IS NOT NULL",
+ "final_sql": "SELECT \n    INNER_CODE AS `内部参考代码`,\n    STOCKCODE AS `股票代码`,\n    SEC_SNAME AS `股票简称`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(TCAP_1/100000000, 1) AS `总市值(亿)`,\n    ROUND(A_TCAP_1/100000000, 1) AS `A股市值(亿)`\nFROM ANA_STK_VAL_IDX\nWHERE \n    ISVALID = 1\n    AND TRD_DATE = '2025-12-31'\n    AND PE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND SEC_SNAME IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "45.9128"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "101000001 002252 上海莱士 2025-12-31 00:00:00 23.04 1.29 420.8 420.8\n101000002 002253 *ST智胜 2025-12-31 00:00:00 -23.12 2.39 25.4 25.4\n101000003 000001 平安银行 2025-12-31 00:00:00 5.14 0.49 2214.2 2214.2\n1010",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 60.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_19_764cfbe6.3",
+  "llm_call_count": 17,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 82.9,
+  "llm_seconds_max": 10.24,
+  "selected_tables": [
+   "ANA_STK_VAL_IDX",
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "ANA_STK_QTR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_LIST_RESULT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   97490
+  ],
+  "prompt_columns_raw_len": 22495
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2852,
+   "prompt_tokens": 99370,
+   "total_tokens": 102222,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 99370,
+  "completion": 2852,
+  "total": 102222
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2852,
+   "prompt_tokens": 99370,
+   "total_tokens": 102222,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_VAL_IDX",
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "ANA_STK_QTR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_LIST_RESULT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

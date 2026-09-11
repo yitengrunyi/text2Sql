@@ -1,0 +1,127 @@
+{
+ "round_id": 30,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "那把窗口拉长到最近一年呢，平均下来大概什么收益水平？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "暂时无法回答该问题，Paipai会持续优化学习",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": null,
+ "final_sql": null,
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "33.96"
+ },
+ "exec_first": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_first": false,
+ "ex_reasons": [
+  "未生成SQL"
+ ],
+ "exec_final": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 3.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_30_a01f3abf.3",
+  "llm_call_count": 1,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 3.37,
+  "llm_seconds_max": 3.37,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 73,
+   "prompt_tokens": 3327,
+   "total_tokens": 3400,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 3327,
+  "completion": 73,
+  "total": 3400
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 73,
+   "prompt_tokens": 3327,
+   "total_tokens": 3400,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EXPR_IDX",
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": false
+ }
+}

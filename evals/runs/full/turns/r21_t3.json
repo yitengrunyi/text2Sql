@@ -1,0 +1,197 @@
+{
+ "round_id": 21,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE，Price to Earnings Ratio）\n- 指数点位（用于确认所查指数）\n- 估值水平（通常通过市盈率进行横向比较）\n\n[2] 可能的计算公式：  \n- 市盈率（PE） = 指数成分股总市值 / 指数成分股总净利润  \n- 估值高低比较 = 若 PE_中证1000 > PE_上证50，则中证1000估值更高；反之则上证50估值更高。\n\n综上，本query主要涉及“市盈率PE”这一指标，分别查询中证1000、上证50指数所有成分股的总市值与净利润，然后进行计算并横向对比。\n['中证1000指数', '上证50指数', '市盈率', 'PE', 'Price to Earnings Ratio', '指数点位', '估值水平', '市值', '净利润', '指数成分股总市值', '指数成分股总净利润', '估值高低比较', 'PE_中证1000', 'PE_上证50']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'INDX_SAMP_INFO', 'VIEW_STK_FIN_IDX', 'ANA_STK_EXPR_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.TRD_DATE AS `估值日期`,\n    a.INDX_CNAME AS `指数名称`,\n    a.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.PC, 2) AS `市现率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\nJOIN\n    GET_INDX_GEN_INFO b\n        ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.TRD_DATE = '2026-09-02'\n    AND a.INDX_CODE IN ('000016', '000852')\n    AND a.PE IS NOT NULL\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\nORDER BY\n    a.INDX_CODE ASC\n200\n{table:[['估值日期', '指数名称', '市盈率(倍)', '市净率(倍)', '市现率(倍)'], ['2026-09-02', '上证50指数', '10.64', '1.12', '2.66'], ['2026-09-02', '中证1000指数', '43.09', '2.32', '17.92']]}\n该查询的目的是获取指定日期下，中证1000指数和上证50指数的最新市盈率水平，并对两者的估值情况进行比较。本次查询对市盈率、市净率、市现率进行了四舍五入并保留两位小数。\n\n市盈率的计算方法为：市盈率等于总市值除以最近连续四个季度的净利润，即市盈率（倍）= 总市值 / 四个季度净利润。查询结果中的市盈率、市净率和市现率均为单位已经算好，在此查询中，结果直接取用了数据库中的财务指标。查询结果符合要求。\n\n本次查询从指数估值数据表和指数基本信息表提取信息，通过指数内部编码实现两表的关联，确保提取的估值数据和指数基本描述一致。筛选条件限定了需要查询的估值日期、只关注指数代码为“000016”（上证50）和“000852”（中证1000）的记录，并要求数据有效、状态为“使用”，且市盈率数据不为空。最后，结果按照指数代码的升序进行排序。查询返回了两个指数在指定日期下的最新估值水平，可以直接进行市盈率的比较。\n查询中证1000指数和上证50指数当前的最新市盈率水平，并比较两者的估值高低。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.TRD_DATE AS `估值日期`,\n    a.INDX_CNAME AS `指数名称`,\n    a.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.PC, 2) AS `市现率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\nJOIN\n    GET_INDX_GEN_INFO b\n        ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.TRD_DATE = '2026-09-02'\n    AND a.INDX_CODE IN ('000016', '000852')\n    AND a.PE IS NOT NULL\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\nORDER BY\n    a.INDX_CODE ASC",
+ "final_sql": "SELECT\n    a.TRD_DATE AS `估值日期`,\n    a.INDX_CNAME AS `指数名称`,\n    a.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.PC, 2) AS `市现率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\nJOIN\n    GET_INDX_GEN_INFO b\n        ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.TRD_DATE = '2026-09-02'\n    AND a.INDX_CODE IN ('000016', '000852')\n    AND a.PE IS NOT NULL\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\nORDER BY\n    a.INDX_CODE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "上证50指数 10.6404\n中证1000指数 43.0869"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2026-09-02 00:00:00 上证50指数 000016 10.64 1.12 2.66\n2026-09-02 00:00:00 中证1000指数 000852 43.09 2.32 17.92",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "elapsed_seconds": 144.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_21_1bd420a8.3",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 139.36,
+  "llm_seconds_max": 71.68,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   31729
+  ],
+  "prompt_columns_raw_len": 5388
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1152,
+   "prompt_tokens": 12587,
+   "total_tokens": 13739,
+   "completion_tokens_details": {
+    "reasoning_tokens": 904,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12587,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1293,
+   "prompt_tokens": 33595,
+   "total_tokens": 34888,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 46182,
+  "completion": 2445,
+  "total": 48627
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1152,
+   "prompt_tokens": 12587,
+   "total_tokens": 13739,
+   "completion_tokens_details": {
+    "reasoning_tokens": 904,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12587,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1293,
+   "prompt_tokens": 33595,
+   "total_tokens": 34888,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

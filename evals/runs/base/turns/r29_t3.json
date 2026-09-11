@@ -1,0 +1,202 @@
+{
+ "round_id": 29,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "往回看一个财年，2024年主营业务板块这块做了多少收入？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 主营业务收入（也称主营业务收入或主营收入）\n\n[2] 可能的计算公式：  \n主营业务收入 = ∑（各主营业务板块的收入）\n\n具体到2024财年：  \n2024年主营业务收入 = 2024年所有主营业务板块收入之和\n\n注：主营业务收入一般直接来自利润表（P&L）“主营业务收入/营业收入”科目，反映企业核心业务在所述财年内的总收入。\n['主营业务收入', '主营收入', '主营业务板块', '主营业务板块收入', '收入', '财年', '2024财年', '2024年主营业务收入', '利润表', 'P&L', '营业收入']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['自营业务']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '自营业务'。\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_DISTRICT', 'STK_COM_PROFILE', 'STK_LIST_RESULT', 'VW_CONCEPT_STK', 'VIEW_CONCEPT_DAILY_QUOTE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n    d.PERIODDATE AS `报告日期`,\n    p.CSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.ITEM_NAME AS `地区名称`,\n    v.CONCEPT_NAME AS `题材名称`,\n    ROUND(d.INCOME / 10000, 3) AS `主营业务收入(亿)`,\n    d.PRI_RVNU_PCT AS `占营业收入比重(%)`\nFROM STK_PRI_INCOME_DISTRICT d\nLEFT JOIN STK_COM_PROFILE p ON d.COMCODE = p.COMCODE AND p.ISVALID = 1\nLEFT JOIN VW_CONCEPT_STK v ON p.COMCODE = v.INNER_CODE AND v.CONCEPT_NAME = '自营业务' AND v.HISVALID = 1\nWHERE \n    d.ISVALID = 1\n    AND d.RPT_TYPE = '合并'\n    AND d.PERIODDATE = '2023-12-31'\n    AND d.ITEM_NAME IN ('合计', '总计')\n    AND d.INCOME IS NOT NULL\n    AND d.PRI_RVNU_PCT IS NOT NULL\nORDER BY d.INCOME DESC\n200\n{table:[['报告日期', '股票简称', '股票代码', '地区名称', '题材名称', '主营业务收入(亿)', '占营业收入比重(%)'], ['2023-12-31', '中国建筑', '601668', '合计', '-', '22,655.29', '100.00'], ['2023-12-31', '中国铁建', '601186', '合计', '-', '11,379.94', '100.00'], ['2023-12-31', '上汽集团', '600104', '合计', '-', '7,447.05', '102.55'], ['2023-12-31', '中国电建', '601669', '合计', '-', '6,060.45', '99.61'], ['2023-12-31', '江西铜业', '600362', '合计', '-', '5,218.92', '100.00'], ['2023-12-31', '绿地控股', '600606', '合计', '-', '3,549.82', '98.54'], ['2023-12-31', '陕建股份', '600248', '合计', '-', '1,798.78', '99.63'], ['2023-12-31', '中远海控', '601919', '合计', '-', '1,754.48', '100.00'], ['2023-12-31', '陕西煤业', '601225', '合计', '-', '1,708.72', '100.00'], ['2023-12-31', '华域汽车', '600741', '合计', '-', '1,595.19', '94.62'], ['2023-12-31', '南方航空', '600029', '合计', '-',",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    d.PERIODDATE AS `报告日期`,\n    p.CSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.ITEM_NAME AS `地区名称`,\n    v.CONCEPT_NAME AS `题材名称`,\n    ROUND(d.INCOME / 10000, 3) AS `主营业务收入(亿)`,\n    d.PRI_RVNU_PCT AS `占营业收入比重(%)`\nFROM STK_PRI_INCOME_DISTRICT d\nLEFT JOIN STK_COM_PROFILE p ON d.COMCODE = p.COMCODE AND p.ISVALID = 1\nLEFT JOIN VW_CONCEPT_STK v ON p.COMCODE = v.INNER_CODE AND v.CONCEPT_NAME = '自营业务' AND v.HISVALID = 1\nWHERE \n    d.ISVALID = 1\n    AND d.RPT_TYPE = '合并'\n    AND d.PERIODDATE = '2023-12-31'\n    AND d.ITEM_NAME IN ('合计', '总计')\n    AND d.INCOME IS NOT NULL\n    AND d.PRI_RVNU_PCT IS NOT NULL\nORDER BY d.INCOME DESC",
+ "final_sql": "SELECT \n    d.PERIODDATE AS `报告日期`,\n    p.CSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.ITEM_NAME AS `地区名称`,\n    v.CONCEPT_NAME AS `题材名称`,\n    ROUND(d.INCOME / 10000, 3) AS `主营业务收入(亿)`,\n    d.PRI_RVNU_PCT AS `占营业收入比重(%)`\nFROM STK_PRI_INCOME_DISTRICT d\nLEFT JOIN STK_COM_PROFILE p ON d.COMCODE = p.COMCODE AND p.ISVALID = 1\nLEFT JOIN VW_CONCEPT_STK v ON p.COMCODE = v.INNER_CODE AND v.CONCEPT_NAME = '自营业务' AND v.HISVALID = 1\nWHERE \n    d.ISVALID = 1\n    AND d.RPT_TYPE = '合并'\n    AND d.PERIODDATE = '2023-12-31'\n    AND d.ITEM_NAME IN ('合计', '总计')\n    AND d.INCOME IS NOT NULL\n    AND d.PRI_RVNU_PCT IS NOT NULL\nORDER BY d.INCOME DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "238700.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.STK_PRI_INCOME_DISTRICT' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 67.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_29_b2739f16.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 62.74,
+  "llm_seconds_max": 10.25,
+  "selected_tables": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   40860
+  ],
+  "prompt_columns_raw_len": 22622
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1536,
+   "prompt_tokens": 44323,
+   "total_tokens": 45859,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 431,
+   "total_tokens": 432,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 431,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 44754,
+  "completion": 1537,
+  "total": 46291
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1536,
+   "prompt_tokens": 44323,
+   "total_tokens": 45859,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 431,
+   "total_tokens": 432,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 431,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 10,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "特斯拉最新的市盈率是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.CSNAME LIKE '%特斯拉%' AND t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL;\n200\n{table:[['股票名称', '股票代码', '市盈率更新日期', '市盈率'], ['特斯拉', 'TSLA.US', '-', '73.27']]}\n该查询提取了特斯拉公司的最新市盈率及对应更新日期。数据关联自美股股票列表和主要技术指标信息，确保公司名称中包含“特斯拉”，并过滤掉无效或缺失数据。查询结果包含股票名称、展示代码、市盈率和市盈率数据的最新更新时间。市盈率直接使用了数据库中的现有财务指标，并对最终结果保留两位小数。查询结果能够准确反映特斯拉最新的市盈率状况，满足用户需求。\n{table:[['股票名称', '股票代码', '市盈率更新日期', '市盈率'], ['特斯拉', 'TSLA.US', '-', '73.27']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.CSNAME LIKE '%特斯拉%' AND t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL",
+ "final_sql": "SELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.CSNAME LIKE '%特斯拉%' AND t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "73.27"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "特斯拉 TSLA.US  73.27",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 25.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_10_7ddc27b2.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 24.61,
+  "llm_seconds_max": 20.64,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1912,
+   "prompt_tokens": 11595,
+   "total_tokens": 13507,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1519,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11595,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 117,
+   "prompt_tokens": 5647,
+   "total_tokens": 5764,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17242,
+  "completion": 2029,
+  "total": 19271
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1912,
+   "prompt_tokens": 11595,
+   "total_tokens": 13507,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1519,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11595,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 117,
+   "prompt_tokens": 5647,
+   "total_tokens": 5764,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

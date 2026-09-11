@@ -1,0 +1,130 @@
+{
+ "round_id": 22,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "initial": {
+  "question": "我组合里拿了中欧医疗健康混合A，先帮我看下它最新一个交易日的单位净值是多少？",
+  "judge": "numeric",
+  "gold_value": "1.9279",
+  "gold_display": "1.9279元（2026-09-02）",
+  "gold_entities": [
+   "中欧医疗健康混合A"
+  ],
+  "gold_date": null,
+  "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1",
+  "gold_tables": [
+   "FUND_NETVALUE"
+  ],
+  "labels": {
+   "difficulty": "单表",
+   "followup_type": null,
+   "route_gold": null,
+   "time_sensitivity": "relative"
+  }
+ },
+ "feedbacks": [
+  {
+   "question": "它的累计净值呢？顺便一起报一下。",
+   "judge": "numeric",
+   "gold_value": "2.1233",
+   "gold_display": "2.1233元（2026-09-02）",
+   "gold_entities": [
+    "中欧医疗健康混合A"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "指代继承",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "今年以来这只基金整体是赚是亏？按复权净值给我算个收益率出来。",
+   "judge": "numeric",
+   "gold_value": "8.69",
+   "gold_display": "+8.69%（截至2026-09-02，按复权累计净值计算，基准为上年末2025-12-31复权净值）",
+   "gold_entities": [
+    "中欧医疗健康混合A"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT ROUND(100*((SELECT RESTORED_ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1)/(SELECT RESTORED_ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' AND TRADING_DAY<'2026-01-01' ORDER BY TRADING_DAY DESC LIMIT 1)-1),2) AS ytd_pct",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "labels": {
+    "difficulty": "时间窗口",
+    "followup_type": "条件追加",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "那2025年一整年下来，它的年度收益率是多少？",
+   "judge": "numeric",
+   "gold_value": "13.07",
+   "gold_display": "+13.07%",
+   "gold_entities": [
+    "中欧医疗健康混合A"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT ROUND(YIELD*100,2) AS yield_pct FROM FUND_STATISTICS_YEAR WHERE FUND_SYMBOL='003095.OF' AND YEAR=2025",
+   "gold_tables": [
+    "FUND_STATISTICS_YEAR"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "时间漂移",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "把范围放大点，中欧基金旗下2025年收益率最高的基金是哪只？当年涨了多少？",
+   "judge": "entity",
+   "gold_value": "143.07",
+   "gold_display": "中欧数字经济混合发起A(018993.OF)，2025年度收益率+143.07%",
+   "gold_entities": [
+    "中欧数字经济混合发起A"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT s.FUND_SYMBOL, s.FUND_NAME, ROUND(s.YIELD*100,2) AS yield_pct FROM FUND_STATISTICS_YEAR s JOIN FUND_AND_COMPANY_MAPPING c ON s.FUND_SYMBOL=c.FUND_SYMBOL AND c.END_DATE IS NULL WHERE c.COMPANY_ABBR='中欧基金' AND s.YEAR=2025 ORDER BY s.YIELD DESC LIMIT 1",
+   "gold_tables": [
+    "FUND_STATISTICS_YEAR",
+    "FUND_AND_COMPANY_MAPPING"
+   ],
+   "labels": {
+    "difficulty": "多表join",
+    "followup_type": "条件追加",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "对了，最近想配点黄金，华安黄金易ETF(518880)最近一年涨了多少？",
+   "judge": "numeric",
+   "gold_value": "16.41",
+   "gold_display": "+16.41%（截至2026-09-02）",
+   "gold_entities": [
+    "华安黄金易ETF",
+    "华安黄金易(ETF)"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT ROUND(RETURN_1Y*100,2) AS ret_1y_pct FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='518880.SH' AND TYPE=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "话题切换",
+    "route_gold": "NEW_QUERY",
+    "time_sensitivity": "relative"
+   }
+  }
+ ]
+}

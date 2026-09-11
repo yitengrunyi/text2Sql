@@ -1,0 +1,173 @@
+{
+ "round_id": 7,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "其中QDII类型的ETF有多少只？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT COUNT(DISTINCT ETF_CODE) AS `QDII类型ETF总数`, DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期` FROM ETF_LABEL_INFO_CHINA WHERE HISVALID = 1 AND ETF_CODE IS NOT NULL AND IF_QDII = 1;\n200\n{table:[['QDII类型ETF总数', '统计日期'], ['147', '2026-09-03']]}\n该查询统计了当前市场范围内所有已上市且状态有效的ETF产品中，属于合格境外投资者（QDII）类型的ETF总数量。数据来源于ETF标签信息相关表，筛选条件要求产品必须处于有效状态，且仅统计有正常代码的QDII型ETF。统计时，对QDII型ETF的产品代码进行去重计数，得到当前市场有效的QDII型ETF总数，并补充显示统计日期。该查询过程中未涉及金额换算，仅为数量统计，且已满足用户关于“市场上QDII类型ETF有多少只”的需求。查询结果符合要求。\n{table:[['QDII类型ETF总数', '统计日期'], ['147', '2026-09-03']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT COUNT(DISTINCT ETF_CODE) AS `QDII类型ETF总数`, DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期` FROM ETF_LABEL_INFO_CHINA WHERE HISVALID = 1 AND ETF_CODE IS NOT NULL AND IF_QDII = 1",
+ "final_sql": "SELECT COUNT(DISTINCT ETF_CODE) AS `QDII类型ETF总数`, DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期` FROM ETF_LABEL_INFO_CHINA WHERE HISVALID = 1 AND ETF_CODE IS NOT NULL AND IF_QDII = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "285"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "147 2026-09-03",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 20.2,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_7_befd7283.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 19.35,
+  "llm_seconds_max": 14.8,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1003,
+   "prompt_tokens": 11430,
+   "total_tokens": 12433,
+   "completion_tokens_details": {
+    "reasoning_tokens": 704,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11430,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 139,
+   "prompt_tokens": 5202,
+   "total_tokens": 5341,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16632,
+  "completion": 1142,
+  "total": 17774
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1003,
+   "prompt_tokens": 11430,
+   "total_tokens": 12433,
+   "completion_tokens_details": {
+    "reasoning_tokens": 704,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11430,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 139,
+   "prompt_tokens": 5202,
+   "total_tokens": 5341,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_INFO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,207 @@
+{
+ "round_id": 12,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "那2025年年报的时候呢，前十大合计持股是多少？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：前十大股东合计持股数（或合计持股比例）\n\n[2] 可能的计算公式：  \n前十大合计持股 = ∑（前十大股东各自持股数量）  \n或  \n前十大合计持股比例 = ∑（前十大股东各自持股数量）/ 公司总股本 × 100%\n['前十大合计持股', '前十大股东合计持股数', '前十大合计持股比例', '前十大股东', '持股数量', '公司总股本', '合计持股数', '合计持股比例']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['大基金持股']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '大基金持股'。\n个股相关\n['主板股本股东', '主板基本信息']\n['VIEW_CONCEPT_DAILY_QUOTE', 'STK_SHR_STRU', 'GET_STK_SHR_CLS_DTL', 'STK_COMSUB_PROFILE', 'STK_COM_PROFILE', 'STK_LIST_RESULT']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT * FROM (\n  -- 主板+创业板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    b.COMB_SYMBOL  AS `股票代码`,\n    b.SEC_SNAME    AS `股票名称`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(MAX(a.ENDDATE), '%Y-%m-%d') AS `报告期截止日`\n  FROM GET_STK_SHR_CLS_DTL a\n  JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n  WHERE \n    a.ENDDATE = '2025-12-31'\n    AND a.ISVALID = 1\n    AND b.SEC_CODE NOT LIKE '688%'\n    AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND b.SEC_MKT_TYPE ='A股'\n  GROUP BY b.COMB_SYMBOL, b.SEC_SNAME\n\n  UNION ALL\n\n  -- 科创板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    c.SECCODE   AS `股票代码`,\n    c.SECSNAME  AS `股票名称`,\n    ROUND(c.TOT_SHR_PCT, 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(c.ENDDATE, '%Y-%m-%d') AS `报告期截止日`\n  FROM STI_MAIN_HOLDER c\n  JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n  WHERE \n    d.SEC_CODE LIKE '688%'\n    AND c.ISVALID = 1\n    AND c.ITEM = 1\n    AND c.ENDDATE = '2025-12-31'\n    AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND d.SEC_MKT_TYPE ='A股'\n) combined\nWHERE `前十大股东合计持股比例(%)` IS NOT NULL\nORDER BY `前十大股东合计持股比例(%)` DESC\n200\nMySQL Database error: (1146, \"Table 'juling.GET_SEC_CODE' doesn't exist\")\n前十大股东合计持股比例是通过将前十大股东的持股占比相加，然后取两位小数。计算公式为：前十大股东合计持股比例等于所有排名前十的股东持股比例之和。对于科创板公司，直接使用统计好的前十大股东总持股比例，并保留两位小数。在此查询中，已对结果进行了合计和四舍五入处理。\n\n该查询提供了主板、创业板和科创板上市公司在2025年年报时前十大股东合计持股比例及对应的股票代码、股票名称和报告期截止日的信息。数据来自股东持股类别明细信息表和科创板主要股东信息表，结合股票基础信息表，将公司代码与股票代码和名称关联。\n\n筛选条件包括：仅统计2025年年报（截止日期为2025年12月31日）、要求数据为有效记录，主板和创业板公司排除科创板股票代码开头为688的记录，科创板公",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT * FROM (\n  -- 主板+创业板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    b.COMB_SYMBOL  AS `股票代码`,\n    b.SEC_SNAME    AS `股票名称`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(MAX(a.ENDDATE), '%Y-%m-%d') AS `报告期截止日`\n  FROM GET_STK_SHR_CLS_DTL a\n  JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n  WHERE \n    a.ENDDATE = '2025-12-31'\n    AND a.ISVALID = 1\n    AND b.SEC_CODE NOT LIKE '688%'\n    AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND b.SEC_MKT_TYPE ='A股'\n  GROUP BY b.COMB_SYMBOL, b.SEC_SNAME\n\n  UNION ALL\n\n  -- 科创板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    c.SECCODE   AS `股票代码`,\n    c.SECSNAME  AS `股票名称`,\n    ROUND(c.TOT_SHR_PCT, 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(c.ENDDATE, '%Y-%m-%d') AS `报告期截止日`\n  FROM STI_MAIN_HOLDER c\n  JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n  WHERE \n    d.SEC_CODE LIKE '688%'\n    AND c.ISVALID = 1\n    AND c.ITEM = 1\n    AND c.ENDDATE = '2025-12-31'\n    AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND d.SEC_MKT_TYPE ='A股'\n) combined\nWHERE `前十大股东合计持股比例(%)` IS NOT NULL\nORDER BY `前十大股东合计持股比例(%)` DESC",
+ "final_sql": "SELECT * FROM (\n  -- 主板+创业板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    b.COMB_SYMBOL  AS `股票代码`,\n    b.SEC_SNAME    AS `股票名称`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(MAX(a.ENDDATE), '%Y-%m-%d') AS `报告期截止日`\n  FROM GET_STK_SHR_CLS_DTL a\n  JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n  WHERE \n    a.ENDDATE = '2025-12-31'\n    AND a.ISVALID = 1\n    AND b.SEC_CODE NOT LIKE '688%'\n    AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND b.SEC_MKT_TYPE ='A股'\n  GROUP BY b.COMB_SYMBOL, b.SEC_SNAME\n\n  UNION ALL\n\n  -- 科创板上市公司前十大股东合计持股比例（截止2025年年报）\n  SELECT \n    c.SECCODE   AS `股票代码`,\n    c.SECSNAME  AS `股票名称`,\n    ROUND(c.TOT_SHR_PCT, 2) AS `前十大股东合计持股比例(%)`,\n    DATE_FORMAT(c.ENDDATE, '%Y-%m-%d') AS `报告期截止日`\n  FROM STI_MAIN_HOLDER c\n  JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n  WHERE \n    d.SEC_CODE LIKE '688%'\n    AND c.ISVALID = 1\n    AND c.ITEM = 1\n    AND c.ENDDATE = '2025-12-31'\n    AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n    AND d.SEC_MKT_TYPE ='A股'\n) combined\nWHERE `前十大股东合计持股比例(%)` IS NOT NULL\nORDER BY `前十大股东合计持股比例(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "58.96"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'juling.GET_SEC_CODE' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 66.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_12_c9270ea8.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 70.26,
+  "llm_seconds_max": 9.41,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   49360
+  ],
+  "prompt_columns_raw_len": 20171
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1879,
+   "prompt_tokens": 51162,
+   "total_tokens": 53041,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 594,
+   "total_tokens": 595,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 594,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 51756,
+  "completion": 1880,
+  "total": 53636
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1879,
+   "prompt_tokens": 51162,
+   "total_tokens": 53041,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 594,
+   "total_tokens": 595,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 594,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

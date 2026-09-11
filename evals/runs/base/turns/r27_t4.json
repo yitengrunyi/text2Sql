@@ -1,0 +1,130 @@
+{
+ "round_id": 27,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "行，大致有数了。顺便确认一下：这些美股报表都是美元列报的吧？用的是审计后的年报口径吗？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 财报货币单位（确定为美元 USD）  \n- 财报口径（是否审计、年报/季报）  \n- 美股财务报表的主要指标，如：收入、净利润、总资产、股东权益、每股收益（EPS）等  \n\n[2] 可能的计算公式  \n- 每股收益（EPS） = 净利润 / 发行在外普通股数量  \n- 净资产收益率（ROE） = 净利润 / 平均股东权益  \n- 利润率 = 净利润 / 营业收入  \n\n补充说明：\n- 绝大多数美股财报均以美元为列报货币，遵循美国GAAP或IFRS编制。  \n- 公开年报（10-K）为审计后的年报数据，季度报表（10-Q）多数为审阅或未经审计数据。\n['美股报表', '财报货币单位', '美元', 'USD', '财报口径', '审计', '年报', '季报', '美国GAAP', 'IFRS', '年报数据', '季度报表', '审计后', '公开年报', '10-K', '10-Q', '审阅', '未经审计数据', '主要指标', '收入', '营业收入', '净利润', '总资产', '股东权益', '平均股东权益', '每股收益', 'EPS', '发行在外普通股数量', '净资产收益率', 'ROE', '利润率']\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n美股相关\n['美股基本信息', '美股财务']\n['VIEW_COM3104_Q', 'COM3104', 'COM3103', 'VIEW_COM3102_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.COMB_SYMBOL AS `股票代码`,\n    m.CSNAME AS `股票名称`,\n    r.F001D AS `报表截止日期`,\n    r.F003V AS `报表种类`,\n    r.F005V AS `货币类型`,\n    r.F004N AS `报告周期天数`,\n    r.F048N/10 AS `营业收入(亿美元)`,\n    r.F034N*10000 AS `归属于普通股东净利润(万美元)`,\n    r.F032N*10000 AS `净利润(万美元)`,\n    r.F022N AS `毛利润(百万美元)`,\n    r.F041N AS `营业利润(百万美元)`,\n    r.F018N AS `每股收益(元)`,\n    r.F015N AS `每股基本收益(百万元)`,\n    r.F016N AS `摊薄每股收益(元)`,\n    r.F017N AS `摊薄每股收益(不包含非经常损益)(元)`,\n    CASE WHEN r.F003V='FY' THEN '是' ELSE '否' END AS `是否年报`,\n    CASE WHEN r.F005V='USD' THEN '是' ELSE '否' END AS `是否美元列报`\nFROM \n    COM3103 r\n    LEFT JOIN AMERICAN_STOCK_MAIN m ON r.FIU_ID = m.FIU_ID\nWHERE\n    r.F001D IS NOT NULL\n    AND r.F003V = 'FY'\n    AND r.F005V = 'USD'\n    AND r.F048N IS NOT NULL\n    AND r.F034N IS NOT NULL\n    AND r.F032N IS NOT NULL\n    AND r.F022N IS NOT NULL\n    AND r.F041N IS NOT NULL\n    AND r.F018N IS NOT NULL\nORDER BY \n    r.F001D DESC, m.COMB_SYMBOL\n\n200\n{table:[['股票代码', '股",
+ "route_gold": "NON_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    m.COMB_SYMBOL AS `股票代码`,\n    m.CSNAME AS `股票名称`,\n    r.F001D AS `报表截止日期`,\n    r.F003V AS `报表种类`,\n    r.F005V AS `货币类型`,\n    r.F004N AS `报告周期天数`,\n    r.F048N/10 AS `营业收入(亿美元)`,\n    r.F034N*10000 AS `归属于普通股东净利润(万美元)`,\n    r.F032N*10000 AS `净利润(万美元)`,\n    r.F022N AS `毛利润(百万美元)`,\n    r.F041N AS `营业利润(百万美元)`,\n    r.F018N AS `每股收益(元)`,\n    r.F015N AS `每股基本收益(百万元)`,\n    r.F016N AS `摊薄每股收益(元)`,\n    r.F017N AS `摊薄每股收益(不包含非经常损益)(元)`,\n    CASE WHEN r.F003V='FY' THEN '是' ELSE '否' END AS `是否年报`,\n    CASE WHEN r.F005V='USD' THEN '是' ELSE '否' END AS `是否美元列报`\nFROM \n    COM3103 r\n    LEFT JOIN AMERICAN_STOCK_MAIN m ON r.FIU_ID = m.FIU_ID\nWHERE\n    r.F001D IS NOT NULL\n    AND r.F003V = 'FY'\n    AND r.F005V = 'USD'\n    AND r.F048N IS NOT NULL\n    AND r.F034N IS NOT NULL\n    AND r.F032N IS NOT NULL\n    AND r.F022N IS NOT NULL\n    AND r.F041N IS NOT NULL\n    AND r.F018N IS NOT NULL\nORDER BY \n    r.F001D DESC, m.COMB_SYMBOL",
+ "final_sql": "SELECT \n    m.COMB_SYMBOL AS `股票代码`,\n    m.CSNAME AS `股票名称`,\n    r.F001D AS `报表截止日期`,\n    r.F003V AS `报表种类`,\n    r.F005V AS `货币类型`,\n    r.F004N AS `报告周期天数`,\n    r.F048N/10 AS `营业收入(亿美元)`,\n    r.F034N*10000 AS `归属于普通股东净利润(万美元)`,\n    r.F032N*10000 AS `净利润(万美元)`,\n    r.F022N AS `毛利润(百万美元)`,\n    r.F041N AS `营业利润(百万美元)`,\n    r.F018N AS `每股收益(元)`,\n    r.F015N AS `每股基本收益(百万元)`,\n    r.F016N AS `摊薄每股收益(元)`,\n    r.F017N AS `摊薄每股收益(不包含非经常损益)(元)`,\n    CASE WHEN r.F003V='FY' THEN '是' ELSE '否' END AS `是否年报`,\n    CASE WHEN r.F005V='USD' THEN '是' ELSE '否' END AS `是否美元列报`\nFROM \n    COM3103 r\n    LEFT JOIN AMERICAN_STOCK_MAIN m ON r.FIU_ID = m.FIU_ID\nWHERE\n    r.F001D IS NOT NULL\n    AND r.F003V = 'FY'\n    AND r.F005V = 'USD'\n    AND r.F048N IS NOT NULL\n    AND r.F034N IS NOT NULL\n    AND r.F032N IS NOT NULL\n    AND r.F022N IS NOT NULL\n    AND r.F041N IS NOT NULL\n    AND r.F018N IS NOT NULL\nORDER BY \n    r.F001D DESC, m.COMB_SYMBOL",
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": false,
+ "answer_ok": null,
+ "elapsed_seconds": 60.2,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_27_7991d800.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 58.1,
+  "llm_seconds_max": 7.01,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   25946
+  ],
+  "prompt_columns_raw_len": 14996
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1532,
+   "prompt_tokens": 32646,
+   "total_tokens": 34178,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 32646,
+  "completion": 1532,
+  "total": 34178
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1532,
+   "prompt_tokens": 32646,
+   "total_tokens": 34178,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

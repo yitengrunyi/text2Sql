@@ -1,0 +1,174 @@
+{
+ "round_id": 2,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安、兴业银行、长江电力这三家公司里，2025年归母净利润最高的是谁？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE WHERE (a.SEC_SNAME LIKE '%中国平安%' OR a.SEC_SNAME LIKE '%兴业银行%' OR a.SEC_SNAME LIKE '%长江电力%') AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND a.ISVALID = 1 AND f.ISVALID = 1 ORDER BY f.F110101 DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万)'], ['中国平安', '601318', '2025-12-31', '13,477,800.00']]}\n本查询获取了中国平安、兴业银行和长江电力三家公司2025年归属于母公司股东的净利润信息，并筛选出净利润最高的公司。数据来源于股票基本信息表和主板公司财务指标表，通过公司唯一标识进行关联。筛选条件包括：仅查询这三家公司的有效数据，截止日期为2025年末，归母净利润数据不可为空。查询结果按照归属于母公司股东的净利润从高到低排序，仅显示排在第一位的公司。净利润数值由原始金额（元）换算为“万元”，并保留1位小数。此查询直接引用了年度累计的归母净利润数据，能够清晰选出三家公司中归属于母公司净利润最高者，查询结果符合用户需求。\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万)'], ['中国平安', '601318', '2025-12-31', '13,477,800.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE WHERE (a.SEC_SNAME LIKE '%中国平安%' OR a.SEC_SNAME LIKE '%兴业银行%' OR a.SEC_SNAME LIKE '%长江电力%') AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND a.ISVALID = 1 AND f.ISVALID = 1 ORDER BY f.F110101 DESC LIMIT 1",
+ "final_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE WHERE (a.SEC_SNAME LIKE '%中国平安%' OR a.SEC_SNAME LIKE '%兴业银行%' OR a.SEC_SNAME LIKE '%长江电力%') AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND a.ISVALID = 1 AND f.ISVALID = 1 ORDER BY f.F110101 DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "77469000000.0000\n134778000000.0000\n34502809176.3900"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国平安 601318 2025-12-31 00:00:00 13477800.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 34.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_2_aae0ee9b.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 33.34,
+  "llm_seconds_max": 27.36,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2816,
+   "prompt_tokens": 23322,
+   "total_tokens": 26138,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2265,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23322,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 183,
+   "prompt_tokens": 16235,
+   "total_tokens": 16418,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39557,
+  "completion": 2999,
+  "total": 42556
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2816,
+   "prompt_tokens": 23322,
+   "total_tokens": 26138,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2265,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23322,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 183,
+   "prompt_tokens": 16235,
+   "total_tokens": 16418,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

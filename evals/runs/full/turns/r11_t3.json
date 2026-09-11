@@ -1,0 +1,241 @@
+{
+ "round_id": 11,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 国外营业收入\n- 总营业收入\n- 国外营业收入占总营收的比重（比例）\n\n[2] 计算公式：\n\n国外营业收入占总营收比重 = 国外营业收入 ÷ 总营业收入 × 100%\n['万华化学', '国外营业收入', '总营业收入', '营业收入', '营收', '国外营业收入占总营收的比重', '国外营业收入占总营收比重', '国外营业收入比重', '国外营收比重', '比例', '占比']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_DISTRICT', 'ASTK_REVENUE_OVERSEAS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n['国外']\nquery抽取的主体词是['国外']\n生成查询代码\ntop30召回:{}\nSELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票简称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / NULLIF(\n            IFNULL(\n                (\n                    IFNULL(a.REVENUE_ASIA_CNY,0) +\n                    IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                    IFNULL(a.REVENUE_EU_CNY,0) +\n                    IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                    IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                    IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                    IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                    IFNULL(a.REVENUE_KOREA_CNY,0) +\n                    IFNULL(a.REVENUE_TW_CNY,0) +\n                    IFNULL(a.REVENUE_RUSSIA_CNY,0)\n                ) + IFNULL(b.INCOME,0)\n            ,0)\n        ,0) * 100, 2\n    ) AS `2025年海外营业收入占总营收比重(%)`,\n   ",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票简称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / NULLIF(\n            IFNULL(\n                (\n                    IFNULL(a.REVENUE_ASIA_CNY,0) +\n                    IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                    IFNULL(a.REVENUE_EU_CNY,0) +\n                    IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                    IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                    IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                    IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                    IFNULL(a.REVENUE_KOREA_CNY,0) +\n                    IFNULL(a.REVENUE_TW_CNY,0) +\n                    IFNULL(a.REVENUE_RUSSIA_CNY,0)\n                ) + IFNULL(b.INCOME,0)\n            ,0)\n        ,0) * 100, 2\n    ) AS `2025年海外营业收入占总营收比重(%)`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / 10000, 3\n    ) AS `2025年海外营业收入(亿元)`,\n    ROUND(\n        IFNULL(\n            (\n                IFNULL(a.REVENUE_ASIA_CNY,0) +\n                IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                IFNULL(a.REVENUE_EU_CNY,0) +\n                IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                IFNULL(a.REVENUE_KOREA_CNY,0) +\n                IFNULL(a.REVENUE_TW_CNY,0) +\n                IFNULL(a.REVENUE_RUSSIA_CNY,0)\n            ) + IFNULL(b.INCOME,0)\n        ,0) / 10000, 3\n    ) AS `2025年总营业收入(亿元)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nLEFT JOIN\n    STK_PRI_INCOME_DISTRICT b\n    ON a.COMCODE = b.COMCODE AND b.ITEM_NAME LIKE '%合计%' AND b.PERIODDATE = '2025-12-31' AND b.RPT_TYPE = '合并' AND b.ISVALID=1\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2025-12-31'\n    AND (a.REVENUE_ASIA_CNY IS NOT NULL OR\n         a.REVENUE_OCEANIA_CNY IS NOT NULL OR\n         a.REVENUE_EU_CNY IS NOT NULL OR\n         a.REVENUE_NON_EU_CNY IS NOT NULL OR\n         a.REVENUE_AFRICA_CNY IS NOT NULL OR\n         a.REVENUE_MID_EAST_CNY IS NOT NULL OR\n         a.REVENUE_LATIN_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_NORTH_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_JAPAN_CNY IS NOT NULL OR\n         a.REVENUE_KOREA_CNY IS NOT NULL OR\n         a.REVENUE_TW_CNY IS NOT NULL OR\n         a.REVENUE_RUSSIA_CNY IS NOT NULL)\n    AND a.COMB_SYMBOL IS NOT NULL",
+ "final_sql": "SELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票简称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / NULLIF(\n            IFNULL(\n                (\n                    IFNULL(a.REVENUE_ASIA_CNY,0) +\n                    IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                    IFNULL(a.REVENUE_EU_CNY,0) +\n                    IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                    IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                    IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                    IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                    IFNULL(a.REVENUE_KOREA_CNY,0) +\n                    IFNULL(a.REVENUE_TW_CNY,0) +\n                    IFNULL(a.REVENUE_RUSSIA_CNY,0)\n                ) + IFNULL(b.INCOME,0)\n            ,0)\n        ,0) * 100, 2\n    ) AS `2025年海外营业收入占总营收比重(%)`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / 10000, 3\n    ) AS `2025年海外营业收入(亿元)`,\n    ROUND(\n        IFNULL(\n            (\n                IFNULL(a.REVENUE_ASIA_CNY,0) +\n                IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                IFNULL(a.REVENUE_EU_CNY,0) +\n                IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                IFNULL(a.REVENUE_KOREA_CNY,0) +\n                IFNULL(a.REVENUE_TW_CNY,0) +\n                IFNULL(a.REVENUE_RUSSIA_CNY,0)\n            ) + IFNULL(b.INCOME,0)\n        ,0) / 10000, 3\n    ) AS `2025年总营业收入(亿元)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nLEFT JOIN\n    STK_PRI_INCOME_DISTRICT b\n    ON a.COMCODE = b.COMCODE AND b.ITEM_NAME LIKE '%合计%' AND b.PERIODDATE = '2025-12-31' AND b.RPT_TYPE = '合并' AND b.ISVALID=1\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2025-12-31'\n    AND (a.REVENUE_ASIA_CNY IS NOT NULL OR\n         a.REVENUE_OCEANIA_CNY IS NOT NULL OR\n         a.REVENUE_EU_CNY IS NOT NULL OR\n         a.REVENUE_NON_EU_CNY IS NOT NULL OR\n         a.REVENUE_AFRICA_CNY IS NOT NULL OR\n         a.REVENUE_MID_EAST_CNY IS NOT NULL OR\n         a.REVENUE_LATIN_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_NORTH_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_JAPAN_CNY IS NOT NULL OR\n         a.REVENUE_KOREA_CNY IS NOT NULL OR\n         a.REVENUE_TW_CNY IS NOT NULL OR\n         a.REVENUE_RUSSIA_CNY IS NOT NULL)\n    AND a.COMB_SYMBOL IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "47.39"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 93.3,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_11_a515b79f.3",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 94.33,
+  "llm_seconds_max": 23.88,
+  "selected_tables": [
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   19727
+  ],
+  "prompt_columns_raw_len": 11344
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1689,
+   "prompt_tokens": 10153,
+   "total_tokens": 11842,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1403,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10153,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3168,
+   "prompt_tokens": 34199,
+   "total_tokens": 37367,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 429,
+   "total_tokens": 430,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 429,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 44781,
+  "completion": 4858,
+  "total": 49639
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1689,
+   "prompt_tokens": 10153,
+   "total_tokens": 11842,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1403,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10153,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3168,
+   "prompt_tokens": 34199,
+   "total_tokens": 37367,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 429,
+   "total_tokens": 430,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 429,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_DISTRICT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

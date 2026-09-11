@@ -1,0 +1,175 @@
+{
+ "round_id": 10,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "全部美股里市盈率最低的是哪只股票？市盈率是多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT asm.CSNAME AS `股票名称`, asm.COMB_SYMBOL AS `股票代码`, asm.FIU_ID AS `美股内部代码`, ROUND(com.F021N, 2) AS `最新市盈率`, com.F022D AS `市盈率更新时间`, com.F002V AS `市盈率货币` FROM AMERICAN_STOCK_MAIN asm JOIN COM3101 com ON asm.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL AND com.F021N > 0 ORDER BY com.F021N ASC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '美股内部代码', '最新市盈率', '市盈率更新时间', '市盈率货币'], ['京东-W', 'JD.US', '00000041', '9.35', '-', 'USD']]}\n该查询获取了全部美股中最新市盈率最低且为正值的一只股票的信息，包括股票名称、股票代码、内部识别码、市盈率数值、更新时间及市盈率的货币类型。数据综合来自股票基本信息表和最新技术指标表，结合了基础资料与最新财务估值。筛选条件为市盈率数据不为空且大于零，即只考虑盈利企业，避免异常值或亏损公司。查询结果按市盈率从小到大排序，仅取市盈率最低的公司。市盈率数据直接使用现有的财务指标，数值保留两位小数，单位按查询结果展示。该查询结果完全满足“全部美股里市盈率最低是哪只股票及其市盈率”的用户需求。\n{table:[['股票名称', '股票代码', '美股内部代码', '最新市盈率', '市盈率更新时间', '市盈率货币'], ['京东-W', 'JD.US', '00000041', '9.35', '-', 'USD']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT asm.CSNAME AS `股票名称`, asm.COMB_SYMBOL AS `股票代码`, asm.FIU_ID AS `美股内部代码`, ROUND(com.F021N, 2) AS `最新市盈率`, com.F022D AS `市盈率更新时间`, com.F002V AS `市盈率货币` FROM AMERICAN_STOCK_MAIN asm JOIN COM3101 com ON asm.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL AND com.F021N > 0 ORDER BY com.F021N ASC LIMIT 1",
+ "final_sql": "SELECT asm.CSNAME AS `股票名称`, asm.COMB_SYMBOL AS `股票代码`, asm.FIU_ID AS `美股内部代码`, ROUND(com.F021N, 2) AS `最新市盈率`, com.F022D AS `市盈率更新时间`, com.F002V AS `市盈率货币` FROM AMERICAN_STOCK_MAIN asm JOIN COM3101 com ON asm.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL AND com.F021N > 0 ORDER BY com.F021N ASC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "JD 京东-W 9.35"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "京东-W JD.US 00000041 9.35  USD",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 37.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_10_349cd127.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.34,
+  "llm_seconds_max": 30.03,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3133,
+   "prompt_tokens": 17596,
+   "total_tokens": 20729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2644,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17596,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 176,
+   "prompt_tokens": 11587,
+   "total_tokens": 11763,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29183,
+  "completion": 3309,
+  "total": 32492
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3133,
+   "prompt_tokens": 17596,
+   "total_tokens": 20729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2644,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17596,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 176,
+   "prompt_tokens": 11587,
+   "total_tokens": 11763,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

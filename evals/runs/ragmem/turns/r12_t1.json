@@ -1,0 +1,174 @@
+{
+ "round_id": 12,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "名单里排第一的是谁？持有多少股、占比多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期`,\n    a.`RANK` AS `股东排名`,\n    a.NAME AS `股东名称`,\n    ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量（亿股）`,\n    ROUND(a.HOLD_PCT, 2) AS `持股比例（%）`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE \n            AND ENDDATE >= '2026-06-30 00:00:00.000'\n            AND ENDDATE < '2026-09-30 00:00:00.000'\n    )\n    AND a.`RANK` = 1\nORDER BY a.`RANK` ASC;\n200\n{table:[['股票名称', '股票代码', '报告期', '股东排名', '股东名称', '持股数量（亿股）', '持股比例（%）'], ['恒瑞医药', '600276.SH', '2026-08-19', '1', '江苏恒瑞医药集团有限公司', '15.38', '23.18']]}\n该查询获取了恒瑞医药在2026年中期报告披露的第一大股东的详细信息，包括股东名称、持股数量（已转换为亿股，保留两位小数）、持股比例（百分比，保留两位小数）、报告期、股票名称及代码。数据来源于上市公司十大股东结构明细和股票基本信息两个功能表，通过公司代码完成关联。筛选条件限定在有效数据、公司简称为恒瑞医药、报告期为2026年中报具体限定时间段，并仅提取第一大股东。结果按股东排名升序排列（仅一条数据）。持股数量通过将原始股数除以1亿转换为亿股，持股比例直接采用已披露的百分比指标。查询结果完全满足用户关于第一大股东名称、持股数量及占比的需求。\n{table:[['股票名称', '股票代码', '报告期', '股东排名', '股东名称', '持股数量（亿股）', '持股比例（%）'], ['恒瑞医药', '600276.SH', '2026-08-19', '1', '江苏恒瑞医药集团有限公司', '15.38', '23.18']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期`,\n    a.`RANK` AS `股东排名`,\n    a.NAME AS `股东名称`,\n    ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量（亿股）`,\n    ROUND(a.HOLD_PCT, 2) AS `持股比例（%）`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE \n            AND ENDDATE >= '2026-06-30 00:00:00.000'\n            AND ENDDATE < '2026-09-30 00:00:00.000'\n    )\n    AND a.`RANK` = 1\nORDER BY a.`RANK` ASC",
+ "final_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期`,\n    a.`RANK` AS `股东排名`,\n    a.NAME AS `股东名称`,\n    ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量（亿股）`,\n    ROUND(a.HOLD_PCT, 2) AS `持股比例（%）`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE \n            AND ENDDATE >= '2026-06-30 00:00:00.000'\n            AND ENDDATE < '2026-09-30 00:00:00.000'\n    )\n    AND a.`RANK` = 1\nORDER BY a.`RANK` ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "江苏恒瑞医药集团有限公司 1538184187 23.18"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "恒瑞医药 600276.SH 2026-08-19 00:00:00 1 江苏恒瑞医药集团有限公司 15.38 23.18",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 44.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_12_bb1d7128.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 25.43,
+  "llm_seconds_max": 20.58,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2142,
+   "prompt_tokens": 17558,
+   "total_tokens": 19700,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1542,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17558,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 197,
+   "prompt_tokens": 9855,
+   "total_tokens": 10052,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27413,
+  "completion": 2339,
+  "total": 29752
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2142,
+   "prompt_tokens": 17558,
+   "total_tokens": 19700,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1542,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17558,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 197,
+   "prompt_tokens": 9855,
+   "total_tokens": 10052,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

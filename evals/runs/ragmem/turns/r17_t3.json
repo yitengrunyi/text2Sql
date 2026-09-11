@@ -1,0 +1,173 @@
+{
+ "round_id": 17,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "那换成2024年年报，这个倍数是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2024-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1;\n200\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）', '归母净利润（万）', '经营活动产生的现金流量净额/归母净利润（倍）'], ['2024-12-31', '万华化学', '600309', '95,719.00', '1,303,306.70', '0.00']]}\n该查询获取了万华化学在2024年年报中的经营活动产生的现金流量净额、归属于母公司净利润及两者的倍数关系。数据来源于公司财务指标累计信息表，筛选了已经披露的有效记录，限定公司名称包含“万华化学”，报告截止日为2024年12月31日，且相关财务数据必须有值。结果仅展示一条符合条件的数据。经营活动现金流量净额经过单位换算，从元转换为万元并保留1位小数，归属于母公司净利润同样做了单位处理。倍数的计算方法为：用经营活动现金流量净额除以归属于母公司净利润，若净利润为零则不显示倍数，最终保留2位小数。该查询直接采用了公司年度主要财务指标，满足用户对2024年年报现金流与净利润倍数的查询需求，查询结果符合要求。\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）', '归母净利润（万）', '经营活动产生的现金流量净额/归母净利润（倍）'], ['2024-12-31', '万华化学', '600309', '95,719.00', '1,303,306.70', '0.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2024-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2024-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.03"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2024-12-31 00:00:00 万华化学 600309 95719.0 1303306.7 0.00",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 35.7,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_17_782aa971.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 34.46,
+  "llm_seconds_max": 27.46,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3040,
+   "prompt_tokens": 26450,
+   "total_tokens": 29490,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2420,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26450,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 217,
+   "prompt_tokens": 19099,
+   "total_tokens": 19316,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 45549,
+  "completion": 3257,
+  "total": 48806
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3040,
+   "prompt_tokens": 26450,
+   "total_tokens": 29490,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2420,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26450,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 217,
+   "prompt_tokens": 19099,
+   "total_tokens": 19316,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

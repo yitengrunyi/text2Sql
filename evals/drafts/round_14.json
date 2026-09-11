@@ -1,0 +1,74 @@
+{
+  "round_id": 14,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+  "initial": {
+    "question": "紫金矿业最近一次业绩预告是什么类型？针对哪个报告期？",
+    "judge": "entity",
+    "gold_value": "业绩大幅上升",
+    "gold_display": "最近一次业绩预告为“业绩大幅上升”（临时公告），针对2026年半年报（报告期截至2026-06-30），公告日2026-07-10",
+    "gold_entities": ["紫金矿业"],
+    "gold_date": "2026-07-10",
+    "gold_sql": "SELECT A_STOCKSNAME,FORE_CLS,ENDDATE,DECLAREDATE,SRC FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ISVALID=1 ORDER BY DECLAREDATE DESC LIMIT 1",
+    "gold_tables": ["STK_ACHIEVE_FORECAST"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "relative"}
+  },
+  "feedbacks": [
+    {
+      "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+      "judge": "numeric",
+      "gold_value": "3910000",
+      "gold_display": "预计2026年1-6月归母净利润3910000万元（约391亿元），预告上限与下限一致，同比增幅约68%",
+      "gold_entities": ["紫金矿业"],
+      "gold_date": null,
+      "gold_sql": "SELECT MAX_VAL,MIN_VAL FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ENDDATE='2026-06-30' AND ISVALID=1",
+      "gold_tables": ["STK_ACHIEVE_FORECAST"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "去年同期那次预告呢？当时预计2025年上半年能赚多少？",
+      "judge": "numeric",
+      "gold_value": "2320000",
+      "gold_display": "2025-07-14的预告为“业绩大幅上升”，预计2025年1-6月归母净利润2320000万元（约232亿元），同比增加约54%",
+      "gold_entities": ["紫金矿业"],
+      "gold_date": null,
+      "gold_sql": "SELECT MAX_VAL,MIN_VAL,FORE_CLS FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ENDDATE='2025-06-30' AND ISVALID=1",
+      "gold_tables": ["STK_ACHIEVE_FORECAST"],
+      "labels": {"difficulty": "单表", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "预告之外，再看看机构预测这边：紫金矿业2024年的一致预期净利润是多少？",
+      "judge": "numeric",
+      "gold_value": "3196059.835439",
+      "gold_display": "一致预期净利润约3196059.84万元（约319.61亿元），取最新数据日2025-06-13的一致预期值",
+      "gold_entities": ["紫金矿业"],
+      "gold_date": null,
+      "gold_sql": "SELECT CONSENSUS_PROFIT FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1 AND END_DATE=(SELECT MAX(END_DATE) FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1)",
+      "gold_tables": ["VIEW_STK_CONSENSUS_FORECAST"],
+      "labels": {"difficulty": "子查询", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "对应的一致预期EPS和市盈率是多少？",
+      "judge": "numeric",
+      "gold_value": "1.202514",
+      "gold_display": "一致预期EPS约1.20元/股，对应一致预期PE约15.86倍（数据日2025-06-13）",
+      "gold_entities": ["紫金矿业"],
+      "gold_date": null,
+      "gold_sql": "SELECT CONSENSUS_EPS,CONSENSUS_PE,END_DATE FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1 ORDER BY END_DATE DESC LIMIT 1",
+      "gold_tables": ["VIEW_STK_CONSENSUS_FORECAST"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+      "judge": "list",
+      "gold_value": null,
+      "gold_display": "中国人寿（上限1371.19亿元）、紫金矿业（391亿元）、中国神华（298亿元）、工业富联（244亿元）、新华保险（236.78亿元）",
+      "gold_entities": ["中国人寿", "紫金矿业", "中国神华", "工业富联", "新华保险"],
+      "gold_date": null,
+      "gold_sql": "SELECT A_STOCKSNAME,MAX(MAX_VAL) AS mv FROM STK_ACHIEVE_FORECAST WHERE ENDDATE='2026-06-30' AND ISVALID=1 GROUP BY A_STOCKCODE,A_STOCKSNAME ORDER BY mv DESC LIMIT 5",
+      "gold_tables": ["STK_ACHIEVE_FORECAST"],
+      "labels": {"difficulty": "聚合", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

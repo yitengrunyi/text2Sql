@@ -1,0 +1,135 @@
+{
+  "round_id": 20,
+  "source": "MYSQL-2",
+  "domain": "指数",
+  "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+  "initial": {
+    "question": "中证军工指数今年以来涨跌幅是多少？",
+    "judge": "numeric",
+    "gold_value": "-17.58",
+    "gold_display": "-17.58%（2025-12-31收盘14011.14点 → 2026-09-02收盘11548.66点）",
+    "gold_entities": [
+      "中证军工指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证军工指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1)",
+    "gold_tables": [
+      "GET_INDX_GEN_INFO",
+      "INDX_MKT"
+    ],
+    "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "relative"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "同样的时间区间，中证银行指数表现怎么样？",
+      "judge": "numeric",
+      "gold_value": "-0.49",
+      "gold_display": "-0.49%",
+      "gold_entities": [
+        "中证银行指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证银行指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1)",
+      "gold_tables": [
+        "GET_INDX_GEN_INFO",
+        "INDX_MKT"
+      ],
+      "labels": {
+        "difficulty": "时间窗口",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "那中证军工2025年全年涨了多少？",
+      "judge": "numeric",
+      "gold_value": "31.55",
+      "gold_display": "+31.55%（2024-12-31收盘10650.79点 → 2025-12-31收盘14011.14点）",
+      "gold_entities": [
+        "中证军工指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS pct_2025 FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证军工指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2025-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01')",
+      "gold_tables": [
+        "GET_INDX_GEN_INFO",
+        "INDX_MKT"
+      ],
+      "labels": {
+        "difficulty": "时间窗口",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "今年以来它的日均成交额大概什么量级？",
+      "judge": "numeric",
+      "gold_value": "873.18",
+      "gold_display": "873.18亿元",
+      "gold_entities": [
+        "中证军工指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(AVG(TVALUE)/100000000,2) AS avg_amt_yi FROM INDX_MKT WHERE ISVALID=1 AND TRADEDATE>='2026-01-01' AND INNER_CODE=(SELECT INNER_CODE FROM GET_INDX_GEN_INFO WHERE INDX_CNAME='中证军工指数' AND ISVALID=1)",
+      "gold_tables": [
+        "INDX_MKT",
+        "GET_INDX_GEN_INFO"
+      ],
+      "labels": {
+        "difficulty": "聚合",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "再看个短线问题，9月2日上证50、中证白酒、中证医疗这三个指数谁的日涨幅最大？",
+      "judge": "entity",
+      "gold_value": "-0.8133",
+      "gold_display": "中证医疗 -0.81% 最大（上证50 -0.93%、中证白酒 -1.34%）",
+      "gold_entities": [
+        "中证医疗指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT INNER_CODE, INDX_SNAME, CHNG_PCT FROM INDX_MKT WHERE ISVALID=1 AND INNER_CODE IN (106000255,106006657,106006473) AND TRADEDATE='2026-09-02' ORDER BY CHNG_PCT DESC",
+      "gold_tables": [
+        "INDX_MKT"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "把这三个指数今年以来涨跌幅从高到低排一下，谁最抗跌？",
+      "judge": "list",
+      "gold_value": null,
+      "gold_display": "中证医疗 -1.18% > 上证50 -3.85% > 中证白酒 -26.11%，中证医疗最抗跌",
+      "gold_entities": [
+        "中证医疗指数",
+        "上证50指数",
+        "中证白酒指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT g.INDX_CNAME, ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME IN ('中证医疗指数','上证50指数','中证白酒指数') AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1) ORDER BY ytd_pct DESC",
+      "gold_tables": [
+        "GET_INDX_GEN_INFO",
+        "INDX_MKT"
+      ],
+      "labels": {
+        "difficulty": "时间窗口",
+        "followup_type": "条件追加",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+ "round_id": 6,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "聚合",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 前三大重仓股（基金持仓占比最高的三只股票）  \n- 重仓股持仓市值  \n- 重仓股占基金净资产比例\n\n[2] 可能的计算公式：  \n- 重仓股持仓市值 = 持仓股票数量 × 股票期末价格  \n- 重仓股占基金净资产比例 = 重仓股持仓市值 ÷ 基金期末净资产总值 × 100%\n['易方达蓝筹精选混合', '二季报', '前三大重仓股', '重仓股', '基金持仓', '持仓占比', '重仓股持仓市值', '持仓市值', '持仓股票数量', '股票期末价格', '基金净资产', '基金净资产总值', '净资产', '重仓股占基金净资产比例', '净资产比例', '基金期末净资产总值']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓']\n['FUND_PORTFOLIO_DETAIL', 'FUND_STOCK_CHANGE_HY', 'FUND_TOP10_STOCK_CHANGE_HY', 'FUND_INDUSTRY_ASSET_RATIO_ALL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿元)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持仓占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    FUND_NAME AS `基金名称`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND SEC_NAME IS NOT NULL\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 3\n200\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿元)', '持仓占基金净值比例(%)', '持股数量(股)', '基金名称'], ['2026-06-30', '腾讯控股', '00700.HK', '11.70', '5.72', '3,130,500.00', '易方达蓝筹精选混合'], ['2026-06-30', '贵州茅台', '600519.SH', '11.50', '5.62', '968,500.00', '易方达蓝筹精选混合'], ['2026-06-30', '百胜中国', '09987.HK', '11.20', '5.49', '4,037,500.00', '易方达蓝筹精选混合']]}\n该查询的目的是获取易方达蓝筹精选混合基金在2026年二季报披露的前三大重仓股票信息。持股市值（亿元）通过公式“持股市值（亿元）= 持股市值（元）/ 100000000”得到，持仓占基金净值比例（%）通过公式“持仓占净值比例（%）= 持仓占基金净资产比例 × 100”得到，持股数量（股）直接取值，保留为整数。在此查询中，对结果进行了单位换算和比例的计算。\n\n数据来源于基金持股明细表，该表主要记录基金产品在各个报告期的详细持股信息，包括基金名称、报告期、股票名称、股票代码、持股市值、持股数量和持仓占基金净值比例等。查询中筛选了基金名称包含“易方达蓝筹精选混合”，报告期为2026年6月30日，数据来源于基金季报，记录有效且股票名称、持股市值不为空。结果按照持股市值从高到低排序，只取持股市值最高的前三条记录。\n\n查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿元)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持仓占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    FUND_NAME AS `基金名称`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND SEC_NAME IS NOT NULL\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 3",
+ "final_sql": "SELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿元)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持仓占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    FUND_NAME AS `基金名称`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND SEC_NAME IS NOT NULL\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "腾讯控股 0.057200\n贵州茅台 0.056200\n百胜中国 0.054900"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "2026-06-30 腾讯控股 00700.HK 11.7 5.72 3130500 易方达蓝筹精选混合\n2026-06-30 贵州茅台 600519.SH 11.5 5.62 968500 易方达蓝筹精选混合\n2026-06-30 百胜中国 09987.HK 11.2 5.49 4037500 易方达蓝筹精选混合",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 61.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_6_49a4726f.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 66.83,
+  "llm_seconds_max": 10.83,
+  "selected_tables": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "STOCK_HOLD_STATISTICS_HY",
+   "STOCK_FACTOR_VALUE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   17142
+  ],
+  "prompt_columns_raw_len": 7886
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1986,
+   "prompt_tokens": 27951,
+   "total_tokens": 29937,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 12672,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27951,
+  "completion": 1986,
+  "total": 29937
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1986,
+   "prompt_tokens": 27951,
+   "total_tokens": 29937,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 12672,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

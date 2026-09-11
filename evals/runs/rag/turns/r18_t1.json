@@ -1,0 +1,170 @@
+{
+ "round_id": 18,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "它今年以来累计上涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：累计涨幅（Year-to-Date Return, YTD涨幅）\n\n[2] 可能的计算公式：\n累计上涨百分比 = （当前价格 - 年初价格）/ 年初价格 × 100%\n['累计涨幅', 'Year-to-Date Return', 'YTD涨幅', '累计上涨百分比', '当前价格', '年初价格']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_EXPR_IDX', 'STK_MKT', 'GET_A_INDICS_LATEST', 'VIEW_CONCEPT_DAILY_QUOTE', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `截止日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND CHNG_PCT_YEAR_SOFAR IS NOT NULL\n\n200\nQuery execution timed out.\n今年以来累计涨跌幅是通过公式“今年以来累计涨跌幅等于累计复权系数乘以当日收盘价除以当年首个前收盘价减去1再乘以100”进行计算。例如：如果某股票2026年首个有效交易日的收盘价为10元，2026年9月2日的收盘价为15元，则今年以来累计涨跌幅等于（15/10-1）*100，结果为50%。在此查询中，计算了今年以来累计涨跌幅并保留两位小数。\n\n该查询从记录个股市场表现指标的表中提取数据，选择了截止日期、股票名称、股票代码和今年以来累计涨跌幅。在过滤条件上，筛选了截止日期为“2026年9月2日”的记录，并要求今年以来累计涨跌幅的数据不为空。查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `截止日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND CHNG_PCT_YEAR_SOFAR IS NOT NULL",
+ "final_sql": "SELECT \n    ENDDATE AS `截止日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND CHNG_PCT_YEAR_SOFAR IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.64"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 232.7,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_18_af5b8ece.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 60.85,
+  "llm_seconds_max": 7.3,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   28340
+  ],
+  "prompt_columns_raw_len": 6729
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1474,
+   "prompt_tokens": 39761,
+   "total_tokens": 41235,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39761,
+  "completion": 1474,
+  "total": 41235
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1474,
+   "prompt_tokens": 39761,
+   "total_tokens": 41235,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

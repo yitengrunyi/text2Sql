@@ -1,0 +1,194 @@
+{
+ "round_id": 29,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：营业收入（Operating Revenue / Total Revenue）\n\n[2] 可能的计算公式：  \n营业收入 = 产品销售收入 + 服务收入 + 其他主营业务收入  \n即：Operating Revenue = Revenue from Product Sales + Revenue from Services + Other Main Operating Income\n\n在上市公司财报中，通常营业收入直接披露为Total Revenue，无需自行分项加总。\n['营业收入', 'Operating Revenue', 'Total Revenue', '产品销售收入', 'Revenue from Product Sales', '服务收入', 'Revenue from Services', '其他主营业务收入', 'Other Main Operating Income', '波音公司', '财报', '关键金融指标']\n该问题可能涉及美股-'波音', 它的美股股票代码为：BA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-国防军工。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'COM3103', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F056N AS `财政年度`,\n    c.F001D AS `报表截止日期`,\n    c.F005V AS `货币类型`,\n    ROUND(c.F048N/10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N/100, 3) AS `营业收入(亿)` -- 单位亿，保留3位小数\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN\n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY\n    c.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财政年度', '报表截止日期', '货币类型', '营业收入(亿美元)', '营业收入(亿)'], ['波音', 'BA.US', '2,025', '2025-12-31', 'USD', '15,653.38', '1,565.34']]}\n该查询的目的是获取波音公司在2025财年全年营业收入的数据。在结果中，营业收入被分别转换成亿美元和亿单位，计算方式如下：\n\n- 营业收入（亿美元）通过将原始营业收入（百万美元）除以10，并保留三位小数进行计算。\n- 营业收入（亿）通过将原始营业收入（百万美元）除以100，并保留三位小数进行计算。\n\n在此查询中，对原始营业收入进行了单位转换和格式化。\n\n查询结果符合要求。 \n\n查询从美股主板信息表和累计综合收益表中提取数据，通过内部代码进行连接。主板信息表提供了股票名称和展示代码等基础信息，累计综合收益表提供了财报数据。筛选条件包括选择展示代码为波音公司（BA.US），只关注2025年财政年度，报表类型为全年数据（年报），并确保营业收入数据不为空。结果按照报表截止日期降序排列，只取最新一条记录。\n查询波音公司2025财年全年的营业收入总共是多少",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F056N AS `财政年度`,\n    c.F001D AS `报表截止日期`,\n    c.F005V AS `货币类型`,\n    ROUND(c.F048N/10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N/100, 3) AS `营业收入(亿)` -- 单位亿，保留3位小数\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN\n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY\n    c.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F056N AS `财政年度`,\n    c.F001D AS `报表截止日期`,\n    c.F005V AS `货币类型`,\n    ROUND(c.F048N/10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N/100, 3) AS `营业收入(亿)` -- 单位亿，保留3位小数\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN\n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY\n    c.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "156534.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "波音 BA.US 2025 2025-12-31 USD 15653.375 1565.338",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 101.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_29_4db67a7c.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 99.08,
+  "llm_seconds_max": 50.87,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   18836
+  ],
+  "prompt_columns_raw_len": 10231
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4958,
+   "prompt_tokens": 8545,
+   "total_tokens": 13503,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4675,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8545,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 973,
+   "prompt_tokens": 25376,
+   "total_tokens": 26349,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5760,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33921,
+  "completion": 5931,
+  "total": 39852
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4958,
+   "prompt_tokens": 8545,
+   "total_tokens": 13503,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4675,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8545,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 973,
+   "prompt_tokens": 25376,
+   "total_tokens": 26349,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5760,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

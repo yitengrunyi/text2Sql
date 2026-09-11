@@ -1,0 +1,147 @@
+{
+ "round_id": 20,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "再看个短线问题，9月2日上证50、中证白酒、中证医疗这三个指数谁的日涨幅最大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 日涨幅（日度价格涨跌幅）\n\n[2] 可能的计算公式：  \n日涨幅 = (当日收盘价 - 前一交易日收盘价) / 前一交易日收盘价 × 100%\n['上证50', '中证白酒', '中证医疗', '日涨幅', '价格涨跌幅', '当日收盘价', '前一交易日收盘价']\n该问题可能涉及到申万二级行业，二级行业名称为\"白酒\"，即SW_INDU_CODE_2021_2 LIKE \"%白酒%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%白酒%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及的题材包含：['医疗保健', '白酒']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME IN ('医疗保健', '白酒')。\n指数相关\n['境内指数']\n['INDX_SAMP_INFO', 'INDX_TCLOSE_WEIGHT']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.TRADEDATE AS `交易日期`,\n    g.INDEX_NAME AS `指数名称`,\n    g.INDEX_CODE AS `指数代码`,\n    ROUND(t.CHNG_PCT*100, 2) AS `日涨跌幅(%)`\nFROM (\n    SELECT \n        TRADEDATE, \n        INDEX_CODE, \n        CHNG_PCT\n    FROM (\n        -- 上证50\n        SELECT \n            TRADEDATE, \n            '上证50' AS INDEX_NAME, \n            '000016' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT \n        WHERE INDEX_CODE = '000016'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证白酒\n        SELECT \n            TRADEDATE, \n            '中证白酒' AS INDEX_NAME, \n            '000827' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000827'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证医疗\n        SELECT \n            TRADEDATE, \n            '中证医疗' AS INDEX_NAME, \n            '000933' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000933'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n    ) t1\n) t\nJOIN (\n    SELECT '上证50' AS INDEX_NAME, '000016' AS INDEX_CODE\n    UNION ALL SELECT '中证白酒', '000827'\n    UNION ALL SELECT '中证医疗', '000933'\n) g ON t.INDEX_CODE = g.INDEX_CODE\nORDER BY `日涨跌幅(%)` DESC\nLIMIT 1\n200\nMySQL Database error: (1146, \"Table 'juling.INDXN_MKT' doesn't ex",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.TRADEDATE AS `交易日期`,\n    g.INDEX_NAME AS `指数名称`,\n    g.INDEX_CODE AS `指数代码`,\n    ROUND(t.CHNG_PCT*100, 2) AS `日涨跌幅(%)`\nFROM (\n    SELECT \n        TRADEDATE, \n        INDEX_CODE, \n        CHNG_PCT\n    FROM (\n        -- 上证50\n        SELECT \n            TRADEDATE, \n            '上证50' AS INDEX_NAME, \n            '000016' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT \n        WHERE INDEX_CODE = '000016'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证白酒\n        SELECT \n            TRADEDATE, \n            '中证白酒' AS INDEX_NAME, \n            '000827' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000827'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证医疗\n        SELECT \n            TRADEDATE, \n            '中证医疗' AS INDEX_NAME, \n            '000933' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000933'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n    ) t1\n) t\nJOIN (\n    SELECT '上证50' AS INDEX_NAME, '000016' AS INDEX_CODE\n    UNION ALL SELECT '中证白酒', '000827'\n    UNION ALL SELECT '中证医疗', '000933'\n) g ON t.INDEX_CODE = g.INDEX_CODE\nORDER BY `日涨跌幅(%)` DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    t.TRADEDATE AS `交易日期`,\n    g.INDEX_NAME AS `指数名称`,\n    g.INDEX_CODE AS `指数代码`,\n    ROUND(t.CHNG_PCT*100, 2) AS `日涨跌幅(%)`\nFROM (\n    SELECT \n        TRADEDATE, \n        INDEX_CODE, \n        CHNG_PCT\n    FROM (\n        -- 上证50\n        SELECT \n            TRADEDATE, \n            '上证50' AS INDEX_NAME, \n            '000016' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT \n        WHERE INDEX_CODE = '000016'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证白酒\n        SELECT \n            TRADEDATE, \n            '中证白酒' AS INDEX_NAME, \n            '000827' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000827'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n        UNION ALL\n        -- 中证医疗\n        SELECT \n            TRADEDATE, \n            '中证医疗' AS INDEX_NAME, \n            '000933' AS INDEX_CODE,\n            CHNG_PCT\n        FROM INDXN_MKT\n        WHERE INDEX_CODE = '000933'\n            AND TRADEDATE = '2026-09-02'\n            AND CHNG_PCT IS NOT NULL\n    ) t1\n) t\nJOIN (\n    SELECT '上证50' AS INDEX_NAME, '000016' AS INDEX_CODE\n    UNION ALL SELECT '中证白酒', '000827'\n    UNION ALL SELECT '中证医疗', '000933'\n) g ON t.INDEX_CODE = g.INDEX_CODE\nORDER BY `日涨跌幅(%)` DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "106006473 中证医疗 -0.8133\n106000255 上证50 -0.9306\n106006657 中证白酒 -1.3427"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'juling.INDXN_MKT' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 63.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_20_adbc553e.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 61.4,
+  "llm_seconds_max": 10.13,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   16144
+  ],
+  "prompt_columns_raw_len": 3118
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1466,
+   "prompt_tokens": 22625,
+   "total_tokens": 24091,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10624,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 22625,
+  "completion": 1466,
+  "total": 24091
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1466,
+   "prompt_tokens": 22625,
+   "total_tokens": 24091,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10624,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

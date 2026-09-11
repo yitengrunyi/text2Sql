@@ -1,0 +1,155 @@
+{
+ "round_id": 14,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n归属于母公司股东的净利润（归母净利润）\n\n[2] 可能的计算公式  \n归母净利润 = 净利润 - 少数股东损益\n\n其中：  \n净利润 = 营业总收入 - 营业成本 - 税费及费用 + 其他收益\n['归属于母公司股东的净利润', '归母净利润', '净利润', '少数股东损益', '营业总收入', '营业成本', '税费', '费用', '税费及费用', '其他收益']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板业绩预告', '主板基本信息']\n['STK_ACHIEVE_FORECAST', 'STK_LIST_PLAN', 'VIEW_STK_STI_LIST_PLAN', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    f.A_STOCKSNAME AS `股票名称`,\n    f.A_STOCKCODE AS `股票代码`,\n    f.ENDDATE AS `业绩预告会计期截止日`,\n    f.DECLAREDATE AS `业绩预告发布日期`,\n    ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    f.SUMMARY AS `业绩预告摘要`,\n    f.CONTENT AS `业绩预告全文内容`\nFROM \n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MIN_VAL IS NOT NULL\n    AND f.MAX_VAL IS NOT NULL\nORDER BY \n    f.DECLAREDATE DESC\n\n200\n{table:[['股票名称', '股票代码', '业绩预告会计期截止日', '业绩预告发布日期', '归母净利润预测下限(万)', '归母净利润预测上限(万)', '业绩预告摘要', '业绩预告全文内容'], ['*ST国中', '600187', '2026-06-30', '2026-08-19', '265.00', '315.00', '预计2026年1-6月归属于上市公司股东的净利润盈利:265万元至315万元。', '预计2026年1-6月归属于上市公司股东的净利润盈利:265万元至315万元;\\r\\n预计2026年1-6月扣除非经常性损益后的净利润亏损:1,500万元至1,800万元;\\r\\n'], ['广聚能源', '000096', '2026-06-30', '2026-08-12', '6,556.00', '6,856.40', '预计2026年1-6月归属于上市公司股东的净利润盈利:6,555.96万元至6,856.42万元,同比上年增长:603.02%至635.24%。', '预计2026年1-6月归属于上市公司股东的净利润盈利:6,555.96万元至6,856.42万元,同比上年增长:603.02%至635.24%;\\r\\n预计2026年1-6月扣除非经常性损益后的净利润盈利:6,401.19万元至6,701.65万元,同比上年增长:3247.38%至3404.5%;\\r\\n预计2026年1-6月每股收益盈利:0.12元至0.13元;\\r\\n'], ['美联新材', '300586', '2026-06-30', '2026-08-07', '900.00', '1,200.00', '预计2026年1-6月归属于上市公司股东的净利润盈利:900万元至1,200万元。', '预计2026年1-6月归属于上市公司股东的净利润盈利:900万元至1,200万元;\\r\\n预计2026年1-6月扣除非经常性损益后的净利润盈利:600万元至800万元;\\r\\n'], ['江苏雷利', '300660', '2026-06-30', '2026-08-07', '9,685.80', '11,548.50', '预计2026年1-6月归属于上市公司股东的净利润盈利:9,685.83万元至11,548.49万元,同比上年下降:38%至48%。', '预计2026年1-6月归属于上市公司股东的净利润盈利:9,685.83万元至11,548.49万元,同比上年下降:38%至48%;\\r\\n预计2026年1-6月扣除非经常性损益后的净利润盈利:7,392.67万元至9,152.83万元,同比上年下降:48%至58%;\\r\\n'], ['新兴装备', '002933', '20",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    f.A_STOCKSNAME AS `股票名称`,\n    f.A_STOCKCODE AS `股票代码`,\n    f.ENDDATE AS `业绩预告会计期截止日`,\n    f.DECLAREDATE AS `业绩预告发布日期`,\n    ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    f.SUMMARY AS `业绩预告摘要`,\n    f.CONTENT AS `业绩预告全文内容`\nFROM \n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MIN_VAL IS NOT NULL\n    AND f.MAX_VAL IS NOT NULL\nORDER BY \n    f.DECLAREDATE DESC",
+ "final_sql": "SELECT \n    f.A_STOCKSNAME AS `股票名称`,\n    f.A_STOCKCODE AS `股票代码`,\n    f.ENDDATE AS `业绩预告会计期截止日`,\n    f.DECLAREDATE AS `业绩预告发布日期`,\n    ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    f.SUMMARY AS `业绩预告摘要`,\n    f.CONTENT AS `业绩预告全文内容`\nFROM \n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MIN_VAL IS NOT NULL\n    AND f.MAX_VAL IS NOT NULL\nORDER BY \n    f.DECLAREDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3910000.0000 3910000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "*ST国中 600187 2026-06-30 00:00:00 2026-08-19 00:00:00 265.0 315.0 预计2026年1-6月归属于上市公司股东的净利润盈利:265万元至315万元。 预计2026年1-6月归属于上市公司股东的净利润盈利:265万元至315万元;\r\n预计2026年1-6月扣除非经常性损益后的净利润亏损:1,500万元至1,800万元;\r\n\n广聚能源 000",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 51.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_14_2d8cb3ed.1",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 50.58,
+  "llm_seconds_max": 5.12,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   32367
+  ],
+  "prompt_columns_raw_len": 18330
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1262,
+   "prompt_tokens": 38462,
+   "total_tokens": 39724,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38462,
+  "completion": 1262,
+  "total": 39724
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1262,
+   "prompt_tokens": 38462,
+   "total_tokens": 39724,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

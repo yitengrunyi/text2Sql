@@ -1,0 +1,207 @@
+{
+ "round_id": 7,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "目前境内的ETF一共有多少只？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 境内ETF（交易型开放式指数基金）的数量\n\n[2] 可能的计算公式：  \n- ETF总数量 = ∑（数据库或官方公示的所有已注册且存续的ETF产品）\n\n**公式表示：**  \nETF总数 = COUNT(ETF_list_China)  \n其中，ETF_list_China为中国证监会或证券交易所披露的境内上市ETF清单。\n['境内ETF', '交易型开放式指数基金', 'ETF总数量', 'ETF总数', '已注册且存续的ETF产品', 'ETF_list_China', '中国证监会', '证券交易所', '境内上市ETF清单']\n此问题不涉及到个股、行业或者题材\n基金相关\n['ETF相关信息', '基金产品基本信息']\n['ETF_LABEL_INFO_CHINA', 'FUND_AND_COMPANY_MAPPING', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    COUNT(DISTINCT ETF_CODE) AS `ETF总数`,\n    DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期`\nFROM \n    ETF_LABEL_INFO_CHINA\nWHERE \n    HISVALID = 1\n    AND ETF_CODE IS NOT NULL\n200\n{table:[['ETF总数', '统计日期'], ['2,264', '2026-09-03']]}\n该查询的主要目的是统计当前有效且带有代码的境内ETF总数。采用了对ETF代码去重后的计数方式。ETF总数=去重后的ETF代码数量。并直接输出了统计日期。\n\n该数据来自A股ETF标签信息表，该表记录了境内所有上市ETF的详细属性和分类。本次检索对是否有效进行筛选，仅统计有效记录；同时排除了ETF代码为空的数据。\n\n查询结果符合要求，能够有效统计目前境内的ETF数量和统计日期。\n目前境内的ETF一共有多少只？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    COUNT(DISTINCT ETF_CODE) AS `ETF总数`,\n    DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期`\nFROM \n    ETF_LABEL_INFO_CHINA\nWHERE \n    HISVALID = 1\n    AND ETF_CODE IS NOT NULL",
+ "final_sql": "SELECT \n    COUNT(DISTINCT ETF_CODE) AS `ETF总数`,\n    DATE_FORMAT(NOW(), '%Y-%m-%d') AS `统计日期`\nFROM \n    ETF_LABEL_INFO_CHINA\nWHERE \n    HISVALID = 1\n    AND ETF_CODE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "11701"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2264 2026-09-03",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 58.4,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_7_befd7283.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 59.53,
+  "llm_seconds_max": 14.53,
+  "selected_tables": [
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_AND_COMPANY_MAPPING",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   17688
+  ],
+  "prompt_columns_raw_len": 8926
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1171,
+   "prompt_tokens": 13187,
+   "total_tokens": 14358,
+   "completion_tokens_details": {
+    "reasoning_tokens": 989,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13187,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1053,
+   "prompt_tokens": 25829,
+   "total_tokens": 26882,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1792,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39016,
+  "completion": 2224,
+  "total": 41240
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1171,
+   "prompt_tokens": 13187,
+   "total_tokens": 14358,
+   "completion_tokens_details": {
+    "reasoning_tokens": 989,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13187,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1053,
+   "prompt_tokens": 25829,
+   "total_tokens": 26882,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1792,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_INFO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_AND_COMPANY_MAPPING",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

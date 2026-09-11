@@ -1,0 +1,186 @@
+{
+ "round_id": 29,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 按板块（Segment）拆分的销售收入（Segment Revenue）\n- 主营业务收入（Primary Business Revenue/Main operating segment revenue）\n\n[2] 可能的计算公式：\n\n- 各板块销售收入 = 板块A收入 + 板块B收入 + ... + 板块N收入\n  - 具体到谷歌（Alphabet）：如Google Services、Google Cloud、Other Bets等分部收入\n- 主营业务收入 = 与主营业务相关的板块销售收入之和\n  - 对Alphabet来说，主营业务多为Google Services收入\n  - 主营业务收入 = 总销售收入 × 主营业务占比 或 直接按报告披露的主营板块收入\n\n['谷歌A', 'Alphabet', '2025财年', '板块', '分部', '板块销售收入', 'Segment Revenue', '分部收入', '主营业务收入', '主营业务', 'Primary Business Revenue', 'Main operating segment revenue', 'Google Services', 'Google Cloud', 'Other Bets', '总销售收入', '主营业务占比', '报告披露的主营板块收入']\n该问题可能涉及美股-'谷歌', 它的美股股票代码为：A，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n该问题可能涉及的题材包含：['互联网服务']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '互联网服务'。\n美股相关\n['美股基本信息', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3105']\n是否命中召回表：True\n['互联网服务']\nquery抽取的主体词是['互联网服务']\n生成查询代码\ntop30召回:{}\nSELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财政周期结束日期`,\n    vc.SECTION_CNAME AS `板块中文`,\n    vc.F006V AS `板块英文`,\n    vc.F005V AS `货币`,\n    ROUND(vc.F007N/100000000, 3) AS `销售（亿）`,\n    ROUND(vc.F008N/100000000, 3) AS `运营收入（亿）`\nFROM \n    AMERICAN_STOCK_MAIN am\nLEFT JOIN \n    VIEW_COM3105 vc\n    ON am.FIU_ID = vc.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'GOOGL.US'\n    AND vc.F001D >= '2024-07-01' AND vc.F001D <= '2025-06-30'\n    AND vc.SECTION_CNAME IS NOT NULL\n    AND vc.F007N IS NOT NULL\n    AND vc.F008N IS NOT NULL\n    AND vc.SECTION_CNAME LIKE '%主营%'\nORDER BY \n    vc.F001D DESC\n500\nMySQL Database error: (1054, \"Unknown column 'vc.SECTION_CNAME' in 'field list'\")\n诊断 根据你提供的【模型生成的SQL】以及执行结果报错信息，**最主要的两个原因如下**：\n\n---\n\n### 1. **SQL语句涉及的字段在数据库表/视图中不存在**\n- 报错信息 `Unknown column 'vc.SECTION_CNAME' in 'field list'` 明确指出，在 `VIEW_COM3105` 这个视图（别名 `vc`）中 **没有字段名为 `SECTION_CNAME`**。\n- 这意味着你的数据表或视图结构并不包含该字段，模型生成SQL时“凭空捏造”或错误地猜想了字段名。\n\n#### 可能性细化：\n- 也许表结构中该字段名称不叫 `SECTION_CNAME`，实际字段名可能为其它名字，如 `SECTOR_NAME`、`BUSINESS_NAME`等等。\n- 也有可能是模型错误“臆造”出一个不存在的字段名。\n\n---\n\n### 2. **模型生成SQL语句时对数据表结构不清楚导致字段拼写/引用错误",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财政周期结束日期`,\n    vc.SECTION_CNAME AS `板块中文`,\n    vc.F006V AS `板块英文`,\n    vc.F005V AS `货币`,\n    ROUND(vc.F007N/100000000, 3) AS `销售（亿）`,\n    ROUND(vc.F008N/100000000, 3) AS `运营收入（亿）`\nFROM \n    AMERICAN_STOCK_MAIN am\nLEFT JOIN \n    VIEW_COM3105 vc\n    ON am.FIU_ID = vc.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'GOOGL.US'\n    AND vc.F001D >= '2024-07-01' AND vc.F001D <= '2025-06-30'\n    AND vc.SECTION_CNAME IS NOT NULL\n    AND vc.F007N IS NOT NULL\n    AND vc.F008N IS NOT NULL\n    AND vc.SECTION_CNAME LIKE '%主营%'\nORDER BY \n    vc.F001D DESC",
+ "final_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财政周期结束日期`,\n    vc.F005V AS `货币`,\n    vc.F006V AS `业务板块名称`,\n    ROUND(vc.F007N/100000000, 3) AS `营业收入（亿）`\nFROM \n    AMERICAN_STOCK_MAIN am\nLEFT JOIN \n    VIEW_COM3105 vc\n    ON am.FIU_ID = vc.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'GOOGL.US'\n    AND vc.F001D >= '2024-07-01' \n    AND vc.F001D <= '2025-06-30'\n    AND vc.F007N IS NOT NULL\n    AND vc.F006V IS NOT NULL\nORDER BY \n    vc.F001D DESC",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "262570.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'vc.SECTION_CNAME' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 65.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_29_36ccbde1.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 63.33,
+  "llm_seconds_max": 8.17,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105",
+   "VIEW_COM3106"
+  ],
+  "sql_prompt_chars": [
+   11457,
+   10680
+  ],
+  "prompt_columns_raw_len": 2302
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1913,
+   "prompt_tokens": 23838,
+   "total_tokens": 25751,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 2,
+   "prompt_tokens": 467,
+   "total_tokens": 469,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 2,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24305,
+  "completion": 1915,
+  "total": 26220
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1913,
+   "prompt_tokens": 23838,
+   "total_tokens": 25751,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 2,
+   "prompt_tokens": 467,
+   "total_tokens": 469,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 2,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

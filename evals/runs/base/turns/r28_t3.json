@@ -1,0 +1,149 @@
+{
+ "round_id": 28,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "估值先放一边，那过去一年呢？迪士尼这段时间股价累计涨跌了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 迪士尼股价涨跌幅（累计涨跌幅/总回报率）\n\n[2] 可能的计算公式：  \n迪士尼股价累计涨跌幅 = （期末收盘价 - 期初收盘价） / 期初收盘价 × 100%\n['迪士尼', '股价', '累计涨跌幅', '总回报率', '涨跌幅', '期末收盘价', '期初收盘价', '迪士尼股价累计涨跌幅', '股价涨跌幅', '回报率']\n该问题可能涉及美股-'迪士尼', 它的美股股票代码为：DIS.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。\n美股相关\n['美股基本信息', '美股行情']\n['VIEW_US_EXPR_IDX', 'VIEW_ADS_STOCK_US_EOD_DI', 'VIEW_US_EOD_EXPR', 'VIEW_STOCK_US_TURNOUT_SHARES']\n是否命中召回表：False\n生成查询代码\nSELECT\n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(CHG_PCT_YEAR, 2) AS `过去一年股价累计涨跌幅(%)`,\n    CLOSE_PRICE AS `最新收盘价(美元)`\nFROM\n    fiu.VIEW_US_EXPR_IDX\nWHERE\n    COMB_SYMBOL = 'DIS.US'\n    AND TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM fiu.VIEW_US_EXPR_IDX WHERE COMB_SYMBOL='DIS.US')\n    AND CHG_PCT_YEAR IS NOT NULL\n    AND CLOSE_PRICE IS NOT NULL\n\n200\n{table:[['交易日期', '股票名称', '股票代码', '过去一年股价累计涨跌幅(%)', '最新收盘价(美元)'], ['2026-08-25', '迪士尼', 'DIS.US', '6.65', '110.00']]}\n查询的主要目的是获取迪士尼在最新交易日时，过去一年的股价累计涨跌幅和最新的收盘价。过去一年股价累计涨跌幅是根据当前交易日往前推一个自然年内所有交易日的复利累计收益率来计算，具体公式为：累计涨跌幅等于区间内每日涨跌幅按复利方式累计。这样可以更准确反映长期持有的实际收益情况。收盘价直接取最新交易日的除权收盘价。在此查询中，累计涨跌幅通过公式计算，其余指标为直接取值。查询结果符合要求。\n\n数据来源于一个用于存储美股增强行情数据的表。该表已经预先计算好了每只股票在各个周期下的累计收益率，以及除权收盘价信息。查询中选择了股票名称、展示代码（带后缀）、最新收盘价、和过去一年累计涨跌幅。\n\n查询限定了股票代码为迪士尼，且只查最新交易日的记录，只返回过去一年累计涨跌幅和收盘价等信息不为空的数据。这保证了得到的是截止最新交易日的有效结果。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(CHG_PCT_YEAR, 2) AS `过去一年股价累计涨跌幅(%)`,\n    CLOSE_PRICE AS `最新收盘价(美元)`\nFROM\n    fiu.VIEW_US_EXPR_IDX\nWHERE\n    COMB_SYMBOL = 'DIS.US'\n    AND TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM fiu.VIEW_US_EXPR_IDX WHERE COMB_SYMBOL='DIS.US')\n    AND CHG_PCT_YEAR IS NOT NULL\n    AND CLOSE_PRICE IS NOT NULL",
+ "final_sql": "SELECT\n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(CHG_PCT_YEAR, 2) AS `过去一年股价累计涨跌幅(%)`,\n    CLOSE_PRICE AS `最新收盘价(美元)`\nFROM\n    fiu.VIEW_US_EXPR_IDX\nWHERE\n    COMB_SYMBOL = 'DIS.US'\n    AND TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM fiu.VIEW_US_EXPR_IDX WHERE COMB_SYMBOL='DIS.US')\n    AND CHG_PCT_YEAR IS NOT NULL\n    AND CLOSE_PRICE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "6.65"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 迪士尼 DIS.US 6.65 110.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 44.2,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_28_6e096666.3",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 42.67,
+  "llm_seconds_max": 6.16,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EXPR_IDX",
+   "STK2401",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   14886
+  ],
+  "prompt_columns_raw_len": 5048
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1011,
+   "prompt_tokens": 19624,
+   "total_tokens": 20635,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19624,
+  "completion": 1011,
+  "total": 20635
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1011,
+   "prompt_tokens": 19624,
+   "total_tokens": 20635,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EXPR_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EXPR_IDX",
+   "STK2401",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

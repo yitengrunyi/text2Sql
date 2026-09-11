@@ -1,0 +1,162 @@
+{
+ "round_id": 28,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（P/E ratio, Price-to-Earnings Ratio）\n\n[2] 可能的计算公式：  \n市盈率 = 公司当前总市值 / 最近一年净利润  \n或者：  \n市盈率 = 每股股价 / 每股收益（EPS）\n['迪士尼', '奈飞', '估值水平', '市盈率', 'P/E ratio', 'Price-to-Earnings Ratio', '公司当前总市值', '最近一年净利润', '每股股价', '每股收益', 'EPS']\n该问题可能涉及美股-'迪士尼', 它的美股股票代码为：DIS.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。该问题可能涉及美股-'奈飞', 它的美股股票代码为：NFLX.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。\n美股相关\n['美股基本信息', '美股行情', '美股财务']\n['VIEW_COM3102_CUM', 'VIEW_COM3103_CUM', 'STK2401', 'VIEW_STOCK_US_TURNOUT_SHARES', 'VIEW_COM3104_Q']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.TRADE_DATE AS `行情日期`,\n    ROUND(a.F007N,2) AS `最新收盘价`,\n    b.CURRENCY AS `货币类型`,\n    ROUND(c.`市盈率`,2) AS `市盈率`,\n    ROUND(d.`归母净利润(万)`,1) AS `归母净利润(万)`,\n    ROUND(e.`总股本(亿)`,2) AS `总股本(亿)`\nFROM \n(\n    -- 1. 取迪士尼和奈飞的FIU_ID\n    SELECT \n        COMB_SYMBOL,\n        FIU_ID,\n        CSNAME,\n        CURRENCY\n    FROM AMERICAN_STOCK_MAIN\n    WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n) b\n-- 2. 联合最新行情日价，取最大交易日\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        CSNAME,\n        F007N,\n        F001D AS TRADE_DATE\n    FROM STK2401\n    WHERE F001D = (\n        SELECT MAX(F001D) FROM STK2401 WHERE FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n        )\n    )\n    AND FIU_ID IN (\n        SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n    )\n) a ON a.FIU_ID = b.FIU_ID\n-- 3. 财报：最新年度归母净利润，最新F001D且F004N最长（优先年报）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        F001D AS 财报截止日,\n        F004N AS 财政期间长度,\n        (CASE WHEN F034N IS NULL THEN NULL ELSE F034N*10000 END) AS `归母净利润(万)`,  -- 单位百万美元转万\n        F048N AS 营业收入,\n        F003V AS 报表种类\n    FROM VIEW_COM3103_CUM\n    WHERE\n        (F003V = 'FY' OR F003V = 'T1')\n        AND F001D = (\n            SELECT MAX(F001D) FROM VIEW_COM3103_CUM t2 WHERE t2.FIU_ID = VIEW_COM3103_CUM.FIU_ID\n        )\n        AND FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN W",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.TRADE_DATE AS `行情日期`,\n    ROUND(a.F007N,2) AS `最新收盘价`,\n    b.CURRENCY AS `货币类型`,\n    ROUND(c.`市盈率`,2) AS `市盈率`,\n    ROUND(d.`归母净利润(万)`,1) AS `归母净利润(万)`,\n    ROUND(e.`总股本(亿)`,2) AS `总股本(亿)`\nFROM \n(\n    -- 1. 取迪士尼和奈飞的FIU_ID\n    SELECT \n        COMB_SYMBOL,\n        FIU_ID,\n        CSNAME,\n        CURRENCY\n    FROM AMERICAN_STOCK_MAIN\n    WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n) b\n-- 2. 联合最新行情日价，取最大交易日\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        CSNAME,\n        F007N,\n        F001D AS TRADE_DATE\n    FROM STK2401\n    WHERE F001D = (\n        SELECT MAX(F001D) FROM STK2401 WHERE FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n        )\n    )\n    AND FIU_ID IN (\n        SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n    )\n) a ON a.FIU_ID = b.FIU_ID\n-- 3. 财报：最新年度归母净利润，最新F001D且F004N最长（优先年报）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        F001D AS 财报截止日,\n        F004N AS 财政期间长度,\n        (CASE WHEN F034N IS NULL THEN NULL ELSE F034N*10000 END) AS `归母净利润(万)`,  -- 单位百万美元转万\n        F048N AS 营业收入,\n        F003V AS 报表种类\n    FROM VIEW_COM3103_CUM\n    WHERE\n        (F003V = 'FY' OR F003V = 'T1')\n        AND F001D = (\n            SELECT MAX(F001D) FROM VIEW_COM3103_CUM t2 WHERE t2.FIU_ID = VIEW_COM3103_CUM.FIU_ID\n        )\n        AND FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n        )\n) d ON d.FIU_ID = b.FIU_ID\n-- 4. 股本（最新日）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        (TOTAL_SHARES/100000000) AS `总股本(亿)`,\n        TRADE_DATE\n    FROM VIEW_STOCK_US_TURNOUT_SHARES\n    WHERE\n        TRADE_DATE = (\n            SELECT MAX(TRADE_DATE) FROM VIEW_STOCK_US_TURNOUT_SHARES WHERE SYMBOL IN ('DIS','NFLX')\n        )\n        AND SYMBOL IN ('DIS','NFLX')\n) e ON e.FIU_ID = b.FIU_ID\n-- 5. 动态市盈率（price/eps, eps为最新年报摊薄每股收益F016N）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        CASE \n            WHEN MAX(F016N) IS NOT NULL AND MAX(F016N)<>0\n            THEN MAX(F007N)/MAX(F016N)\n            ELSE NULL\n        END AS `市盈率`\n    FROM (\n        SELECT\n            t1.FIU_ID,\n            t1.F007N,\n            t2.F016N\n        FROM\n            (\n                -- 最新收盘价\n                SELECT FIU_ID, F007N\n                FROM STK2401\n                WHERE F001D = (\n                        SELECT MAX(F001D) FROM STK2401 WHERE FIU_ID IN (\n                            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                        )\n                )\n                AND FIU_ID IN (\n                    SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                )\n            ) t1\n        LEFT JOIN\n            (\n                -- 最新年报每股收益\n                SELECT FIU_ID, F016N\n                FROM VIEW_COM3103_CUM\n                WHERE F003V = 'FY' AND F001D = (\n                    SELECT MAX(F001D)\n                    FROM VIEW_COM3103_CUM t2\n                    WHERE t2.FIU_ID = VIEW_COM3103_CUM.FIU_ID AND F003V = 'FY'\n                )\n                AND FIU_ID IN (\n                    SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                )\n            ) t2 ON t1.FIU_ID = t2.FIU_ID\n    ) sub\n    GROUP BY FIU_ID\n) c ON c.FIU_ID = b.FIU_ID\nORDER BY c.`市盈率` DESC",
+ "final_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.TRADE_DATE AS `行情日期`,\n    ROUND(a.F007N,2) AS `最新收盘价`,\n    b.CURRENCY AS `货币类型`,\n    ROUND(c.`市盈率`,2) AS `市盈率`,\n    ROUND(d.`归母净利润(万)`,1) AS `归母净利润(万)`,\n    ROUND(e.`总股本(亿)`,2) AS `总股本(亿)`\nFROM \n(\n    -- 1. 取迪士尼和奈飞的FIU_ID\n    SELECT \n        COMB_SYMBOL,\n        FIU_ID,\n        CSNAME,\n        CURRENCY\n    FROM AMERICAN_STOCK_MAIN\n    WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n) b\n-- 2. 联合最新行情日价，取最大交易日\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        CSNAME,\n        F007N,\n        F001D AS TRADE_DATE\n    FROM STK2401\n    WHERE F001D = (\n        SELECT MAX(F001D) FROM STK2401 WHERE FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n        )\n    )\n    AND FIU_ID IN (\n        SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n    )\n) a ON a.FIU_ID = b.FIU_ID\n-- 3. 财报：最新年度归母净利润，最新F001D且F004N最长（优先年报）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        F001D AS 财报截止日,\n        F004N AS 财政期间长度,\n        (CASE WHEN F034N IS NULL THEN NULL ELSE F034N*10000 END) AS `归母净利润(万)`,  -- 单位百万美元转万\n        F048N AS 营业收入,\n        F003V AS 报表种类\n    FROM VIEW_COM3103_CUM\n    WHERE\n        (F003V = 'FY' OR F003V = 'T1')\n        AND F001D = (\n            SELECT MAX(F001D) FROM VIEW_COM3103_CUM t2 WHERE t2.FIU_ID = VIEW_COM3103_CUM.FIU_ID\n        )\n        AND FIU_ID IN (\n            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n        )\n) d ON d.FIU_ID = b.FIU_ID\n-- 4. 股本（最新日）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        (TOTAL_SHARES/100000000) AS `总股本(亿)`,\n        TRADE_DATE\n    FROM VIEW_STOCK_US_TURNOUT_SHARES\n    WHERE\n        TRADE_DATE = (\n            SELECT MAX(TRADE_DATE) FROM VIEW_STOCK_US_TURNOUT_SHARES WHERE SYMBOL IN ('DIS','NFLX')\n        )\n        AND SYMBOL IN ('DIS','NFLX')\n) e ON e.FIU_ID = b.FIU_ID\n-- 5. 动态市盈率（price/eps, eps为最新年报摊薄每股收益F016N）\nLEFT JOIN (\n    SELECT \n        FIU_ID,\n        CASE \n            WHEN MAX(F016N) IS NOT NULL AND MAX(F016N)<>0\n            THEN MAX(F007N)/MAX(F016N)\n            ELSE NULL\n        END AS `市盈率`\n    FROM (\n        SELECT\n            t1.FIU_ID,\n            t1.F007N,\n            t2.F016N\n        FROM\n            (\n                -- 最新收盘价\n                SELECT FIU_ID, F007N\n                FROM STK2401\n                WHERE F001D = (\n                        SELECT MAX(F001D) FROM STK2401 WHERE FIU_ID IN (\n                            SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                        )\n                )\n                AND FIU_ID IN (\n                    SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                )\n            ) t1\n        LEFT JOIN\n            (\n                -- 最新年报每股收益\n                SELECT FIU_ID, F016N\n                FROM VIEW_COM3103_CUM\n                WHERE F003V = 'FY' AND F001D = (\n                    SELECT MAX(F001D)\n                    FROM VIEW_COM3103_CUM t2\n                    WHERE t2.FIU_ID = VIEW_COM3103_CUM.FIU_ID AND F003V = 'FY'\n                )\n                AND FIU_ID IN (\n                    SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US','NFLX.US')\n                )\n            ) t2 ON t1.FIU_ID = t2.FIU_ID\n    ) sub\n    GROUP BY FIU_ID\n) c ON c.FIU_ID = b.FIU_ID\nORDER BY c.`市盈率` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "奈飞 56.19\n迪士尼 35.5"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'CURRENCY' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 53.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_28_6e096666.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.11,
+  "llm_seconds_max": 15.32,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   23959
+  ],
+  "prompt_columns_raw_len": 13994
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2307,
+   "prompt_tokens": 31619,
+   "total_tokens": 33926,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31619,
+  "completion": 2307,
+  "total": 33926
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2307,
+   "prompt_tokens": 31619,
+   "total_tokens": 33926,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

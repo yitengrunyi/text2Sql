@@ -1,0 +1,55 @@
+{
+  "comment": "MYSQL-1(FUND_INFO)语义覆盖层：build 时在结构对账+激活之后应用，幂等。修复评测暴露的三类语义缺口：正确表无域映射、代码后缀格式、权威源无标注。",
+  "domain_mappings": [
+    { "db_name": "FUND_INFO", "table": "ETF_PERFORMANCE_DETAIL",
+      "domains": ["基金产品净值", "基金份额变动", "ETF相关信息"] },
+    { "db_name": "FUND_INFO", "table": "ETF_INFO_DETAIL",
+      "domains": ["ETF相关信息", "基金产品基本信息"] },
+    { "db_name": "FUND_INFO", "table": "FUND_STATISTICS_YEAR",
+      "domains": ["基金产品净值"] }
+  ],
+  "expert_knowledge": [
+    { "db_name": "FUND_INFO", "table": "ETF_PERFORMANCE_DETAIL",
+      "keywords": "ETF收盘价,ETF行情,ETF涨跌幅,ETF规模,ETF份额,YTD,今年以来收益,ETF成交额,ETF总数",
+      "desc": "ETF行情与规模权威表(当日更新)：收盘价CLOSE_PRICE、涨跌幅CHANGE_PCT、基金规模FUND_SIZE(亿)、份额FUND_SHARES、YTD及1W~10Y滚动收益率均为现成列，直接取值禁止自算。TYPE=1境内/2美股。FUND_SYMBOL必须带交易所后缀，如510050.SH。注意：本表仅含有当日行情记录的ETF(单日约两千只)，统计ETF总数/QDII数量必须改用ETF_INFO_DETAIL(COUNT TYPE=1境内、IF_QDII=1)。" },
+    { "db_name": "FUND_INFO", "table": "ETF_INFO_DETAIL",
+      "keywords": "ETF数量,境内ETF,多少只ETF,QDII ETF,ETF总数",
+      "desc": "ETF数量统计权威源：境内ETF总数=COUNT(TYPE=1)；QDII的ETF数=COUNT(IF_QDII=1)。ETF_LABEL_INFO_CHINA仅为A股ETF标签明细表、口径不同，禁止用于数量统计。" },
+    { "db_name": "FUND_INFO", "table": "FUND_STATISTICS_YEAR",
+      "keywords": "年度收益率,年度收益,基金收益,收益率最高,收益排名,最大回撤,夏普",
+      "desc": "基金年度业绩统计表：YEAR=统计年份，YIELD=年度收益率(%)，另有MAX_DRAWBACK/SHARPE。查某基金某年收益率、年度收益冠军/排名必须直接查本表并按YIELD排序，严禁从FUND_NETVALUE(3700万行)自算收益率（必然超时）。" },
+    { "db_name": "FUND_INFO", "table": "FUND_NETVALUE",
+      "keywords": "单位净值,累计净值,基金净值,最新净值,复权净值,收益率",
+      "desc": "基金净值日表(T+1更新)：单位净值UNIT_NAV、累计净值ACCU_NAV、复权累计RESTORED_ACCU_NAV。FUND_SYMBOL必须带交易所后缀：场外.OF(如001051.OF)、沪市.SH(如510050.SH)、深市.SZ，裸代码查不到。货币基金单位净值恒为1且部分停更，规模勿用净值推算(用FUND_ASSET_ALLOCATION)。查基金年度收益率/收益冠军/收益排名必须改用FUND_STATISTICS_YEAR(YEAR+YIELD现成列)，严禁在本表自算收益率(3700万行必超时)。" },
+    { "db_name": "FUND_INFO", "table": "FUND_PORTFOLIO_DETAIL",
+      "keywords": "重仓股,前十大重仓,基金持仓,持股明细,第一大重仓",
+      "desc": "基金持股明细：查前十大重仓股必须加FUND_HOLDING_SOURCE_ID=1(季报口径，每基金10行)；2=半年报全持仓；3=上市公司股东披露口径。不加过滤会因多口径并存出现重复行。排序用MARKET_VALUE或RATIO_IN_NV，报告期REPORT_DATE如'2026-06-30'。" },
+    { "db_name": "FUND_INFO", "table": "FUND_ASSET_ALLOCATION",
+      "keywords": "基金规模,资产净值,最大的基金,规模最大,总资产",
+      "desc": "基金资产规模权威表(报告期快照)：资产净值NET_VALUE、总资产TOTAL_ASSET、股票市值MV_OF_STOCK，按REPORT_DATE取MAX(报告期)即最新；比较全市场规模也直接ORDER BY NET_VALUE DESC。货币基金(如天弘余额宝000198.OF)规模同样在此表。" },
+    { "db_name": "FUND_INFO", "table": "FUND_MANAGER_INFO",
+      "keywords": "基金经理,在管基金数,管理规模,任职年限,管了几只",
+      "desc": "基金经理截面表：在管基金数=FUND_NUM_ACTUAL、管理规模=NET_VALUE(元)、管理年限=EXPERIENCE_TIME。查在管最多/规模最大的经理直接ORDER BY对应列取值，无需join其他表、无需用市值/净值构造比率过滤。" },
+    { "db_name": "FUND_INFO", "table": "ETF_DAILY_QUOTE",
+      "keywords": "ETF日线,ETF历史行情,LOF行情,ETF开盘价,ETF最高价",
+      "desc": "ETF/LOF历史日线行情(更新至当前交易日)：FUND_SYMBOL必须带交易所后缀(如510050.SH、160613.SZ)，裸代码查不到任何行。本表仅价格量额，无规模/份额/收益率列——查规模、份额、YTD请改用ETF_PERFORMANCE_DETAIL。" }
+  ],
+  "expert_knowledge_deactivate": [
+    { "db_name": "FUND_INFO", "table": "FUND_MANAGER_INFO", "know_id": 149,
+      "reason": "源库启发式『查规模加权益占比>44.7%/主动>被动过滤』会被模型误套到数量/名单类问题上(评测实测：在管数量题因此答错)；规模口径已由覆盖层 FUND_MANAGER_INFO 知识行(NET_VALUE直接取值)覆盖。" }
+  ],
+  "column_desc_patches": [
+    { "db_name": "FUND_INFO", "table": "FUND_NETVALUE", "column": "FUND_SYMBOL", "mode": "append",
+      "text": "【重要】代码带交易所后缀：场外.OF、沪市.SH、深市.SZ，如001051.OF、510050.SH。" },
+    { "db_name": "FUND_INFO", "table": "ETF_PERFORMANCE_DETAIL", "column": "FUND_SYMBOL", "mode": "append",
+      "text": "【重要】代码带交易所后缀：如510050.SH。" },
+    { "db_name": "FUND_INFO", "table": "ETF_DAILY_QUOTE", "column": "FUND_SYMBOL", "mode": "append",
+      "text": "【重要】代码带交易所后缀：如510050.SH、160613.SZ。" },
+    { "db_name": "FUND_INFO", "table": "ETF_INFO_DETAIL", "column": "FUND_SYMBOL", "mode": "append",
+      "text": "【重要】代码带交易所后缀：如510050.SH。" },
+    { "db_name": "FUND_INFO", "table": "FUND_SHARES_CHANGE", "column": "FUND_SYMBOL", "mode": "append",
+      "text": "【重要】代码带交易所后缀：如510050.SH。" },
+    { "db_name": "FUND_INFO", "table": "FUND_STATISTICS_YEAR", "column": "YIELD", "mode": "replace",
+      "text": "年度收益率(%)，正为盈利负为亏损；YEAR为统计年份。" }
+  ]
+}

@@ -1,0 +1,192 @@
+{
+ "round_id": 2,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安2025年的基本每股收益是多少？",
+ "labels": {
+  "followup_type": "普通追问",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基本每股收益（EPS，Earnings Per Share）\n\n[2] 可能的计算公式：  \n基本每股收益（EPS） = 净利润 / 普通股的加权平均股数\n['中国平安', '基本每股收益', '每股收益', 'EPS', 'Earnings Per Share', '净利润', '普通股的加权平均股数']\n该问题可能涉及A股-'中国平安'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-非银金融。\n个股相关\n['主板基本信息', '主板财务']\n['STK_PREEXP', 'VIEW_STK_CONSENSUS_FORECAST', 'STK_STOCK', 'STK_ASSETS', 'STK_TAXPAY', 'ANA_STK_DIV_RATE_IDX', 'VIEW_STK_INCOME_GEN_QTR', 'STK_ACCT_RCV', 'STK_ATCP_LBLT', 'VIEW_STK_STI_LIST_PLAN']\n是否命中召回表：False\n生成查询代码\nSELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.P240801, 3) AS `基本每股收益(元)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR A\nWHERE \n    A.A_STOCKSNAME LIKE '%中国平安%'\n    AND A.RPT_TYPE = '合并'\n    AND A.RPT_YEAR = 2025\n    AND A.RPT_QTR = '四季度'\n    AND A.ISVALID = 1\n    AND A.P240801 IS NOT NULL\nORDER BY \n    A.ENDDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报表截止日期', '基本每股收益(元)'], ['中国平安', '601318', '2025-12-31', '0.12']]}\n该查询旨在获取中国平安在2025年度第四季度的基本每股收益。基本每股收益通过提取利润表中的相关财务指标，并引用报告期末最新数据，经过单位保留三位小数后展现。计算方式为：基本每股收益 = 报告期归属于普通股股东的净利润 / 期末普通股股数。查询中已经对结果进行了保留小数及取值处理。\n\n查询从单季度利润表数据中选取信息，主要涉及A股公司简称、A股代码、报表截止日期及基本每股收益等字段。筛选条件包括公司简称包含“中国平安”，报表类型为“合并”，年份为2025年，季度为“四季度”，数据有效且基本每股收益不为空。结果按截止日期降序排列，并限制输出1条最新记录。\n\n查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.P240801, 3) AS `基本每股收益(元)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR A\nWHERE \n    A.A_STOCKSNAME LIKE '%中国平安%'\n    AND A.RPT_TYPE = '合并'\n    AND A.RPT_YEAR = 2025\n    AND A.RPT_QTR = '四季度'\n    AND A.ISVALID = 1\n    AND A.P240801 IS NOT NULL\nORDER BY \n    A.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.P240801, 3) AS `基本每股收益(元)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR A\nWHERE \n    A.A_STOCKSNAME LIKE '%中国平安%'\n    AND A.RPT_TYPE = '合并'\n    AND A.RPT_YEAR = 2025\n    AND A.RPT_QTR = '四季度'\n    AND A.ISVALID = 1\n    AND A.P240801 IS NOT NULL\nORDER BY \n    A.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7.680000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国平安 601318 2025-12-31 00:00:00 0.120",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 45.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_2_0e76367a.5",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 64.27,
+  "llm_seconds_max": 7.89,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   42758
+  ],
+  "prompt_columns_raw_len": 21813
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2011,
+   "prompt_tokens": 61015,
+   "total_tokens": 63026,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 14592,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 61015,
+  "completion": 2011,
+  "total": 63026
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2011,
+   "prompt_tokens": 61015,
+   "total_tokens": 63026,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 14592,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

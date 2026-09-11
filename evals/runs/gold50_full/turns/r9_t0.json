@@ -1,0 +1,163 @@
+{
+ "round_id": 9,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年的营业收入是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 营业收入（Revenue 或 Operating Revenue）\n\n[2] 可能的计算公式：  \n营业收入 = 产品销售收入 + 服务收入  \n或  \n营业收入 = 销售商品或提供劳务所取得的总收入（不含各类税费等扣除项）\n['苹果公司', '营业收入', 'Revenue', 'Operating Revenue', '产品销售收入', '服务收入', '销售商品', '提供劳务收入', '总收入', '税费']\n该问题可能涉及美股-'苹果', 它的美股股票代码为：AAPL.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM', 'COM3103']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F003V AS `报表种类`,\n    c.F004N AS `财政期间长度(天数)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿美元)`,\n    CONCAT(ROUND(c.F048N / 100, 3), ' 亿美元') AS `营业收入(亿)`,\n    c.F005V AS `货币类型`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'AAPL.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '报表种类', '财政期间长度(天数)', '营业收入(亿美元)', '营业收入(亿)', '货币类型'], ['苹果', 'AAPL.US', '2025-12-31', 'FY', '365', '5,393.14', '5393.142 亿美元', 'USD']]}\n该查询的主要目的是获取苹果公司2025财年年度报表对应的营业收入数据，并将单位转换为亿美元进行展示。营业收入（亿美元）的计算方式为：营业收入（百万美元）除以100，并保留三位小数。例如，若营业收入为10000百万美元，转换后为100亿美元。结果也拼接了显示单位以便直观展示。\n\n查询从两个表中提取数据，通过美股内部代码字段进行连接。用于存储美股基础信息的表被用来获取股票名称和代码，覆盖美股累计年度财务数据的表用来查找对应年度的财务信息。\n\n选择了公司名称、股票代码、财政周期结束日期、报表种类、财政期间长度、营业收入（亿美元）、格式化后的营业收入以及货币类型。筛选条件包括：股票展示代码为苹果公司、财政年度为2025年、报表种类为年度报表，并确保营业收入数据存在。查询结果按财政周期结束日期倒序排列，返回最新的一条记录。\n\n查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F003V AS `报表种类`,\n    c.F004N AS `财政期间长度(天数)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿美元)`,\n    CONCAT(ROUND(c.F048N / 100, 3), ' 亿美元') AS `营业收入(亿)`,\n    c.F005V AS `货币类型`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'AAPL.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F003V AS `报表种类`,\n    c.F004N AS `财政期间长度(天数)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿美元)`,\n    CONCAT(ROUND(c.F048N / 100, 3), ' 亿美元') AS `营业收入(亿)`,\n    c.F005V AS `货币类型`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'AAPL.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "539314.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 2025-12-31 FY 365 5393.142 5393.142 亿美元 USD",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 44.6,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_9_d847654b.0",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 42.86,
+  "llm_seconds_max": 5.27,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   18831
+  ],
+  "prompt_columns_raw_len": 10231
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 977,
+   "prompt_tokens": 25354,
+   "total_tokens": 26331,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25354,
+  "completion": 977,
+  "total": 26331
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 977,
+   "prompt_tokens": 25354,
+   "total_tokens": 26331,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

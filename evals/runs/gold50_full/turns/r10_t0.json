@@ -1,0 +1,144 @@
+{
+ "round_id": 10,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与多轮实体切换",
+ "question": "苹果公司当前样本的总市值是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "多表join",
+  "route_gold": null,
+  "time_sensitivity": "snapshot"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n总市值（Market Capitalization）\n\n[2] 可能的计算公式：  \n总市值 = 股价 × 已发行股份总数  \n（Market Cap = Share Price × Total Shares Outstanding）\n['苹果公司', '总市值', '市值', 'Market Capitalization', 'Market Cap', '股价', 'Share Price', '已发行股份总数', 'Total Shares Outstanding']\n该问题可能涉及美股-'苹果', 它的美股股票代码为：AAPL.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n美股相关\n['美股基本信息', '美股行情']\n[]\n是否命中召回表：False\n生成查询代码\n执行错误: Traceback (most recent call last):\n  File \"/Users/mdb/project/text2sql_renew/handler/text2sql_handler.py\", line 363, in handle_query_demo_for_mq\n    generated_sql, final_define, general_text, domain_text, table_text, combine_prompt, top30_candidates_dict, filtered_table_define = await fetch_and_generate_sql_o1(\n                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/mdb/project/text2sql_renew/service/sql_generator/text_to_sql_generator.py\", line 94, in fetch_and_generate_sql_o1\n    table_text = await fetch_table_knowledge(top30_candidates_dict, table_res)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/mdb/project/text2sql_renew/service/sql_generator/fetch_knowledge.py\", line 211, in fetch_table_knowledge\n    final_table_list = tuple(final_table_list) if len(final_table_list) > 1 else f\"('{final_table_list[0]}')\"\n                                                                                      ~~~~~~~~~~~~~~~~^^^\nIndexError: list index out of range\n",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": null,
+ "final_sql": null,
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "苹果 27907200.0"
+ },
+ "exec_first": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_first": false,
+ "ex_reasons": [
+  "未生成SQL"
+ ],
+ "exec_final": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 29.0,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_10_54579ef3.0",
+  "llm_call_count": 9,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 27.5,
+  "llm_seconds_max": 5.73,
+  "selected_tables": [],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": 50
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 477,
+   "prompt_tokens": 7295,
+   "total_tokens": 7772,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 7295,
+  "completion": 477,
+  "total": 7772
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 477,
+   "prompt_tokens": 7295,
+   "total_tokens": 7772,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": false
+ }
+}

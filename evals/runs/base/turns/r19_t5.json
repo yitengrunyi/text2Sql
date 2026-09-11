@@ -1,0 +1,155 @@
+{
+ "round_id": 19,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "和中证1000同期相比，两者的净资产收益率谁更高？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：净资产收益率（ROE, Return on Equity）\n\n[2] 可能的计算公式：  \n净资产收益率（ROE） = 净利润 ÷ 平均净资产 × 100%  \n其中，需要分别计算“和中证1000同期”的两个主体的ROE，然后进行对比。\n['和中证1000同期', '净资产收益率', 'ROE', 'Return on Equity', '净利润', '平均净资产']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'ANA_STK_EXPR_IDX', 'INDX_TCLOSE_WEIGHT', 'INDX_SAMP_INFO', 'ANA_INDX_VAL_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.TRD_DATE AS `统计日期`,\n    a.INDX_CODE AS `指数代码`,\n    a.INDX_CNAME AS `指数名称`,\n    ROUND(a.EPS / a.PB * 100, 2) AS `净资产收益率(%)`,\n    ROUND(a.PE, 2) AS `市盈率`,\n    ROUND(a.PB, 2) AS `市净率`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`\nFROM ANA_INDX_VAL_IDX a\nWHERE a.INDX_CODE IN ('000852', '000985')\n  AND a.TRD_DATE = '2026-03-31'\n  AND a.ISVALID = 1\n  AND a.EPS IS NOT NULL\n  AND a.PB IS NOT NULL\n200\n{table:[['统计日期', '指数名称', '净资产收益率(%)', '市盈率', '市净率', '每股收益(元)'], ['2026-03-31', '中证全指指数', '39.53', '21.03', '1.62', '0.64'], ['2026-03-31', '中证1000指数', '12.17', '45.95', '2.44', '0.30']]}\n净资产收益率的计算方式是：净资产收益率(%) = 每股收益 / 市净率 × 100。查询中直接通过公式计算了净资产收益率，并对结果保留两位小数。此外，还将市盈率、市净率、每股收益进行了单位转换和数值精度处理。查询结果符合要求。\n\n该查询从记录指数估值数据的表中选取信息，筛选了指数代码为中证1000及目标指数的两条记录，限定统计日期为2026年3月31日。仅筛选有效数据，并排除每股收益和市净率为空的情况。查询返回了这两个指数在同一时间点的净资产收益率、市盈率、市净率和每股收益等财务指标数据，可直接比较两者净资产收益率高低。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.TRD_DATE AS `统计日期`,\n    a.INDX_CODE AS `指数代码`,\n    a.INDX_CNAME AS `指数名称`,\n    ROUND(a.EPS / a.PB * 100, 2) AS `净资产收益率(%)`,\n    ROUND(a.PE, 2) AS `市盈率`,\n    ROUND(a.PB, 2) AS `市净率`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`\nFROM ANA_INDX_VAL_IDX a\nWHERE a.INDX_CODE IN ('000852', '000985')\n  AND a.TRD_DATE = '2026-03-31'\n  AND a.ISVALID = 1\n  AND a.EPS IS NOT NULL\n  AND a.PB IS NOT NULL",
+ "final_sql": "SELECT \n    a.TRD_DATE AS `统计日期`,\n    a.INDX_CODE AS `指数代码`,\n    a.INDX_CNAME AS `指数名称`,\n    ROUND(a.EPS / a.PB * 100, 2) AS `净资产收益率(%)`,\n    ROUND(a.PE, 2) AS `市盈率`,\n    ROUND(a.PB, 2) AS `市净率`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`\nFROM ANA_INDX_VAL_IDX a\nWHERE a.INDX_CODE IN ('000852', '000985')\n  AND a.TRD_DATE = '2026-03-31'\n  AND a.ISVALID = 1\n  AND a.EPS IS NOT NULL\n  AND a.PB IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "深证100指数 7.3965\n中证1000指数 3.7513"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2026-03-31 00:00:00 000985 中证全指指数 39.53 21.03 1.62 0.642\n2026-03-31 00:00:00 000852 中证1000指数 12.17 45.95 2.44 0.297",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 117.0,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_19_764cfbe6.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 52.39,
+  "llm_seconds_max": 8.93,
+  "selected_tables": [
+   "ANA_INDX_FIN_IDX",
+   "VIEW_STK_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   30787
+  ],
+  "prompt_columns_raw_len": 8123
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1220,
+   "prompt_tokens": 31775,
+   "total_tokens": 32995,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31775,
+  "completion": 1220,
+  "total": 32995
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1220,
+   "prompt_tokens": 31775,
+   "total_tokens": 32995,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_FIN_IDX",
+  "GET_INDX_GEN_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_FIN_IDX",
+   "VIEW_STK_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

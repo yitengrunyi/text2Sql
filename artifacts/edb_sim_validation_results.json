@@ -1,0 +1,291 @@
+[
+  {
+    "name": "Q1 指标目录",
+    "sql": "SELECT SHOW_NAME_SHORT AS `指标名称`, UNIT AS `单位`, FREQ AS `频率` FROM EDB_INDIC_DATA WHERE ind_der_code IN ('1012dskwe36i8uq1h1o2khx9j3am','201mcbxe1p6uoemumvdlijlle6u','20146gv9dv5t5ev7k2pzfnvbslt0')",
+    "ok": true,
+    "rowcount": 3,
+    "columns": [
+      "指标名称",
+      "单位",
+      "频率"
+    ],
+    "first3": [
+      [
+        "中国:GDP:不变价:同比(季)",
+        "%",
+        "季"
+      ],
+      [
+        "欧盟:欧元区:GDP:同比(季)",
+        "%",
+        "季"
+      ],
+      [
+        "美国:CPI:同比(月)",
+        "%",
+        "月"
+      ]
+    ]
+  },
+  {
+    "name": "Q2 JOIN透视-GDP近10年",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') AS `日期`, MAX(CASE WHEN t2.ind_der_code = '1012dskwe36i8uq1h1o2khx9j3am' THEN ROUND(t1.DATA_VALUE, 2) END) AS `中国GDP不变价同比(%)`, MAX(CASE WHEN t2.ind_der_code = '1012dhd93dzojvrn0oshoec7uwen' THEN ROUND(t1.DATA_VALUE, 2) END) AS `中国GDP环比季调(%)` FROM ECO_DATA_CHINA t1 JOIN EDB_INDIC_DATA t2 ON t2.DATA_TABLE = 'ECO_DATA_CHINA' AND t1.ind_der_code = t2.ind_der_code WHERE t2.ind_der_code IN ('1012dskwe36i8uq1h1o2khx9j3am','1012dhd93dzojvrn0oshoec7uwen') AND t1.PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 10 YEAR) AND t1.DATA_VALUE IS NOT NULL GROUP BY DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') ORDER BY DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') DESC",
+    "ok": true,
+    "rowcount": 40,
+    "columns": [
+      "日期",
+      "中国GDP不变价同比(%)",
+      "中国GDP环比季调(%)"
+    ],
+    "first3": [
+      [
+        "2026-06-30",
+        "13.16",
+        "2.29"
+      ],
+      [
+        "2026-03-31",
+        "10.61",
+        "1.46"
+      ],
+      [
+        "2025-12-31",
+        "9.01",
+        "1.71"
+      ]
+    ]
+  },
+  {
+    "name": "Q3 年度分组-2015以来",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y') AS `年份`, ROUND(AVG(t1.DATA_VALUE), 2) AS `GDP不变价同比均值(%)` FROM ECO_DATA_CHINA t1 WHERE t1.ind_der_code = '1012dskwe36i8uq1h1o2khx9j3am' AND t1.PERIOD_DATE >= '2015-01-01' AND t1.DATA_VALUE IS NOT NULL GROUP BY DATE_FORMAT(t1.PERIOD_DATE, '%Y') ORDER BY `年份` DESC",
+    "ok": true,
+    "rowcount": 12,
+    "columns": [
+      "年份",
+      "GDP不变价同比均值(%)"
+    ],
+    "first3": [
+      [
+        "2026",
+        "11.88"
+      ],
+      [
+        "2025",
+        "9.61"
+      ],
+      [
+        "2024",
+        "12.8"
+      ]
+    ]
+  },
+  {
+    "name": "Q4 近6个月美国CPI同比",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m') AS `月份`, ROUND(t1.DATA_VALUE, 2) AS `美国CPI同比(%)` FROM ECO_DATA_GLOBE_USA t1 WHERE t1.ind_der_code = '201mcbxe1p6uoemumvdlijlle6u' AND t1.PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) AND t1.DATA_VALUE IS NOT NULL ORDER BY t1.PERIOD_DATE DESC",
+    "ok": true,
+    "rowcount": 6,
+    "columns": [
+      "月份",
+      "美国CPI同比(%)"
+    ],
+    "first3": [
+      [
+        "2026-07",
+        "6.07"
+      ],
+      [
+        "2026-06",
+        "6.11"
+      ],
+      [
+        "2026-05",
+        "5.63"
+      ]
+    ]
+  },
+  {
+    "name": "Q5 美国失业率CPI透视",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m') AS `月份`, MAX(CASE WHEN t2.ind_der_code = '201b29bogrrwk2ki8wvtb5xyvy46' THEN ROUND(t1.DATA_VALUE, 2) END) AS `美国U3失业率(%)`, MAX(CASE WHEN t2.ind_der_code = '201mcbxe1p6uoemumvdlijlle6u' THEN ROUND(t1.DATA_VALUE, 2) END) AS `美国CPI同比(%)`, MAX(CASE WHEN t2.ind_der_code = '2018z4wosz6czk0db6zcj6ickykg' THEN ROUND(t1.DATA_VALUE, 2) END) AS `美国核心CPI同比(%)` FROM ECO_DATA_GLOBE_USA t1 JOIN EDB_INDIC_DATA t2 ON t2.DATA_TABLE = 'ECO_DATA_GLOBE_USA' AND t1.ind_der_code = t2.ind_der_code WHERE t2.ind_der_code IN ('201b29bogrrwk2ki8wvtb5xyvy46','201mcbxe1p6uoemumvdlijlle6u','2018z4wosz6czk0db6zcj6ickykg') AND t1.PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND t1.DATA_VALUE IS NOT NULL GROUP BY DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m') ORDER BY DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m') DESC LIMIT 6",
+    "ok": true,
+    "rowcount": 6,
+    "columns": [
+      "月份",
+      "美国U3失业率(%)",
+      "美国CPI同比(%)",
+      "美国核心CPI同比(%)"
+    ],
+    "first3": [
+      [
+        "2026-07",
+        "2.36",
+        "6.07",
+        "3.5"
+      ],
+      [
+        "2026-06",
+        "3.68",
+        "6.11",
+        "3.46"
+      ],
+      [
+        "2026-05",
+        "1.76",
+        "5.63",
+        "3.7"
+      ]
+    ]
+  },
+  {
+    "name": "Q6 欧元区PMI",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m') AS `月份`, ROUND(t1.DATA_VALUE, 2) AS `欧元区综合PMI(%)` FROM ECO_DATA_GLOBE_EU t1 WHERE t1.ind_der_code = '2012l22m4iiprtg38tpaqeehiktr' AND t1.PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) AND t1.DATA_VALUE IS NOT NULL ORDER BY t1.PERIOD_DATE DESC",
+    "ok": true,
+    "rowcount": 6,
+    "columns": [
+      "月份",
+      "欧元区综合PMI(%)"
+    ],
+    "first3": [
+      [
+        "2026-07",
+        "8.08"
+      ],
+      [
+        "2026-06",
+        "12.13"
+      ],
+      [
+        "2026-05",
+        "-10.86"
+      ]
+    ]
+  },
+  {
+    "name": "Q7 日本GDP环比折年率",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') AS `日期`, ROUND(t1.DATA_VALUE, 2) AS `日本GDP环比折年率(%)` FROM ECO_DATA_GLOBE_REST t1 WHERE t1.ind_der_code = '2011fulppl44714v4wp36fcqa2db' AND t1.PERIOD_DATE >= '2024-01-01' AND t1.DATA_VALUE IS NOT NULL ORDER BY t1.PERIOD_DATE DESC",
+    "ok": true,
+    "rowcount": 10,
+    "columns": [
+      "日期",
+      "日本GDP环比折年率(%)"
+    ],
+    "first3": [
+      [
+        "2026-06-30",
+        "5.39"
+      ],
+      [
+        "2026-03-31",
+        "5.27"
+      ],
+      [
+        "2025-12-31",
+        "5.12"
+      ]
+    ]
+  },
+  {
+    "name": "Q8 空表查询",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') AS `日期`, ROUND(t1.DATA_VALUE, 2) AS `数值` FROM ECO_DATA_IND_AUTOMOBILE t1 WHERE t1.PERIOD_DATE >= '2024-01-01' AND t1.DATA_VALUE IS NOT NULL ORDER BY t1.PERIOD_DATE DESC",
+    "ok": true,
+    "rowcount": 0,
+    "columns": [
+      "日期",
+      "数值"
+    ],
+    "first3": []
+  },
+  {
+    "name": "Q9 周频连续性",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y') AS `年份`, COUNT(t1.DATA_VALUE) AS `周数`, ROUND(AVG(t1.DATA_VALUE), 1) AS `均值(千人)` FROM ECO_DATA_GLOBE_USA t1 WHERE t1.ind_der_code = '2016cl8x9ei68rp7ytbd16b3l3em' AND t1.PERIOD_DATE >= '2023-01-01' AND t1.DATA_VALUE IS NOT NULL GROUP BY DATE_FORMAT(t1.PERIOD_DATE, '%Y') ORDER BY `年份` DESC",
+    "ok": true,
+    "rowcount": 4,
+    "columns": [
+      "年份",
+      "周数",
+      "均值(千人)"
+    ],
+    "first3": [
+      [
+        "2026",
+        "31",
+        "1312.1"
+      ],
+      [
+        "2025",
+        "52",
+        "1517.7"
+      ],
+      [
+        "2024",
+        "52",
+        "1313.5"
+      ]
+    ]
+  },
+  {
+    "name": "Q10 季频连续性",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y') AS `年份`, COUNT(t1.DATA_VALUE) AS `季度数` FROM ECO_DATA_CHINA t1 WHERE t1.ind_der_code = '1012dskwe36i8uq1h1o2khx9j3am' AND t1.PERIOD_DATE >= '2022-01-01' AND t1.DATA_VALUE IS NOT NULL GROUP BY DATE_FORMAT(t1.PERIOD_DATE, '%Y') ORDER BY `年份` DESC",
+    "ok": true,
+    "rowcount": 5,
+    "columns": [
+      "年份",
+      "季度数"
+    ],
+    "first3": [
+      [
+        "2026",
+        "2"
+      ],
+      [
+        "2025",
+        "4"
+      ],
+      [
+        "2024",
+        "4"
+      ]
+    ]
+  },
+  {
+    "name": "Q11 IFNULL+ROUND",
+    "sql": "SELECT DATE_FORMAT(t1.PERIOD_DATE, '%Y-%m-%d') AS `日期`, IFNULL(ROUND(t1.DATA_VALUE, 2), 0) AS `欧元区消费者信心指数`, IFNULL(ROUND(t1.DATA_VALUE * 1.0, 2), 0) AS ` Sentix信心指数` FROM ECO_DATA_GLOBE_EU t1 WHERE t1.ind_der_code IN ('2013y7ux2pub47nyjxdia8dvycfv','2012yryn7et0dx2t4oz03k2cs4cn') AND t1.PERIOD_DATE >= '2026-01-01' AND t1.DATA_VALUE IS NOT NULL ORDER BY t1.PERIOD_DATE DESC",
+    "ok": true,
+    "rowcount": 14,
+    "columns": [
+      "日期",
+      "欧元区消费者信心指数",
+      "Sentix信心指数"
+    ],
+    "first3": [
+      [
+        "2026-07-31",
+        "65709.13",
+        "65709.13"
+      ],
+      [
+        "2026-07-31",
+        "42551.61",
+        "42551.61"
+      ],
+      [
+        "2026-06-30",
+        "66547.83",
+        "66547.83"
+      ]
+    ]
+  },
+  {
+    "name": "Q12 无数据兜底",
+    "sql": "SELECT '无可用数据' AS `提示`",
+    "ok": true,
+    "rowcount": 1,
+    "columns": [
+      "提示"
+    ],
+    "first3": [
+      [
+        "无可用数据"
+      ]
+    ]
+  }
+]

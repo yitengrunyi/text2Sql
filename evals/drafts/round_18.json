@@ -1,0 +1,74 @@
+{
+  "round_id": 18,
+  "source": "MYSQL-2",
+  "domain": "指数",
+  "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+  "initial": {
+    "question": "深证成指最近一个交易日的收盘点位是多少？",
+    "judge": "numeric",
+    "gold_value": "13611.5470",
+    "gold_display": "13611.55点（2026-09-02收盘）",
+    "gold_entities": ["深证成指"],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1",
+    "gold_tables": ["INDX_MKT"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "relative"}
+  },
+  "feedbacks": [
+    {
+      "question": "它今年以来累计上涨了多少？",
+      "judge": "numeric",
+      "gold_value": "0.64",
+      "gold_display": "上涨0.64%（2026-09-02收13611.55点，较2025-12-31收13525.02点）",
+      "gold_entities": ["深证成指"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM INDX_MKT a JOIN INDX_MKT b ON b.INNER_CODE=a.INNER_CODE AND b.ISVALID=1 WHERE a.INNER_CODE=106000028 AND a.ISVALID=1 AND a.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1) AND b.TRADEDATE='2025-12-31'",
+      "gold_tables": ["INDX_MKT"],
+      "labels": {"difficulty": "时间窗口", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "上证50在同一个交易日收在多少点？",
+      "judge": "numeric",
+      "gold_value": "2914.4449",
+      "gold_display": "2914.44点（2026-09-02收盘）",
+      "gold_entities": ["上证50"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106000255 AND ISVALID=1 AND TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1)",
+      "gold_tables": ["INDX_MKT"],
+      "labels": {"difficulty": "子查询", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "那2025年全年它涨了多少？",
+      "judge": "numeric",
+      "gold_value": "29.87",
+      "gold_display": "上涨29.87%（2025-12-31收13525.02点，2024-12-31收10414.61点）",
+      "gold_entities": ["深证成指"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS ret_2025 FROM INDX_MKT a JOIN INDX_MKT b ON b.INNER_CODE=a.INNER_CODE AND b.ISVALID=1 WHERE a.INNER_CODE=106000028 AND a.ISVALID=1 AND a.TRADEDATE='2025-12-31' AND b.TRADEDATE='2024-12-31'",
+      "gold_tables": ["INDX_MKT"],
+      "labels": {"difficulty": "时间窗口", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "这些点位是交易所发布的官方收盘行情吗，还是复权价？",
+      "judge": "nonquery",
+      "gold_value": null,
+      "gold_display": null,
+      "gold_entities": [],
+      "gold_date": null,
+      "gold_sql": null,
+      "gold_tables": [],
+      "labels": {"difficulty": null, "followup_type": "非查询", "route_gold": "NON_QUERY", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+      "judge": "numeric",
+      "gold_value": "43.0869",
+      "gold_display": "43.09倍（2026-09-02）",
+      "gold_entities": ["中证1000"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE INNER_CODE=106006433 AND ISVALID=1 ORDER BY TRD_DATE DESC LIMIT 1",
+      "gold_tables": ["ANA_INDX_VAL_IDX"],
+      "labels": {"difficulty": "单表", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "relative"}
+    }
+  ]
+}

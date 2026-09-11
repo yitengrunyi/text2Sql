@@ -1,0 +1,275 @@
+{
+ "round_id": 12,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 新发行H股股份数量（含超额配售）\n- 总股本增加数量\n\n[2] 可能的计算公式  \n总股本增加数量 = H股实际发行数量 + 超额配售发行数量\n\n解释：此查询关注恒瑞医药因H股上市发行（含超额配售）而导致的总股本增长。需统计基准期内公司实际发行的H股股数及因超额配售机制额外发行的部分，两者之和即总股本的增加量。\n['恒瑞医药', 'H股上市发行', 'H股', '超额配售', '新发行H股股份数量', '超额配售发行数量', '总股本增加数量', '总股本', '基准期', '股本增长', 'H股实际发行数量']\n该问题可能涉及A股-'恒瑞医药'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-医药生物。\n该问题可能涉及的题材包含：['分拆上市意愿']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '分拆上市意愿'。\n个股相关\n['主板股本股东', '主板公司行为', '主板基本信息']\n['STK_SHR_STRU', 'STK_SHR_STRU_CHNG', 'NEWS_ESP_HINT', 'GET_STK_SHR_CLS_DTL', 'VW_CONCEPT_STK', 'STK_LIST_RESULT', 'STK_LIST_PLAN', 'VIEW_STK_STI_LIST_PLAN', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT\n  r.A_STOCKSNAME AS `股票名称`,\n  r.A_STOCKCODE AS `股票代码`,\n  r.LIST_DATE AS `H股上市日期`,\n  r.LIST_DATE AS `时间`,\n  ROUND(r.SHR_AFT_ISS/10000,2) AS `发行后总股本(亿股)`,\n  ROUND(r.SHR_AFT_ISS - r.SHR_BF_ISS,2) AS `新增总股本(万股)`,\n  ROUND(r.TTL_SHR,2) AS `本次发行总股数(万股)`,\n  ROUND(r.UND_SHR,2) AS `余额包销/超额配售股数(万股)`,\n  ROUND(r.SHR_BF_ISS,2) AS `发行前总股本(万股)`\nFROM STK_LIST_RESULT r\nJOIN GET_A_SEC_CODE c ON r.COMCODE = c.COMCODE\nWHERE c.SEC_SNAME LIKE '%恒瑞医药%'\n  AND r.STK_CLS = '港股'\n  AND r.LIST_DATE BETWEEN '2025-01-01' AND '2025-06-30'\n  AND r.ISVALID = 1\n  AND c.ISVALID = 1\nORDER BY r.LIST_DATE DESC\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n新增总股本是通过发行后总股本减去发行前总股本得到，即新增总股本 = 发行后总股本 - 发行前总股本。发行后总股本的单位为万股，查询中还将其转换为亿股。余额包销/超额配售股数直接取值，表示本次配售实际增加的股数。本次发行总股数也直接取值。同样，发行前总股本直接取值。\n\n在此查询中，计算了发行后总股本的单位转换（万股转亿股），以及新增总股本的差值计算。查询结果符合要求。\n\n该查询从上市结果表中获取了恒瑞医药2025年上半年港股上市的详细信息，包括发行前后总股本、发行总股数、余额包销/超额配售股数、发行日期等。通过公司基础信息表和上市结果表按公司代码进行关联。筛选条件包括公司简称包含“恒瑞医药”、股票种类为港股、上市日期在2025年上半年、数据有效。结果按上市日期降序排列，返回恒瑞医药相关H股上市发行以及超额配售后总股本的变动情况。\n查询恒瑞医药2025年上半年完成H股上市发行加上超额配售，总股本一共增加了多少股？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n  r.A_STOCKSNAME AS `股票名称`,\n  r.A_STOCKCODE AS `股票代码`,\n  r.LIST_DATE AS `H股上市日期`,\n  r.LIST_DATE AS `时间`,\n  ROUND(r.SHR_AFT_ISS/10000,2) AS `发行后总股本(亿股)`,\n  ROUND(r.SHR_AFT_ISS - r.SHR_BF_ISS,2) AS `新增总股本(万股)`,\n  ROUND(r.TTL_SHR,2) AS `本次发行总股数(万股)`,\n  ROUND(r.UND_SHR,2) AS `余额包销/超额配售股数(万股)`,\n  ROUND(r.SHR_BF_ISS,2) AS `发行前总股本(万股)`\nFROM STK_LIST_RESULT r\nJOIN GET_A_SEC_CODE c ON r.COMCODE = c.COMCODE\nWHERE c.SEC_SNAME LIKE '%恒瑞医药%'\n  AND r.STK_CLS = '港股'\n  AND r.LIST_DATE BETWEEN '2025-01-01' AND '2025-06-30'\n  AND r.ISVALID = 1\n  AND c.ISVALID = 1\nORDER BY r.LIST_DATE DESC",
+ "final_sql": "SELECT\n  r.A_STOCKSNAME AS `股票名称`,\n  r.A_STOCKCODE AS `股票代码`,\n  r.LIST_DATE AS `H股上市日期`,\n  r.LIST_DATE AS `时间`,\n  ROUND(r.SHR_AFT_ISS/10000,2) AS `发行后总股本(亿股)`,\n  ROUND(r.SHR_AFT_ISS - r.SHR_BF_ISS,2) AS `新增总股本(万股)`,\n  ROUND(r.TTL_SHR,2) AS `本次发行总股数(万股)`,\n  ROUND(r.UND_SHR,2) AS `余额包销/超额配售股数(万股)`,\n  ROUND(r.SHR_BF_ISS,2) AS `发行前总股本(万股)`\nFROM STK_LIST_RESULT r\nJOIN GET_A_SEC_CODE c ON r.COMCODE = c.COMCODE\nWHERE c.SEC_SNAME LIKE '%恒瑞医药%'\n  AND r.STK_CLS = '港股'\n  AND r.LIST_DATE BETWEEN '2025-01-01' AND '2025-06-30'\n  AND r.ISVALID = 1\n  AND c.ISVALID = 1\nORDER BY r.LIST_DATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "258197600"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 88.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_12_bb1d7128.4",
+  "llm_call_count": 17,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 107.91,
+  "llm_seconds_max": 35.15,
+  "selected_tables": [
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "NEWS_ESP_HINT",
+   "GET_STK_SHR_CLS_DTL",
+   "VW_CONCEPT_STK",
+   "STK_LIST_RESULT",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "NEWS_ESP_HINT",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "STK_ADD_HOLD",
+   "STK_GREATE_EVENT",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ISS_PLAN",
+   "STK_ISS_RESULT",
+   "STK_ACCUM_FREEZE",
+   "STK_ACCUM_IMPAWN",
+   "STK_FREEZE_NEW",
+   "STK_FREEZE_STAT",
+   "STK_GUAR_INFO",
+   "STK_IMPAWN_NEW",
+   "STK_LAWSUIT_NEW",
+   "STK_PLEDGE",
+   "STK_PUNISH",
+   "STK_REL_TRD",
+   "STK_REPURCHASE",
+   "STK_REPURCHASE_PRG",
+   "STK_SEC_IVST",
+   "STK_TENDER_OFFER_DTL",
+   "STK_TENDER_OFFER_INFO",
+   "STK_TENDER_OFFER_PRG",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   57159
+  ],
+  "prompt_columns_raw_len": 20233
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3175,
+   "prompt_tokens": 17589,
+   "total_tokens": 20764,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2845,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17589,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2508,
+   "prompt_tokens": 68209,
+   "total_tokens": 70717,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 605,
+   "total_tokens": 606,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 605,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 86403,
+  "completion": 5684,
+  "total": 92087
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3175,
+   "prompt_tokens": 17589,
+   "total_tokens": 20764,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2845,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17589,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2508,
+   "prompt_tokens": 68209,
+   "total_tokens": 70717,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 605,
+   "total_tokens": 606,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 605,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_SHR_STRU_CHNG"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "NEWS_ESP_HINT",
+   "GET_STK_SHR_CLS_DTL",
+   "VW_CONCEPT_STK",
+   "STK_LIST_RESULT",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

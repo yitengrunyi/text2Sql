@@ -1,0 +1,152 @@
+{
+ "round_id": 27,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：营业收入（Revenue / Operating Revenue / Total Revenue）\n\n[2] 可能的计算公式：  \n营业收入 = 产品销售收入 + 服务收入 + 其他主营业务收入  \n（在年报中一般直接披露为“营业收入”或“Total Revenue”，不需要自行详细拆解即可获取全年数据）\n['沃尔玛', '营业收入', 'Revenue', 'Operating Revenue', 'Total Revenue', '产品销售收入', '服务收入', '其他主营业务收入', '年报', '财年']\n该问题可能涉及美股-'沃尔玛', 它的美股股票代码为：WMT.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-商贸零售。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM', 'COM3103', 'VIEW_COM3103_Q']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `报表期截止日`,\n    ROUND(b.F048N / 10, 3) AS `营业收入(亿)`,\n    b.F005V AS `货币`,\n    b.F004N AS `财政期间长度(天)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM b ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'WMT.US'\n    AND b.F003V = 'FY'\n    AND b.F048N IS NOT NULL\n    AND b.F001D = (\n        SELECT MAX(t.F001D)\n        FROM VIEW_COM3103_CUM t\n        WHERE t.FIU_ID = a.FIU_ID\n          AND t.F003V = 'FY'\n          AND t.F048N IS NOT NULL\n    )\nORDER BY b.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报表期截止日', '营业收入(亿)', '货币', '财政期间长度(天)'], ['沃尔玛', 'WMT.US', '2025-12-31', '92,694.24', 'USD', '365']]}\n营业收入（亿）是通过将销售收入（营业收入）以百万为单位的数据除以10，并保留三位小数，换算为“亿”为单位进行展示。公式为：营业收入（亿）= 营业收入（百万）/10。查询结果包含沃尔玛的股票名称、展示代码、报表期截止日、营业收入（亿）、货币以及该财年的财政期间长度（天）。\n\n查询从美股上市公司基本信息表和记录美股累计综合收益数据的表中提取信息，通过内部代码进行关联。筛选条件为公司展示代码等于“WMT.US”，只选择年报类型的报表，且营业收入不为空。系统自动选取报表期截止日为最新的年报数据，仅返回一条最新记录。查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `报表期截止日`,\n    ROUND(b.F048N / 10, 3) AS `营业收入(亿)`,\n    b.F005V AS `货币`,\n    b.F004N AS `财政期间长度(天)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM b ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'WMT.US'\n    AND b.F003V = 'FY'\n    AND b.F048N IS NOT NULL\n    AND b.F001D = (\n        SELECT MAX(t.F001D)\n        FROM VIEW_COM3103_CUM t\n        WHERE t.FIU_ID = a.FIU_ID\n          AND t.F003V = 'FY'\n          AND t.F048N IS NOT NULL\n    )\nORDER BY b.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `报表期截止日`,\n    ROUND(b.F048N / 10, 3) AS `营业收入(亿)`,\n    b.F005V AS `货币`,\n    b.F004N AS `财政期间长度(天)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM b ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'WMT.US'\n    AND b.F003V = 'FY'\n    AND b.F048N IS NOT NULL\n    AND b.F001D = (\n        SELECT MAX(t.F001D)\n        FROM VIEW_COM3103_CUM t\n        WHERE t.FIU_ID = a.FIU_ID\n          AND t.F003V = 'FY'\n          AND t.F048N IS NOT NULL\n    )\nORDER BY b.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "926942.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "沃尔玛 WMT.US 2025-12-31 92694.244 USD 365",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 41.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_27_bbd483d2.0",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 40.3,
+  "llm_seconds_max": 7.56,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   23243
+  ],
+  "prompt_columns_raw_len": 15027
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 28669,
+   "total_tokens": 29600,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28669,
+  "completion": 931,
+  "total": 29600
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 28669,
+   "total_tokens": 29600,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

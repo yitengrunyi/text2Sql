@@ -1,0 +1,142 @@
+{
+ "round_id": 22,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "我组合里拿了中欧医疗健康混合A，先帮我看下它最新一个交易日的单位净值是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：单位净值（基金单位净值，Net Asset Value per Unit，NAV）\n\n[2] 可能的计算公式：  \n单位净值 = （基金总资产 - 基金总负债）/ 基金份额总数\n\n注：查询单位净值通常直接查阅基金公司公告或第三方金融服务平台，不涉及自行计算，但如需原理，就是上述公式。\n['中欧医疗健康混合A', '单位净值', '基金单位净值', 'Net Asset Value per Unit', 'NAV', '基金总资产', '基金总负债', '基金份额总数']\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及的题材包含：['医疗保健']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '医疗保健'。\n基金相关\n['基金产品净值']\n['FUND_NETVALUE_SIMULATE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE, 4) AS `最新拟合单位净值`\nFROM \n    FUND_NETVALUE_SIMULATE\nWHERE \n    FUND_NAME LIKE '%中欧医疗健康混合A%'\n    AND DATA_TYPE = 2\n    AND HISVALID = 1\n    AND TRADING_DAY = '2026-09-02'\nORDER BY \n    TRADING_DAY DESC\nLIMIT 1\n200\n{table:[['交易日', '基金名称', '基金代码', '最新拟合单位净值'], ['2026-09-02', '中欧医疗健康混合A', '003095.OF', '2.42']]}\n该查询的主要目的是获取中欧医疗健康混合A基金在指定最新交易日的拟合单位净值。单位净值是通过对拟合净值字段保留四位小数直接得到的结果。在此查询中，计算了单位净值的精确显示（四位小数），查询结果符合要求。\n\n查询从包含基金净值模拟数据的表中提取信息。选择了交易日、基金名称、基金代码以及拟合单位净值。筛选条件包括基金名称包含“中欧医疗健康混合A”，只考虑计算数据类型为持仓占比统计方式的记录、只选择被标记为有效的记录，并且限制交易日为2026年9月2日。结果根据交易日降序排列，并只返回最新的一条数据。最终返回的是该基金指定日的最新拟合单位净值。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE, 4) AS `最新拟合单位净值`\nFROM \n    FUND_NETVALUE_SIMULATE\nWHERE \n    FUND_NAME LIKE '%中欧医疗健康混合A%'\n    AND DATA_TYPE = 2\n    AND HISVALID = 1\n    AND TRADING_DAY = '2026-09-02'\nORDER BY \n    TRADING_DAY DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE, 4) AS `最新拟合单位净值`\nFROM \n    FUND_NETVALUE_SIMULATE\nWHERE \n    FUND_NAME LIKE '%中欧医疗健康混合A%'\n    AND DATA_TYPE = 2\n    AND HISVALID = 1\n    AND TRADING_DAY = '2026-09-02'\nORDER BY \n    TRADING_DAY DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1.92790000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 中欧医疗健康混合A 003095.OF 2.4216",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 49.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_22_8ec85681.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.71,
+  "llm_seconds_max": 6.16,
+  "selected_tables": [
+   "FUND_NETVALUE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   12240
+  ],
+  "prompt_columns_raw_len": 1412
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 836,
+   "prompt_tokens": 19827,
+   "total_tokens": 20663,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19827,
+  "completion": 836,
+  "total": 20663
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 836,
+   "prompt_tokens": 19827,
+   "total_tokens": 20663,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_NETVALUE"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_NETVALUE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

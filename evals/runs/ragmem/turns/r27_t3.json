@@ -1,0 +1,191 @@
+{
+ "round_id": 27,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 经营净现金流（Operating Cash Flow, OCF）  \n- 资本性支出（Capital Expenditures, CAPEX）  \n- 自由现金流（Free Cash Flow, FCF）\n\n[2] 可能的计算公式：  \n- 自由现金流(FCF) = 经营净现金流(OCF) – 资本性支出(CAPEX)\n- 对比分析 = 2025财年FCF – 2024财年FCF  \n  （若为正，则2025年改善；若为负，则恶化）\n['沃尔玛', 'WMT.US', '2024财年', '2025财年', '经营净现金流', 'Operating Cash Flow', 'OCF', '资本性支出', 'Capital Expenditures', 'CAPEX', '自由现金流', 'Free Cash Flow', 'FCF', '自由现金流公式', '自由现金流计算', '对比分析']\n该问题可能涉及美股-'沃尔玛', 它的美股股票代码为：WMT.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-商贸零售。\n该问题可能涉及的题材包含：['百货']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '百货'。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3104_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F044N AS `财年`,\n    DATE_FORMAT(c.F001D, '%Y-%m-%d') AS `财报截止日期`,\n    CONCAT(ROUND(c.F036N, 1), ' 万美元') AS `经营净现金流`,\n    CONCAT(ROUND(c.F008N, 1), ' 万美元') AS `资本性支出`,\n    CONCAT(ROUND(c.F036N - c.F008N, 1), ' 万美元') AS `自由现金流（经营净现金流-资本性支出）`,\n    c.F036N - c.F008N AS `自由现金流比较值`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3104_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'WMT.US'\n    AND c.F044N IN (2024, 2025)\n    AND c.F003V = 'FY'\n    AND c.F036N IS NOT NULL\n    AND c.F008N IS NOT NULL\nORDER BY\n    c.F044N ASC\n\n200\n{table:[['股票名称', '股票代码', '财年', '财报截止日期', '经营净现金流', '资本性支出', '自由现金流（经营净现金流-资本性支出）', '自由现金流比较值'], ['沃尔玛', 'WMT.US', '2,024', '2024-12-31', '37000.4 万美元', '28080.7 万美元', '8919.7 万美元', '8,919.67'], ['沃尔玛', 'WMT.US', '2,025', '2025-12-31', '30551.7 万美元', '34840.9 万美元', '-4289.2 万美元', '-4,289.19']]}\n经营净现金流减资本性支出的自由现金流，通过公式“自由现金流 = 经营净现金流 - 资本性支出”计算。查询中已经将经营净现金流和资本性支出分别进行了单位转换（四舍五入到一位小数后加单位“万美元”），自由现金流同样采用上述公式并已计算出结果。额外提供了自由现金流的数值结果用于年度间比较。\n\n查询结果能够判断2024财年与2025财年自由现金流的变化，若2025年的自由现金流比2024年高，说明改善；反之则为恶化。查询结果符合要求。\n\n查询主要从美股股票列表信息表和美股现金流量累计表中提取数据，通过美股内部代码进行连接。筛选目标为股票展示代码为沃尔玛WMT.US，报表类型为年度，且经营净现金流和资本性支出均有有效数据，限定只包含2024及2025两个财年，并按财年升序展示。查询返回沃尔玛在相关年度的经营净现金流、资本性支出及自由现金流数据，方便进一步对比年度间变化。\n查询沃尔玛(WMT.US)2024财年和2025财年的经营净现金流和资本性支出，计算按经",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F044N AS `财年`,\n    DATE_FORMAT(c.F001D, '%Y-%m-%d') AS `财报截止日期`,\n    CONCAT(ROUND(c.F036N, 1), ' 万美元') AS `经营净现金流`,\n    CONCAT(ROUND(c.F008N, 1), ' 万美元') AS `资本性支出`,\n    CONCAT(ROUND(c.F036N - c.F008N, 1), ' 万美元') AS `自由现金流（经营净现金流-资本性支出）`,\n    c.F036N - c.F008N AS `自由现金流比较值`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3104_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'WMT.US'\n    AND c.F044N IN (2024, 2025)\n    AND c.F003V = 'FY'\n    AND c.F036N IS NOT NULL\n    AND c.F008N IS NOT NULL\nORDER BY\n    c.F044N ASC",
+ "final_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F044N AS `财年`,\n    DATE_FORMAT(c.F001D, '%Y-%m-%d') AS `财报截止日期`,\n    CONCAT(ROUND(c.F036N, 1), ' 万美元') AS `经营净现金流`,\n    CONCAT(ROUND(c.F008N, 1), ' 万美元') AS `资本性支出`,\n    CONCAT(ROUND(c.F036N - c.F008N, 1), ' 万美元') AS `自由现金流（经营净现金流-资本性支出）`,\n    c.F036N - c.F008N AS `自由现金流比较值`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3104_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'WMT.US'\n    AND c.F044N IN (2024, 2025)\n    AND c.F003V = 'FY'\n    AND c.F036N IS NOT NULL\n    AND c.F008N IS NOT NULL\nORDER BY\n    c.F044N ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "8919.7"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "沃尔玛 WMT.US 2024 2024-12-31 37000.4 万美元 28080.7 万美元 8919.7 万美元 8919.673828125\n沃尔玛 WMT.US 2025 2025-12-31 30551.7 万美元 34840.9 万美元 -4289.2 万美元 -4289.185546875",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 62.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_27_878d0752.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 59.88,
+  "llm_seconds_max": 17.25,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   14016
+  ],
+  "prompt_columns_raw_len": 4912
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1207,
+   "prompt_tokens": 17384,
+   "total_tokens": 18591,
+   "completion_tokens_details": {
+    "reasoning_tokens": 871,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17384,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1181,
+   "prompt_tokens": 22356,
+   "total_tokens": 23537,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39740,
+  "completion": 2388,
+  "total": 42128
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1207,
+   "prompt_tokens": 17384,
+   "total_tokens": 18591,
+   "completion_tokens_details": {
+    "reasoning_tokens": 871,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17384,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1181,
+   "prompt_tokens": 22356,
+   "total_tokens": 23537,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3104"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

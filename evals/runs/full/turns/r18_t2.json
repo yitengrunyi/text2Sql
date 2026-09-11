@@ -1,0 +1,172 @@
+{
+ "round_id": 18,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "上证50在同一个交易日收在多少点？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT INDX_SNAME AS `指数名称`, SECCODE AS `指数代码`, TRADEDATE AS `交易日期`, ROUND(TCLOSE, 2) AS `收盘点位` FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE = '2026-09-02' AND TCLOSE IS NOT NULL AND ISVALID = 1 LIMIT 1;\n200\n{table:[['指数名称', '指数代码', '交易日期', '收盘点位'], ['上证50', '000016', '2026-09-02', '2,914.44']]}\n该查询获取了上证50指数在最近一个交易日的收盘点位数据。查询来源于指数行情数据，筛选条件包括指数代码为上证50、交易日期为与之前查询一致的最近一个交易日、数据需为有效状态且收盘点位不为空。结果包含指数名称、指数代码、交易日期和收盘点位，并将收盘点位数值四舍五入保留两位小数。此查询直接使用了已有的指数行情数据，无需额外计算，能精确反映上证50在指定交易日的收盘情况。查询结果符合用户“上证50在同一个交易日收在多少点”的需求。\n{table:[['指数名称', '指数代码', '交易日期', '收盘点位'], ['上证50', '000016', '2026-09-02', '2,914.44']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT INDX_SNAME AS `指数名称`, SECCODE AS `指数代码`, TRADEDATE AS `交易日期`, ROUND(TCLOSE, 2) AS `收盘点位` FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE = '2026-09-02' AND TCLOSE IS NOT NULL AND ISVALID = 1 LIMIT 1",
+ "final_sql": "SELECT INDX_SNAME AS `指数名称`, SECCODE AS `指数代码`, TRADEDATE AS `交易日期`, ROUND(TCLOSE, 2) AS `收盘点位` FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE = '2026-09-02' AND TCLOSE IS NOT NULL AND ISVALID = 1 LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2914.4449"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "上证50 000016 2026-09-02 00:00:00 2914.44",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 29.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_18_b48fed34.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 28.53,
+  "llm_seconds_max": 21.55,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2158,
+   "prompt_tokens": 12467,
+   "total_tokens": 14625,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1760,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 152,
+   "prompt_tokens": 4678,
+   "total_tokens": 4830,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17145,
+  "completion": 2310,
+  "total": 19455
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2158,
+   "prompt_tokens": 12467,
+   "total_tokens": 14625,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1760,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 152,
+   "prompt_tokens": 4678,
+   "total_tokens": 4830,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

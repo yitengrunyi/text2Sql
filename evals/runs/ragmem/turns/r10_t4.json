@@ -1,0 +1,175 @@
+{
+ "round_id": 10,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "全部美股里市盈率最低的是哪只股票？市盈率是多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL AND t2.F021N > 0 ORDER BY t2.F021N ASC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '市盈率更新日期', '市盈率'], ['京东-W', 'JD.US', '-', '9.35']]}\n该查询用于查找全部美股中市盈率最低的那只股票，返回股票名称、股票代码、市盈率和更新日期。查询从美股基础信息表与美股估值指标数据表获取相关信息，通过内部关联代码进行数据匹配。筛选条件要求关联字段和市盈率数据均为有效值，并且只统计市盈率为正数的股票，确保剔除因亏损等导致的负市盈率情况。结果按照市盈率从低到高排序，仅返回最低的那一只股票。市盈率为直接使用的现有财务指标，结果保留两位小数。查询的输出内容完全覆盖了“全部美股里市盈率最低的是哪只股票”这一需求，查询结果符合要求。\n{table:[['股票名称', '股票代码', '市盈率更新日期', '市盈率'], ['京东-W', 'JD.US', '-', '9.35']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL AND t2.F021N > 0 ORDER BY t2.F021N ASC LIMIT 1",
+ "final_sql": "SELECT t1.CSNAME AS `股票名称`, t1.COMB_SYMBOL AS `股票代码`, t2.F022D AS `市盈率更新日期`, ROUND(t2.F021N, 2) AS `市盈率` FROM AMERICAN_STOCK_MAIN t1 JOIN COM3101 t2 ON t1.FIU_ID = t2.FIU_ID WHERE t1.FIU_ID IS NOT NULL AND t2.FIU_ID IS NOT NULL AND t2.F021N IS NOT NULL AND t2.F021N > 0 ORDER BY t2.F021N ASC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "JD 京东-W 9.35"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "京东-W JD.US  9.35",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 28.7,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_10_7ddc27b2.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 27.99,
+  "llm_seconds_max": 23.09,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2416,
+   "prompt_tokens": 11550,
+   "total_tokens": 13966,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1931,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11550,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 5751,
+   "total_tokens": 5923,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17301,
+  "completion": 2588,
+  "total": 19889
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2416,
+   "prompt_tokens": 11550,
+   "total_tokens": 13966,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1931,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11550,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 5751,
+   "total_tokens": 5923,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,3306 @@
+{
+  "run_at": "2026-09-02T01:02:13.125321+08:00",
+  "uri": "ws://127.0.0.1:5903/ws",
+  "question_count": 10,
+  "completed_count": 10,
+  "timing": {
+    "average_seconds": 49.571,
+    "median_seconds": 48.954,
+    "min_seconds": 39.292,
+    "max_seconds": 66.176
+  },
+  "results": [
+    {
+      "number": 1,
+      "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+      "elapsed_seconds": 60.84,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：归属于母公司股东的净利润（Net Profit Attributable to Parent Shareholders）\n\n[2] 可能的计算公式：  \n归属于母公司股东的净利润 = 公司总净利润 - 少数股东损益\n\n简化公式：  \n净利润（母公司） = 利润总额 - 所得税 - 少数股东损益"
+        ],
+        "998": [
+          "['贵州茅台', '归属于母公司股东的净利润', '净利润', 'Net Profit Attributable to Parent Shareholders', '公司总净利润', '少数股东损益', '利润总额', '所得税', '净利润（母公司）']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板财务', '主板基本信息']"
+        ],
+        "1006": [
+          "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_ASSETS', 'STK_FIN_CHARGE', 'STK_NON_EXTR_ITEM', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    gai.SEC_SNAME AS `股票名称`,\n    gai.SEC_CODE AS `股票代码`,\n    vsfi.ENDDATE AS `报表截止日`,\n    ROUND(vsfi.F110101/10000, 1) AS `归母净利润(万)`,\n    vsfi.F110101 AS `归母净利润(元)`,\n    vsfi.F110201 AS `归母净利润(扣非)(元)`\nFROM \n    VIEW_STK_FIN_IDX vsfi\nJOIN \n    GET_A_INDUSTRY gai ON vsfi.COMCODE = gai.COMCODE\nWHERE \n    gai.SEC_SNAME LIKE '%贵州茅台%'\n    AND vsfi.ISVALID = 1\n    AND gai.ISVALID = 1\n    AND vsfi.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    vsfi.ENDDATE DESC\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['股票名称', '报表截止日', '归母净利润(万)', '归母净利润(元)', '归母净利润(扣非)(元)'], ['贵州茅台', '2025-12-31', '8,232,006.70', '82,320,067,101.68', '82,293,107,655.25']]}"
+        ],
+        "1020": [
+          "归属于母公司股东的净利润（万元）通过将归母净利润（元）除以一万并保留一位小数得到。归母净利润（元）和扣除非经常性损益后的归母净利润（元）是直接取值。在此查询中，归母净利润单位转换进行了计算，其余指标直接提取。查询结果符合要求。\n\n查询提取了贵州茅台的证券简称、股票代码、报表截止日期、归母净利润（万元）、归母净利润（元）、归母净利润（扣非）（元）等信息。主要财务指标表用于获取净利润具体数据，A股行业汇总表提供证券基础信息。通过公司内部代码关联两表。筛选条件包括证券简称包含“贵州茅台”、财务指标数据和证券信息均为有效、报表截止日期为2025年末。结果按照报表日期降序，仅展示最新一条贵州茅台的归母净利润数据。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：归属于母公司股东的净利润（Net Profit Attributable to Parent Shareholders）\n\n[2] 可能的计算公式：  \n归属于母公司股东的净利润 = 公司总净利润 - 少数股东损益\n\n简化公式：  \n净利润（母公司） = 利润总额 - 所得税 - 少数股东损益",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.675
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['贵州茅台', '归属于母公司股东的净利润', '净利润', 'Net Profit Attributable to Parent Shareholders', '公司总净利润', '少数股东损益', '利润总额', '所得税', '净利润（母公司）']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.675
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 19.769
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 22.943
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板财务', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 26.644
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_ASSETS', 'STK_FIN_CHARGE', 'STK_NON_EXTR_ITEM', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 34.099
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 34.101
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 34.102
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    gai.SEC_SNAME AS `股票名称`,\n    gai.SEC_CODE AS `股票代码`,\n    vsfi.ENDDATE AS `报表截止日`,\n    ROUND(vsfi.F110101/10000, 1) AS `归母净利润(万)`,\n    vsfi.F110101 AS `归母净利润(元)`,\n    vsfi.F110201 AS `归母净利润(扣非)(元)`\nFROM \n    VIEW_STK_FIN_IDX vsfi\nJOIN \n    GET_A_INDUSTRY gai ON vsfi.COMCODE = gai.COMCODE\nWHERE \n    gai.SEC_SNAME LIKE '%贵州茅台%'\n    AND vsfi.ISVALID = 1\n    AND gai.ISVALID = 1\n    AND vsfi.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    vsfi.ENDDATE DESC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 43.63
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 56.045
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['股票名称', '报表截止日', '归母净利润(万)', '归母净利润(元)', '归母净利润(扣非)(元)'], ['贵州茅台', '2025-12-31', '8,232,006.70', '82,320,067,101.68', '82,293,107,655.25']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 56.056
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6f9b0287_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6f9b0287",
+            "question": "贵州茅台2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-1-64ffeea1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "归属于母公司股东的净利润（万元）通过将归母净利润（元）除以一万并保留一位小数得到。归母净利润（元）和扣除非经常性损益后的归母净利润（元）是直接取值。在此查询中，归母净利润单位转换进行了计算，其余指标直接提取。查询结果符合要求。\n\n查询提取了贵州茅台的证券简称、股票代码、报表截止日期、归母净利润（万元）、归母净利润（元）、归母净利润（扣非）（元）等信息。主要财务指标表用于获取净利润具体数据，A股行业汇总表提供证券基础信息。通过公司内部代码关联两表。筛选条件包括证券简称包含“贵州茅台”、财务指标数据和证券信息均为有效、报表截止日期为2025年末。结果按照报表日期降序，仅展示最新一条贵州茅台的归母净利润数据。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 2110,
+              "prompt_tokens": 47831,
+              "total_tokens": 49941,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 0,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 60.838
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "question": "贵州茅台2025年基本每股收益是多少？",
+      "elapsed_seconds": 50.664,
+      "error": null,
+      "event_count": 13,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：基本每股收益（EPS，Earnings Per Share）\n\n[2] 可能的计算公式：  \nEPS = 净利润（Net Profit）÷ 普通股的加权平均股数（Weighted Average Shares Outstanding）\n\n如果查询的是预测2025年贵州茅台的EPS，则需要用2025年预计净利润除以预计的加权平均股数。"
+        ],
+        "998": [
+          "['贵州茅台', '基本每股收益', '每股收益', 'EPS', 'Earnings Per Share', '净利润', 'Net Profit', '普通股的加权平均股数', '加权平均股数', 'Weighted Average Shares Outstanding', '预测净利润', '预计净利润', '预计加权平均股数']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "999": [
+          "该问题可能涉及的题材包含：['白酒']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '白酒'。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板基本信息', '主板财务']"
+        ],
+        "1006": [
+          "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'VW_CONCEPT_STK', 'STK_EQT_CHNG', 'VW_CONCEPT_STK', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    a.ENDDATE AS `报告截止日期`,\n    b.SEC_SNAME AS `股票名称`,\n    b.SEC_CODE AS `股票代码`,\n    CAST(a.EPSP AS DECIMAL(18,3)) AS `基本每股收益(元/股)`\nFROM \n    VIEW_STK_FIN_IDX_PLUS a\nJOIN \n    GET_A_INDUSTRY b\n    ON a.COMCODE = b.COMCODE AND b.ISVALID = 1\nWHERE \n    b.SEC_SNAME LIKE '%贵州茅台%'\n    AND a.RPT_TYPE = '2'\n    AND a.RPT_TAG = 7           -- 年报（1-一季报,5-中报,6-三季,7-年报）\n    AND a.RPT_YEAR = 2025\n    AND a.EPSP IS NOT NULL\n    AND a.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['报告截止日期', '股票名称', '基本每股收益(元/股)'], ['2025-12-31', '贵州茅台', '65.66']]}"
+        ],
+        "1020": [
+          "该查询的主要目的是获取贵州茅台在2025年年报期间的基本每股收益。基本每股收益由公司披露，反映为公司在报告期内实现的归属于普通股股东的净利润除以流通在外的普通股加权平均数。公式为：基本每股收益 = 归属于普通股股东的净利润 / 加权平均普通股股数。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n本次查询从两个表中提取数据，一个表用于记录A股上市公司每个季度累计值的主要财务数据，另一个表提供A股行业的基本信息。通过公司内部代码将两个表关联，选择了报告截止日期、股票名称、股票代码以及基本每股收益。通过模糊匹配筛选证券简称中包含“贵州茅台”的公司，仅筛选年报数据（年报标记为7），报告年份为2025年，报表类型为“合并”，报告截止日期为“2025年12月31日”。额外排除了基本每股收益为空的数据，并确保行业信息有效。最终结果会按照报告截止日期降序排列，并限制返回1条数据。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：基本每股收益（EPS，Earnings Per Share）\n\n[2] 可能的计算公式：  \nEPS = 净利润（Net Profit）÷ 普通股的加权平均股数（Weighted Average Shares Outstanding）\n\n如果查询的是预测2025年贵州茅台的EPS，则需要用2025年预计净利润除以预计的加权平均股数。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.244
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['贵州茅台', '基本每股收益', '每股收益', 'EPS', 'Earnings Per Share', '净利润', 'Net Profit', '普通股的加权平均股数', '加权平均股数', 'Weighted Average Shares Outstanding', '预测净利润', '预计净利润', '预计加权平均股数']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.244
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 16.93
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 999,
+            "answer": "该问题可能涉及的题材包含：['白酒']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '白酒'。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 16.93
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 19.375
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板基本信息', '主板财务']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 22.758
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'VW_CONCEPT_STK', 'STK_EQT_CHNG', 'VW_CONCEPT_STK', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 30.443
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 30.444
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 30.444
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    a.ENDDATE AS `报告截止日期`,\n    b.SEC_SNAME AS `股票名称`,\n    b.SEC_CODE AS `股票代码`,\n    CAST(a.EPSP AS DECIMAL(18,3)) AS `基本每股收益(元/股)`\nFROM \n    VIEW_STK_FIN_IDX_PLUS a\nJOIN \n    GET_A_INDUSTRY b\n    ON a.COMCODE = b.COMCODE AND b.ISVALID = 1\nWHERE \n    b.SEC_SNAME LIKE '%贵州茅台%'\n    AND a.RPT_TYPE = '2'\n    AND a.RPT_TAG = 7           -- 年报（1-一季报,5-中报,6-三季,7-年报）\n    AND a.RPT_YEAR = 2025\n    AND a.EPSP IS NOT NULL\n    AND a.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 38.126
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.232
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['报告截止日期', '股票名称', '基本每股收益(元/股)'], ['2025-12-31', '贵州茅台', '65.66']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.242
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-f0570d5a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-f0570d5a",
+            "question": "贵州茅台2025年基本每股收益是多少？",
+            "sessionId": "mysql2-benchmark-2-845c4b84",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的主要目的是获取贵州茅台在2025年年报期间的基本每股收益。基本每股收益由公司披露，反映为公司在报告期内实现的归属于普通股股东的净利润除以流通在外的普通股加权平均数。公式为：基本每股收益 = 归属于普通股股东的净利润 / 加权平均普通股股数。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n本次查询从两个表中提取数据，一个表用于记录A股上市公司每个季度累计值的主要财务数据，另一个表提供A股行业的基本信息。通过公司内部代码将两个表关联，选择了报告截止日期、股票名称、股票代码以及基本每股收益。通过模糊匹配筛选证券简称中包含“贵州茅台”的公司，仅筛选年报数据（年报标记为7），报告年份为2025年，报表类型为“合并”，报告截止日期为“2025年12月31日”。额外排除了基本每股收益为空的数据，并确保行业信息有效。最终结果会按照报告截止日期降序排列，并限制返回1条数据。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 2089,
+              "prompt_tokens": 45508,
+              "total_tokens": 47597,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 0,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 50.662
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+      "elapsed_seconds": 47.243,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：归属于母公司股东的净利润  \n[2] 可能的计算公式：  \n归属于母公司股东的净利润 = 净利润 - 少数股东损益  \n\n其中：  \n净利润 = 营业收入 - 营业成本 - 管理费用 - 财务费用 - 所有税费 + 投资收益等  \n归属于母公司股东的净利润指的是上市公司“母公司”在一个财年最终可以分配给股东的利润，即净利润减去属于非控股股东（少数股东）的部分。"
+        ],
+        "998": [
+          "['五粮液', '归属于母公司股东的净利润', '净利润', '少数股东损益', '营业收入', '营业成本', '管理费用', '财务费用', '所有税费', '投资收益', '少数股东', '母公司', '非控股股东']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'五粮液'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板基本信息', '主板财务']"
+        ],
+        "1006": [
+          "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_NON_EXTR_ITEM', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    a.ENDDATE AS `截止日期`, \n    b.SEC_SNAME AS `股票名称`, \n    b.SEC_CODE AS `股票代码`, \n    a.F110101 / 10000 AS `归母净利润(万)`,\n    a.COMCODE AS `公司内部代码`\nFROM \n    VIEW_STK_FIN_IDX a\nJOIN \n    GET_A_INDUSTRY b \n    ON a.COMCODE = b.COMCODE \nWHERE \n    b.SEC_SNAME LIKE '%五粮液%'\n    AND a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND a.ENDDATE = '2025-12-31'\n    AND a.F110101 IS NOT NULL\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['截止日期', '股票名称', '归母净利润(万)'], ['2025-12-31', '五粮液', '895,425.72']]}"
+        ],
+        "1020": [
+          "该查询的主要目的是获取五粮液在2025年截止时的归属于母公司股东的净利润。在本次查询中，对归属于母公司净利润做了单位换算，即归母净利润(万) = 归母净利润(元)除以1万。查询结果符合要求。\n\n查询从两个表中提取数据，通过公司内部代码进行连接。其中一个表用于提供上市公司的主要财务指标信息，另一个表用于提供A股股票简称和市场代码等基本信息。查询内容包括截止日期、股票名称、股票代码、归母净利润（以万元为单位）以及公司内部代码。\n\n通过条件筛选公司简称为“五粮液”的记录，筛选财务指标和公司信息均为有效的数据，规定截止日期为2025年12月31日，只选取归母净利润不为空的记录，并按截止日期倒序排列，最终返回一条记录。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：归属于母公司股东的净利润  \n[2] 可能的计算公式：  \n归属于母公司股东的净利润 = 净利润 - 少数股东损益  \n\n其中：  \n净利润 = 营业收入 - 营业成本 - 管理费用 - 财务费用 - 所有税费 + 投资收益等  \n归属于母公司股东的净利润指的是上市公司“母公司”在一个财年最终可以分配给股东的利润，即净利润减去属于非控股股东（少数股东）的部分。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.279
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['五粮液', '归属于母公司股东的净利润', '净利润', '少数股东损益', '营业收入', '营业成本', '管理费用', '财务费用', '所有税费', '投资收益', '少数股东', '母公司', '非控股股东']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.279
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'五粮液'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 18.449
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 20.794
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板基本信息', '主板财务']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 23.776
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_NON_EXTR_ITEM', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 31.322
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 31.323
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 31.324
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    a.ENDDATE AS `截止日期`, \n    b.SEC_SNAME AS `股票名称`, \n    b.SEC_CODE AS `股票代码`, \n    a.F110101 / 10000 AS `归母净利润(万)`,\n    a.COMCODE AS `公司内部代码`\nFROM \n    VIEW_STK_FIN_IDX a\nJOIN \n    GET_A_INDUSTRY b \n    ON a.COMCODE = b.COMCODE \nWHERE \n    b.SEC_SNAME LIKE '%五粮液%'\n    AND a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND a.ENDDATE = '2025-12-31'\n    AND a.F110101 IS NOT NULL\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 41.301
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 43.207
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['截止日期', '股票名称', '归母净利润(万)'], ['2025-12-31', '五粮液', '895,425.72']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 43.217
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-6e9fc8c3_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-6e9fc8c3",
+            "question": "五粮液2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-3-253aadc8",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的主要目的是获取五粮液在2025年截止时的归属于母公司股东的净利润。在本次查询中，对归属于母公司净利润做了单位换算，即归母净利润(万) = 归母净利润(元)除以1万。查询结果符合要求。\n\n查询从两个表中提取数据，通过公司内部代码进行连接。其中一个表用于提供上市公司的主要财务指标信息，另一个表用于提供A股股票简称和市场代码等基本信息。查询内容包括截止日期、股票名称、股票代码、归母净利润（以万元为单位）以及公司内部代码。\n\n通过条件筛选公司简称为“五粮液”的记录，筛选财务指标和公司信息均为有效的数据，规定截止日期为2025年12月31日，只选取归母净利润不为空的记录，并按截止日期倒序排列，最终返回一条记录。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 2107,
+              "prompt_tokens": 46411,
+              "total_tokens": 48518,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 3584,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 47.232
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+      "elapsed_seconds": 54.097,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：归属于母公司股东的净利润（Net profit attributable to shareholders of the parent company）\n\n[2] 计算公式：  \n归属于母公司股东的净利润 = 总净利润 − 少数股东损益  \n其中，总净利润 = 营业收入 − 营业成本 − 各项费用（如销售费用、管理费用、财务费用等）± 投资收益 ± 公允价值变动收益 ± 资产处置收益 − 所得税费用"
+        ],
+        "998": [
+          "['比亚迪', '归属于母公司股东的净利润', 'Net profit attributable to shareholders of the parent company', '总净利润', '营业收入', '营业成本', '销售费用', '管理费用', '财务费用', '投资收益', '公允价值变动收益', '资产处置收益', '所得税费用', '少数股东损益']"
+        ],
+        "1003": [
+          "该问题可能涉及美股-'比亚迪股份 (OTC)', 它的美股股票代码为：BYDDY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。该问题可能涉及港股-'比亚迪股份',对应的港股行业名称为-汽车。该问题可能涉及A股-'比亚迪'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-汽车。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板财务', '主板基本信息']"
+        ],
+        "1006": [
+          "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_NON_EXTR_ITEM', 'STK_NONOPT_EXPENSE', 'STK_TAX_RATIO', 'STK_TAXPAY', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vsfip.ENDDATE AS `截止日期`,\n    ROUND(vsfip.F110101 / 10000, 1) AS `归属于母公司股东的净利润(万)`\nFROM \n    VIEW_STK_FIN_IDX vsfip\nJOIN \n    GET_A_INDUSTRY ga \n    ON vsfip.COMCODE = ga.COMCODE \nWHERE \n    ga.SEC_SNAME LIKE '%比亚迪%' \n    AND vsfip.ENDDATE = '2025-12-31'\n    AND vsfip.ISVALID = 1\n    AND ga.ISVALID = 1\nORDER BY \n    vsfip.ENDDATE DESC\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['股票名称', '截止日期', '归属于母公司股东的净利润(万)'], ['比亚迪', '2025-12-31', '3,261,902.20']]}"
+        ],
+        "1020": [
+          "该查询的目的是获取比亚迪在2025年归属于母公司股东的净利润数据。在这个查询中，对净利润进行了单位换算，将归属于母公司股东的净利润从“元”转换为“万元”，具体公式是归属于母公司股东的净利润（万元）=归属于母公司股东的净利润（元）除以10000。同时，保留了一位小数以便于展示。在此查询中，归属于母公司股东的净利润数据也是直接取值。查询结果符合要求。\n\n查询从财务指标表和A股行业汇总信息表提取数据，通过公司代码字段进行连接。财务指标表记录了上市公司主要财务指标情况，A股行业汇总信息表用于记录A股行业的证券简称和市场代码等信息。查询选择了股票名称、股票代码、截止日期、归属于母公司股东的净利润（万元）等字段。通过模糊筛选证券简称中包含“比亚迪”的记录，限定截止日期为2025年12月31日，并确保财务信息和行业信息记录都是有效的。查询结果按截止日期降序排列，最多只取一条数据。最终返回比亚迪2025年归属于母公司股东的净利润。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：归属于母公司股东的净利润（Net profit attributable to shareholders of the parent company）\n\n[2] 计算公式：  \n归属于母公司股东的净利润 = 总净利润 − 少数股东损益  \n其中，总净利润 = 营业收入 − 营业成本 − 各项费用（如销售费用、管理费用、财务费用等）± 投资收益 ± 公允价值变动收益 ± 资产处置收益 − 所得税费用",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.495
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['比亚迪', '归属于母公司股东的净利润', 'Net profit attributable to shareholders of the parent company', '总净利润', '营业收入', '营业成本', '销售费用', '管理费用', '财务费用', '投资收益', '公允价值变动收益', '资产处置收益', '所得税费用', '少数股东损益']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.495
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及美股-'比亚迪股份 (OTC)', 它的美股股票代码为：BYDDY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。该问题可能涉及港股-'比亚迪股份',对应的港股行业名称为-汽车。该问题可能涉及A股-'比亚迪'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-汽车。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 20.947
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 24.18
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板财务', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 28.041
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'STK_COMSUB_PROFILE', 'STK_NON_EXTR_ITEM', 'STK_NONOPT_EXPENSE', 'STK_TAX_RATIO', 'STK_TAXPAY', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 38.113
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 38.116
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 38.117
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vsfip.ENDDATE AS `截止日期`,\n    ROUND(vsfip.F110101 / 10000, 1) AS `归属于母公司股东的净利润(万)`\nFROM \n    VIEW_STK_FIN_IDX vsfip\nJOIN \n    GET_A_INDUSTRY ga \n    ON vsfip.COMCODE = ga.COMCODE \nWHERE \n    ga.SEC_SNAME LIKE '%比亚迪%' \n    AND vsfip.ENDDATE = '2025-12-31'\n    AND vsfip.ISVALID = 1\n    AND ga.ISVALID = 1\nORDER BY \n    vsfip.ENDDATE DESC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 47.678
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 49.567
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['股票名称', '截止日期', '归属于母公司股东的净利润(万)'], ['比亚迪', '2025-12-31', '3,261,902.20']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 49.576
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-029a20e7_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-029a20e7",
+            "question": "比亚迪2025年归属于母公司股东的净利润是多少？",
+            "sessionId": "mysql2-benchmark-4-7c39c5cc",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的目的是获取比亚迪在2025年归属于母公司股东的净利润数据。在这个查询中，对净利润进行了单位换算，将归属于母公司股东的净利润从“元”转换为“万元”，具体公式是归属于母公司股东的净利润（万元）=归属于母公司股东的净利润（元）除以10000。同时，保留了一位小数以便于展示。在此查询中，归属于母公司股东的净利润数据也是直接取值。查询结果符合要求。\n\n查询从财务指标表和A股行业汇总信息表提取数据，通过公司代码字段进行连接。财务指标表记录了上市公司主要财务指标情况，A股行业汇总信息表用于记录A股行业的证券简称和市场代码等信息。查询选择了股票名称、股票代码、截止日期、归属于母公司股东的净利润（万元）等字段。通过模糊筛选证券简称中包含“比亚迪”的记录，限定截止日期为2025年12月31日，并确保财务信息和行业信息记录都是有效的。查询结果按截止日期降序排列，最多只取一条数据。最终返回比亚迪2025年归属于母公司股东的净利润。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 2209,
+              "prompt_tokens": 52116,
+              "total_tokens": 54325,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 5760,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 54.085
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+      "elapsed_seconds": 46.299,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n- 收盘价：指某一交易日结束时最后一笔交易的成交价格。  \n公式：  \n收盘价 = 当天最后成交价格"
+        ],
+        "998": [
+          "['贵州茅台', '收盘价', 'Closing Price', '交易日期', 'Trading Date', '成交价格', '当天最后成交价格']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板行情', '主板基本信息']"
+        ],
+        "1006": [
+          "['GET_A_INDICS_LATEST', 'ANA_STK_VAL_IDX', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    DATE_FORMAT(MAX_TRADATE, '%Y-%m-%d') AS `交易日期`,\n    ROUND(TCLOSE, 2) AS `收盘价`\nFROM\n    GET_A_INDICS_LATEST\nWHERE\n    SEC_SNAME LIKE '%贵州茅台%'\n    AND TCLOSE IS NOT NULL\n    AND MAX_TRADATE = '2026-09-01'\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['股票名称', '交易日期', '收盘价'], ['贵州茅台', '2026-09-01', '1,299.56']]}"
+        ],
+        "1020": [
+          "该查询的主要目的是获取贵州茅台在最近一个交易日的收盘价以及对应的交易日期。收盘价通过对原始收盘数据进行四舍五入，保留两位小数，计算方式如下：收盘价（保留两位小数）等于原始收盘价四舍五入到小数点后两位。在此查询中，还对交易日期进行了格式化，统一展示为年-月-日格式。\n\n从记录A股公司最近交易日行情指标的信息表中提取数据。查询选择了股票名称、股票代码、最近交易日和收盘价等内容。使用条件限定了股票简称含有“贵州茅台”，剔除了收盘价为空的记录，并只查询交易日期为2026年9月1日的数据。由于设置了记录条数限制，最多返回一条结果。查询结果符合要求。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n- 收盘价：指某一交易日结束时最后一笔交易的成交价格。  \n公式：  \n收盘价 = 当天最后成交价格",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 9.546
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['贵州茅台', '收盘价', 'Closing Price', '交易日期', 'Trading Date', '成交价格', '当天最后成交价格']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 9.546
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 16.972
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 19.162
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板行情', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 21.653
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['GET_A_INDICS_LATEST', 'ANA_STK_VAL_IDX', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 28.679
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 28.682
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 28.683
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    DATE_FORMAT(MAX_TRADATE, '%Y-%m-%d') AS `交易日期`,\n    ROUND(TCLOSE, 2) AS `收盘价`\nFROM\n    GET_A_INDICS_LATEST\nWHERE\n    SEC_SNAME LIKE '%贵州茅台%'\n    AND TCLOSE IS NOT NULL\n    AND MAX_TRADATE = '2026-09-01'\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 41.163
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 41.241
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['股票名称', '交易日期', '收盘价'], ['贵州茅台', '2026-09-01', '1,299.56']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 41.246
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-3b64a085_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-3b64a085",
+            "question": "贵州茅台最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-5-84334ef1",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的主要目的是获取贵州茅台在最近一个交易日的收盘价以及对应的交易日期。收盘价通过对原始收盘数据进行四舍五入，保留两位小数，计算方式如下：收盘价（保留两位小数）等于原始收盘价四舍五入到小数点后两位。在此查询中，还对交易日期进行了格式化，统一展示为年-月-日格式。\n\n从记录A股公司最近交易日行情指标的信息表中提取数据。查询选择了股票名称、股票代码、最近交易日和收盘价等内容。使用条件限定了股票简称含有“贵州茅台”，剔除了收盘价为空的记录，并只查询交易日期为2026年9月1日的数据。由于设置了记录条数限制，最多返回一条结果。查询结果符合要求。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 1151,
+              "prompt_tokens": 28149,
+              "total_tokens": 29300,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 5376,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 46.291
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+      "elapsed_seconds": 39.292,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n收盘价=当日所有成交价格中最后一笔交易价格  \n即：  \n收盘价 = 最后一笔成交价  \n交易日期 = 最近一个交易日的日期（以交易所日历为准）"
+        ],
+        "998": [
+          "['五粮液', '收盘价', 'Closing Price', '成交价格', '交易日期', 'Trading Date', '成交价', '交易日', '交易所日历']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'五粮液'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板行情', '主板基本信息']"
+        ],
+        "1006": [
+          "['GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价`,\n    MAX_TRADATE AS `交易日期`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    SEC_SNAME LIKE '%五粮液%'\n    AND TCLOSE IS NOT NULL\n    AND MAX_TRADATE = '2026-09-01'\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['股票名称', '收盘价', '交易日期'], ['五粮液', '71.83', '2026-09-01']]}"
+        ],
+        "1020": [
+          "该查询的目的是获取五粮液在最新交易日的收盘价以及对应的交易日期。收盘价通过直接对原始数据进行了保留两位小数的数值处理。查询结果符合要求。\n\n查询使用的是A股最新行情指标表，该表记录了所有A股公司最近交易日的行情数据，包括收盘价、股票名称、股票代码和交易日期信息。数据筛选方面，通过模糊匹配股票名称包含“五粮液”来确定目标公司，并仅选择收盘价不为空且交易日期为2026年9月1日的记录。最后选取一条结果进行展示。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n收盘价=当日所有成交价格中最后一笔交易价格  \n即：  \n收盘价 = 最后一笔成交价  \n交易日期 = 最近一个交易日的日期（以交易所日历为准）",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 9.428
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['五粮液', '收盘价', 'Closing Price', '成交价格', '交易日期', 'Trading Date', '成交价', '交易日', '交易所日历']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 9.429
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'五粮液'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 16.966
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 19.806
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板行情', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 22.776
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.652
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.653
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.654
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价`,\n    MAX_TRADATE AS `交易日期`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    SEC_SNAME LIKE '%五粮液%'\n    AND TCLOSE IS NOT NULL\n    AND MAX_TRADATE = '2026-09-01'\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.786
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.866
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['股票名称', '收盘价', '交易日期'], ['五粮液', '71.83', '2026-09-01']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.87
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-94c411db_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-94c411db",
+            "question": "五粮液最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-6-792565fe",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的目的是获取五粮液在最新交易日的收盘价以及对应的交易日期。收盘价通过直接对原始数据进行了保留两位小数的数值处理。查询结果符合要求。\n\n查询使用的是A股最新行情指标表，该表记录了所有A股公司最近交易日的行情数据，包括收盘价、股票名称、股票代码和交易日期信息。数据筛选方面，通过模糊匹配股票名称包含“五粮液”来确定目标公司，并仅选择收盘价不为空且交易日期为2026年9月1日的记录。最后选取一条结果进行展示。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 1125,
+              "prompt_tokens": 26476,
+              "total_tokens": 27601,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 8704,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 39.286
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+      "elapsed_seconds": 39.593,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n收盘价 = 最后成交价格（该交易日最后一笔成交价）  \n交易日期 = 该收盘价对应的日期（即最新交易日）\n\n（注意：收盘价数据通常由交易所直接发布，无需复杂计算，只需查询即可。）"
+        ],
+        "998": [
+          "['比亚迪', '收盘价', 'Closing Price', '交易日期', 'Trading Date', '最后成交价格', '该交易日最后一笔成交价', '最新交易日', '交易所']"
+        ],
+        "1003": [
+          "该问题可能涉及美股-'比亚迪股份 (OTC)', 它的美股股票代码为：BYDDY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。该问题可能涉及港股-'比亚迪股份',对应的港股行业名称为-汽车。该问题可能涉及A股-'比亚迪'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-汽车。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板行情', '主板基本信息']"
+        ],
+        "1006": [
+          "['GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `最新收盘价`,\n    MAX_TRADATE AS `交易日期`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    SEC_SNAME LIKE '%比亚迪%'\n    AND MAX_TRADATE = '2026-09-01'\n    AND TCLOSE IS NOT NULL"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['股票名称', '最新收盘价', '交易日期'], ['比亚迪', '88.71', '2026-09-01']]}"
+        ],
+        "1020": [
+          "查询的主要目的是获取比亚迪公司在最新交易日的收盘价和对应的交易日期。该查询对收盘价进行了四舍五入，保留了两位小数。收盘价的保留两位小数的结果是采用公式：最新收盘价 = 原始收盘价四舍五入保留两位小数。查询结果符合要求。\n\n本次查询从用于记录A股公司最近交易日行情指标的数据表中获取信息，选择了股票名称、股票代码、最新收盘价和交易日期这几个展示维度。通过筛选证券简称包含“比亚迪”的记录，只保留最近交易日在2026年9月1日这一天，且收盘价有效的记录。最终得到比亚迪在该交易日的最新收盘价和当日的具体日期。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）  \n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n收盘价 = 最后成交价格（该交易日最后一笔成交价）  \n交易日期 = 该收盘价对应的日期（即最新交易日）\n\n（注意：收盘价数据通常由交易所直接发布，无需复杂计算，只需查询即可。）",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.341
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['比亚迪', '收盘价', 'Closing Price', '交易日期', 'Trading Date', '最后成交价格', '该交易日最后一笔成交价', '最新交易日', '交易所']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 10.342
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及美股-'比亚迪股份 (OTC)', 它的美股股票代码为：BYDDY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。该问题可能涉及港股-'比亚迪股份',对应的港股行业名称为-汽车。该问题可能涉及A股-'比亚迪'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-汽车。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 17.376
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 19.274
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板行情', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 22.296
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 27.191
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 27.192
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 27.193
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `最新收盘价`,\n    MAX_TRADATE AS `交易日期`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    SEC_SNAME LIKE '%比亚迪%'\n    AND MAX_TRADATE = '2026-09-01'\n    AND TCLOSE IS NOT NULL",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.066
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.147
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['股票名称', '最新收盘价', '交易日期'], ['比亚迪', '88.71', '2026-09-01']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.151
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-b6e2186c_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-b6e2186c",
+            "question": "比亚迪最新一个交易日的收盘价是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-7-5cc7626e",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "查询的主要目的是获取比亚迪公司在最新交易日的收盘价和对应的交易日期。该查询对收盘价进行了四舍五入，保留了两位小数。收盘价的保留两位小数的结果是采用公式：最新收盘价 = 原始收盘价四舍五入保留两位小数。查询结果符合要求。\n\n本次查询从用于记录A股公司最近交易日行情指标的数据表中获取信息，选择了股票名称、股票代码、最新收盘价和交易日期这几个展示维度。通过筛选证券简称包含“比亚迪”的记录，只保留最近交易日在2026年9月1日这一天，且收盘价有效的记录。最终得到比亚迪在该交易日的最新收盘价和当日的具体日期。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 1096,
+              "prompt_tokens": 27116,
+              "total_tokens": 28212,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 3584,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 39.587
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+      "elapsed_seconds": 40.655,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：  \n- 沪深300指数最新一个交易日的收盘点位（Closing Price of CSI 300 Index）\n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n- 沪深300指数收盘点位并不通过一般简单的计算公式获得，其点位由其成分股（沪深300只A股）的收盘价经市值加权后计算得出。简化表示为：  \n  沪深300指数收盘点位 = Σ（成分股收盘价 × 成分股权重）  \n- 交易日期= 最近一个交易日的日期（由官方交易日历确定）"
+        ],
+        "998": [
+          "['沪深300指数', 'CSI 300 Index', '收盘点位', 'Closing Price', '交易日期', 'Trading Date', '成分股', 'A股', '收盘价', '成分股收盘价', '市值加权', '成分股权重', '官方交易日历']"
+        ],
+        "1003": [
+          "该问题可能涉及到申万三级行业，三级行业名称为\"证券\"，即SW_INDU_CODE_2021_3 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万二级行业，二级行业名称为\"证券\"，即SW_INDU_CODE_2021_2 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\""
+        ],
+        "1004": [
+          "指数相关"
+        ],
+        "1005": [
+          "['境内指数']"
+        ],
+        "1006": [
+          "['INDX_MKT', 'GET_INDX_GEN_INFO']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.INDX_SNAME AS `指数名称`,\n    a.SECCODE AS `指数代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘点位`\nFROM \n    INDX_MKT a\nWHERE \n    a.SECCODE = '000300'\n    AND a.TRADEDATE = '2026-09-01'\n    AND a.ISVALID = 1\nORDER BY \n    a.TRADEDATE DESC\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['交易日期', '指数名称', '指数代码', '收盘点位'], ['2026-09-01', '沪深300', '000300', '4,611.44']]}"
+        ],
+        "1020": [
+          "该查询的主要目的是获取沪深300指数在最近一个交易日的收盘点位，同时返回对应的交易日期。在此查询中，收盘点位通过对原始收盘价取两位小数的方式呈现。查询结果符合要求。\n\n查询从指数行情信息表中获取数据，筛选了指数代码为沪深300的记录，限定了特定的交易日期，确保仅获取有效的记录。最终返回交易日期、指数名称、指数代码以及经过小数点精确化处理的收盘点位，并按照交易日期倒序排列仅取一条最新数据。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：  \n- 沪深300指数最新一个交易日的收盘点位（Closing Price of CSI 300 Index）\n- 交易日期（Trading Date）\n\n[2] 可能的计算公式：  \n- 沪深300指数收盘点位并不通过一般简单的计算公式获得，其点位由其成分股（沪深300只A股）的收盘价经市值加权后计算得出。简化表示为：  \n  沪深300指数收盘点位 = Σ（成分股收盘价 × 成分股权重）  \n- 交易日期= 最近一个交易日的日期（由官方交易日历确定）",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 14.569
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['沪深300指数', 'CSI 300 Index', '收盘点位', 'Closing Price', '交易日期', 'Trading Date', '成分股', 'A股', '收盘价', '成分股收盘价', '市值加权', '成分股权重', '官方交易日历']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 14.569
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及到申万三级行业，三级行业名称为\"证券\"，即SW_INDU_CODE_2021_3 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万二级行业，二级行业名称为\"证券\"，即SW_INDU_CODE_2021_2 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 20.836
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "指数相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 22.626
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['境内指数']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 24.938
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['INDX_MKT', 'GET_INDX_GEN_INFO']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.511
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.516
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 29.517
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.INDX_SNAME AS `指数名称`,\n    a.SECCODE AS `指数代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘点位`\nFROM \n    INDX_MKT a\nWHERE \n    a.SECCODE = '000300'\n    AND a.TRADEDATE = '2026-09-01'\n    AND a.ISVALID = 1\nORDER BY \n    a.TRADEDATE DESC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.152
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.316
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['交易日期', '指数名称', '指数代码', '收盘点位'], ['2026-09-01', '沪深300', '000300', '4,611.44']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.323
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-09ecda3f_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-09ecda3f",
+            "question": "沪深300指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-8-594d7871",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的主要目的是获取沪深300指数在最近一个交易日的收盘点位，同时返回对应的交易日期。在此查询中，收盘点位通过对原始收盘价取两位小数的方式呈现。查询结果符合要求。\n\n查询从指数行情信息表中获取数据，筛选了指数代码为沪深300的记录，限定了特定的交易日期，确保仅获取有效的记录。最终返回交易日期、指数名称、指数代码以及经过小数点精确化处理的收盘点位，并按照交易日期倒序排列仅取一条最新数据。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 1122,
+              "prompt_tokens": 25847,
+              "total_tokens": 26969,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 1792,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 40.647
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+      "elapsed_seconds": 50.851,
+      "error": null,
+      "event_count": 12,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标：\n- 上证指数（Shanghai Composite Index）收盘点位\n- 交易日期\n\n[2] 可能的计算公式：\n- 上证指数收盘点位 = 交易日所有成分股收盘价的加权平均（具体权重基于市值调整，总体公式为：指数=（成分股市值合计/基期市值合计）× 基期指数）\n- 交易日期 = 最后一个交易日的日期（由交易所发布）"
+        ],
+        "998": [
+          "['上证指数', 'Shanghai Composite Index', '收盘点位', '交易日期', '成分股', '成分股收盘价', '加权平均', '市值', '市值调整', '成分股市值合计', '基期市值合计', '基期指数', '交易所']"
+        ],
+        "1003": [
+          "该问题可能涉及到申万三级行业，三级行业名称为\"证券\"，即SW_INDU_CODE_2021_3 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万二级行业，二级行业名称为\"证券\"，即SW_INDU_CODE_2021_2 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\""
+        ],
+        "1004": [
+          "指数相关"
+        ],
+        "1005": [
+          "['境内指数']"
+        ],
+        "1006": [
+          "['INDX_MKT', 'GET_INDX_GEN_INFO']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    DATE_FORMAT(m.TRADEDATE, '%Y-%m-%d') AS `交易日期`,\n    g.INDX_SNAME AS `指数简称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘点位`\nFROM\n    GET_INDX_GEN_INFO g\nINNER JOIN\n    INDX_MKT m\n        ON g.INNER_CODE = m.INNER_CODE\nWHERE\n    g.INDX_CODE = '000001'\n    AND g.USE_STATUS = '使用'\n    AND g.ISVALID = 1\n    AND m.SECCODE = '000001'\n    AND m.TRADEDATE = '2026-09-01'\n    AND m.ISVALID = 1\nLIMIT 1"
+        ],
+        "1008": [
+          "200"
+        ],
+        "1009": [
+          "{table:[['交易日期', '指数简称', '收盘点位'], ['2026-09-01', '上证指数', '3,979.89']]}"
+        ],
+        "1020": [
+          "该查询的主要目的是获取上证指数在最新一个交易日的收盘点位和对应的交易日期。收盘点位通过对原始收盘价数值保留两位小数获得，即收盘点位 = 原始收盘价数值，结果显示为保留两位小数的形式。查询结果符合要求。\n\n查询从两个表中提取数据，通过指数内部代码字段进行连接。一个表用于存储指数基本信息，另一个表用于记录每个指数每日的交易行情。  \n查询选择了交易日期、指数简称、指数代码和收盘点位等信息。  \n筛选条件包括：只查找指数代码为“000001”的记录（即上证指数），只查使用状态为“使用”的指数信息，且保证数据有效。只查找交易行情表中指数代码为“000001”且交易日期为“2026-09-01”，并且数据有效的那条记录。  \n查询只返回满足条件的上证指数在指定交易日的收盘点位及日期。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标：\n- 上证指数（Shanghai Composite Index）收盘点位\n- 交易日期\n\n[2] 可能的计算公式：\n- 上证指数收盘点位 = 交易日所有成分股收盘价的加权平均（具体权重基于市值调整，总体公式为：指数=（成分股市值合计/基期市值合计）× 基期指数）\n- 交易日期 = 最后一个交易日的日期（由交易所发布）",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 14.163
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['上证指数', 'Shanghai Composite Index', '收盘点位', '交易日期', '成分股', '成分股收盘价', '加权平均', '市值', '市值调整', '成分股市值合计', '基期市值合计', '基期指数', '交易所']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 14.163
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及到申万三级行业，三级行业名称为\"证券\"，即SW_INDU_CODE_2021_3 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万二级行业，二级行业名称为\"证券\"，即SW_INDU_CODE_2021_2 LIKE \"%证券%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%证券%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 21.222
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "指数相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 23.792
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['境内指数']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 25.309
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['INDX_MKT', 'GET_INDX_GEN_INFO']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.736
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.738
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 35.741
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    DATE_FORMAT(m.TRADEDATE, '%Y-%m-%d') AS `交易日期`,\n    g.INDX_SNAME AS `指数简称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘点位`\nFROM\n    GET_INDX_GEN_INFO g\nINNER JOIN\n    INDX_MKT m\n        ON g.INNER_CODE = m.INNER_CODE\nWHERE\n    g.INDX_CODE = '000001'\n    AND g.USE_STATUS = '使用'\n    AND g.ISVALID = 1\n    AND m.SECCODE = '000001'\n    AND m.TRADEDATE = '2026-09-01'\n    AND m.ISVALID = 1\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.003
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "200",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.081
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "{table:[['交易日期', '指数简称', '收盘点位'], ['2026-09-01', '上证指数', '3,979.89']]}",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.086
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-2bf1034d_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-2bf1034d",
+            "question": "上证指数最新一个交易日的收盘点位是多少？请同时给出交易日期。",
+            "sessionId": "mysql2-benchmark-9-3b107884",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "该查询的主要目的是获取上证指数在最新一个交易日的收盘点位和对应的交易日期。收盘点位通过对原始收盘价数值保留两位小数获得，即收盘点位 = 原始收盘价数值，结果显示为保留两位小数的形式。查询结果符合要求。\n\n查询从两个表中提取数据，通过指数内部代码字段进行连接。一个表用于存储指数基本信息，另一个表用于记录每个指数每日的交易行情。  \n查询选择了交易日期、指数简称、指数代码和收盘点位等信息。  \n筛选条件包括：只查找指数代码为“000001”的记录（即上证指数），只查使用状态为“使用”的指数信息，且保证数据有效。只查找交易行情表中指数代码为“000001”且交易日期为“2026-09-01”，并且数据有效的那条记录。  \n查询只返回满足条件的上证指数在指定交易日的收盘点位及日期。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 1482,
+              "prompt_tokens": 26581,
+              "total_tokens": 28063,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 5120,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 50.844
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+      "elapsed_seconds": 66.176,
+      "error": null,
+      "event_count": 14,
+      "by_type": {
+        "1002": [
+          "[1] 关键金融指标  \n- 贵州茅台（股票代码：600519.SH）  \n- 收盘价（Closing Price）  \n- 时间（2026年8月的各交易日）  \n\n[2] 可能的计算公式  \n最高收盘价 = max{ 收盘价(贵州茅台, t) | t 属于2026年8月的每个交易日 }  \n对应日期 = argmax_t{ 收盘价(贵州茅台, t) | t 属于2026年8月 }"
+        ],
+        "998": [
+          "['贵州茅台', '股票代码', '600519.SH', '收盘价', 'Closing Price', '时间', '交易日', '最高收盘价', 'max', '对应日期', 'argmax', '2026年8月']"
+        ],
+        "1003": [
+          "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。"
+        ],
+        "999": [
+          "该问题可能涉及的题材包含：['高端白酒']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '高端白酒'。"
+        ],
+        "1004": [
+          "个股相关"
+        ],
+        "1005": [
+          "['主板行情', '主板基本信息']"
+        ],
+        "1006": [
+          "['VW_CONCEPT_STK', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']"
+        ],
+        "1030": [
+          "是否命中召回表：False"
+        ],
+        "2000": [
+          "生成查询代码"
+        ],
+        "1007": [
+          "SELECT \n    DATE_FORMAT(A.TRADEDATE, '%Y-%m-%d') AS `日期`,\n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    ROUND(A.A_PRC, 2) AS `收盘价(元)`\nFROM \n    DERI_STK_AH_PRC A\nJOIN \n    GET_A_INDUSTRY B\n    ON A.COMCODE = B.COMCODE\nWHERE \n    B.SEC_SNAME LIKE '%贵州茅台%'\n    AND A.A_PRC IS NOT NULL\n    AND A.TRADEDATE >= '2026-08-01 00:00:00'\n    AND A.TRADEDATE < '2026-09-01 00:00:00'\nORDER BY \n    A.A_PRC DESC,\n    A.TRADEDATE ASC\nLIMIT 1"
+        ],
+        "1008": [
+          "500"
+        ],
+        "1009": [
+          "No rows fetched. 查找结果为空，请检查SQL语句"
+        ],
+        "1034": [
+          "诊断 根据你提供的信息以及SQL执行结果“查找结果为空”，最可能的**2个原因**分析如下：\n\n---\n\n### 1. **数据本身缺失**（最可能）\n\n#### 详细分析：\n你的SQL筛选的时间段是：`2026-08-01 00:00:00` 至 `2026-09-01 00:00:00`，查询的是2026年8月贵州茅台的收盘价。**当前服务器时间为2026年9月2日，仅比检索区间晚一天**。通常，金融类数据库特别是历史行情数据在交易日结束后几天内会自动同步，如果因数据源、同步延迟、维护等问题，2026年8月的数据尚未入库，就会导致查无结果。\n\n- **实际数据缺失**的可能性最大，尤其是如果你查询的是“未来”日期数据或数据更新不同步；\n- 可以通过直接`SELECT * FROM DERI_STK_AH_PRC WHERE TRADEDATE >= '2026-08-01 00:00:00' AND TRADEDATE < '2026-09-01 00:00:00'`（不加任何股票名条件）来快速验证数据是空还是其他问题。\n\n---\n\n### 2. **表或字段信息命名/关联错误，字段可能不存在或拼写错误**\n\n#### 详细分析：\n- SQL中涉及了`A.A_STOCKSNAME`, `A.A_STOCKCODE`, `A.A_PRC`, `A.TRADEDATE`，以及`B.SEC_SNAME`，还涉及到`GET_A_INDUSTRY`的`COMCODE`、`SEC_SNAME`字段。这些字段如果有误、某些库表并不存在这些字段，模型可能**“想当然”地捏造了字段名**，导致查不到结果而不是报错，例如：\n    - `A.A_STOCKSNAME`，有的数据库实际字段名可能是`A_STOCKNAME`或`STOCKS_NAME`；\n    - `GET_A_INDUSTRY`表是否确实存在、命名是否正确，`SEC_SNAME`拼写是否准确；\n    - `A.PRC`与`A_PRC`命名；\n    - 如果字段有误，MySQL一般会报字段不存在的异常，但如果拼接SQL是在代码中动态产生的、被捕获吞掉，则返回空集。\n- 同时，`JOIN`条件`A.COMCODE = B.COMCODE`要求A和B的COMCODE匹配。某些情况下，A和B表的数据因同步、命名、关联关系等问题未能正确匹配，导致筛选后无结果。\n\n---\n\n## 其他可能性（补充说明）\n- **贵州茅台代码筛选条件有误**：`B.SEC_SNAME LIKE '%贵州茅台%'`，真实的语义应映射到唯一指定一支A股，实际字段内容可能为“贵州茅台股份有限公司”，或者实际`SEC_SNAME`用的是证券简称比如`'贵州茅台'`。如果这字段数据不标准，筛不到贵州茅台的数据。\n- **表格根本不存在或数据库连接有问题**：如表名输错、表未授权、数据未分配至当前用户等，但此时MySQL会报未找到表或权限不足的错码，通常不是无数据。\n- **SQL语法错误**：你提供的SQL从语法上没错误，如果语法错误MySQL会有明确语法报错；这里情况为“查无结果”，不是报错。\n\n---\n\n## **结论：最可能的2个原因**\n### 1.【最可能】2026年8月数据本身尚未同步或不存在，导致无结果。\n### 2.【次可能】部分表或关键字段名拼写与实际数据库不一致、SQL拼接错误或JOIN条件导致数据集为空。\n\n---\n\n### **建议排查办法**  \n1. 尝试不带JOIN、不加任何贵州茅台条件，先查`2026-08`是否有任何记录。\n2. 明确检查`DERI_STK_AH_PRC`, `GET_A_INDUSTRY`两表结构，确认字段名拼写和JOIN条件准确无误。\n3. 检查同步日志或ETL流水，查证行情数据确实已入库。\n\n如需继续排查，可补充实际两表的字段列表及简要的样本数据。"
+        ],
+        "1020": [
+          "在该查询中，对收盘价进行了单位转换和保留两位小数的处理，即收盘价（元）等于原始收盘价取值后四舍五入至小数点后两位。查询结果符合要求。\n\n查询主要提取了2026年8月贵州茅台的每日收盘价信息，包括日期、股票名称与股票代码。通过公司内部代码字段关联两个表，一个表用于记录A股和H股价格及交易表现，另一个表提供A股行业汇总信息。筛选条件为证券简称中包含“贵州茅台”，收盘价不为空，并限定交易日期在2026年8月内。结果按照收盘价从高到低排序，再按日期升序排列，最终只返回收盘价最高的那一天以及对应的收盘价。"
+        ]
+      },
+      "events": [
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1002,
+            "answer": "[1] 关键金融指标  \n- 贵州茅台（股票代码：600519.SH）  \n- 收盘价（Closing Price）  \n- 时间（2026年8月的各交易日）  \n\n[2] 可能的计算公式  \n最高收盘价 = max{ 收盘价(贵州茅台, t) | t 属于2026年8月的每个交易日 }  \n对应日期 = argmax_t{ 收盘价(贵州茅台, t) | t 属于2026年8月 }",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.644
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 998,
+            "answer": "['贵州茅台', '股票代码', '600519.SH', '收盘价', 'Closing Price', '时间', '交易日', '最高收盘价', 'max', '对应日期', 'argmax', '2026年8月']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 12.644
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1003,
+            "answer": "该问题可能涉及A股-'贵州茅台'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-食品饮料。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 24.932
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 999,
+            "answer": "该问题可能涉及的题材包含：['高端白酒']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '高端白酒'。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 24.932
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1004,
+            "answer": "个股相关",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 26.944
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1005,
+            "answer": "['主板行情', '主板基本信息']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 30.113
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1006,
+            "answer": "['VW_CONCEPT_STK', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.817
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1030,
+            "answer": "是否命中召回表：False",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.819
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 2000,
+            "answer": "生成查询代码",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 37.821
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1007,
+            "answer": "SELECT \n    DATE_FORMAT(A.TRADEDATE, '%Y-%m-%d') AS `日期`,\n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    ROUND(A.A_PRC, 2) AS `收盘价(元)`\nFROM \n    DERI_STK_AH_PRC A\nJOIN \n    GET_A_INDUSTRY B\n    ON A.COMCODE = B.COMCODE\nWHERE \n    B.SEC_SNAME LIKE '%贵州茅台%'\n    AND A.A_PRC IS NOT NULL\n    AND A.TRADEDATE >= '2026-08-01 00:00:00'\n    AND A.TRADEDATE < '2026-09-01 00:00:00'\nORDER BY \n    A.A_PRC DESC,\n    A.TRADEDATE ASC\nLIMIT 1",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 45.215
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1008,
+            "answer": "500",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 47.165
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1009,
+            "answer": "No rows fetched. 查找结果为空，请检查SQL语句",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 47.165
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1034,
+            "answer": "诊断 根据你提供的信息以及SQL执行结果“查找结果为空”，最可能的**2个原因**分析如下：\n\n---\n\n### 1. **数据本身缺失**（最可能）\n\n#### 详细分析：\n你的SQL筛选的时间段是：`2026-08-01 00:00:00` 至 `2026-09-01 00:00:00`，查询的是2026年8月贵州茅台的收盘价。**当前服务器时间为2026年9月2日，仅比检索区间晚一天**。通常，金融类数据库特别是历史行情数据在交易日结束后几天内会自动同步，如果因数据源、同步延迟、维护等问题，2026年8月的数据尚未入库，就会导致查无结果。\n\n- **实际数据缺失**的可能性最大，尤其是如果你查询的是“未来”日期数据或数据更新不同步；\n- 可以通过直接`SELECT * FROM DERI_STK_AH_PRC WHERE TRADEDATE >= '2026-08-01 00:00:00' AND TRADEDATE < '2026-09-01 00:00:00'`（不加任何股票名条件）来快速验证数据是空还是其他问题。\n\n---\n\n### 2. **表或字段信息命名/关联错误，字段可能不存在或拼写错误**\n\n#### 详细分析：\n- SQL中涉及了`A.A_STOCKSNAME`, `A.A_STOCKCODE`, `A.A_PRC`, `A.TRADEDATE`，以及`B.SEC_SNAME`，还涉及到`GET_A_INDUSTRY`的`COMCODE`、`SEC_SNAME`字段。这些字段如果有误、某些库表并不存在这些字段，模型可能**“想当然”地捏造了字段名**，导致查不到结果而不是报错，例如：\n    - `A.A_STOCKSNAME`，有的数据库实际字段名可能是`A_STOCKNAME`或`STOCKS_NAME`；\n    - `GET_A_INDUSTRY`表是否确实存在、命名是否正确，`SEC_SNAME`拼写是否准确；\n    - `A.PRC`与`A_PRC`命名；\n    - 如果字段有误，MySQL一般会报字段不存在的异常，但如果拼接SQL是在代码中动态产生的、被捕获吞掉，则返回空集。\n- 同时，`JOIN`条件`A.COMCODE = B.COMCODE`要求A和B的COMCODE匹配。某些情况下，A和B表的数据因同步、命名、关联关系等问题未能正确匹配，导致筛选后无结果。\n\n---\n\n## 其他可能性（补充说明）\n- **贵州茅台代码筛选条件有误**：`B.SEC_SNAME LIKE '%贵州茅台%'`，真实的语义应映射到唯一指定一支A股，实际字段内容可能为“贵州茅台股份有限公司”，或者实际`SEC_SNAME`用的是证券简称比如`'贵州茅台'`。如果这字段数据不标准，筛不到贵州茅台的数据。\n- **表格根本不存在或数据库连接有问题**：如表名输错、表未授权、数据未分配至当前用户等，但此时MySQL会报未找到表或权限不足的错码，通常不是无数据。\n- **SQL语法错误**：你提供的SQL从语法上没错误，如果语法错误MySQL会有明确语法报错；这里情况为“查无结果”，不是报错。\n\n---\n\n## **结论：最可能的2个原因**\n### 1.【最可能】2026年8月数据本身尚未同步或不存在，导致无结果。\n### 2.【次可能】部分表或关键字段名拼写与实际数据库不一致、SQL拼接错误或JOIN条件导致数据集为空。\n\n---\n\n### **建议排查办法**  \n1. 尝试不带JOIN、不加任何贵州茅台条件，先查`2026-08`是否有任何记录。\n2. 明确检查`DERI_STK_AH_PRC`, `GET_A_INDUSTRY`两表结构，确认字段名拼写和JOIN条件准确无误。\n3. 检查同步日志或ETL流水，查证行情数据确实已入库。\n\n如需继续排查，可补充实际两表的字段列表及简要的样本数据。",
+            "isEnd": false,
+            "mode": null
+          },
+          "elapsed_seconds": 62.86
+        },
+        {
+          "code": 200,
+          "message": "成功",
+          "messageId": "test-4de4a86a_0",
+          "data": {
+            "userId": "mysql2-benchmark",
+            "userName": "MYSQL-2基准测试",
+            "questionId": "test-4de4a86a",
+            "question": "2026年8月贵州茅台收盘价最高的是哪一天？最高收盘价是多少？",
+            "sessionId": "mysql2-benchmark-10-7501dc42",
+            "system": null,
+            "feedbackQuestion": null,
+            "feedbackQuestionId": null,
+            "feedbackNum": 0,
+            "type": 1020,
+            "answer": "在该查询中，对收盘价进行了单位转换和保留两位小数的处理，即收盘价（元）等于原始收盘价取值后四舍五入至小数点后两位。查询结果符合要求。\n\n查询主要提取了2026年8月贵州茅台的每日收盘价信息，包括日期、股票名称与股票代码。通过公司内部代码字段关联两个表，一个表用于记录A股和H股价格及交易表现，另一个表提供A股行业汇总信息。筛选条件为证券简称中包含“贵州茅台”，收盘价不为空，并限定交易日期在2026年8月内。结果按照收盘价从高到低排序，再按日期升序排列，最终只返回收盘价最高的那一天以及对应的收盘价。",
+            "isEnd": true,
+            "mode": null
+          },
+          "usage": [
+            {
+              "llm_model": "gpt-4.1",
+              "real_model": "gpt-4.1",
+              "completion_tokens": 2519,
+              "prompt_tokens": 28862,
+              "total_tokens": 31381,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "text_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0,
+                "cached_tokens": 3584,
+                "cache_creation_tokens": 0
+              }
+            }
+          ],
+          "elapsed_seconds": 66.167
+        }
+      ]
+    }
+  ]
+}

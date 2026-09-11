@@ -1,0 +1,133 @@
+{
+ "round_id": 30,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "行，清楚了。顺便确认下，这些涨跌幅都是按分红拆股调整后的复权口径算的吧？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 涨跌幅（Return）\n- 复权涨跌幅（Total Return/Adjusted Return）\n\n[2] 可能的计算公式：  \n复权涨跌幅（通常指分红、拆股等已调整后的收益，Total Return）计算公式为：  \n\\[ 复权涨跌幅 = \\frac{当前复权价 - 基期复权价}{基期复权价} \\times 100\\% \\]\n\n其中，复权价会根据分红、配股、拆股等事件做调整，确保涨跌幅数据的可比性。\n['涨跌幅', 'Return', '复权涨跌幅', 'Total Return', 'Adjusted Return', '复权价', '当前复权价', '基期复权价', '分红', '拆股', '配股']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n个股相关\n['主板行情']\n['ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'STK_MKT', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `当日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(CHNG_PCT_THREE_MONTH, 2) AS `近3月涨跌幅(%)`,\n    ROUND(CHNG_PCT_SIX_MONTH, 2) AS `近6月涨跌幅(%)`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `近1年涨跌幅(%)`,\n    ROUND(CHNG_PCT_FIVE_YEAR, 2) AS `近5年涨跌幅(%)`,\n    ROUND(CHNG_PCT_SOFAR, 2) AS `上市以来涨跌幅(%)`,\n    '均为分红拆股调整后的复权口径' AS `涨跌幅口径说明`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-02'\n  AND STOCKSNAME IS NOT NULL\n  AND STOCKCODE IS NOT NULL\n  AND TCLOSE IS NOT NULL\n  AND CHNG_PCT_DAY IS NOT NULL\n200\n{table:[['日期', '股票名称', '股票代码', '收盘价(元)', '当日涨跌幅(%)', '近1周涨跌幅(%)', '近1月涨跌幅(%)', '近3月涨跌幅(%)', '近6月涨跌幅(%)', '近1年涨跌幅(%)', '近5年涨跌幅(%)', '上市以来涨跌幅(%)', '涨跌幅口径说明'], ['2026-09-02', '上海莱士', '002252', '4.91', '-1.41', '-1.01', '-5.21', '-5.80', '-22.12', '-27.21', '-27.74', '493.53', '均为分红拆股调整后的复权口径'], ['2026-09-02', '川大智胜', '002253', '10.12', '-0.39', '4.44', '8.93', '-15.67', '-3.53', '-2.79', '-29.23', '114.46', '均为分红拆股调整后的复权口径'], ['2026-09-02', '平安银行', '000001'",
+ "route_gold": "NON_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `当日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(CHNG_PCT_THREE_MONTH, 2) AS `近3月涨跌幅(%)`,\n    ROUND(CHNG_PCT_SIX_MONTH, 2) AS `近6月涨跌幅(%)`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `近1年涨跌幅(%)`,\n    ROUND(CHNG_PCT_FIVE_YEAR, 2) AS `近5年涨跌幅(%)`,\n    ROUND(CHNG_PCT_SOFAR, 2) AS `上市以来涨跌幅(%)`,\n    '均为分红拆股调整后的复权口径' AS `涨跌幅口径说明`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-02'\n  AND STOCKSNAME IS NOT NULL\n  AND STOCKCODE IS NOT NULL\n  AND TCLOSE IS NOT NULL\n  AND CHNG_PCT_DAY IS NOT NULL",
+ "final_sql": "SELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `当日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(CHNG_PCT_THREE_MONTH, 2) AS `近3月涨跌幅(%)`,\n    ROUND(CHNG_PCT_SIX_MONTH, 2) AS `近6月涨跌幅(%)`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `近1年涨跌幅(%)`,\n    ROUND(CHNG_PCT_FIVE_YEAR, 2) AS `近5年涨跌幅(%)`,\n    ROUND(CHNG_PCT_SOFAR, 2) AS `上市以来涨跌幅(%)`,\n    '均为分红拆股调整后的复权口径' AS `涨跌幅口径说明`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-02'\n  AND STOCKSNAME IS NOT NULL\n  AND STOCKCODE IS NOT NULL\n  AND TCLOSE IS NOT NULL\n  AND CHNG_PCT_DAY IS NOT NULL",
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": false,
+ "answer_ok": null,
+ "elapsed_seconds": 221.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_30_02da0411.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.51,
+  "llm_seconds_max": 8.3,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "STK_MKT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "GET_A_INDICS_LATEST",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   23006
+  ],
+  "prompt_columns_raw_len": 3942
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1584,
+   "prompt_tokens": 35787,
+   "total_tokens": 37371,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 35787,
+  "completion": 1584,
+  "total": 37371
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1584,
+   "prompt_tokens": 35787,
+   "total_tokens": 37371,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "STK_MKT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

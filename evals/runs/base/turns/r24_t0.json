@@ -1,0 +1,148 @@
+{
+ "round_id": 24,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "我关注景顺长城的刘彦春挺久了，他目前在管的总规模有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n基金经理在管基金的总规模（管理资产总规模，AUM，Assets Under Management）\n\n[2] 可能的计算公式：  \n管理资产总规模（AUM） = ∑（各基金的最新资产净值（NAV））  \n即：  \nAUM = NAV₁ + NAV₂ + ... + NAVn  \n其中，NAV代表刘彦春当前在管的每只基金的最新基金资产净值，所有基金净值累加即为总管理规模。\n['景顺长城', '刘彦春', '基金经理', '管理资产总规模', 'AUM', 'Assets Under Management', '基金', '最新资产净值', 'NAV', '基金资产净值', '资产净值']\n该问题可能涉及美股-'景顺', 它的美股股票代码为：IVZ.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-非银金融。该问题可能涉及港股-'长城汽车',对应的港股行业名称为-汽车。\n基金相关\n['基金经理基本信息', '基金经理净值']\n['FUND_MANAGER_ASSET_ALLOCATION', 'FUND_MANAGER_STATISTICS_YEAR', 'FUND_MANAGER_TURNOVER_RATE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    REPORT_DATE AS `报告期`,\n    PSN_NAME AS `基金经理姓名`,\n    TOTAL_ASSET/100000000 AS `在管总规模(亿)`,\n    NET_VALUE/100000000 AS `净资产规模(亿)`,\n    MV_OF_STOCK/100000000 AS `股票投资资产规模(亿)`,\n    MV_OF_BOND/100000000 AS `债券投资资产规模(亿)`\nFROM \n    FUND_MANAGER_ASSET_ALLOCATION\nWHERE \n    PSN_NAME = '刘彦春'\n    AND HISVALID = 1\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_MANAGER_ASSET_ALLOCATION\n        WHERE PSN_NAME = '刘彦春'\n          AND HISVALID = 1\n    )\n\n200\n{table:[['报告期', '基金经理姓名', '在管总规模(亿)', '净资产规模(亿)', '股票投资资产规模(亿)', '债券投资资产规模(亿)'], ['2026-06-30', '刘彦春', '242.12', '240.49', '194.88', '8.53']]}\n查询的目的是获取景顺长城基金经理刘彦春最近一期管理的总资产、净资产、股票投资资产及债券投资资产的规模数据。查询中涉及的“在管总规模(亿)”、“净资产规模(亿)”、“股票投资资产规模(亿)”和“债券投资资产规模(亿)”均是将相应的资产市值（单位为元）除以一亿，即将原始金额单位从元转换为亿元后显示，计算公式为：资产金额(亿元) = 资产金额(元) / 100000000。\n\n在此查询中，对结果中的资产金额进行了单位转换的计算。查询结果符合要求。\n\n该查询从记录基金经理持有主动型基金规模情况的表中提取信息。筛选条件限定为基金经理姓名为“刘彦春”，且数据为有效记录。同时，查询选取了最近一期的报告期作为时间范围，确保返回的是最新数据。查询返回包含报告期、基金经理姓名、管理的总资产规模、净资产规模、股票资产规模和债券资产规模等信息。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    REPORT_DATE AS `报告期`,\n    PSN_NAME AS `基金经理姓名`,\n    TOTAL_ASSET/100000000 AS `在管总规模(亿)`,\n    NET_VALUE/100000000 AS `净资产规模(亿)`,\n    MV_OF_STOCK/100000000 AS `股票投资资产规模(亿)`,\n    MV_OF_BOND/100000000 AS `债券投资资产规模(亿)`\nFROM \n    FUND_MANAGER_ASSET_ALLOCATION\nWHERE \n    PSN_NAME = '刘彦春'\n    AND HISVALID = 1\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_MANAGER_ASSET_ALLOCATION\n        WHERE PSN_NAME = '刘彦春'\n          AND HISVALID = 1\n    )",
+ "final_sql": "SELECT \n    REPORT_DATE AS `报告期`,\n    PSN_NAME AS `基金经理姓名`,\n    TOTAL_ASSET/100000000 AS `在管总规模(亿)`,\n    NET_VALUE/100000000 AS `净资产规模(亿)`,\n    MV_OF_STOCK/100000000 AS `股票投资资产规模(亿)`,\n    MV_OF_BOND/100000000 AS `债券投资资产规模(亿)`\nFROM \n    FUND_MANAGER_ASSET_ALLOCATION\nWHERE \n    PSN_NAME = '刘彦春'\n    AND HISVALID = 1\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_MANAGER_ASSET_ALLOCATION\n        WHERE PSN_NAME = '刘彦春'\n          AND HISVALID = 1\n    )",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "24048631916.3500"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-06-30 刘彦春 242.12254107 240.48631916 194.88274199 8.53189439",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 44.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_24_d534acc1.0",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 42.06,
+  "llm_seconds_max": 9.96,
+  "selected_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_NET_VALUE"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_NET_VALUE",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "FUND_MANAGER_STATISTICS_YEAR",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "sql_prompt_chars": [
+   14376
+  ],
+  "prompt_columns_raw_len": 4647
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1084,
+   "prompt_tokens": 22907,
+   "total_tokens": 23991,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 22907,
+  "completion": 1084,
+  "total": 23991
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1084,
+   "prompt_tokens": 22907,
+   "total_tokens": 23991,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_NET_VALUE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

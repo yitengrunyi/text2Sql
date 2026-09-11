@@ -1,0 +1,74 @@
+{
+  "round_id": 12,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+  "initial": {
+    "question": "恒瑞医药2026年中报披露的前十大股东都是哪些？",
+    "judge": "list",
+    "gold_value": "江苏恒瑞医药集团有限公司、上海启创达远企业管理有限公司、香港中央结算有限公司、HKSCC NOMINEES LIMITED、中国医药投资有限公司、上海汇智联成科技有限公司、连云港市金融控股集团有限公司、中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金、中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金、太白投资有限公司-自有资金(R)",
+    "gold_display": "共10家：恒瑞集团23.18%、上海启创达远14.35%、香港中央结算5.48%、HKSCC NOMINEES 3.89%、中国医药投资2.52%、上海汇智联成2.40%、连云港金控1.71%、易方达沪深300医药ETF 1.09%、中欧医疗健康混合0.71%、太白投资0.52%",
+    "gold_entities": ["江苏恒瑞医药集团有限公司", "上海启创达远企业管理有限公司", "香港中央结算有限公司", "HKSCC NOMINEES LIMITED", "中国医药投资有限公司", "上海汇智联成科技有限公司", "连云港市金融控股集团有限公司", "中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金", "中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金", "太白投资有限公司-自有资金(R)"],
+    "gold_date": null,
+    "gold_sql": "SELECT NAME FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1 ORDER BY `RANK`",
+    "gold_tables": ["GET_STK_SHR_CLS_DTL"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "absolute"}
+  },
+  "feedbacks": [
+    {
+      "question": "名单里排第一的是谁？持有多少股、占比多少？",
+      "judge": "entity",
+      "gold_value": "1538184187",
+      "gold_display": "江苏恒瑞医药集团有限公司，持股1,538,184,187股，占总股本23.18%",
+      "gold_entities": ["江苏恒瑞医药集团有限公司"],
+      "gold_date": null,
+      "gold_sql": "SELECT NAME,HOLD_NUM,ROUND(HOLD_PCT,2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1 AND `RANK`=1",
+      "gold_tables": ["GET_STK_SHR_CLS_DTL"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "这十家股东加起来，合计持股比例是多少？",
+      "judge": "numeric",
+      "gold_value": "55.85",
+      "gold_display": "55.85%",
+      "gold_entities": ["恒瑞医药"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(SUM(HOLD_PCT),2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1",
+      "gold_tables": ["GET_STK_SHR_CLS_DTL"],
+      "labels": {"difficulty": "聚合", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "那2025年年报的时候呢，前十大合计持股是多少？",
+      "judge": "numeric",
+      "gold_value": "58.96",
+      "gold_display": "58.96%，较2026年中报的55.85%下降3.11个百分点",
+      "gold_entities": ["恒瑞医药"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(SUM(HOLD_PCT),2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2025-12-31' AND ISVALID=1",
+      "gold_tables": ["GET_STK_SHR_CLS_DTL"],
+      "labels": {"difficulty": "聚合", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+      "judge": "numeric",
+      "gold_value": "258197600",
+      "gold_display": "增加258,197,600股（约2.58亿股），总股本由6,379,002,274股增至6,637,199,874股",
+      "gold_entities": ["恒瑞医药"],
+      "gold_date": null,
+      "gold_sql": "SELECT SUM(NEW_TOT-EX_TOT) FROM STK_SHR_STRU_CHNG WHERE A_STOCKCODE='600276' AND ISVALID=1 AND CHANGEDATE>='2025-01-01' AND CHANGEDATE<='2025-12-31'",
+      "gold_tables": ["STK_SHR_STRU_CHNG"],
+      "labels": {"difficulty": "时间窗口", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "换家公司看看，中国神华2025年度累计现金分红总额是多少？",
+      "judge": "numeric",
+      "gold_value": "41811266889.02",
+      "gold_display": "418.11亿元（约占当年净利润528.49亿元的79.11%）",
+      "gold_entities": ["中国神华"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(TOT_ACCUM_DIV,2) FROM STK_DIV_STAT WHERE A_STOCKCODE='601088' AND DIV_YEAR=2025 AND ISVALID=1",
+      "gold_tables": ["STK_DIV_STAT"],
+      "labels": {"difficulty": "单表", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

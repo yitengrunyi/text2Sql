@@ -1,0 +1,168 @@
+{
+ "round_id": 15,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 股票当前收盘价（Latest Closing Price）\n\n[2] 可能的计算公式：  \n收盘价 = 最新一个交易日的最后一笔成交价格\n\n**注**：收盘价一般由交易所每日自动统计，无需手动计算，直接采集当日交易终端的数据即可。\n['收盘价', 'Closing Price', '最新收盘价', '最新一个交易日的收盘价', '股票当前收盘价', 'Latest Closing Price', '最新一个交易日的最后一笔成交价格']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    MAX_TRADATE AS `交易日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\nORDER BY \n    `收盘价(元)` DESC\n200\n{table:[['交易日期', '股票名称', '收盘价(元)'], ['2026-09-02', '联讯仪器', '2,399.80'], ['2026-09-02', '源杰科技', '1,481.00'], ['2026-09-02', '贵州茅台', '1,297.50'], ['2026-09-02', '寒武纪', '1,108.00'], ['2026-09-02', '中际旭创', '822.40'], ['2026-09-02', '频准激光', '784.01'], ['2026-09-02', '北方华创', '667.00'], ['2026-09-02', '沐曦股份', '664.15'], ['2026-09-02', '拓荆科技', '644.31'], ['2026-09-02', '罗博特科', '582.70'], ['2026-09-02', '宇树科技', '546.02'], ['2026-09-02', '摩尔线程', '532.99'], ['2026-09-02', '精智达', '483.42'], ['2026-09-02', '蘅东光', '470.01'], ['2026-09-02', '强一股份', '447.38'], ['2026-09-02', '大普微', '426.01'], ['2026-09-02', '茂莱光学', '423.00'], ['2026-09-02', '德明利', '412.93'], ['2026-09-02', '长飞光纤', '407.80'], ['2026-09-02', '芯碁微装', '389.41'], ['2026-09-02', '兆易创新', '388.86'], ['2026-09-02', '普冉股份', '388.50'], ['2026-09-02', '鼎泰高科', '387.90'], ['2026-09-02', '新易盛', '386.70'], ['2026-09-02', '华峰测控', '381.45'], ['2026-09-02', '吉比特', '378.57'], ['2026-09-02', '杰普特', '378.00'], ['2026-09-02', '国盾量子', '369.82'], ['2026-09-02', '盛科通信', '362.41'], ['2026-09-02', '江波龙', '362.30'], ['2026-09-02', '深南电路', '348.39'], ['2026-09-02', '宁德时代', '348.29'], ['2026-09-02', '中微公司', '343.88'], ['2026-09-02', '芯源微', '341.29'], ['2026-09-02', '超纯应材', '341.03'], ['2026-09-02', '中科飞测', '337.40'], ['2026-09-02', '金海通', '325.00'], ['2026-09-02', '优迅股份', '307.00'], ['2026-09-02', '矽电股份', '303.88'], ['2026-0",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    MAX_TRADATE AS `交易日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\nORDER BY \n    `收盘价(元)` DESC",
+ "final_sql": "SELECT \n    MAX_TRADATE AS `交易日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\nORDER BY \n    `收盘价(元)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "438.2000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "2026-09-02 联讯仪器 688808 2399.80\n2026-09-02 源杰科技 688498 1481.00\n2026-09-02 贵州茅台 600519 1297.50\n2026-09-02 寒武纪 688256 1108.00\n2026-09-02 中际旭创 300308 822.40\n2026-09-02 频准激光 688826 784.01\n2026-09-02 北方华创 0",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 44.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_15_86005a99.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 53.0,
+  "llm_seconds_max": 7.23,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   25030
+  ],
+  "prompt_columns_raw_len": 3942
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1220,
+   "prompt_tokens": 36704,
+   "total_tokens": 37924,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 36704,
+  "completion": 1220,
+  "total": 37924
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1220,
+   "prompt_tokens": 36704,
+   "total_tokens": 37924,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_STKDMK",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

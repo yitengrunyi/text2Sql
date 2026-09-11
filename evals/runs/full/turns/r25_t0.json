@@ -1,0 +1,153 @@
+{
+ "round_id": 25,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "华宝中证医疗ETF，代码512170，它跟踪的标的指数是哪一个？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 标的指数名称（Underlying Index Name）\n\n[2] 可能的计算公式：  \n- 标的指数选择：ETF所跟踪的指数 = 公告披露的跟踪标的  \n（如需进一步信息，ETF净值增长率=标的指数收益率×跟踪误差+贝塔系数等，具体以基金公告为准）\n\n**直接答案结合：**  \n[1] 关键指标是“标的指数”名称。  \n[2] 查找对应ETF的基金公告或公开信息确认其跟踪的指数，公式为：  \nETF跟踪指数 = 基金合同或基金公告中披露的指数名称\n['华宝中证医疗ETF', '512170', '标的指数', '标的指数名称', 'Underlying Index Name', 'ETF', '跟踪指数', '基金公告', '基金合同', '净值增长率', '标的指数收益率', '跟踪误差', '贝塔系数', 'ETF所跟踪的指数', '公告披露的跟踪标的']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['医疗保健']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '医疗保健'。\n基金相关\n['ETF相关信息', '基金产品基本信息']\n['ETF_LABEL_INFO_CHINA', 'ETF_INFO_DETAIL', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    INDEX_TRACKED AS `跟踪标的指数`\nFROM \n    ETF_INFO_DETAIL\nWHERE \n    (FUND_SYMBOL = '512170.SH' OR FUND_NAME LIKE '%华宝中证医疗ETF%')\n    AND TYPE = 1\n    AND HISVALID = 1\n    AND INDEX_TRACKED IS NOT NULL\nLIMIT 1\n200\n{table:[['基金名称', '基金代码', '跟踪标的指数'], ['华宝中证医疗ETF', '512170.SH', '中证医疗指数']]}\n该查询用于获取华宝中证医疗ETF（代码512170）所跟踪的标的指数。在此查询中，我们直接使用了已有的基金信息和跟踪指数数据。查询结果符合要求。\n\n本次查询从用于存储ETF基础信息的表中提取数据。选择了基金名称、基金代码和基金跟踪的标的指数等信息。筛选条件包括：基金代码为512170或基金名称包含“华宝中证医疗ETF”；只选择A股（即单位为元）的基金类型；只选择有效的记录；确保有跟踪指数信息。最终返回符合条件的基金所对应的标的指数。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    INDEX_TRACKED AS `跟踪标的指数`\nFROM \n    ETF_INFO_DETAIL\nWHERE \n    (FUND_SYMBOL = '512170.SH' OR FUND_NAME LIKE '%华宝中证医疗ETF%')\n    AND TYPE = 1\n    AND HISVALID = 1\n    AND INDEX_TRACKED IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    INDEX_TRACKED AS `跟踪标的指数`\nFROM \n    ETF_INFO_DETAIL\nWHERE \n    (FUND_SYMBOL = '512170.SH' OR FUND_NAME LIKE '%华宝中证医疗ETF%')\n    AND TYPE = 1\n    AND HISVALID = 1\n    AND INDEX_TRACKED IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "中证医疗指数"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "华宝中证医疗ETF 512170.SH 中证医疗指数",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 53.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_25_41689ce1.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.03,
+  "llm_seconds_max": 7.22,
+  "selected_tables": [
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   19630
+  ],
+  "prompt_columns_raw_len": 10125
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1167,
+   "prompt_tokens": 27729,
+   "total_tokens": 28896,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27729,
+  "completion": 1167,
+  "total": 28896
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1167,
+   "prompt_tokens": 27729,
+   "total_tokens": 28896,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_INFO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,162 @@
+{
+ "round_id": 28,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE Ratio，Price-to-Earnings Ratio）\n\n[2] 可能的计算公式：  \n- 市盈率 = 公司当前市值或股价 / 每股净利润（Earnings Per Share, EPS）  \n- 简化公式：PE Ratio = 股价 ÷ 每股收益（EPS）\n['埃克森美孚', '雪佛龙', '油气巨头', '市盈率', 'PE Ratio', 'Price-to-Earnings Ratio', '每股净利润', 'Earnings Per Share', 'EPS', '公司当前市值', '股价', '每股收益']\n该问题可能涉及美股-'埃克森美孚', 它的美股股票代码为：XOM.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-石油石化。该问题可能涉及美股-'雪佛龙', 它的美股股票代码为：CVX.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-石油石化。\n该问题可能涉及的题材包含：['石油天然气']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '石油天然气'。\n美股相关\n['美股基本信息', '美股行情', '美股财务']\n['AMERICAN_STOCK_MAIN', 'COM3101', 'AMERICAN_STOCK_MAIN', 'VIEW_US_EOD_EXPR', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT\n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    am.SW_INDU_CODE_2021_1 AS `申万行业名称`,\n    c.F021N AS `市盈率`,\n    ROUND(c.F013N/10, 1) AS `市值(亿)`,\n    c.F022D AS `市盈率更新日期`\nFROM\n    AMERICAN_STOCK_MAIN am\nJOIN\n    COM3101 c ON am.FIU_ID = c.FIU_ID\nWHERE\n    am.COMB_SYMBOL IN ('XOM.US', 'CVX.US')\n    AND c.F021N IS NOT NULL\nORDER BY\n    c.F021N ASC\n200\n{table:[['股票名称', '股票代码', '申万行业名称', '市盈率', '市值(亿)', '市盈率更新日期'], ['雪佛龙', 'CVX.US', '采掘', '14.34', '207,576.00', '-'], ['埃克森美孚', 'XOM.US', '采掘', '15.21', '377,712.00', '-']]}\n该查询的主要目的是比较埃克森美孚和雪佛龙两家公司的市盈率，判断谁的市盈率更低。市盈率的计算方式是用最新收盘价除以月度每股收益。市值单位转换为“亿”，计算公式为市值（百万元）除以10。市盈率直接取值，未做任何变换。在此查询中，计算了市值的单位转换（百万元转换为亿），其余财务指标均为现成数据，未再加工。查询结果符合要求。\n\n查询从两个表中提取数据，一个表用于提供美股上市公司基础资料，包括股票名称、行业类别、展示代码等信息，另一个表用于记录最新技术指标和估值指标，如市盈率、市值、更新日期等。通过内部代码将两表连接。筛选条件为展示代码匹配“XOM.US”或“CVX.US”，同时要求市盈率信息有效。结果按市盈率升序排列，方便直观比较两家公司的市盈率哪家更低。返回的信息包括股票名称、展示代码、申万一级行业名称、市盈率、市值（单位已转换）、市盈率更新日期。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    am.SW_INDU_CODE_2021_1 AS `申万行业名称`,\n    c.F021N AS `市盈率`,\n    ROUND(c.F013N/10, 1) AS `市值(亿)`,\n    c.F022D AS `市盈率更新日期`\nFROM\n    AMERICAN_STOCK_MAIN am\nJOIN\n    COM3101 c ON am.FIU_ID = c.FIU_ID\nWHERE\n    am.COMB_SYMBOL IN ('XOM.US', 'CVX.US')\n    AND c.F021N IS NOT NULL\nORDER BY\n    c.F021N ASC",
+ "final_sql": "SELECT\n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    am.SW_INDU_CODE_2021_1 AS `申万行业名称`,\n    c.F021N AS `市盈率`,\n    ROUND(c.F013N/10, 1) AS `市值(亿)`,\n    c.F022D AS `市盈率更新日期`\nFROM\n    AMERICAN_STOCK_MAIN am\nJOIN\n    COM3101 c ON am.FIU_ID = c.FIU_ID\nWHERE\n    am.COMB_SYMBOL IN ('XOM.US', 'CVX.US')\n    AND c.F021N IS NOT NULL\nORDER BY\n    c.F021N ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "14.34\n15.21"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "雪佛龙 CVX.US 采掘 14.34 207576.0 \n埃克森美孚 XOM.US 采掘 15.21 377712.0 ",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 46.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_28_27dbea4c.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 50.12,
+  "llm_seconds_max": 10.05,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   19138
+  ],
+  "prompt_columns_raw_len": 10462
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1307,
+   "prompt_tokens": 26585,
+   "total_tokens": 27892,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 26585,
+  "completion": 1307,
+  "total": 27892
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1307,
+   "prompt_tokens": 26585,
+   "total_tokens": 27892,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,146 @@
+{
+ "round_id": 30,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市值（Market Capitalization）\n\n[2] 可能的计算公式：  \n市值 = 股价 × 总股本\n\n（其中，“股价”为当前公司股票的市场价格，“总股本”为公司发行在外的全部普通股数量）\n['中概股标签', '美股', '市值', 'Market Capitalization', '股价', '股票市场价格', '当前公司股票的市场价格', '总股本', '公司发行在外的全部普通股数量']\n此问题不涉及到个股、行业或者题材\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'COM3101']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N/100, 1) AS `市值(亿美元)`,\n    a.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5\n500\nNo rows fetched. 查找结果为空，请检查SQL语句\n诊断 根据你提供的SQL、背景和执行结果“查找结果为空”，结合你的分析请求，有如下检视和诊断：\n\n#### 1. 表格或字段是否缺失？\n\n- 假如`AMERICAN_STOCK_MAIN`或`COM3101`这两个表根本不存在，SQL会报表不存在的错误，而不是返回空集。因此此项 **不是导致返回空结果的最可能原因**。\n- 同理，如果某些字段不存在（如`IS_CHINESE_STOCK`、`FIU_ID`、`CSNAME`等），MySQL通常直接报“Unknown column xxx in ‘field list’ ”而不是空结果，这也不是最可能原因（你的SQL已成功执行，只是无结果）。\n\n#### 2. 数据本身可能缺失？\n\n- **极为可能原因**：`a.IS_CHINESE_STOCK = '中概股'` 是硬条件——如果表内这个字段填的值不是`中概股`（例如填的是`是`/`否`、英文`YES`/`NO`、或者其它编码），则不会匹配任何记录，结果为空。\n- 另一个数据层面因素是连接的`FIU_ID`在两表间没有正确匹配导致内连接后的结果集本身就为空。\n\n#### 3. 语法或句法错误？\n\n- SQL 语法本身没有问题，MySQL 8.0.28不会对这个SQL语法报错。\n- 但需留意场景相关的语句，例如`ROUND(c.F013N/100, 1)`，但这不会导致无结果（只会影响计算）。\n- 且返回的是“结果为空”，不是语法错误。\n\n#### 4. 字段名或模型虚构的字段？\n\n- 如果`IS_CHINESE_STOCK`或`CSNAME`等字段不存在，通常会报 “unknown column” 错，但实际SQL已执行（说明字段名写法在你的库是接受的）。\n- 当然，不排斥模型根据描述瞎编了一些字段名，如`IS_CHINESE_STOCK`，但目前主要表现并不是字段不存在的报错。\n\n#### 5. 其余可能性\n\n- 字段的取值范围或类型与期望不符，比如`city`型/`int`型或者大小写问题。\n- `c.F013N`（市值）、`c.F014D`（市值更新日期）任何一个有NULL都被where条件去除了，如果表内数据不全，也会无结果。\n- `LIMIT 5`本身不会导致无结果。\n\n---\n\n## 最可能的两个原因\n\n### 第一：**条件`a.IS_CHINESE_STOCK = '中概股'`对应的数据实际不存在**\n- 表的该字段取值不是`中概股`三个字。例如取值为1/0、Y/N、true/false、Yes/No、中文`是/否`或其它形式。\n- 这属于“数据本身缺失（无对应标记数据）”或“模型凭想当然写死了判断值”两个问题中的核心。\n- 这在金融数据库中常见，通常会用1/0或bool而非中文“中概股”三个字作标志。\n\n### 第二：**内连接后没有有效匹配行（`a.FIU_ID = c.FIU_ID`）**\n- 主表`AMERICAN_STOCK_MAIN`与`COM3101`两张表之间通过`FIU_ID`",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N/100, 1) AS `市值(亿美元)`,\n    a.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5",
+ "final_sql": "SELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N/100, 1) AS `市值(亿美元)`,\n    a.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "阿里巴巴-W BABA 1663200.0\n拼多多-W PDD 1209600.0\n网易-W NTES 506880.0\n京东-W JD 323136.0\n百度-W BIDU 214200.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 77.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_30_8fe857ee.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 75.13,
+  "llm_seconds_max": 13.93,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   12824
+  ],
+  "prompt_columns_raw_len": 3732
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2037,
+   "prompt_tokens": 18169,
+   "total_tokens": 20206,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18169,
+  "completion": 2037,
+  "total": 20206
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2037,
+   "prompt_tokens": 18169,
+   "total_tokens": 20206,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

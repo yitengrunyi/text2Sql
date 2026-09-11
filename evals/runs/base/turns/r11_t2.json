@@ -1,0 +1,181 @@
+{
+ "round_id": 11,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "它的毛利率大概是什么水平？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：毛利率（Gross Profit Margin）\n\n[2] 可能的计算公式：  \n毛利率 = （营业收入 - 营业成本） / 营业收入 × 100%\n['毛利率', 'Gross Profit Margin', '营业收入', '营业成本', '收入', '成本']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务', '主板经营']\n['STK_IMM_ASS', 'STK_TAXPAY', 'STK_PREEXP', 'STK_EQT_CHNG', 'STK_RD_DTL', 'VIEW_STK_CONSENSUS_FORECAST', 'STK_FIN_CHARGE', 'VIEW_STK_INCOME_GEN']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `报表截止日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    P110101/100000000 AS `营业收入（亿）`,\n    P110202/100000000 AS `营业成本（亿）`,\n    CASE \n        WHEN P110101 IS NOT NULL AND P110101 <> 0 AND P110202 IS NOT NULL \n        THEN ROUND( (P110101 - P110202) / P110101 * 100, 2)\n        ELSE NULL\n    END AS `毛利率(%)`\nFROM \n    VIEW_STK_INCOME_GEN\nWHERE \n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND ENDDATE = '2026-03-31 00:00:00'\n    AND P110101 IS NOT NULL\n    AND P110202 IS NOT NULL\nORDER BY \n    `毛利率(%)` DESC\n200\n{table:[['报表截止日期', '股票简称', '股票代码', '营业收入（亿）', '营业成本（亿）', '毛利率(%)'], ['2026-03-31', '海德股份', '000567', '5.47', '0.03', '99.41'], ['2026-03-31', '*ST沪科', '600608', '0.02', '0.00', '96.42'], ['2026-03-31', '康乐卫士', '920575', '0.00', '0.00', '95.70'], ['2026-03-31', '巨人网络', '002558', '23.29', '1.08', '95.38'], ['2026-03-31', '我武生物', '300357', '2.53', '0.12', '95.25'], ['2026-03-31', '吉比特', '603444', '18.47', '1.15', '93.77'], ['2026-03-31', '泛微网络', '603039', '3.33', '0.21', '93.72'], ['2026-03-31', '冰川网络', '300533', '6.21', '0.42', '93.22'], ['2026-03-31', '西藏药业', '600211', '7.24', '0.51', '92.90'], ['2026-03-31', '爱美客', '300896', '6.34', '0.48', '92.49'], ['2026-03-31', '-', '-', '0.03', '0.00', '91.18'], ['2026-03-31', '康华生物', '300841', '1.72', '0.16', '90.98'], ['2026-03-31', '陕国投A', '000563', '4.29', '0.40', '90.61'], ['2026-03-31', '盈建科', '300935', '0.12', '0.01', '90.58'], ['2026-03-31', '百普赛斯', '301080', '2.36', '0.23', '90.35'], ['2026-03-31', '重庆路桥', '600106', '0.24', '0.02', '90.17'], ['2026-03-31', '指南针', '300803', '5.18', '0.52', '89.98'], ['2026-03-31', '康辰药业', '603590', '2.15'",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `报表截止日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    P110101/100000000 AS `营业收入（亿）`,\n    P110202/100000000 AS `营业成本（亿）`,\n    CASE \n        WHEN P110101 IS NOT NULL AND P110101 <> 0 AND P110202 IS NOT NULL \n        THEN ROUND( (P110101 - P110202) / P110101 * 100, 2)\n        ELSE NULL\n    END AS `毛利率(%)`\nFROM \n    VIEW_STK_INCOME_GEN\nWHERE \n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND ENDDATE = '2026-03-31 00:00:00'\n    AND P110101 IS NOT NULL\n    AND P110202 IS NOT NULL\nORDER BY \n    `毛利率(%)` DESC",
+ "final_sql": "SELECT \n    ENDDATE AS `报表截止日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    P110101/100000000 AS `营业收入（亿）`,\n    P110202/100000000 AS `营业成本（亿）`,\n    CASE \n        WHEN P110101 IS NOT NULL AND P110101 <> 0 AND P110202 IS NOT NULL \n        THEN ROUND( (P110101 - P110202) / P110101 * 100, 2)\n        ELSE NULL\n    END AS `毛利率(%)`\nFROM \n    VIEW_STK_INCOME_GEN\nWHERE \n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND ENDDATE = '2026-03-31 00:00:00'\n    AND P110101 IS NOT NULL\n    AND P110202 IS NOT NULL\nORDER BY \n    `毛利率(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "26.88"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "2026-03-31 00:00:00 海德股份 000567 5.466647 0.032525 99.41\n2026-03-31 00:00:00 *ST沪科 600608 0.018449 0.000661 96.42\n2026-03-31 00:00:00 康乐卫士 920575 0.001066 0.000046 95.70\n2026-03-31 00:00:00 巨人网络 002558",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 52.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_11_e709ef3d.2",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 66.5,
+  "llm_seconds_max": 7.15,
+  "selected_tables": [
+   "VIEW_STK_FIN_IDX",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_STOCK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_EQT_CHNG",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_CONSENSUS_FORECAST"
+  ],
+  "sql_prompt_chars": [
+   39804
+  ],
+  "prompt_columns_raw_len": 7874
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1998,
+   "prompt_tokens": 55241,
+   "total_tokens": 57239,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55241,
+  "completion": 1998,
+  "total": 57239
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1998,
+   "prompt_tokens": 55241,
+   "total_tokens": 57239,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [
+   "VIEW_STK_FIN_IDX",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_STOCK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

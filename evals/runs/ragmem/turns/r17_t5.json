@@ -1,0 +1,172 @@
+{
+ "round_id": 17,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "换个标的，帮我查一下隆基绿能2025年年报经营活动产生的现金流量净额是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%隆基绿能%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL;\n200\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）'], ['2025-12-31', '隆基绿能', '601012', '5,753.00']]}\n该查询获取了隆基绿能在2025年年度报告中的经营活动产生的现金流量净额信息。数据来源于公司年度财务指标表，筛选条件为公司简称包含“隆基绿能”、报告日期为2025年12月31日且数据有效，同时现金流量净额数据不为空。查询结果以公司名称、代码、报告截止日及现金流量净额展示。现金流量净额原数据单位为元，查询过程中已转换为“万元”，并保留1位小数。此项数据采用了公司年度财务报表中已披露的经营活动现金流量净额，无需额外计算。查询结果完全满足用户对于隆基绿能2025年度经营活动现金流量净额的查询需求。\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）'], ['2025-12-31', '隆基绿能', '601012', '5,753.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%隆基绿能%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL",
+ "final_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%隆基绿能%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "4359382755.77"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 隆基绿能 601012 5753.0",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 49.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_17_782aa971.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 47.55,
+  "llm_seconds_max": 37.15,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3678,
+   "prompt_tokens": 26574,
+   "total_tokens": 30252,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3226,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26574,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 19040,
+   "total_tokens": 19212,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 45614,
+  "completion": 3850,
+  "total": 49464
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3678,
+   "prompt_tokens": 26574,
+   "total_tokens": 30252,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3226,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26574,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 19040,
+   "total_tokens": 19212,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,203 @@
+{
+ "round_id": 27,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "换家公司看看：可口可乐最新一份年报期末的总资产是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：总资产（Total Assets）\n\n[2] 可能的计算公式：  \n总资产 = 流动资产（Current Assets）+ 非流动资产（Non-current Assets 或 Long-term Assets）\n\n这个指标一般可以直接从公司年报的资产负债表（Balance Sheet）期末数获得。\n['总资产', '资产', 'Total Assets', '流动资产', 'Current Assets', '非流动资产', 'Non-current Assets', '长期资产', 'Long-term Assets', '公司年报', '资产负债表', 'Balance Sheet']\n该问题可能涉及美股-'可口可乐装瓶', 它的美股股票代码为：COKE.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。该问题可能涉及美股-'可口可乐', 它的美股股票代码为：KO.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-食品饮料。\n美股相关\n['美股基本信息', '美股财务', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'COM3102', 'VIEW_COM3102_Q', 'VIEW_COM3102_CUM', 'AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM', 'VIEW_COM3104_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表期末日期`,\n    a.F005V AS `币种`,\n    ROUND(a.F008N, 2) AS `总资产(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3102_CUM a\nON \n    m.FIU_ID = a.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'KO.US'\n    AND a.F003V = 'FY'\n    AND a.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(sub.F001D)\n        FROM VIEW_COM3102_CUM sub\n        WHERE sub.FIU_ID = m.FIU_ID\n        AND sub.F003V = 'FY'\n        AND sub.F008N IS NOT NULL\n    )\n\n200\n{table:[['股票名称', '股票代码', '报表期末日期', '币种', '总资产(百万美元)'], ['可口可乐', 'KO.US', '2025-12-31', 'USD', '148,431.47']]}\n该查询的主要目的是获取可口可乐公司在最新一份年报期末公布的总资产数据。总资产以百万美元计，保留两位小数，通过公式“总资产(百万美元) = 总资产字段取值，保留两位小数”进行计算。\n\n查询从两个表中提取数据，一个表用于记录美股上市公司基本信息，包括名称和展示代码等，另一个表提供各公司资产负债表数据，包含总资产、报表日期、币种等内容。查询通过内部代码进行关联。\n\n筛选条件包括只选择展示代码为“KO.US”的记录、只选报表类型为年报、总资产数据不为空，并且只取最新的一份年报期末数据。最终返回可口可乐的股票名称、股票代码、报表期末日期、币种和最新年报总资产。\n\n查询结果符合要求。\n查询可口可乐最新一份年报期末的总资产是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表期末日期`,\n    a.F005V AS `币种`,\n    ROUND(a.F008N, 2) AS `总资产(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3102_CUM a\nON \n    m.FIU_ID = a.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'KO.US'\n    AND a.F003V = 'FY'\n    AND a.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(sub.F001D)\n        FROM VIEW_COM3102_CUM sub\n        WHERE sub.FIU_ID = m.FIU_ID\n        AND sub.F003V = 'FY'\n        AND sub.F008N IS NOT NULL\n    )",
+ "final_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表期末日期`,\n    a.F005V AS `币种`,\n    ROUND(a.F008N, 2) AS `总资产(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN \n    VIEW_COM3102_CUM a\nON \n    m.FIU_ID = a.FIU_ID\nWHERE \n    m.COMB_SYMBOL = 'KO.US'\n    AND a.F003V = 'FY'\n    AND a.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(sub.F001D)\n        FROM VIEW_COM3102_CUM sub\n        WHERE sub.FIU_ID = m.FIU_ID\n        AND sub.F003V = 'FY'\n        AND sub.F008N IS NOT NULL\n    )",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "148431.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "可口可乐 KO.US 2025-12-31 USD 148431.47",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 93.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_27_2c5c0aef.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 97.66,
+  "llm_seconds_max": 15.41,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3102_CUM",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3105",
+   "VIEW_COM3106",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   33901
+  ],
+  "prompt_columns_raw_len": 23574
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1330,
+   "prompt_tokens": 12624,
+   "total_tokens": 13954,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1102,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12624,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1226,
+   "prompt_tokens": 36615,
+   "total_tokens": 37841,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1920,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 49239,
+  "completion": 2556,
+  "total": 51795
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1330,
+   "prompt_tokens": 12624,
+   "total_tokens": 13954,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1102,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12624,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1226,
+   "prompt_tokens": 36615,
+   "total_tokens": 37841,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1920,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3102"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3102_CUM",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 19,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "那它同一个交易日的市净率呢？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PB IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1;\n200\n{table:[['交易日期', '指数名称', '指数代码', '市净率(倍)', '市盈率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2026-09-02', '中证1000指数', '000852', '2.32', '43.09', '0.31', '145,904.00', '130,275.70']]}\n该查询获取了中证1000指数在最新交易日的市净率、市盈率、每股收益、总市值和流通市值等关键信息，涵盖了指数的基础数据和估值水平。查询从指数基本信息表和指数估值指标表中提取数据，通过指数代码进行关联，确保查询目标为中证1000指数，并限定所用的记录为当前在用且状态有效的条目。筛选条件包括该指数的最新一个有效交易日、要求市净率数据不为空，并限制仅显示一条最新记录，按交易日从新到旧排序。市净率按“总市值除以最新净资产”的方式计算，单位为“倍”，查询时结果保留2位小数；总市值与流通市值由元单位转换为亿元，结果保留1位小数；每股收益保留3位小数。查询中所用各项指标均为数据库内已有的财务估值数据，无需进一步计算。整体查询结果准确反映了最新时点中证1000指数的市净率水平，并能满足用户对该交易日市净率的需求。\n{table:[['交易日期', '指数名称', '指数代码', '市净率(倍)', '市盈率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2026-09-02', '中证1000指数', '000852', '2.32', '43.09', '0.31', '145,904.00', '130,275.70']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PB IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PB IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.3227"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中证1000指数 000852 2.32 43.09 0.310 145904.0 130275.7",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 30.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_19_2b3073b8.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.93,
+  "llm_seconds_max": 22.36,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2317,
+   "prompt_tokens": 18104,
+   "total_tokens": 20421,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1566,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18104,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 260,
+   "prompt_tokens": 10551,
+   "total_tokens": 10811,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28655,
+  "completion": 2577,
+  "total": 31232
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2317,
+   "prompt_tokens": 18104,
+   "total_tokens": 20421,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1566,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18104,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 260,
+   "prompt_tokens": 10551,
+   "total_tokens": 10811,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

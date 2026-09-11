@@ -1,0 +1,172 @@
+{
+ "round_id": 3,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "中国平安2026年8月收盘价最低的是哪一天？最低收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT b.ENDDATE AS `交易日期`, b.STOCKSNAME AS `股票名称`, b.STOCKCODE AS `股票代码`, ROUND(b.TCLOSE, 2) AS `收盘价(元)`, ROUND(b.TOPEN, 2) AS `开盘价(元)`, ROUND(b.THIGH, 2) AS `最高价(元)`, ROUND(b.TLOW, 2) AS `最低价(元)`, ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`, ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`, ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`, ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)` FROM GET_A_SEC_CODE a JOIN ANA_STK_EXPR_IDX b ON a.INNER_CODE = b.INNER_CODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE >= '2026-08-01 00:00:00.000' AND b.ENDDATE <= '2026-08-31 23:59:59.999' AND a.ISVALID = 1 AND b.TCLOSE IS NOT NULL ORDER BY b.TCLOSE ASC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-18', '中国平安', '601318', '51.32', '51.80', '51.84', '51.17', '57.90', '29.76', '5,470.70', '9,292.80']]}\n该查询获取了中国平安在2026年8月期间收盘价最低的交易日及相关行情信息。数据来源于股票基本信息表和个股市场表现指标表，通过公司名称进行筛选，仅选取有效股票且收盘价数据不为空，时间限定在2026年8月1日至8月31日。查询按收盘价从低到高排序，只返回最低收盘价的那一天，包括交易日期、股票名称、股票代码、收盘价、开盘价、最高价、最低价、成交量（以百万股为单位保留两位小数）、成交额（以亿元为单位保留两位小数）、流通市值和总市值（都以亿元为单位各保留一位小数）。行情指标均直接使用已有的日度数据。查询结果可以准确为用户提供中国平安2026年8月收盘价最低的交易日及最低收盘价，满足用户需求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-18', '中国平安', '601318', '51.32', '51.80', '51.84', '51.17', '57.90', '29.76', '5,470.70', '9,292.80']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT b.ENDDATE AS `交易日期`, b.STOCKSNAME AS `股票名称`, b.STOCKCODE AS `股票代码`, ROUND(b.TCLOSE, 2) AS `收盘价(元)`, ROUND(b.TOPEN, 2) AS `开盘价(元)`, ROUND(b.THIGH, 2) AS `最高价(元)`, ROUND(b.TLOW, 2) AS `最低价(元)`, ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`, ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`, ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`, ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)` FROM GET_A_SEC_CODE a JOIN ANA_STK_EXPR_IDX b ON a.INNER_CODE = b.INNER_CODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE >= '2026-08-01 00:00:00.000' AND b.ENDDATE <= '2026-08-31 23:59:59.999' AND a.ISVALID = 1 AND b.TCLOSE IS NOT NULL ORDER BY b.TCLOSE ASC LIMIT 1",
+ "final_sql": "SELECT b.ENDDATE AS `交易日期`, b.STOCKSNAME AS `股票名称`, b.STOCKCODE AS `股票代码`, ROUND(b.TCLOSE, 2) AS `收盘价(元)`, ROUND(b.TOPEN, 2) AS `开盘价(元)`, ROUND(b.THIGH, 2) AS `最高价(元)`, ROUND(b.TLOW, 2) AS `最低价(元)`, ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`, ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`, ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`, ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)` FROM GET_A_SEC_CODE a JOIN ANA_STK_EXPR_IDX b ON a.INNER_CODE = b.INNER_CODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE >= '2026-08-01 00:00:00.000' AND b.ENDDATE <= '2026-08-31 23:59:59.999' AND a.ISVALID = 1 AND b.TCLOSE IS NOT NULL ORDER BY b.TCLOSE ASC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-18 00:00:00 51.3200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-18 00:00:00 中国平安 601318 51.32 51.80 51.84 51.17 57.90 29.76 5470.7 9292.8",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 31.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_3_30a6c0b6.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 30.5,
+  "llm_seconds_max": 21.93,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2536,
+   "prompt_tokens": 16930,
+   "total_tokens": 19466,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1821,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16930,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 212,
+   "prompt_tokens": 10130,
+   "total_tokens": 10342,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27060,
+  "completion": 2748,
+  "total": 29808
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2536,
+   "prompt_tokens": 16930,
+   "total_tokens": 19466,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1821,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16930,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 212,
+   "prompt_tokens": 10130,
+   "total_tokens": 10342,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

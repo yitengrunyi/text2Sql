@@ -1,0 +1,173 @@
+{
+ "round_id": 3,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "兴业银行2026年8月31日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价', '收盘价', '最高价', '最低价', '成交额(亿)', '成交量(亿股)', '涨跌额', '涨跌幅(%)'], ['2026-08-31', '兴业银行', '601166', '17.44', '17.54', '17.65', '17.44', '22.73', '1.30', '0.11', '0.63']]}\n该查询获取了兴业银行在2026年8月31日的股票收盘价及同日的相关行情数据，包括交易日期、股票简称、股票代码、开盘价、收盘价、最高价、最低价、成交额、成交量、涨跌额以及涨跌幅。数据来源于股票日度行情信息表和股票基础信息表，并通过内部关联确保查到的记录为有效且数据完整。筛选条件限定了记录必须是兴业银行、交易日期为2026年8月31日，且行情有效和收盘价数据不为空。成交额和成交量将原始金额和股数分别除以1亿，并保留两位小数，实现单位换算与规范展示，价格指标如开盘价、收盘价、最高价和最低价等均保留两位小数。涨跌额和涨跌幅指标直接采用了已经计算好的行情数据。该查询结果能够准确满足用户对于指定日期兴业银行收盘价等行情信息的需求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价', '收盘价', '最高价', '最低价', '成交额(亿)', '成交量(亿股)', '涨跌额', '涨跌幅(%)'], ['2026-08-31', '兴业银行', '601166', '17.44', '17.54', '17.65', '17.44', '22.73', '1.30', '0.11', '0.63']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL LIMIT 1",
+ "final_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "17.5400"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 兴业银行 601166 17.44 17.54 17.65 17.44 22.73 1.30 0.11 0.63",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 38.4,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_3_9dab8f00.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.98,
+  "llm_seconds_max": 31.12,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2499,
+   "prompt_tokens": 18025,
+   "total_tokens": 20524,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1955,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18025,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 225,
+   "prompt_tokens": 11092,
+   "total_tokens": 11317,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29117,
+  "completion": 2724,
+  "total": 31841
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2499,
+   "prompt_tokens": 18025,
+   "total_tokens": 20524,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1955,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18025,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 225,
+   "prompt_tokens": 11092,
+   "total_tokens": 11317,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

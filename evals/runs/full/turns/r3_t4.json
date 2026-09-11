@@ -1,0 +1,172 @@
+{
+ "round_id": 3,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "兴业银行2026年8月31日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31 00:00:00.000' AND m.TCLOSE IS NOT NULL;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-08-31', '兴业银行', '601166', '17.54']]}\n该查询获取了兴业银行在2026年8月31日当天的收盘价、交易日期、股票名称和股票代码。数据来源于每日股票行情信息表，仅筛选有效记录，并限定股票简称包含“兴业银行”且交易日期为2026年8月31日。展示结果时剔除收盘价为空的数据，并将收盘价保留到2位小数，结果以元为单位。收盘价本身为当天市场交易收盘时的价格，未做额外计算，属于直接提取的行情指标。查询结果符合用户关于特定日期单一股票收盘价的需求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-08-31', '兴业银行', '601166', '17.54']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31 00:00:00.000' AND m.TCLOSE IS NOT NULL",
+ "final_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%兴业银行%' AND m.TRADEDATE = '2026-08-31 00:00:00.000' AND m.TCLOSE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "17.5400"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 兴业银行 601166 17.54",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 34.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_3_af250c53.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 33.97,
+  "llm_seconds_max": 28.42,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2922,
+   "prompt_tokens": 17875,
+   "total_tokens": 20797,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17875,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 11072,
+   "total_tokens": 11215,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28947,
+  "completion": 3065,
+  "total": 32012
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2922,
+   "prompt_tokens": 17875,
+   "total_tokens": 20797,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17875,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 11072,
+   "total_tokens": 11215,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

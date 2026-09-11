@@ -1,0 +1,172 @@
+{
+ "round_id": 21,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "对了，再帮我查一下万华化学2025年年报的归属于母公司股东的净利润是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT A_STOCKSNAME AS `股票简称`, A_STOCKCODE AS `股票代码`, ENDDATE AS `截止日期`, ROUND(F110101 / 10000, 1) AS `归母净利润(万)` FROM VIEW_STK_FIN_IDX WHERE A_STOCKSNAME LIKE '%万华化学%' AND ENDDATE = '2025-12-31 00:00:00.000' AND F110101 IS NOT NULL AND ISVALID = 1;\n200\n{table:[['股票简称', '股票代码', '截止日期', '归母净利润(万)'], ['万华化学', '600309', '2025-12-31', '1,252,720.10']]}\n该查询获取了万华化学在2025年年报披露的归属于母公司股东的净利润信息。数据来自上市公司财务指标汇总表，筛选目标公司名称包含“万华化学”，报告截止日期为2025年12月31日，只选取有效数据且净利润数值不为空。净利润金额以人民币万元为单位，经换算后保留1位小数呈现，同时一并展示公司简称、股票代码和报告日期。此数据为直接使用公司财务报告披露的归母净利润累计指标，没有额外计算。查询结果完全满足用户关于万华化学2025年年报归母净利润的查询需求。\n{table:[['股票简称', '股票代码', '截止日期', '归母净利润(万)'], ['万华化学', '600309', '2025-12-31', '1,252,720.10']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT A_STOCKSNAME AS `股票简称`, A_STOCKCODE AS `股票代码`, ENDDATE AS `截止日期`, ROUND(F110101 / 10000, 1) AS `归母净利润(万)` FROM VIEW_STK_FIN_IDX WHERE A_STOCKSNAME LIKE '%万华化学%' AND ENDDATE = '2025-12-31 00:00:00.000' AND F110101 IS NOT NULL AND ISVALID = 1",
+ "final_sql": "SELECT A_STOCKSNAME AS `股票简称`, A_STOCKCODE AS `股票代码`, ENDDATE AS `截止日期`, ROUND(F110101 / 10000, 1) AS `归母净利润(万)` FROM VIEW_STK_FIN_IDX WHERE A_STOCKSNAME LIKE '%万华化学%' AND ENDDATE = '2025-12-31 00:00:00.000' AND F110101 IS NOT NULL AND ISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "12527201094.1500"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "万华化学 600309 2025-12-31 00:00:00 1252720.1",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 55.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_21_1bd420a8.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 46.5,
+  "llm_seconds_max": 40.63,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4246,
+   "prompt_tokens": 20458,
+   "total_tokens": 24704,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3794,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 20458,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 156,
+   "prompt_tokens": 12861,
+   "total_tokens": 13017,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33319,
+  "completion": 4402,
+  "total": 37721
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4246,
+   "prompt_tokens": 20458,
+   "total_tokens": 24704,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3794,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 20458,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 156,
+   "prompt_tokens": 12861,
+   "total_tokens": 13017,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

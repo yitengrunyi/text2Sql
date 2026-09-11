@@ -1,0 +1,155 @@
+{
+  "mode": "audit",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 3307,
+    "database": "schema_metadata"
+  },
+  "orphan_references": {
+    "orphan_domain_mappings": 0,
+    "orphan_table_rules": 15
+  },
+  "audit": {
+    "juling": {
+      "checked_at": "2026-09-03T18:01:02+08:00",
+      "physical": {
+        "tables": 748,
+        "columns": 25036
+      },
+      "metadata": {
+        "table_records": 764,
+        "column_records": 26888,
+        "active_tables": 748,
+        "active_columns": 25036,
+        "active_domain_mappings": 150,
+        "active_table_rules": 3
+      },
+      "semantic_coverage": {
+        "reviewed_tables": 246,
+        "reviewed_tables_denominator": 748,
+        "reviewed_columns": 8301,
+        "reviewed_columns_denominator": 25036
+      },
+      "drift": {
+        "physical_tables_without_metadata": [],
+        "active_metadata_tables_missing_in_physical": [],
+        "physical_columns_without_metadata": [],
+        "active_metadata_columns_missing_in_physical": [],
+        "column_type_mismatches": [],
+        "column_nullable_mismatches": [],
+        "active_domain_mappings_to_inactive_tables": 0,
+        "active_table_rules_to_inactive_tables": 0
+      },
+      "consistent": true,
+      "source_metadata": {
+        "baseline_tables": 15,
+        "current_tables": 15,
+        "new_tables": [],
+        "missing_tables": [],
+        "changed_tables": [
+          {
+            "table": "MKT_MAX_TRADEDATE",
+            "baseline_rows": 2,
+            "current_rows": 2
+          }
+        ],
+        "ignored_dynamic_changes": [],
+        "consistent": false
+      }
+    },
+    "FUND_INFO": {
+      "checked_at": "2026-09-03T18:01:06+08:00",
+      "physical": {
+        "tables": 266,
+        "columns": 5236
+      },
+      "metadata": {
+        "table_records": 286,
+        "column_records": 5516,
+        "active_tables": 266,
+        "active_columns": 5236,
+        "active_domain_mappings": 74,
+        "active_table_rules": 0
+      },
+      "semantic_coverage": {
+        "reviewed_tables": 68,
+        "reviewed_tables_denominator": 266,
+        "reviewed_columns": 1277,
+        "reviewed_columns_denominator": 5236
+      },
+      "drift": {
+        "physical_tables_without_metadata": [],
+        "active_metadata_tables_missing_in_physical": [],
+        "physical_columns_without_metadata": [],
+        "active_metadata_columns_missing_in_physical": [],
+        "column_type_mismatches": [],
+        "column_nullable_mismatches": [],
+        "active_domain_mappings_to_inactive_tables": 0,
+        "active_table_rules_to_inactive_tables": 0
+      },
+      "consistent": true,
+      "source_metadata": {
+        "baseline_tables": 15,
+        "current_tables": 15,
+        "new_tables": [],
+        "missing_tables": [],
+        "changed_tables": [
+          {
+            "table": "MKT_MAX_TRADEDATE",
+            "baseline_rows": 2,
+            "current_rows": 2
+          }
+        ],
+        "ignored_dynamic_changes": [],
+        "consistent": false
+      }
+    },
+    "fiu": {
+      "checked_at": "2026-09-03T18:01:06+08:00",
+      "physical": {
+        "tables": 20,
+        "columns": 687
+      },
+      "metadata": {
+        "table_records": 20,
+        "column_records": 687,
+        "active_tables": 20,
+        "active_columns": 687,
+        "active_domain_mappings": 18,
+        "active_table_rules": 0
+      },
+      "semantic_coverage": {
+        "reviewed_tables": 20,
+        "reviewed_tables_denominator": 20,
+        "reviewed_columns": 687,
+        "reviewed_columns_denominator": 687
+      },
+      "drift": {
+        "physical_tables_without_metadata": [],
+        "active_metadata_tables_missing_in_physical": [],
+        "physical_columns_without_metadata": [],
+        "active_metadata_columns_missing_in_physical": [],
+        "column_type_mismatches": [],
+        "column_nullable_mismatches": [],
+        "active_domain_mappings_to_inactive_tables": 0,
+        "active_table_rules_to_inactive_tables": 0
+      },
+      "consistent": true,
+      "source_metadata": {
+        "baseline_tables": 15,
+        "current_tables": 15,
+        "new_tables": [],
+        "missing_tables": [],
+        "changed_tables": [
+          {
+            "table": "MKT_MAX_TRADEDATE",
+            "baseline_rows": 2,
+            "current_rows": 2
+          }
+        ],
+        "ignored_dynamic_changes": [],
+        "consistent": false
+      }
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 7,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "目前境内的ETF一共有多少只？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT COUNT(1) AS `境内ETF总数` FROM ETF_INFO_DETAIL WHERE TYPE = 1 AND HISVALID = 1;\n200\n{table:[['境内ETF总数'], ['2,015']]}\n该查询统计了截至当前所有境内有效上市交易型基金（ETF）的总数量。数据来源于ETF基金产品信息表，筛选条件为“境内市场类型”且“记录有效”，不针对特定基金，仅对全部符合条件的ETF进行了全局统计。由于查询只做数量汇总，没有涉及复杂计算，因此结果直接反映了当前境内有效ETF的总数。查询结果符合用户关于“目前境内ETF一共有多少只”的需求。\n{table:[['境内ETF总数'], ['2,015']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT COUNT(1) AS `境内ETF总数` FROM ETF_INFO_DETAIL WHERE TYPE = 1 AND HISVALID = 1",
+ "final_sql": "SELECT COUNT(1) AS `境内ETF总数` FROM ETF_INFO_DETAIL WHERE TYPE = 1 AND HISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "11691"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2015",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 32.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_7_b628968a.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 32.07,
+  "llm_seconds_max": 27.39,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2019,
+   "prompt_tokens": 15746,
+   "total_tokens": 17765,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1794,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15746,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 105,
+   "prompt_tokens": 8716,
+   "total_tokens": 8821,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24462,
+  "completion": 2124,
+  "total": 26586
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2019,
+   "prompt_tokens": 15746,
+   "total_tokens": 17765,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1794,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15746,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 105,
+   "prompt_tokens": 8716,
+   "total_tokens": 8821,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_INFO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,192 @@
+{
+ "round_id": 2,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "长江电力2025年的归母净利润呢？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润（简称“归母净利润”）\n\n[2] 可能的计算公式：  \n归母净利润 = 净利润 - 少数股东损益  \n其中，  \n净利润 = 营业总收入 - 营业总成本 - 所得税费用 + 其他收益\n\n通用表达如下：  \n归母净利润 = 母公司及其控股子公司在一定时期的收入减去成本、费用、税费等，归属于母公司股东所有的净利润部分。\n['长江电力', '归属于母公司股东的净利润', '归母净利润', '净利润', '少数股东损益', '营业总收入', '营业总成本', '所得税费用', '其他收益', '母公司', '控股子公司', '收入', '成本', '费用', '税费']\n该问题可能涉及A股-'长江电力'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-公用事业。\n个股相关\n['主板财务', '主板基本信息']\n['STK_ATCP_LBLT', 'STK_LIST_PLAN', 'STK_COMSUB_PROFILE', 'STK_NONOPT_EXPENSE', 'STK_RD_DTL', 'ANA_STK_QTR_IDX', 'VIEW_STK_INCOME_GEN_QTR', 'VIEW_STK_CASH_GEN', 'STK_PRE_DISCLOSURE', 'STK_COM_RELA_NBALA']\n是否命中召回表：False\n生成查询代码\nSELECT\n    ENDDATE AS `报告期截止日`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ROUND(P160101/10000, 1) AS `归母净利润(万)`\nFROM\n    VIEW_STK_INCOME_GEN_QTR\nWHERE\n    ISVALID = 1\n    AND A_STOCKSNAME LIKE '%长江电力%'\n    AND ENDDATE = '2025-12-31 00:00:00'\n    AND RPT_TYPE = '合并'\n200\n{table:[['报告期截止日', '股票名称', '股票代码', '归母净利润(万)'], ['2025-12-31', '长江电力', '600900', '630,993.50']]}\n该查询获取了长江电力在2025年末的归属于母公司所有者的净利润。归母净利润（万）是通过将数据库中的归母净利润字段数值除以10000，并保留一位小数，转换为以万元为单位的结果。报告期截止日期、股票名称以及股票代码均为直接取值，无需进一步计算。在此查询中，计算了归母净利润的单位转换。查询结果符合要求。\n\n本次查询基于单季度利润表，筛选出2025年12月31日的报告数据。仅选择了有效记录，以及报表类型为“合并”的数据，确保反映上市公司整体的合并财务情况。通过模糊匹配股票简称“长江电力”定位目标公司。最终结果包括报告期、股票名称、股票代码和归母净利润（万）。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    ENDDATE AS `报告期截止日`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ROUND(P160101/10000, 1) AS `归母净利润(万)`\nFROM\n    VIEW_STK_INCOME_GEN_QTR\nWHERE\n    ISVALID = 1\n    AND A_STOCKSNAME LIKE '%长江电力%'\n    AND ENDDATE = '2025-12-31 00:00:00'\n    AND RPT_TYPE = '合并'",
+ "final_sql": "SELECT\n    ENDDATE AS `报告期截止日`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ROUND(P160101/10000, 1) AS `归母净利润(万)`\nFROM\n    VIEW_STK_INCOME_GEN_QTR\nWHERE\n    ISVALID = 1\n    AND A_STOCKSNAME LIKE '%长江电力%'\n    AND ENDDATE = '2025-12-31 00:00:00'\n    AND RPT_TYPE = '合并'",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "34502809176.3900"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 长江电力 600900 630993.5",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 60.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_2_0e76367a.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 73.95,
+  "llm_seconds_max": 7.98,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_TAX_RATIO",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   64429
+  ],
+  "prompt_columns_raw_len": 20052
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2241,
+   "prompt_tokens": 75692,
+   "total_tokens": 77933,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 75692,
+  "completion": 2241,
+  "total": 77933
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2241,
+   "prompt_tokens": 75692,
+   "total_tokens": 77933,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_TAX_RATIO",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

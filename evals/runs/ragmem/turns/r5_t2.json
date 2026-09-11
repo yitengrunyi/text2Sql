@@ -1,0 +1,172 @@
+{
+ "round_id": 5,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金净值与收益",
+ "question": "华夏上证50ETF(510050)2026年9月1日的单位净值是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT TRADING_DAY AS `日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, UNIT_NAV AS `单位净值` FROM FUND_NETVALUE WHERE FUND_SYMBOL LIKE '%510050%' AND TRADING_DAY = '2026-09-01' AND UNIT_NAV IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1;\n200\n{table:[['日期', '基金名称', '基金代码', '单位净值'], ['2026-09-01', '华夏上证50ETF', '510050.SH', '3.05']]}\n该查询获取了华夏上证50ETF（基金代码为510050）在2026年9月1日当天的单位净值信息。查询数据来源于基金净值信息表，主要提取基金简称、基金代码、交易日期及当日单位净值。筛选条件包括基金代码包含510050、交易日期为2026年9月1日、净值数据真实有效且不为空，并限定只返回最新一条相关记录。单位净值为基金当日每份份额对应的价值，此数据直接引用现有的净值指标，保持原有小数精度。查询结果完全符合用户关于华夏上证50ETF指定日期单位净值的需求。\n{table:[['日期', '基金名称', '基金代码', '单位净值'], ['2026-09-01', '华夏上证50ETF', '510050.SH', '3.05']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT TRADING_DAY AS `日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, UNIT_NAV AS `单位净值` FROM FUND_NETVALUE WHERE FUND_SYMBOL LIKE '%510050%' AND TRADING_DAY = '2026-09-01' AND UNIT_NAV IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1",
+ "final_sql": "SELECT TRADING_DAY AS `日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, UNIT_NAV AS `单位净值` FROM FUND_NETVALUE WHERE FUND_SYMBOL LIKE '%510050%' AND TRADING_DAY = '2026-09-01' AND UNIT_NAV IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3.05320000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-01 华夏上证50ETF 510050.SH 3.05320000",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 27.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_5_941ec719.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 26.65,
+  "llm_seconds_max": 22.0,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2201,
+   "prompt_tokens": 9365,
+   "total_tokens": 11566,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1804,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9365,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 153,
+   "prompt_tokens": 2717,
+   "total_tokens": 2870,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 12082,
+  "completion": 2354,
+  "total": 14436
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2201,
+   "prompt_tokens": 9365,
+   "total_tokens": 11566,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1804,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9365,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 153,
+   "prompt_tokens": 2717,
+   "total_tokens": 2870,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_NETVALUE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

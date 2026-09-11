@@ -1,0 +1,134 @@
+{
+ "round_id": 28,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "initial": {
+  "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+  "judge": "entity",
+  "gold_value": "56.19",
+  "gold_display": "奈飞市盈率56.19倍 > 迪士尼35.5倍，奈飞更高，高约20.69倍",
+  "gold_entities": [
+   "奈飞",
+   "迪士尼"
+  ],
+  "gold_date": null,
+  "gold_sql": "SELECT m.CSNAME, c.F021N AS pe FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON c.FIU_ID = m.FIU_ID WHERE c.FIU_ID IN ('00000032', '00000033') ORDER BY c.F021N DESC",
+  "gold_tables": [
+   "COM3101",
+   "AMERICAN_STOCK_MAIN"
+  ],
+  "labels": {
+   "difficulty": "多表join",
+   "followup_type": null,
+   "route_gold": null,
+   "time_sensitivity": "relative"
+  }
+ },
+ "feedbacks": [
+  {
+   "question": "那它们俩的市净率呢？差距也这么明显吗？",
+   "judge": "entity",
+   "gold_value": "7.024",
+   "gold_display": "奈飞市净率7.02倍 > 迪士尼4.44倍，奈飞按账面估值同样明显更贵（高约2.59倍）",
+   "gold_entities": [
+    "奈飞",
+    "迪士尼"
+   ],
+  "gold_date": null,
+   "gold_sql": "SELECT F015N AS pb FROM COM3101 WHERE FIU_ID IN ('00000032', '00000033') ORDER BY F015N DESC",
+   "gold_tables": [
+    "COM3101"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "指代继承",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+   "judge": "list",
+   "gold_value": null,
+   "gold_display": "共4家：雪佛龙3.33%、卡特彼勒3.03%、联合健康2.76%、思科2.53%",
+   "gold_entities": [
+    "雪佛龙",
+    "卡特彼勒",
+    "联合健康",
+    "思科"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT m.CSNAME, c.F007N AS div_yield FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON c.FIU_ID = m.FIU_ID WHERE c.F007N > 2.5 AND (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK <> '中概股') ORDER BY c.F007N DESC",
+   "gold_tables": [
+    "COM3101",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "labels": {
+    "difficulty": "多表join",
+    "followup_type": "条件追加",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "估值先放一边，那过去一年呢？迪士尼这段时间股价累计涨跌了多少？",
+   "judge": "numeric",
+   "gold_value": "6.65",
+   "gold_display": "最近一年累计上涨6.65%（截至2026-08-25收盘）",
+   "gold_entities": [
+    "迪士尼"
+   ],
+   "gold_date": "2026-08-25",
+   "gold_sql": "SELECT CHG_PCT_YEAR FROM VIEW_US_EXPR_IDX WHERE SYMBOL_NASDAQ = 'DIS' AND TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+   "gold_tables": [
+    "VIEW_US_EXPR_IDX"
+   ],
+   "labels": {
+    "difficulty": "时间窗口",
+    "followup_type": "时间漂移",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+   "judge": "entity",
+   "gold_value": "14.34",
+   "gold_display": "雪佛龙14.34倍 < 埃克森美孚15.21倍，雪佛龙估值更低",
+   "gold_entities": [
+    "雪佛龙",
+    "埃克森美孚"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT F021N AS pe FROM COM3101 WHERE FIU_ID IN ('00000012', '00000023') ORDER BY F021N ASC",
+   "gold_tables": [
+    "COM3101"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "话题切换",
+    "route_gold": "NEW_QUERY",
+    "time_sensitivity": "relative"
+   }
+  },
+  {
+   "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+   "judge": "numeric",
+   "gold_value": "36.89",
+   "gold_display": "约36.89倍（按41家市盈率非空且为正的公司平均）",
+   "gold_entities": [],
+   "gold_date": null,
+   "gold_sql": "SELECT ROUND(AVG(F021N), 2) AS avg_pe FROM COM3101 WHERE F021N > 0",
+   "gold_tables": [
+    "COM3101"
+   ],
+   "labels": {
+    "difficulty": "聚合",
+    "followup_type": "条件修改",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "relative"
+   }
+  }
+ ]
+}

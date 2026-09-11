@@ -1,0 +1,185 @@
+{
+ "round_id": 29,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 谷歌A（通常指Alphabet Inc. Class A，GOOGL）的2025财年分板块（Segment）的销售收入（Segment Revenue）  \n- 主营业务板块的销售收入（通常为Google Services或者核心广告业务的收入）\n\n[2] 可能的计算公式  \n- 各板块销售收入 = 各板块披露的Revenue总和，如：  \n  - 主营业务收入 = 广告收入 + YouTube广告收入 + Google云收入（或按公司定义的主营业务拆分）  \n- 总体公式示例：  \n  主营业务销售收入 = ∑（主营相关板块的Revenue）  \n  分板块销售收入 = 各业务板块披露的Revenue\n\n注：具体数值需查阅谷歌（Alphabet Inc.）2025财年的财报分部披露，下述板块通常包括：Google Services、Google Cloud、Other Bets等。\n['谷歌A', 'Alphabet Inc. Class A', 'GOOGL', '2025财年', '板块', 'Segment', '销售收入', 'Segment Revenue', '主营业务', '主营业务板块', 'Google Services', '核心广告业务', '主营业务收入', '广告收入', 'YouTube广告收入', 'Google云收入', 'Google Cloud', 'Other Bets', 'Revenue', '分板块销售收入', '主营相关板块']\n该问题可能涉及美股-'谷歌', 它的美股股票代码为：A，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n该问题可能涉及的题材包含：['互联网服务']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '互联网服务'。\n美股相关\n['美股基本信息', '美股经营分析']\n['VIEW_COM3105', 'VIEW_COM3106']\n是否命中召回表：True\n['谷歌A', '主营业务']\nquery抽取的主体词是['谷歌A', '主营业务']\n生成查询代码\ntop30召回:{}\nSELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财政周期结束日期`,\n    b.F005V AS `货币`,\n    b.SECTOR_CNAME AS `板块名称`,\n    ROUND(b.F007N / 100, 3) AS `销售收入(亿美元)`,\n    b.F006V AS `板块英文`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3105 b \n    ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01'\n    AND b.F001D < '2026-01-01'\n    AND b.F007N IS NOT NULL\nORDER BY \n    b.F001D DESC,\n    b.F007N DESC\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '货币', '板块名称', '销售收入(亿美元)', '板块英文'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', '主营业务', '2,625.70', 'Main Business'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', '次主营', '1,016.40', 'Secondary'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', '其他', '592.90', 'Others']]}\n本次查询主要是获取谷歌A在2025财年按板块划分后的销售收入，以及主营业务板块的销售收入情况。其中销售收入通过公式“销售收入（亿美元）＝销售额（百万美元）÷100”进行了单位换算，并保留三位小数。其他信息如股票名称、股票代码、财政周期结束日期、货币、板块名称和板块英文直接取值。在此查询中，销售收入进行了单位转换。\n\n查询从一个提供公司基础信息的表和一个记录板块收入分布的表获取数据，通过内部ID将两表连接。查询筛选了股票代码为“GOOGL.US”的记录，限定财政周期结束时间为2025年全年，排除了销售收入为空的记录。结果按财政周期结束日期和销售收入降序排列。查询结果符合关",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财政周期结束日期`,\n    b.F005V AS `货币`,\n    b.SECTOR_CNAME AS `板块名称`,\n    ROUND(b.F007N / 100, 3) AS `销售收入(亿美元)`,\n    b.F006V AS `板块英文`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3105 b \n    ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01'\n    AND b.F001D < '2026-01-01'\n    AND b.F007N IS NOT NULL\nORDER BY \n    b.F001D DESC,\n    b.F007N DESC",
+ "final_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财政周期结束日期`,\n    b.F005V AS `货币`,\n    b.SECTOR_CNAME AS `板块名称`,\n    ROUND(b.F007N / 100, 3) AS `销售收入(亿美元)`,\n    b.F006V AS `板块英文`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3105 b \n    ON a.FIU_ID = b.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01'\n    AND b.F001D < '2026-01-01'\n    AND b.F007N IS NOT NULL\nORDER BY \n    b.F001D DESC,\n    b.F007N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "262570.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "谷歌A GOOGL.US 2025-12-31 USD 主营业务 2625.7 Main Business\n谷歌A GOOGL.US 2025-12-31 USD 次主营 1016.4 Secondary\n谷歌A GOOGL.US 2025-12-31 USD 其他 592.9 Others",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 58.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_29_b2739f16.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 57.21,
+  "llm_seconds_max": 6.47,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105",
+   "VIEW_COM3106"
+  ],
+  "sql_prompt_chars": [
+   11562
+  ],
+  "prompt_columns_raw_len": 1885
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1094,
+   "prompt_tokens": 17502,
+   "total_tokens": 18596,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 7,
+   "prompt_tokens": 528,
+   "total_tokens": 535,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 7,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 528,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18030,
+  "completion": 1101,
+  "total": 19131
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1094,
+   "prompt_tokens": 17502,
+   "total_tokens": 18596,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 7,
+   "prompt_tokens": 528,
+   "total_tokens": 535,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 7,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 528,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

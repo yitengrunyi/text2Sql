@@ -1,0 +1,74 @@
+{
+  "round_id": 26,
+  "source": "MYSQL-1",
+  "domain": "基金",
+  "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+  "initial": {
+    "question": "最近黄金ETF吸金很猛，帮我看看华安黄金ETF（518880）最近一周资金净流入大概有多少？",
+    "judge": "numeric",
+    "gold_value": "460969725.0000",
+    "gold_display": "最近5个交易日累计净流入约4.61亿元（截至2026-09-02）",
+    "gold_entities": ["华安黄金ETF"],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT NET_INFLOW FROM ETF_SHARES_CHANGE_ROLL WHERE FUND_SYMBOL='518880.SH' AND ROLL_NUM=5 AND HISVALID=1 AND TRADING_DAY=(SELECT MAX(TRADING_DAY) FROM ETF_SHARES_CHANGE_ROLL WHERE FUND_SYMBOL='518880.SH' AND ROLL_NUM=5 AND HISVALID=1)",
+    "gold_tables": ["ETF_SHARES_CHANGE_ROLL"],
+    "labels": {"difficulty": "子查询", "followup_type": null, "route_gold": null, "time_sensitivity": "relative"}
+  },
+  "feedbacks": [
+    {
+      "question": "它现在最新规模做到多大了？",
+      "judge": "numeric",
+      "gold_value": "104347826801.6000",
+      "gold_display": "约1043.48亿元（2026-09-02）",
+      "gold_entities": ["华安黄金ETF"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT NET_VALUE FROM FUND_SHARES_CHANGE WHERE FUND_SYMBOL='518880.SH' AND HISVALID=1 ORDER BY END_DATE DESC LIMIT 1",
+      "gold_tables": ["FUND_SHARES_CHANGE"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "放到同类里比一下呢，商品型基金按最新规模排前五的都是哪几只？",
+      "judge": "list",
+      "gold_value": "华安黄金易(ETF)、博时黄金ETF、易方达黄金ETF、国泰黄金ETF、华夏黄金ETF",
+      "gold_display": "商品型基金最新规模前五：华安黄金易(ETF)约1043.48亿、博时黄金ETF约419.42亿、易方达黄金ETF约366.67亿、国泰黄金ETF约350.75亿、华夏黄金ETF约172.51亿（2026-09-02）",
+      "gold_entities": ["华安黄金易(ETF)", "博时黄金ETF", "易方达黄金ETF", "国泰黄金ETF", "华夏黄金ETF"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT s.FUND_NAME, f.NET_VALUE FROM MUTUAL_FUND_SECTOR s JOIN FUND_SHARES_CHANGE f ON s.FUND_SYMBOL=f.FUND_SYMBOL WHERE s.HISVALID=1 AND s.CUR_SIGN='1' AND s.SECTOR_NAME_1='基金投资范围板块' AND s.SECTOR_NAME_3='商品型基金' AND f.HISVALID=1 AND f.NET_VALUE IS NOT NULL AND f.END_DATE=(SELECT MAX(END_DATE) FROM FUND_SHARES_CHANGE WHERE HISVALID=1 AND NET_VALUE IS NOT NULL) GROUP BY s.FUND_SYMBOL, s.FUND_NAME, f.NET_VALUE ORDER BY f.NET_VALUE DESC LIMIT 5",
+      "gold_tables": ["MUTUAL_FUND_SECTOR", "FUND_SHARES_CHANGE"],
+      "labels": {"difficulty": "多表join", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+      "judge": "numeric",
+      "gold_value": "-12698692650.0000",
+      "gold_display": "净流出：2026年二季度合计净流出约126.99亿元",
+      "gold_entities": ["华安黄金ETF"],
+      "gold_date": "2026-06-30",
+      "gold_sql": "SELECT SUM(NET_INFLOW) FROM FUND_SHARES_CHANGE WHERE FUND_SYMBOL='518880.SH' AND HISVALID=1 AND END_DATE>='2026-04-01' AND END_DATE<'2026-07-01'",
+      "gold_tables": ["FUND_SHARES_CHANGE"],
+      "labels": {"difficulty": "聚合", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "好，明白了。对了确认一下，这些日频的份额变动和净流入，都是按交易所每天披露的份额数据算出来的吧？",
+      "judge": "nonquery",
+      "gold_value": null,
+      "gold_display": null,
+      "gold_entities": [],
+      "gold_date": null,
+      "gold_sql": null,
+      "gold_tables": [],
+      "labels": {"difficulty": null, "followup_type": "非查询", "route_gold": "NON_QUERY", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "再帮我查个别的，中欧医疗健康混合A最新的单位净值是多少？",
+      "judge": "numeric",
+      "gold_value": "1.92790000",
+      "gold_display": "1.9279元（2026-09-02）",
+      "gold_entities": ["中欧医疗健康混合A"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' AND HISVALID=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+      "gold_tables": ["FUND_NETVALUE"],
+      "labels": {"difficulty": "单表", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "relative"}
+    }
+  ]
+}

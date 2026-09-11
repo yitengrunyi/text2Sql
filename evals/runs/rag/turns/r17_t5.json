@@ -1,0 +1,192 @@
+{
+ "round_id": 17,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "换个标的，帮我查一下隆基绿能2025年年报经营活动产生的现金流量净额是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n经营活动产生的现金流量净额（Operating Cash Flow，OCF）\n\n[2] 可能的计算公式：  \n经营活动产生的现金流量净额 = 经营活动现金流入 - 经营活动现金流出\n\n详细公式为：  \n经营活动产生的现金流量净额 = 销售商品/提供劳务收到的现金  \n— 支付给职工以及为职工支付的现金  \n— 支付的各项税费  \n— 支付的其他与经营活动有关的现金  \n+ 其他经营活动现金流入\n\n（数据通常来源于公司年报的现金流量表“经营活动产生的现金流量净额”项目。）\n['隆基绿能', '经营活动产生的现金流量净额', 'Operating Cash Flow', 'OCF', '现金流入', '现金流出', '销售商品收到的现金', '提供劳务收到的现金', '支付给职工的现金', '为职工支付的现金', '支付的各项税费', '支付的其他与经营活动有关的现金', '其他经营活动现金流入', '年报', '现金流量表']\n该问题可能涉及A股-'隆基绿能'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'VIEW_STK_CASH_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_FIN_CHARGE', 'STK_LNG_LOAN', 'STK_FIX_ASS_DEP', 'STK_NONOPT_EXPENSE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.C100000/10000,1) AS `经营活动产生的现金流量净额(万元)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN \n    VIEW_STK_CASH_GEN f\n    ON a.COMCODE = f.COMCODE\nWHERE\n    a.SEC_SNAME LIKE '%隆基绿能%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_TYPE = '合并'\n    AND f.C100000 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    f.ENDDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '报表截止日期', '经营活动产生的现金流量净额(万元)'], ['隆基绿能', '2025-12-31', '435,938.30']]}\n本次查询的目的是获取隆基绿能2025年年报中经营活动产生的现金流量净额。在此查询中，对经营活动产生的现金流量净额进行了单位转换，具体为“经营活动产生的现金流量净额（万元）=经营活动产生的现金流量净额（元）/10000”，并对结果保留一位小数。查询结果符合要求。\n\n本次查询从两个表获取数据，一张是用于汇总A股公司基础信息的表，另一张是记录公司各会计期间现金流量数据的表。数据通过公司代码进行关联。筛选条件包括：证券简称中包含“隆基绿能”、报告截止日期为2025年12月31日、报表类型为合并口径、不为空的经营活动现金流数据，以及基础信息有效性为1。查询结果按照报表截止时间降序排列，并限制只取一条最新数据。\n\n最终返回了隆基绿能在2025年年报的经营活动产生的现金流量净额（万元）这一核心指标。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.C100000/10000,1) AS `经营活动产生的现金流量净额(万元)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN \n    VIEW_STK_CASH_GEN f\n    ON a.COMCODE = f.COMCODE\nWHERE\n    a.SEC_SNAME LIKE '%隆基绿能%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_TYPE = '合并'\n    AND f.C100000 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    f.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.C100000/10000,1) AS `经营活动产生的现金流量净额(万元)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN \n    VIEW_STK_CASH_GEN f\n    ON a.COMCODE = f.COMCODE\nWHERE\n    a.SEC_SNAME LIKE '%隆基绿能%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_TYPE = '合并'\n    AND f.C100000 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    f.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "4359382755.77"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "隆基绿能 601012 2025-12-31 00:00:00 435938.3",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 50.5,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_17_d1ad8b50.5",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 63.32,
+  "llm_seconds_max": 7.09,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIN_CHARGE",
+   "STK_LNG_LOAN",
+   "STK_FIX_ASS_DEP",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   41170
+  ],
+  "prompt_columns_raw_len": 9040
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2249,
+   "prompt_tokens": 60030,
+   "total_tokens": 62279,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5632,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 60030,
+  "completion": 2249,
+  "total": 62279
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2249,
+   "prompt_tokens": 60030,
+   "total_tokens": 62279,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5632,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIN_CHARGE",
+   "STK_LNG_LOAN",
+   "STK_FIX_ASS_DEP",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

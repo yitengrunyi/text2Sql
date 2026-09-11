@@ -1,0 +1,130 @@
+{
+  "round_id": 25,
+  "source": "MYSQL-1",
+  "domain": "基金",
+  "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+  "initial": {
+    "question": "华宝中证医疗ETF，代码512170，它跟踪的标的指数是哪一个？",
+    "judge": "entity",
+    "gold_value": "中证医疗指数",
+    "gold_display": "中证医疗指数（华宝基金发行，ETF_INFO_DETAIL.INDEX_TRACKED）",
+    "gold_entities": [
+      "华宝中证医疗ETF",
+      "中证医疗指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT INDEX_TRACKED FROM ETF_INFO_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1",
+    "gold_tables": [
+      "ETF_INFO_DETAIL"
+    ],
+    "labels": {
+      "difficulty": "单表",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "absolute"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "那这只基金在标签体系里怎么归类的？算行业类还是主题类，落在哪个行业？",
+      "judge": "entity",
+      "gold_value": "医药生物",
+      "gold_display": "行业类ETF，行业标签为医药生物（赛道：医药），口径：ETF_LABEL_INFO_CHINA",
+      "gold_entities": [
+        "华宝中证医疗ETF",
+        "医药生物"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT FUND_CATEGORY, SECTOR FROM ETF_LABEL_INFO_CHINA WHERE ETF_CODE='512170.SH' AND HISVALID=1",
+      "gold_tables": [
+        "ETF_LABEL_INFO_CHINA"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "顺着问一句，全市场行业类的ETF里面，数量最多的行业是哪一个？大概多少只？",
+      "judge": "entity",
+      "gold_value": "80",
+      "gold_display": "医药生物，共80只（口径：ETF_LABEL_INFO_CHINA，FUND_CATEGORY='行业'且SECTOR非空，按SECTOR分组计数居首；另有212只行业类ETF未打行业标签，不参与行业排名）",
+      "gold_entities": [
+        "医药生物"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT SECTOR, COUNT(*) AS cnt FROM ETF_LABEL_INFO_CHINA WHERE HISVALID=1 AND FUND_CATEGORY='行业' AND SECTOR IS NOT NULL GROUP BY SECTOR ORDER BY cnt DESC LIMIT 1",
+      "gold_tables": [
+        "ETF_LABEL_INFO_CHINA"
+      ],
+      "labels": {
+        "difficulty": "聚合",
+        "followup_type": "条件追加",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "回到这只医疗ETF，它目前最新的基金规模有多大？",
+      "judge": "numeric",
+      "gold_value": "24231835329",
+      "gold_display": "约242.32亿元（2026-09-02，ETF_PERFORMANCE_DETAIL.FUND_SIZE，单位元）",
+      "gold_entities": [
+        "华宝中证医疗ETF"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+      "gold_tables": [
+        "ETF_PERFORMANCE_DETAIL"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "那2025年末的时候呢？当时它的规模有多大？",
+      "judge": "numeric",
+      "gold_value": "25304098970",
+      "gold_display": "约253.04亿元（2025-12-31，较最新约242.32亿元小幅缩水）",
+      "gold_entities": [
+        "华宝中证医疗ETF"
+      ],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 AND TRADING_DAY=(SELECT MAX(TRADING_DAY) FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 AND TRADING_DAY<='2025-12-31')",
+      "gold_tables": [
+        "ETF_PERFORMANCE_DETAIL"
+      ],
+      "labels": {
+        "difficulty": "时间窗口",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "再问个跨境的：境内全市场的QDII类ETF，把LOF剔除掉不算，一共有多少只？",
+      "judge": "numeric",
+      "gold_value": "78",
+      "gold_display": "78只（QDII口径：单一权威表ETF_INFO_DETAIL，TYPE=1境内且IF_QDII=1且IF_LOF=0；同表不剔LOF为111只，ETF_LABEL_INFO_CHINA.IF_QDII=1为147只，均因含LOF未采用）",
+      "gold_entities": [
+        "QDII类ETF"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE HISVALID=1 AND TYPE=1 AND IF_QDII=1 AND IF_LOF=0",
+      "gold_tables": [
+        "ETF_INFO_DETAIL"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "absolute"
+      }
+    }
+  ]
+}

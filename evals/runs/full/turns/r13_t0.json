@@ -1,0 +1,160 @@
+{
+ "round_id": 13,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "中国神华2025年年报的利润分配方案是怎么安排的？每10股派多少现金红利，有没有送股或者转增？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 现金红利（每10股/每股）\n- 股息支付率\n- 派息总额\n- 是否送股（送股比例）\n- 是否转增（转增比例）\n\n[2] 可能的计算公式：\n\n1. 现金红利（每10股） = 本年度分红总额 ÷ 总股本 × 10\n2. 现金红利（每股） = 本年度分红总额 ÷ 总股本\n3. 股息支付率 = 本年度分红总额 ÷ 净利润\n4. 派息总额 = 每股拟派现金红利 × 总股本\n5. 送股/转增比例 = 每10股送/转增股数 =（公告中披露的数量）\n\n实际方案需以公司正式公告为准。\n['中国神华', '利润分配方案', '现金红利', '每10股', '每股', '送股', '转增', '股息支付率', '派息总额', '送股比例', '转增比例', '分红总额', '总股本', '净利润', '拟派现金红利', '公告']\n该问题可能涉及A股-'中国神华'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-煤炭。\n个股相关\n['主板分红', '主板基本信息']\n['STK_DIV_INFO', 'STK_DIV_STAT', 'STK_DIVPAY', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    d.PERIODDATE AS `报告期`,\n    d.A_STOCKSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    d.CASH_AT AS `每10股派现金红利(元,税后)`,\n    d.BONUS_SHR AS `每10股送红股(股)`,\n    d.CAP_SHR AS `每10股转增股份(股)`,\n    d.DIV_INFO AS `分红说明`,\n    d.`PRG` AS `方案进度`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5\n200\n{table:[['报告期', '股票简称', '股票代码', '每10股派现金红利(元,含税)', '每10股派现金红利(元,税后)', '每10股送红股(股)', '每10股转增股份(股)', '分红说明'], ['2025-12-31', '中国神华', '601088', '10.30', '10.30', '-', '-', '以公司总股本2168943.4304万股为基数,每10股派发现金红利10.3元(含税)'], ['2025-06-30', '中国神华', '601088', '9.80', '9.80', '-', '-', '以公司总股本1986851.9955万股为基数,每10股派发现金红利9.8元(含税)']]}\n每10股派现的现金红利数值直接给出，无需计算。每10股送红股和每10股转增股本也是直接取用现有数据。在此查询中，我们直接使用了已有的分红派息方案相关数值。查询结果符合要求。\n\n该查询从记录上市公司分红派息情况的表中提取信息，结合汇总A股证券基础信息的表。先通过公司代码进行关联，确保只查询有效记录，并筛选证券简称包含“中国神华”的公司，报告期限定在2025年全年内。查询内容涵盖了报告期、股票简称、股票代码、每10股派现金红利金额（含税和税后）、每10股送红股数量、每10股转增股份数量、分红说明以及方案进度。结果按报告期及董事会公告日倒序排列，返回最多5条最新数据。这样可以直接展示中国神华2025年年报中的利润分配方案，包括现金分红、送股及转增安排情况。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    d.PERIODDATE AS `报告期`,\n    d.A_STOCKSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    d.CASH_AT AS `每10股派现金红利(元,税后)`,\n    d.BONUS_SHR AS `每10股送红股(股)`,\n    d.CAP_SHR AS `每10股转增股份(股)`,\n    d.DIV_INFO AS `分红说明`,\n    d.`PRG` AS `方案进度`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5",
+ "final_sql": "SELECT\n    d.PERIODDATE AS `报告期`,\n    d.A_STOCKSNAME AS `股票简称`,\n    d.A_STOCKCODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    d.CASH_AT AS `每10股派现金红利(元,税后)`,\n    d.BONUS_SHR AS `每10股送红股(股)`,\n    d.CAP_SHR AS `每10股转增股份(股)`,\n    d.DIV_INFO AS `分红说明`,\n    d.`PRG` AS `方案进度`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "10.300000   实施"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2025-12-31 00:00:00 中国神华 601088 10.300000 10.300000   以公司总股本2168943.4304万股为基数,每10股派发现金红利10.3元(含税) 实施\n2025-06-30 00:00:00 中国神华 601088 9.800000 9.800000   以公司总股本1986851.9955万股为基数,每10股派发现金红利9.8元(含税) 实施",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 60.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_13_9fca7235.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 61.85,
+  "llm_seconds_max": 7.74,
+  "selected_tables": [
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_LIST_ORG",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DIVPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   17815
+  ],
+  "prompt_columns_raw_len": 4100
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1575,
+   "prompt_tokens": 31264,
+   "total_tokens": 32839,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31264,
+  "completion": 1575,
+  "total": 32839
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1575,
+   "prompt_tokens": 31264,
+   "total_tokens": 32839,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

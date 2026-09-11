@@ -1,0 +1,148 @@
+{
+ "round_id": 16,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "那7月呢？是涨还是跌，幅度多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 价格变动（如：股票价格、商品价格、汇率等）  \n- 涨跌幅度（涨跌百分比）  \n\n[2] 可能的计算公式：  \n涨跌幅度 = （7月的价格 - 6月的价格） / 6月的价格 × 100%\n['价格变动', '股票价格', '商品价格', '汇率', '涨跌幅度', '涨跌百分比', '7月的价格', '6月的价格']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'ANA_STK_EXPR_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `截至日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_TMONTH, 2) AS `本月涨跌幅(%)`,\n    CASE\n        WHEN CHNG_PCT_TMONTH > 0 THEN '涨'\n        WHEN CHNG_PCT_TMONTH < 0 THEN '跌'\n        ELSE '持平'\n    END AS `涨跌方向`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-07-31'\n    AND CHNG_PCT_TMONTH IS NOT NULL\nORDER BY CHNG_PCT_TMONTH DESC\n200\n{table:[['截至日期', '股票名称', '股票代码', '本月涨跌幅(%)', '涨跌方向'], ['2026-07-31', '爱丽家居', '603221', '128.37', '涨'], ['2026-07-31', '艾艾精工', '603580', '116.98', '涨'], ['2026-07-31', '五洲医疗', '301234', '100.33', '涨'], ['2026-07-31', '哈药股份', '600664', '96.99', '涨'], ['2026-07-31', '陇神戎发', '300534', '93.93', '涨'], ['2026-07-31', '恒尚节能', '603137', '93.20', '涨'], ['2026-07-31', '米奥会展', '300795', '92.06', '涨'], ['2026-07-31', 'ST龙大', '002726', '83.90', '涨'], ['2026-07-31', '立新能源', '001258', '78.32', '涨'], ['2026-07-31', '传智教育', '003032', '71.07', '涨'], ['2026-07-31', '普联软件', '300996', '70.98', '涨'], ['2026-07-31', '甘咨询', '000779', '64.06', '涨'], ['2026-07-31', '科蓝软件', '300663', '59.46', '涨'], ['2026-07-31', '*ST发展', '000838', '59.24', '涨'], ['2026-07-31', '惠城环保', '300779', '58.13', '涨'], ['2026-07-31', '科力股份', '920088', '56.84', '涨'], ['2026-07-31', '中红医疗', '300981', '54.55', '涨'], ['2026-07-31', '一鸣食品', '605179', '54.10', '涨'], ['2026-07-31', '立方控股', '920130', '52.39', '涨'], ['2026-07-31', '洁雅股份', '301108', '50.91', '涨'], ['2026-07-31', '华洋赛车', '920058', '50.62', '涨'], ['2026-07-31', '赤峰黄金', '600988', '50.30', '涨'], ['2026-07-31', '中远海特', '600428', '49.13', '涨'], ['2026-07-31', '通源石油', '300164', '49.13', '涨'], ['2026-07-31', '中岩大地', '003001', '48.57', '涨'], ['2026-07-31', '*ST中岩', '002542', '47.79', '涨'], ['2026-07-31', '锐捷网络', '301165', '4",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `截至日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_TMONTH, 2) AS `本月涨跌幅(%)`,\n    CASE\n        WHEN CHNG_PCT_TMONTH > 0 THEN '涨'\n        WHEN CHNG_PCT_TMONTH < 0 THEN '跌'\n        ELSE '持平'\n    END AS `涨跌方向`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-07-31'\n    AND CHNG_PCT_TMONTH IS NOT NULL\nORDER BY CHNG_PCT_TMONTH DESC",
+ "final_sql": "SELECT \n    ENDDATE AS `截至日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_TMONTH, 2) AS `本月涨跌幅(%)`,\n    CASE\n        WHEN CHNG_PCT_TMONTH > 0 THEN '涨'\n        WHEN CHNG_PCT_TMONTH < 0 THEN '跌'\n        ELSE '持平'\n    END AS `涨跌方向`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-07-31'\n    AND CHNG_PCT_TMONTH IS NOT NULL\nORDER BY CHNG_PCT_TMONTH DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "12.8000"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 217.0,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_16_aa3b5fee.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 49.92,
+  "llm_seconds_max": 9.97,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   26532
+  ],
+  "prompt_columns_raw_len": 1894
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1052,
+   "prompt_tokens": 29675,
+   "total_tokens": 30727,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29675,
+  "completion": 1052,
+  "total": 30727
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1052,
+   "prompt_tokens": 29675,
+   "total_tokens": 30727,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

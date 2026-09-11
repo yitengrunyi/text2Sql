@@ -1,0 +1,173 @@
+{
+ "round_id": 29,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F005V AS `币种`,\n        DENSE_RANK() OVER(PARTITION BY a.COMB_SYMBOL ORDER BY b.F001D DESC) AS `rn`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F007N IS NOT NULL\n        AND b.F005V = 'USD'\n        AND b.F002V = 'GEO'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `rn` = 1\nORDER BY\n    `销售收入(亿美元)` DESC;\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询获取了谷歌A最新披露财年在各地域板块的销售收入及对应清单。数据来源于股票基本信息表和板块收入分布数据表，通过股票代码和内部ID关联，仅筛选出地域板块，并限定销售收入为美元币种且不为空。查询提取最新年度的所有地域板块，把销售收入自动转换为以亿美元为单位（通过除以1亿）并保留3位小数，结果按照销售收入从高到低排序。此查询直接使用了公司在各地区的财务收入数据，能完整展示最新财年谷歌A在不同地域市场的销售收入排名，查询结果符合用户要求。\nNo rows fetched. 查找结果为空，请检查SQL语句",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F005V AS `币种`,\n        DENSE_RANK() OVER(PARTITION BY a.COMB_SYMBOL ORDER BY b.F001D DESC) AS `rn`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F007N IS NOT NULL\n        AND b.F005V = 'USD'\n        AND b.F002V = 'GEO'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `rn` = 1\nORDER BY\n    `销售收入(亿美元)` DESC",
+ "final_sql": "WITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F005V AS `币种`,\n        DENSE_RANK() OVER(PARTITION BY a.COMB_SYMBOL ORDER BY b.F001D DESC) AS `rn`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F007N IS NOT NULL\n        AND b.F005V = 'USD'\n        AND b.F002V = 'GEO'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `rn` = 1\nORDER BY\n    `销售收入(亿美元)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "北美 245630.0\n欧洲 84700.0\n大中华区 33880.0\n亚太(除中国) 33880.0\n其他 25410.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 88.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_29_4db67a7c.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 87.86,
+  "llm_seconds_max": 84.54,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8839,
+   "prompt_tokens": 8812,
+   "total_tokens": 17651,
+   "completion_tokens_details": {
+    "reasoning_tokens": 8089,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8812,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 151,
+   "prompt_tokens": 2813,
+   "total_tokens": 2964,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 11625,
+  "completion": 8990,
+  "total": 20615
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8839,
+   "prompt_tokens": 8812,
+   "total_tokens": 17651,
+   "completion_tokens_details": {
+    "reasoning_tokens": 8089,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8812,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 151,
+   "prompt_tokens": 2813,
+   "total_tokens": 2964,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3106",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

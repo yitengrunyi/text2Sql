@@ -1,0 +1,161 @@
+{
+ "round_id": 28,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n- 股息率（Dividend Yield）\n\n[2] 可能的计算公式：\n- 股息率 = 年度每股分红 ÷ 当前股价 × 100%\n\n用户query需要筛选出：全部美股（排除中概股）中，股息率超过2.5%的股票，并按照股息率从高到低排序。\n['股息率', 'Dividend Yield', '年度每股分红', '当前股价', '美股', '中概股', '股票']\n此问题不涉及到个股、行业或者题材\n美股相关\n['美股基本信息', '美股行情', '美股财务']\n['AMERICAN_STOCK_MAIN', 'COM3101', 'AMERICAN_STOCK_MAIN', 'VIEW_COM3104_CUM', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    t.F001D AS `数据日期`,\n    ROUND(t.F013N / 10, 1) AS `市值(亿美元)`,\n    ROUND(t.F007N * 100, 2) AS `股息率(%)`,\n    ROUND(t.F021N, 2) AS `市盈率`,\n    ROUND(t.F015N, 2) AS `市净率`,\n    t.F002V AS `货币`\nFROM\n    COM3101 t\n    INNER JOIN AMERICAN_STOCK_MAIN m ON t.FIU_ID = m.FIU_ID\nWHERE\n    (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK <> '中概股')\n    AND t.F007N IS NOT NULL\n    AND t.F007N > 0.025\nORDER BY\n    t.F007N DESC\n200\n{table:[['股票名称', '股票代码', '数据日期', '市值(亿美元)', '股息率(%)', '市盈率', '市净率', '货币'], ['雪佛龙', 'CVX.US', '2026-08-25', '207,576.00', '333.40', '14.34', '1.79', 'USD'], ['卡特彼勒', 'CAT.US', '2026-08-25', '147,268.80', '303.10', '17.96', '2.24', 'USD'], ['联合健康', 'UNH.US', '2026-08-25', '209,664.00', '275.70', '12.13', '1.52', 'USD'], ['思科', 'CSCO.US', '2026-08-25', '195,840.00', '253.40', '21.12', '2.64', 'USD'], ['摩根大通', 'JPM.US', '2026-08-25', '584,640.00', '238.90', '13.90', '1.74', 'USD'], ['高盛', 'GS.US', '2026-08-25', '137,808.00', '230.10', '12.04', '1.50', 'USD'], ['宝洁', 'PG.US', '2026-08-25', '258,278.40', '216.10', '23.72', '2.97', 'USD'], ['高通', 'QCOM.US', '2026-08-25', '118,800.00', '204.30', '16.92', '2.12', 'USD'], ['默沙东', 'MRK.US', '2026-08-25', '149,371.20', '168.40', '12.97', '1.62', 'USD'], ['可口可乐', 'KO.US', '2026-08-25', '216,720.00', '153.20', '27.84', '3.48', 'USD'], ['谷歌A', 'GOOGL.US', '2026-08-25', '1,756,800.00', '152.20', '24.04', '3.01', 'USD'], ['强生', 'JNJ.US', '2026-08-25', '285,120.00', '150.80', '22.25', '2.78', 'USD'], ['Visa', 'V.US', '2026-08-25', '484,380.00', '150.20', '35.26', '4.41', 'USD'], ['麦当劳', 'MCD.US', '2026-08-25",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    t.F001D AS `数据日期`,\n    ROUND(t.F013N / 10, 1) AS `市值(亿美元)`,\n    ROUND(t.F007N * 100, 2) AS `股息率(%)`,\n    ROUND(t.F021N, 2) AS `市盈率`,\n    ROUND(t.F015N, 2) AS `市净率`,\n    t.F002V AS `货币`\nFROM\n    COM3101 t\n    INNER JOIN AMERICAN_STOCK_MAIN m ON t.FIU_ID = m.FIU_ID\nWHERE\n    (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK <> '中概股')\n    AND t.F007N IS NOT NULL\n    AND t.F007N > 0.025\nORDER BY\n    t.F007N DESC",
+ "final_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    t.F001D AS `数据日期`,\n    ROUND(t.F013N / 10, 1) AS `市值(亿美元)`,\n    ROUND(t.F007N * 100, 2) AS `股息率(%)`,\n    ROUND(t.F021N, 2) AS `市盈率`,\n    ROUND(t.F015N, 2) AS `市净率`,\n    t.F002V AS `货币`\nFROM\n    COM3101 t\n    INNER JOIN AMERICAN_STOCK_MAIN m ON t.FIU_ID = m.FIU_ID\nWHERE\n    (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK <> '中概股')\n    AND t.F007N IS NOT NULL\n    AND t.F007N > 0.025\nORDER BY\n    t.F007N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 4,
+  "preview": "雪佛龙 3.334\n卡特彼勒 3.031\n联合健康 2.757\n思科 2.534"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 36
+ },
+ "first_result_preview": "雪佛龙 CVX.US 2026-08-25 207576.0 333.4 14.34 1.79 USD\n卡特彼勒 CAT.US 2026-08-25 147268.8 303.1 17.96 2.24 USD\n联合健康 UNH.US 2026-08-25 209664.0 275.7 12.13 1.52 USD\n思科 CSCO.US 2026-08-25 195840.0 253.4 21.12",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(36行, Gold为4行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 36
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_28_27dbea4c.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 51.04,
+  "llm_seconds_max": 6.66,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   18032
+  ],
+  "prompt_columns_raw_len": 9461
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1209,
+   "prompt_tokens": 25526,
+   "total_tokens": 26735,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25526,
+  "completion": 1209,
+  "total": 26735
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1209,
+   "prompt_tokens": 25526,
+   "total_tokens": 26735,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

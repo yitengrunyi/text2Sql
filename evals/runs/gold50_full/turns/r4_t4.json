@@ -1,0 +1,235 @@
+{
+ "round_id": 4,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "招商银行2026年9月1日的收盘价是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 招商银行股票收盘价（Closing Price）\n\n[2] 可能的计算公式  \n收盘价 = 该交易日最后一笔成交时的价格  \n（即：收盘价 = 当日最后一笔成交价格）\n['招商银行', '收盘价', 'Closing Price', '股票收盘价', '交易日', '成交价格', '最后一笔成交价格', '最后一笔成交']\n该问题可能涉及A股-'招商银行'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-银行。该问题可能涉及美股-'招商银行 (OTC)', 它的美股股票代码为：CIHKY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'VIEW_CONCEPT_DAILY_QUOTE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`\nFROM \n    STK_MKT a\nINNER JOIN \n    GET_A_SEC_CODE b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ISVALID = 1\n    AND a.TRADEDATE = '2026-09-01'\n    AND b.SEC_SNAME LIKE '%招商银行%'\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-09-01', '招商银行', '600036', '40.86']]}\n该查询使用了收盘价的保留两位小数的计算，具体是通过公式“收盘价（元）=收盘价字段数值，保留两位小数”得出。此外，其他字段均为直接取值。在此查询中，我们直接使用了已有的行情数据和基础码表信息。查询结果符合要求。\n\n查询从股票行情表和A股证券基础码表获取数据，通过内部代码进行关联。股票行情表用于记录每日的交易行情信息，证券基础码表用于标识具体的股票名称和代码。查询选择了交易日期、股票名称、股票代码、收盘价（元）。筛选条件包括：只使用有效数据、限定交易日期为2026年9月1日、股票名称中含有“招商银行”，并仅返回一条数据。查询结果可以满足查找招商银行在指定日期的收盘价的需求。\n招商银行2026年9月1日的收盘价是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`\nFROM \n    STK_MKT a\nINNER JOIN \n    GET_A_SEC_CODE b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ISVALID = 1\n    AND a.TRADEDATE = '2026-09-01'\n    AND b.SEC_SNAME LIKE '%招商银行%'\nLIMIT 1",
+ "final_sql": "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`\nFROM \n    STK_MKT a\nINNER JOIN \n    GET_A_SEC_CODE b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ISVALID = 1\n    AND a.TRADEDATE = '2026-09-01'\n    AND b.SEC_SNAME LIKE '%招商银行%'\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "40.8600"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-01 00:00:00 招商银行 600036 40.86",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 51.5,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_4_661b8fe8.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 58.92,
+  "llm_seconds_max": 12.16,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   28094
+  ],
+  "prompt_columns_raw_len": 6729
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 922,
+   "prompt_tokens": 12598,
+   "total_tokens": 13520,
+   "completion_tokens_details": {
+    "reasoning_tokens": 703,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12598,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1455,
+   "prompt_tokens": 40076,
+   "total_tokens": 41531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 52674,
+  "completion": 2377,
+  "total": 55051
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 922,
+   "prompt_tokens": 12598,
+   "total_tokens": 13520,
+   "completion_tokens_details": {
+    "reasoning_tokens": 703,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12598,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1455,
+   "prompt_tokens": 40076,
+   "total_tokens": 41531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

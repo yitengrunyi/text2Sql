@@ -1,0 +1,274 @@
+{
+ "round_id": 1,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "那它2025年的营业收入是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 营业收入（Operating Revenue）\n\n[2] 可能的计算公式：  \n营业收入 = 产品销售收入 + 提供劳务收入 + 其他主营业务收入\n['宁德时代', '营业收入', 'Operating Revenue', '产品销售收入', '提供劳务收入', '其他主营业务收入']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板基本信息', '主板财务']\n['ANA_STK_QTR_IDX', 'STK_COM_PROFILE', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_INCOME_GEN_QTR', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    b.A_STOCKSNAME AS `股票名称`,\n    b.A_STOCKCODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.P110101 / 100000000, 3) AS `营业收入(亿)`\nFROM \n    VIEW_STK_INCOME_GEN a\nJOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE AND b.ISVALID = 1\nWHERE \n    b.SEC_SNAME LIKE '%宁德时代%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.P110101 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1\n500\nMySQL Database error: (1054, \"Unknown column 'b.A_STOCKSNAME' in 'field list'\")\n诊断 根据你提供的信息，**最可能的2个原因**如下：\n\n---\n\n### 1. **字段不存在/名称拼写错误（模型捏造字段）**【最可能原因】\n\n- **报错内容是**: \"Unknown column 'b.A_STOCKSNAME' in 'field list'\"，意思是在 SELECT 字段清单中找不到 b.A_STOCKSNAME 这个字段。\n  - 说明在 `GET_A_SEC_CODE` 这张表中，并没有叫做 `A_STOCKSNAME` 的字段。\n- 该字段可能是**模型自己「幻想」创造出来的字段**，并非真实存在。\n- 另外，还涉及到其他字段，如`A_STOCKCODE`、`SEC_SNAME`，都应该逐个核查是否真实存在。\n- **结论**：模型在SQL生成时，引用了目标数据库中其实并不存在的字段（例如将真正的股票简称字段名 `SEC_SNAME` 用 `A_STOCKSNAME` 替代，是模型捏造了这个字段）。\n\n---\n\n### 2. **表结构缺失/表设计不匹配**【可能原因2】\n\n- 假如 `GET_A_SEC_CODE` 这张表是**并不存在**的，或者被重命名、结构发生变化，也会出现类似错误。\n- 随着数据库维护和业务调整，字段名随时可能变更（如历史表结构与现有表结构不一致），导致模型无法正确抓取。\n- 部分表可能有过多的别名或历史遗留命名问题，中英文、下划线、大小写混用，常出现出错。\n\n---\n\n#### 其他相关但较次要的可能原因\n\n3. **语法无关错误**：当前报错与SQL语法无关。是明确的字段不存在错误。\n4. **表数据本身缺失**：即使表数据没有2025年这一期，也不会报错，而是只会返回空集，不是1054的 unknown column 错。\n5. **模型理解偏差**：模型从外部资料学习时，容易引用通用常用字段名套进去，未必与你实际表一致。\n6. **字段命名一致性问题**：比如有 SEC_SNAME 却误写成 A_STOCKSNAME，很常见。\n\n---\n\n## 总结\n\n**最可能的两个原因**为：\n\n1. **模型引用了数据库中不存在的字段名（如 `A_STOCKSNAME`），字段拼错/捏造字段，导致SQL无法执行。**\n2. **表结构与模型假定不符，相关表缺失或字段缺失或被重命名，表结构设计发生变更。**\n\n---\n\n### 建议\n",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    b.A_STOCKSNAME AS `股票名称`,\n    b.A_STOCKCODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.P110101 / 100000000, 3) AS `营业收入(亿)`\nFROM \n    VIEW_STK_INCOME_GEN a\nJOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE AND b.ISVALID = 1\nWHERE \n    b.SEC_SNAME LIKE '%宁德时代%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.P110101 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    b.SEC_SNAME AS `股票简称`,\n    b.SEC_CODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.P110101 / 100000000, 3) AS `营业收入(亿)`\nFROM \n    VIEW_STK_INCOME_GEN a\nJOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE AND b.ISVALID = 1\nWHERE \n    b.SEC_SNAME LIKE '%宁德时代%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.P110101 IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "423701834000.00"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'b.A_STOCKSNAME' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 107.0,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_1_d0ed21c8.1",
+  "llm_call_count": 18,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 126.87,
+  "llm_seconds_max": 33.06,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   55323,
+   16759
+  ],
+  "prompt_columns_raw_len": 1451
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3053,
+   "prompt_tokens": 14673,
+   "total_tokens": 17726,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2800,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14673,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3090,
+   "prompt_tokens": 76522,
+   "total_tokens": 79612,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 91195,
+  "completion": 6143,
+  "total": 97338
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3053,
+   "prompt_tokens": 14673,
+   "total_tokens": 17726,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2800,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14673,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3090,
+   "prompt_tokens": 76522,
+   "total_tokens": 79612,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

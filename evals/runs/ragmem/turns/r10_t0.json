@@ -1,0 +1,151 @@
+{
+ "round_id": 10,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "美股数据库目前一共收录了多少只股票的行情？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "聚合",
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 美股数据库收录的股票总数（通常为“上市公司数量”或“股票数量”）\n\n[2] 可能的计算公式：  \n股票总数 = COUNT(股票代码)  \n（即统计数据库中所有唯一的股票代码或公司ID的数量）\n\nSQL 示例：  \nSELECT COUNT(DISTINCT 股票代码) FROM 美股行情表;\n['美股数据库', '股票总数', '上市公司数量', '股票数量', '股票代码', '公司ID', '美股行情表', 'COUNT', 'DISTINCT']\n此问题不涉及到个股、行业或者题材\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'STK2401', 'COM3101', 'VIEW_ADS_STOCK_US_EOD_DI', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    MAX(t1.TRADE_DATE) AS `最新行情日期`,\n    COUNT(DISTINCT t1.COMB_SYMBOL) AS `美股当前收录行情股票只数`\nFROM \n    VIEW_US_EOD_EXPR t1\nWHERE \n    t1.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR\n    )\n    AND t1.COMB_SYMBOL IS NOT NULL\n    AND t1.FIU_ID IS NOT NULL\n\n200\n{table:[['最新行情日期', '美股当前收录行情股票只数'], ['2026-08-25', '43']]}\n该查询的主要目的是统计美股数据库在最新行情日期收录了多少只股票的行情信息。统计美股当前收录行情股票只数的方法是：先找出所有记录中最新的交易日期，然后计算在该日期下，不重复的展示代码数量，即为美股当前收录的股票只数。\n\n查询从美股日行情信息表中提取数据。该表用于记录每日每只美股的行情信息，包括展示代码、交易日期、内部代码等。查询对展示代码进行去重计数，确保每只股票只统计一次。同时，筛选出展示代码和内部代码均不为空的数据，并限定在最新的交易日期。\n\n在此查询中，统计过程直接依赖已有的数据，没有对结果进行进一步计算。在最新交易日下统计每只股票的收录数量，并返回最新行情日期。查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    MAX(t1.TRADE_DATE) AS `最新行情日期`,\n    COUNT(DISTINCT t1.COMB_SYMBOL) AS `美股当前收录行情股票只数`\nFROM \n    VIEW_US_EOD_EXPR t1\nWHERE \n    t1.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR\n    )\n    AND t1.COMB_SYMBOL IS NOT NULL\n    AND t1.FIU_ID IS NOT NULL",
+ "final_sql": "SELECT \n    MAX(t1.TRADE_DATE) AS `最新行情日期`,\n    COUNT(DISTINCT t1.COMB_SYMBOL) AS `美股当前收录行情股票只数`\nFROM \n    VIEW_US_EOD_EXPR t1\nWHERE \n    t1.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR\n    )\n    AND t1.COMB_SYMBOL IS NOT NULL\n    AND t1.FIU_ID IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 43",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_10_7ddc27b2.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.45,
+  "llm_seconds_max": 6.21,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   16147
+  ],
+  "prompt_columns_raw_len": 7348
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 873,
+   "prompt_tokens": 19937,
+   "total_tokens": 20810,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19937,
+  "completion": 873,
+  "total": 20810
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 873,
+   "prompt_tokens": 19937,
+   "total_tokens": 20810,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

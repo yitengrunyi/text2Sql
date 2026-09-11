@@ -1,0 +1,172 @@
+{
+ "round_id": 14,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "去年同期那次预告呢？当时预计2025年上半年能赚多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT F.A_STOCKSNAME AS `股票简称`, F.A_STOCKCODE AS `股票代码`, DATE_FORMAT(F.ENDDATE, '%Y-%m-%d') AS `报告期截止日期`, DATE_FORMAT(F.DECLAREDATE, '%Y-%m-%d') AS `业绩预告发布日期`, ROUND(F.MIN_VAL, 1) AS `预计净利润下限(万)`, ROUND(F.MAX_VAL, 1) AS `预计净利润上限(万)` FROM STK_ACHIEVE_FORECAST F WHERE F.A_STOCKSNAME LIKE '%紫金矿业%' AND F.ISVALID = 1 AND F.ENDDATE = '2025-06-30' ORDER BY F.DECLAREDATE DESC LIMIT 1;\n200\n{table:[['股票简称', '股票代码', '报告期截止日期', '业绩预告发布日期', '预计净利润下限(万)', '预计净利润上限(万)'], ['紫金矿业', '601899', '2025-06-30', '2025-07-14', '2,320,000.00', '2,320,000.00']]}\n该查询获取了紫金矿业公司针对去年同期（即2025年上半年报告期）的最新有效业绩预告。信息内容包括公司名称、股票代码、报告期截止日期、业绩预告发布日期，以及预告中的归属于母公司净利润的预测区间（下限和上限，单位为万元，保留1位小数）。本次查询数据来自上市公司业绩预告信息的功能表，仅筛选公司名称含有“紫金矿业”、报告期为2025年6月30日且为最新发布的有效记录，并按业绩预告发布日期进行降序排列，仅返回最新一条数据。预告中的净利润区间数据为公司直接披露的财务预测数据，无需额外换算。查询结果可以直接满足用户对去年同期业绩预告及归母净利润预测金额的需求。\n{table:[['股票简称', '股票代码', '报告期截止日期', '业绩预告发布日期', '预计净利润下限(万)', '预计净利润上限(万)'], ['紫金矿业', '601899', '2025-06-30', '2025-07-14', '2,320,000.00', '2,320,000.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT F.A_STOCKSNAME AS `股票简称`, F.A_STOCKCODE AS `股票代码`, DATE_FORMAT(F.ENDDATE, '%Y-%m-%d') AS `报告期截止日期`, DATE_FORMAT(F.DECLAREDATE, '%Y-%m-%d') AS `业绩预告发布日期`, ROUND(F.MIN_VAL, 1) AS `预计净利润下限(万)`, ROUND(F.MAX_VAL, 1) AS `预计净利润上限(万)` FROM STK_ACHIEVE_FORECAST F WHERE F.A_STOCKSNAME LIKE '%紫金矿业%' AND F.ISVALID = 1 AND F.ENDDATE = '2025-06-30' ORDER BY F.DECLAREDATE DESC LIMIT 1",
+ "final_sql": "SELECT F.A_STOCKSNAME AS `股票简称`, F.A_STOCKCODE AS `股票代码`, DATE_FORMAT(F.ENDDATE, '%Y-%m-%d') AS `报告期截止日期`, DATE_FORMAT(F.DECLAREDATE, '%Y-%m-%d') AS `业绩预告发布日期`, ROUND(F.MIN_VAL, 1) AS `预计净利润下限(万)`, ROUND(F.MAX_VAL, 1) AS `预计净利润上限(万)` FROM STK_ACHIEVE_FORECAST F WHERE F.A_STOCKSNAME LIKE '%紫金矿业%' AND F.ISVALID = 1 AND F.ENDDATE = '2025-06-30' ORDER BY F.DECLAREDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2320000.0000 2320000.0000 业绩大幅上升"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "紫金矿业 601899 2025-06-30 2025-07-14 2320000.0 2320000.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 25.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_14_b4d6f2e3.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 24.15,
+  "llm_seconds_max": 18.2,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1763,
+   "prompt_tokens": 11574,
+   "total_tokens": 13337,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1304,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11574,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 192,
+   "prompt_tokens": 5217,
+   "total_tokens": 5409,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16791,
+  "completion": 1955,
+  "total": 18746
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1763,
+   "prompt_tokens": 11574,
+   "total_tokens": 13337,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1304,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11574,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 192,
+   "prompt_tokens": 5217,
+   "total_tokens": 5409,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

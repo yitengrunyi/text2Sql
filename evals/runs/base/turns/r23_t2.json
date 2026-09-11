@@ -1,0 +1,162 @@
+{
+ "round_id": 23,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "这十只重仓股加在一起，合计占到净值的多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 持仓占净值比（持仓权重）\n- 总持仓占比（Top 10 持仓股合计占净值比例）\n\n[2] 可能的计算公式：  \n总持仓占比 = (Σ 前十只重仓股市值) / 资产净值  \n即：  \n合计占净值百分比 = （∑每只重仓股的市值） ÷ （基金资产净值） × 100%\n['重仓股', '前十只重仓股', '持仓占净值比', '持仓权重', '总持仓占比', 'Top 10 持仓股合计占净值比例', '市值', '资产净值', '基金资产净值', '合计占净值百分比']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓', '基金产品净值']\n['STOCK_HOLD_STATISTICS_HY', 'INDEX_QUOTE_ALL', 'ETF_PERFORMANCE_DETAIL', 'FUND_STOCK_CHANGE_HY', 'FUND_NETVALUE_SIMULATE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.REPORT_DATE AS `报告期`,\n    a.SEC_NAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(SUM(a.RATIO_IN_NV) * 100, 2) AS `合计持仓占基金净值比例(%)`\nFROM\n    (\n        SELECT\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME,\n            SUM(fs.RATIO_IN_NV) AS RATIO_IN_NV\n        FROM\n            FUND_STOCK_CHANGE_HY fs\n        INNER JOIN (\n            SELECT\n                FUND_HCODE\n            FROM\n                FUND_PUBLIC.FUND_BENCHMARK\n            WHERE\n                FUND_TYPE = '股票型'\n                AND INVESTMENT_TYPE <> '指数型'\n        ) f\n        ON fs.FUND_HCODE = f.FUND_HCODE\n        WHERE\n            fs.REPORT_DATE = (\n                SELECT MAX(REPORT_DATE)\n                FROM FUND_STOCK_CHANGE_HY\n                WHERE REPORT_DATE IS NOT NULL\n            )\n            AND fs.RATIO_IN_NV IS NOT NULL\n            AND fs.HISVALID = 1\n        GROUP BY\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME\n        HAVING\n            SUM(fs.RATIO_IN_NV) > 0.10\n        ORDER BY\n            SUM(fs.RATIO_IN_NV) DESC\n        LIMIT 10\n    ) a\nGROUP BY\n    a.REPORT_DATE\n\n200\nQuery execution timed out.\n合计持仓占基金净值比例的计算方法为：先筛选出最新报告期内，单只股票在各只主动型股票基金中的持仓占基金净值比例，并把持仓比例在10%以上的股票进行汇总，选出排名前10的重仓股。之后，将这10只重仓股的占比求和，并乘以100，得到它们合计占基金净值的百分比，结果保留两位小数。\n\n查询的主要目的是获取当前主动型股票基金中，排名前10的重仓股合计占基金净值的比例。查询内容涉及基金在各报告期的持仓信息，重点聚焦最新报告期。筛选时，仅选取基金类型为“股票型”且不是“指数型”的基金产品，并排除了无效的数据和持股占比为空的记录。仅统计单支股票占比高于10%的基金持仓，最终只保留排名最高的10只股票。\n\n这些数据均来自记录基金产品股票持仓及变化的表。查询过程还涉及基准信息",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.REPORT_DATE AS `报告期`,\n    a.SEC_NAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(SUM(a.RATIO_IN_NV) * 100, 2) AS `合计持仓占基金净值比例(%)`\nFROM\n    (\n        SELECT\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME,\n            SUM(fs.RATIO_IN_NV) AS RATIO_IN_NV\n        FROM\n            FUND_STOCK_CHANGE_HY fs\n        INNER JOIN (\n            SELECT\n                FUND_HCODE\n            FROM\n                FUND_PUBLIC.FUND_BENCHMARK\n            WHERE\n                FUND_TYPE = '股票型'\n                AND INVESTMENT_TYPE <> '指数型'\n        ) f\n        ON fs.FUND_HCODE = f.FUND_HCODE\n        WHERE\n            fs.REPORT_DATE = (\n                SELECT MAX(REPORT_DATE)\n                FROM FUND_STOCK_CHANGE_HY\n                WHERE REPORT_DATE IS NOT NULL\n            )\n            AND fs.RATIO_IN_NV IS NOT NULL\n            AND fs.HISVALID = 1\n        GROUP BY\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME\n        HAVING\n            SUM(fs.RATIO_IN_NV) > 0.10\n        ORDER BY\n            SUM(fs.RATIO_IN_NV) DESC\n        LIMIT 10\n    ) a\nGROUP BY\n    a.REPORT_DATE",
+ "final_sql": "SELECT\n    a.REPORT_DATE AS `报告期`,\n    a.SEC_NAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(SUM(a.RATIO_IN_NV) * 100, 2) AS `合计持仓占基金净值比例(%)`\nFROM\n    (\n        SELECT\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME,\n            SUM(fs.RATIO_IN_NV) AS RATIO_IN_NV\n        FROM\n            FUND_STOCK_CHANGE_HY fs\n        INNER JOIN (\n            SELECT\n                FUND_HCODE\n            FROM\n                FUND_PUBLIC.FUND_BENCHMARK\n            WHERE\n                FUND_TYPE = '股票型'\n                AND INVESTMENT_TYPE <> '指数型'\n        ) f\n        ON fs.FUND_HCODE = f.FUND_HCODE\n        WHERE\n            fs.REPORT_DATE = (\n                SELECT MAX(REPORT_DATE)\n                FROM FUND_STOCK_CHANGE_HY\n                WHERE REPORT_DATE IS NOT NULL\n            )\n            AND fs.RATIO_IN_NV IS NOT NULL\n            AND fs.HISVALID = 1\n        GROUP BY\n            fs.REPORT_DATE,\n            fs.SEC_HCODE,\n            fs.COMB_SYMBOL,\n            fs.SEC_NAME\n        HAVING\n            SUM(fs.RATIO_IN_NV) > 0.10\n        ORDER BY\n            SUM(fs.RATIO_IN_NV) DESC\n        LIMIT 10\n    ) a\nGROUP BY\n    a.REPORT_DATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "59.29"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 243.8,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_23_edf44159.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 68.78,
+  "llm_seconds_max": 13.18,
+  "selected_tables": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "STOCK_HOLD_STATISTICS_HY"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_NETVALUE",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "INDEX_QUOTE_ALL",
+   "STOCK_HOLD_STATISTICS_HY",
+   "STOCK_FACTOR_VALUE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   26082
+  ],
+  "prompt_columns_raw_len": 13534
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1712,
+   "prompt_tokens": 34090,
+   "total_tokens": 35802,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 34090,
+  "completion": 1712,
+  "total": 35802
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1712,
+   "prompt_tokens": 34090,
+   "total_tokens": 35802,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "STOCK_HOLD_STATISTICS_HY"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

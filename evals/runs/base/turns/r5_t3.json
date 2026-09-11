@@ -1,0 +1,146 @@
+{
+ "round_id": 5,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金净值与收益",
+ "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+ "labels": {
+  "followup_type": "普通追问",
+  "difficulty": "子查询",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 年度收益率（Annual Return）\n\n[2] 可能的计算公式：  \n年度收益率 = （期末净值 - 期初净值 + 期间分红） ÷ 期初净值 × 100%  \n即：  \nAnnual Return = [(Ending NAV - Beginning NAV + Dividends) / Beginning NAV] × 100%\n['易方达蓝筹精选混合', '年度收益率', 'Annual Return', '期末净值', 'Ending NAV', '期初净值', 'Beginning NAV', '期间分红', 'Dividends']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值']\n['FUND_NETVALUE', 'FUND_STATISTICS_YEAR', 'INDEX_QUOTE_ALL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    YEAR AS `年份`, \n    FUND_NAME AS `基金名称`, \n    FUND_SYMBOL AS `基金代码`, \n    ROUND(YIELD, 2) AS `年度收益率(%)`, \n    ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, \n    MAX_DRAWBACK AS `最大回撤`, \n    SHARPE AS `夏普比率`\nFROM FUND_STATISTICS_YEAR\nWHERE FUND_NAME LIKE '%易方达蓝筹精选混合%' \n    AND YEAR = 2025\n    AND HISVALID = 1\n    AND YIELD IS NOT NULL\nORDER BY YIELD DESC\nLIMIT 1\n200\n{table:[['年份', '基金名称', '基金代码', '年度收益率(%)', '年化收益率(%)', '最大回撤', '夏普比率'], ['2,025', '易方达蓝筹精选混合', '005827.OF', '0.07', '0.07', '-0.14', '0.26']]}\n该查询的目的是获取易方达蓝筹精选混合基金在2025年的年度收益率、年化收益率、最大回撤和夏普比率等核心指标。年度收益率通过将原有的年度收益率数值保留两位小数得出，年化收益率也是用保留两位小数的方式直接展示。在此查询中，年度收益率和年化收益率都进行了四舍五入保留两位小数的处理。\n\n查询使用的表是用于存储基金年度统计数据的表。通过筛选基金名称包含“易方达蓝筹精选混合”，年份为2025，只选取有效的记录，且年度收益率不为空。结果按照年度收益率降序排列，只返回第一条记录。查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    YEAR AS `年份`, \n    FUND_NAME AS `基金名称`, \n    FUND_SYMBOL AS `基金代码`, \n    ROUND(YIELD, 2) AS `年度收益率(%)`, \n    ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, \n    MAX_DRAWBACK AS `最大回撤`, \n    SHARPE AS `夏普比率`\nFROM FUND_STATISTICS_YEAR\nWHERE FUND_NAME LIKE '%易方达蓝筹精选混合%' \n    AND YEAR = 2025\n    AND HISVALID = 1\n    AND YIELD IS NOT NULL\nORDER BY YIELD DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    YEAR AS `年份`, \n    FUND_NAME AS `基金名称`, \n    FUND_SYMBOL AS `基金代码`, \n    ROUND(YIELD, 2) AS `年度收益率(%)`, \n    ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, \n    MAX_DRAWBACK AS `最大回撤`, \n    SHARPE AS `夏普比率`\nFROM FUND_STATISTICS_YEAR\nWHERE FUND_NAME LIKE '%易方达蓝筹精选混合%' \n    AND YEAR = 2025\n    AND HISVALID = 1\n    AND YIELD IS NOT NULL\nORDER BY YIELD DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.068629"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025 易方达蓝筹精选混合 005827.OF 0.07 0.07 -0.13959658 0.259173",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 55.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_5_198a47b2.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 53.14,
+  "llm_seconds_max": 5.81,
+  "selected_tables": [
+   "FUND_NETVALUE",
+   "FUND_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   21410
+  ],
+  "prompt_columns_raw_len": 6391
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 851,
+   "prompt_tokens": 25407,
+   "total_tokens": 26258,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4096,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25407,
+  "completion": 851,
+  "total": 26258
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 851,
+   "prompt_tokens": 25407,
+   "total_tokens": 26258,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4096,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_STATISTICS_YEAR"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_NETVALUE",
+   "FUND_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

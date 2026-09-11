@@ -1,0 +1,135 @@
+{
+ "round_id": 18,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "这些点位是交易所发布的官方收盘行情吗，还是复权价？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 官方收盘价（Official Closing Price）\n- 复权价（Adjusted Price）\n\n[2] 可能的计算公式：\n\n- 官方收盘价：由交易所根据当天最后一笔成交价或加权平均价（具体规则依各交易所）直接发布，无需计算，来源权威。\n- 复权价：一般按照以下公式计算（以前复权为例）：\n  \n  前复权价 = 当日收盘价 ×（所有历史权息调整日前收盘价的累积复权因子）\n  \n  或\n  \n  复权价 = 原始价格 × 复权因子\n\n  复权因子的计算通常基于分红、配股、送股等权息事项的调整，用于消除股价因公司行为产生的跳变影响。\n['官方收盘价', 'Official Closing Price', '复权价', 'Adjusted Price', '交易所', '收盘价', '加权平均价', '复权因子', '权息调整', '分红', '配股', '送股', '跳变影响', '原始价格', '前复权价']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n个股相关\n['主板行情']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价（官方收盘价）`,\n    ROUND(FAC_TCLOSE, 2) AS `收盘价（后复权价）`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\n    AND FAC_TCLOSE IS NOT NULL\nLIMIT 100\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价（官方收盘价）', '收盘价（后复权价）'], ['2026-09-02', '上海莱士', '002252', '4.91', '122.80'], ['2026-09-02', '川大智胜', '002253', '10.12', '39.03'], ['2026-09-02', '平安银行', '000001', '11.91', '1,933.26'], ['2026-09-02', '万科A', '000002', '3.08', '439.76'], ['2026-09-02', '深振业A', '000006', '7.04', '364.49'], ['2026-09-02', '全新好', '000007', '12.93', '129.56'], ['2026-09-02', '神州高铁', '000008', '2.53', '68.04'], ['2026-09-02', '中国宝安', '000009', '7.20', '88.85'], ['2026-09-02', '*ST美丽', '000010', '1.65', '17.78'], ['2026-09-02', '深物业A', '000011', '8.69', '40.17'], ['2026-09-02', '深物业B', '200011', '2.64', '13.61'], ['2026-09-02', '南玻B', '200012', '1.27', '16.15'], ['2026-09-02', '南玻A', '000012', '3.74', '137.37",
+ "route_gold": "NON_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价（官方收盘价）`,\n    ROUND(FAC_TCLOSE, 2) AS `收盘价（后复权价）`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\n    AND FAC_TCLOSE IS NOT NULL\nLIMIT 100",
+ "final_sql": "SELECT \n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价（官方收盘价）`,\n    ROUND(FAC_TCLOSE, 2) AS `收盘价（后复权价）`\nFROM \n    ANA_STK_EXPR_IDX\nWHERE \n    ENDDATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\n    AND FAC_TCLOSE IS NOT NULL\nLIMIT 100",
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": false,
+ "answer_ok": null,
+ "elapsed_seconds": 52.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_18_af5b8ece.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 47.82,
+  "llm_seconds_max": 5.29,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "GET_A_INDICS_LATEST",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   24968
+  ],
+  "prompt_columns_raw_len": 5951
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1117,
+   "prompt_tokens": 35995,
+   "total_tokens": 37112,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 35995,
+  "completion": 1117,
+  "total": 37112
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1117,
+   "prompt_tokens": 35995,
+   "total_tokens": 37112,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

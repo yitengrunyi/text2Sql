@@ -1,0 +1,194 @@
+{
+ "round_id": 1,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润（Net Profit Attributable to Shareholders of the Parent Company）\n\n[2] 可能的计算公式：  \n归属于母公司股东的净利润 = 公司总净利润 - 少数股东损益\n\n其中：  \n- 公司总净利润 = 收入 - 成本 - 费用 - 利息支出 - 税费等\n- 少数股东损益指属于子公司其他股东的部分。\n\n简式公式：  \n归属于母公司股东的净利润 = 总净利润 - 少数股东损益\n['归属于母公司股东的净利润', '净利润', 'Net Profit Attributable to Shareholders of the Parent Company', '公司总净利润', '总净利润', '少数股东损益', '收入', '成本', '费用', '利息支出', '税费']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板财务', '主板基本信息']\n['VIEW_CONCEPT_DAILY_QUOTE', 'VIEW_STK_CASH_GEN', 'ANA_STK_QTR_IDX', 'STK_PREEXP', 'STK_COM_PROFILE', 'VIEW_STK_STI_LIST_PLAN', 'STK_COM_RELA_NBALA', 'VW_CONCEPT_STK', 'VIEW_STK_INCOME_GEN', 'STK_ACCT_RCV', 'STK_LIST_PLAN']\n是否命中召回表：False\n生成查询代码\nSELECT \n    inc.A_STOCKSNAME AS `股票名称`,\n    inc.A_STOCKCODE AS `股票代码`,\n    inc.ENDDATE AS `报表截止日期`,\n    inc.P160101 AS `归属于母公司股东的净利润(元)`,\n    ROUND(inc.P160101 / 10000, 1) AS `归属于母公司股东的净利润(万)`,\n    inc.P150101 AS `净利润(元)`,\n    ROUND(inc.P150101 / 10000, 1) AS `净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN inc\nJOIN \n    STK_COM_PROFILE prof ON inc.COMCODE = prof.COMCODE\nWHERE \n    inc.A_STOCKSNAME LIKE '%宁德时代%'\n    AND inc.ENDDATE = '2025-12-31 00:00:00'\n    AND inc.RPT_TYPE = '合并'\n    AND inc.ISVALID = 1\n    AND prof.ISVALID = 1\n    AND inc.P160101 IS NOT NULL\nORDER BY \n    inc.ENDDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报表截止日期', '归属于母公司股东的净利润(元)', '归属于母公司股东的净利润(万)', '净利润(元)', '净利润(万)'], ['宁德时代', '300750', '2025-12-31', '72,201,282,000.00', '7,220,128.20', '76,786,309,000.00', '7,678,630.90']]}\n归属于母公司股东的净利润（元）直接取值。归属于母公司股东的净利润（万）通过归属于母公司股东的净利润除以一万，并保留一位小数得出。净利润（元）直接取值。净利润（万）通过净利润除以一万，并保留一位小数得出。查询结果符合要求。\n\n查询从用于分析公司收入、成本及利润表现的财务报表表和提供上市公司基本信息的表中提取数据，通过公司代码进行关联。选择了股票名称、股票代码、报表截止日期、各项净利润及其单位转换等信息。筛选条件包括：公司简称含“宁德时代”、数据期间截止日期为2025年年报、报表类型为合并、两张表的数据均为有效数据、归属于母公司股东的净利润值存在。结果按报表截止日期降序排列并只取一条数据，返回宁德时代2025年年报的归属于母公司股东的净利润。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    inc.A_STOCKSNAME AS `股票名称`,\n    inc.A_STOCKCODE AS `股票代码`,\n    inc.ENDDATE AS `报表截止日期`,\n    inc.P160101 AS `归属于母公司股东的净利润(元)`,\n    ROUND(inc.P160101 / 10000, 1) AS `归属于母公司股东的净利润(万)`,\n    inc.P150101 AS `净利润(元)`,\n    ROUND(inc.P150101 / 10000, 1) AS `净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN inc\nJOIN \n    STK_COM_PROFILE prof ON inc.COMCODE = prof.COMCODE\nWHERE \n    inc.A_STOCKSNAME LIKE '%宁德时代%'\n    AND inc.ENDDATE = '2025-12-31 00:00:00'\n    AND inc.RPT_TYPE = '合并'\n    AND inc.ISVALID = 1\n    AND prof.ISVALID = 1\n    AND inc.P160101 IS NOT NULL\nORDER BY \n    inc.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    inc.A_STOCKSNAME AS `股票名称`,\n    inc.A_STOCKCODE AS `股票代码`,\n    inc.ENDDATE AS `报表截止日期`,\n    inc.P160101 AS `归属于母公司股东的净利润(元)`,\n    ROUND(inc.P160101 / 10000, 1) AS `归属于母公司股东的净利润(万)`,\n    inc.P150101 AS `净利润(元)`,\n    ROUND(inc.P150101 / 10000, 1) AS `净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN inc\nJOIN \n    STK_COM_PROFILE prof ON inc.COMCODE = prof.COMCODE\nWHERE \n    inc.A_STOCKSNAME LIKE '%宁德时代%'\n    AND inc.ENDDATE = '2025-12-31 00:00:00'\n    AND inc.RPT_TYPE = '合并'\n    AND inc.ISVALID = 1\n    AND prof.ISVALID = 1\n    AND inc.P160101 IS NOT NULL\nORDER BY \n    inc.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "72201282000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "宁德时代 300750 2025-12-31 00:00:00 72201282000.00 7220128.2 76786309000.00 7678630.9",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 56.2,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_1_2d509774.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 68.15,
+  "llm_seconds_max": 8.21,
+  "selected_tables": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_COM_RELA_NBALA",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   93805
+  ],
+  "prompt_columns_raw_len": 22714
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2428,
+   "prompt_tokens": 93885,
+   "total_tokens": 96313,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 93885,
+  "completion": 2428,
+  "total": 96313
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2428,
+   "prompt_tokens": 93885,
+   "total_tokens": 96313,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_COM_RELA_NBALA",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

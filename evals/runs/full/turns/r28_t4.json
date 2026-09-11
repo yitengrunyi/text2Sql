@@ -1,0 +1,197 @@
+{
+ "round_id": 28,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n市盈率（PE，Price-to-Earnings Ratio）\n\n[2] 计算公式：  \n市盈率 = 每股价格 ÷ 每股收益（PE = Price per Share ÷ Earnings per Share）\n\n涉及主体：埃克森美孚（Exxon Mobil）、雪佛龙（Chevron）\n['市盈率', 'PE', 'Price-to-Earnings Ratio', '每股价格', 'Price per Share', '每股收益', 'Earnings per Share', '埃克森美孚', 'Exxon Mobil', '雪佛龙', 'Chevron']\n该问题可能涉及美股-'埃克森美孚', 它的美股股票代码为：XOM.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-石油石化。该问题可能涉及美股-'雪佛龙', 它的美股股票代码为：CVX.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-石油石化。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3103_Q', 'COM3103', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    cum.F001D AS `报表截止日期`,\n    cum.F004N AS `报表期间长度(天)`,\n    cum.F005V AS `货币`,\n    CAST(eod.`TCLOSE` AS DECIMAL(18,2)) AS `现价`,\n    -- 市盈率 = 总市值 / 归属于普通股东的净利润（这里单位都是美元，无需换算），总市值=现价*总股本\n    CAST((eod.`TCLOSE` * eod.`TOTAL_SHARES` / 100000000) AS DECIMAL(18,1)) AS `总市值(亿美元)`,\n    CAST(cum.F034N * 10000 AS DECIMAL(18,1)) AS `归属于普通股东的净利润(万美元)`,\n    CASE\n        WHEN cum.F034N IS NOT NULL AND cum.F034N <> 0 AND eod.`TCLOSE` IS NOT NULL AND eod.`TOTAL_SHARES` IS NOT NULL\n        THEN ROUND((eod.`TCLOSE` * eod.`TOTAL_SHARES`) / (cum.F034N * 1000000), 2)\n        ELSE NULL\n    END AS `市盈率PE`\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN\n(\n    SELECT\n        FIU_ID,\n        MAX(F001D) AS F001D\n    FROM\n        VIEW_COM3103_CUM\n    WHERE\n        F001D <= '2026-03-31'\n        AND F034N IS NOT NULL\n        AND F005V = 'USD'\n    GROUP BY\n        FIU_ID\n) max_cum ON m.FIU_ID = max_cum.FIU_ID\nJOIN\n    VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD'\nJOIN\n(\n    SELECT\n        FIU_ID,\n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM\n        VIEW_US_EOD_EXPR\n    WHERE\n        TRADE_DATE <= '2026-09-02'\n    GROUP BY\n        FIU_ID\n) max_eod ON m.FIU_ID = max_eod.FIU_ID\nJOIN\n    VIEW_US_EOD_EXPR eod ON m.FIU_ID = eod.FIU_ID AND eod.TRADE_DATE = max_eod.MAX_TRADE_DATE\nWHERE\n    m.COMB_SYMBOL IN ('XOM.US','CVX.US')\nORDER BY\n    `市盈率PE` AS",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    cum.F001D AS `报表截止日期`,\n    cum.F004N AS `报表期间长度(天)`,\n    cum.F005V AS `货币`,\n    CAST(eod.`TCLOSE` AS DECIMAL(18,2)) AS `现价`,\n    -- 市盈率 = 总市值 / 归属于普通股东的净利润（这里单位都是美元，无需换算），总市值=现价*总股本\n    CAST((eod.`TCLOSE` * eod.`TOTAL_SHARES` / 100000000) AS DECIMAL(18,1)) AS `总市值(亿美元)`,\n    CAST(cum.F034N * 10000 AS DECIMAL(18,1)) AS `归属于普通股东的净利润(万美元)`,\n    CASE\n        WHEN cum.F034N IS NOT NULL AND cum.F034N <> 0 AND eod.`TCLOSE` IS NOT NULL AND eod.`TOTAL_SHARES` IS NOT NULL\n        THEN ROUND((eod.`TCLOSE` * eod.`TOTAL_SHARES`) / (cum.F034N * 1000000), 2)\n        ELSE NULL\n    END AS `市盈率PE`\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN\n(\n    SELECT\n        FIU_ID,\n        MAX(F001D) AS F001D\n    FROM\n        VIEW_COM3103_CUM\n    WHERE\n        F001D <= '2026-03-31'\n        AND F034N IS NOT NULL\n        AND F005V = 'USD'\n    GROUP BY\n        FIU_ID\n) max_cum ON m.FIU_ID = max_cum.FIU_ID\nJOIN\n    VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD'\nJOIN\n(\n    SELECT\n        FIU_ID,\n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM\n        VIEW_US_EOD_EXPR\n    WHERE\n        TRADE_DATE <= '2026-09-02'\n    GROUP BY\n        FIU_ID\n) max_eod ON m.FIU_ID = max_eod.FIU_ID\nJOIN\n    VIEW_US_EOD_EXPR eod ON m.FIU_ID = eod.FIU_ID AND eod.TRADE_DATE = max_eod.MAX_TRADE_DATE\nWHERE\n    m.COMB_SYMBOL IN ('XOM.US','CVX.US')\nORDER BY\n    `市盈率PE` ASC",
+ "final_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    cum.F001D AS `报表截止日期`,\n    cum.F004N AS `报表期间长度(天)`,\n    cum.F005V AS `货币`,\n    ROUND(eod.CLOSE, 2) AS `现价`,\n    ROUND(eod.SHARES_OUTSTANDING / 100000000, 2) AS `总股本(亿股)`,\n    ROUND(eod.CLOSE * eod.SHARES_OUTSTANDING / 100000000, 1) AS `总市值(亿美元)`,\n    ROUND(cum.F034N * 10000, 1) AS `归属于普通股东的净利润(万美元)`,\n    CASE\n        WHEN cum.F034N IS NOT NULL AND cum.F034N <> 0 AND eod.CLOSE IS NOT NULL AND eod.SHARES_OUTSTANDING IS NOT NULL\n        THEN ROUND((eod.CLOSE * eod.SHARES_OUTSTANDING) / (cum.F034N * 1000000), 2)\n        ELSE NULL\n    END AS `市盈率PE`\nFROM\n    AMERICAN_STOCK_MAIN m\nJOIN (\n    SELECT\n        FIU_ID,\n        MAX(F001D) AS F001D\n    FROM\n        VIEW_COM3103_CUM\n    WHERE\n        F001D <= '2026-03-31'\n        AND F034N IS NOT NULL\n        AND F005V = 'USD'\n    GROUP BY\n        FIU_ID\n) max_cum ON m.FIU_ID = max_cum.FIU_ID\nJOIN VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD'\nJOIN (\n    SELECT\n        FIU_ID,\n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM\n        VIEW_US_EOD_EXPR\n    WHERE\n        TRADE_DATE <= '2026-09-02'\n    GROUP BY\n        FIU_ID\n) max_eod ON m.FIU_ID = max_eod.FIU_ID\nJOIN VIEW_US_EOD_EXPR eod ON m.FIU_ID = eod.FIU_ID AND eod.TRADE_DATE = max_eod.MAX_TRADE_DATE\nWHERE\n    m.COMB_SYMBOL IN ('XOM.US','CVX.US')\n    AND eod.CLOSE IS NOT NULL\n    AND eod.SHARES_OUTSTANDING IS NOT NULL\n    AND cum.F034N IS NOT NULL\nORDER BY\n    `市盈率PE` ASC",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "14.34\n15.21"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'eod.TCLOSE' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 96.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_28_ca93b425.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 94.31,
+  "llm_seconds_max": 20.1,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_Q",
+   "COM3103",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   23242,
+   11405
+  ],
+  "prompt_columns_raw_len": 1018
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1406,
+   "prompt_tokens": 10493,
+   "total_tokens": 11899,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1122,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10493,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2515,
+   "prompt_tokens": 35975,
+   "total_tokens": 38490,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2688,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 46468,
+  "completion": 3921,
+  "total": 50389
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1406,
+   "prompt_tokens": 10493,
+   "total_tokens": 11899,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1122,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10493,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2515,
+   "prompt_tokens": 35975,
+   "total_tokens": 38490,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2688,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_Q",
+   "COM3103",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 30,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "再看个别的，迪士尼现在的股息率大概什么水平？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT DISTINCT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F008D AS `股息率更新日期`,\n    FORMAT(b.F007N, 2) AS `股息率(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.CSNAME LIKE '%迪士尼%'\n    AND b.F007N IS NOT NULL;\n200\n{table:[['股票名称', '股票代码', '股息率更新日期', '股息率(%)'], ['迪士尼', 'DIS.US', '-', '0.59']]}\n该查询获取了美股“迪士尼”公司的最新股息率水平及其更新时间。查询从股票基本信息表和技术指标数据表中提取数据，通过公司内部关联码连接两表。筛选条件为股票名称包含“迪士尼”且股息率数据不为空，确保结果准确且无重复。股息率的数值直接采用系统已计算好的财务指标，将原始百分比数据格式化为保留两位小数，并附加百分号，方便展示。结果显示公司名称、股票代码、最近一次股息率更新日期和当前股息率，满足用户对迪士尼最新股息率的查询需求。\n{table:[['股票名称', '股票代码', '股息率更新日期', '股息率(%)'], ['迪士尼', 'DIS.US', '-', '0.59']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT DISTINCT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F008D AS `股息率更新日期`,\n    FORMAT(b.F007N, 2) AS `股息率(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.CSNAME LIKE '%迪士尼%'\n    AND b.F007N IS NOT NULL",
+ "final_sql": "SELECT DISTINCT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F008D AS `股息率更新日期`,\n    FORMAT(b.F007N, 2) AS `股息率(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.CSNAME LIKE '%迪士尼%'\n    AND b.F007N IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.592"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "迪士尼 DIS.US nan 0.59",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 35.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_30_68f3a460.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 34.74,
+  "llm_seconds_max": 29.87,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2827,
+   "prompt_tokens": 15457,
+   "total_tokens": 18284,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2355,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15457,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 148,
+   "prompt_tokens": 9258,
+   "total_tokens": 9406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24715,
+  "completion": 2975,
+  "total": 27690
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2827,
+   "prompt_tokens": 15457,
+   "total_tokens": 18284,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2355,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15457,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 148,
+   "prompt_tokens": 9258,
+   "total_tokens": 9406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

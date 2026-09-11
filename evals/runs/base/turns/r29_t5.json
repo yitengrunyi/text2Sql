@@ -1,0 +1,157 @@
+{
+ "round_id": 29,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：营业收入（Revenue 或 Operating Revenue）\n\n[2] 可能的计算公式：  \n营业收入 = 产品销售收入 + 服务收入 + 其他经营收入  \n（Boeing财报中通常分为：Commercial Airplanes、Defense, Space & Security等各业务分部的销售收入，合计为全年营业收入。）\n\n简化公式：  \n全年营业收入 = 各业务分部全年收入之和\n\n即：  \nTotal Revenue (全年) = Revenue (Commercial Airplanes) + Revenue (Defense, Space & Security) + Revenue (Global Services) + Revenue (Boeing Capital) + 其他收入\n['波音', 'Boeing', '营业收入', 'Revenue', 'Operating Revenue', '产品销售收入', '服务收入', '其他经营收入', 'Commercial Airplanes', 'Defense, Space & Security', 'Global Services', 'Boeing Capital', '全年营业收入', 'Total Revenue', '业务分部']\n该问题可能涉及美股-'波音', 它的美股股票代码为：BA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-国防军工。\n美股相关\n['美股基本信息', '美股财务', '美股经营分析']\n['VIEW_COM3102_CUM', 'VIEW_COM3104_Q', 'VIEW_COM3103_CUM', 'COM3103', 'VIEW_COM3103_Q']\n是否命中召回表：False\n生成查询代码\nSELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    c.F004N AS `财政期间长度_日`,\n    c.F005V AS `货币`,\n    ROUND(c.F048N / 10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿)` -- 按百万美元转换亿\nFROM \n    AMERICAN_STOCK_MAIN am\nJOIN \n    VIEW_COM3103_CUM c\n    ON am.FIU_ID = c.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '财政年度', '财政期间长度_日', '货币', '营业收入(亿美元)', '营业收入(亿)'], ['波音', 'BA.US', '2025-12-31', '2,025', '365', 'USD', '15,653.38', '1,565.34']]}\n查询的核心目的是获取波音公司2025财年全年的营业收入数据。对营业收入进行了单位转换操作，将原始的营业收入（百万美元）分别除以10得到营业收入（亿美元），再除以100得到营业收入（亿）。营业收入（亿美元）的计算公式为：营业收入（亿美元） = 营业收入（百万美元） / 10。营业收入（亿）的计算公式为：营业收入（亿） = 营业收入（百万美元） / 100。查询结果符合要求。\n\n查询从两个表中获取数据，一表提供美股公司主信息，另一表记录财务报表总结数据。通过内部ID进行连接。筛选了股票代码为“BA.US”的记录，限定财政年度为2025，报表种类为全年报，只选取营业收入数据有效的行。结果按财政周期结束日期倒序排列，仅返回最新的一条数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    c.F004N AS `财政期间长度_日`,\n    c.F005V AS `货币`,\n    ROUND(c.F048N / 10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿)` -- 按百万美元转换亿\nFROM \n    AMERICAN_STOCK_MAIN am\nJOIN \n    VIEW_COM3103_CUM c\n    ON am.FIU_ID = c.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    c.F004N AS `财政期间长度_日`,\n    c.F005V AS `货币`,\n    ROUND(c.F048N / 10, 3) AS `营业收入(亿美元)`,\n    ROUND(c.F048N / 100, 3) AS `营业收入(亿)` -- 按百万美元转换亿\nFROM \n    AMERICAN_STOCK_MAIN am\nJOIN \n    VIEW_COM3103_CUM c\n    ON am.FIU_ID = c.FIU_ID\nWHERE \n    am.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "156534.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "波音 BA.US 2025-12-31 2025 365 USD 15653.375 1565.338",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 54.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_29_b2739f16.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 57.19,
+  "llm_seconds_max": 10.13,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3105",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3105",
+   "VIEW_COM3106",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   31236
+  ],
+  "prompt_columns_raw_len": 20125
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1320,
+   "prompt_tokens": 35363,
+   "total_tokens": 36683,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 35363,
+  "completion": 1320,
+  "total": 36683
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1320,
+   "prompt_tokens": 35363,
+   "total_tokens": 36683,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3105",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

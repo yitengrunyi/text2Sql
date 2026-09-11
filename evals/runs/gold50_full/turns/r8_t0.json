@@ -1,0 +1,158 @@
+{
+ "round_id": 8,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "苹果公司2026年8月25日的收盘价是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 苹果公司（Apple Inc.，AAPL）的“收盘价”（Closing Price）。\n\n[2] 可能的计算公式：  \n收盘价 = 股票在指定交易日（2026年8月25日）证券交易所收盘时的最后一笔成交价格\n\n公式表达：\n收盘价 = 当天最后一笔成交价格\n\n说明：收盘价是交易所当天的最后成交价格，通常直接由市场数据提供，不涉及复杂计算。\n['苹果公司', 'Apple Inc.', 'AAPL', '收盘价', 'Closing Price', '股票', '证券交易所', '成交价格', '最后一笔成交价格', '交易日', '市场数据']\n该问题可能涉及美股-'苹果', 它的美股股票代码为：AAPL.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'STK2401', 'VIEW_ADS_STOCK_US_EOD_DI', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT\n    V.TRADE_DATE AS `交易日期`,\n    A.CSNAME AS `股票名称`,\n    A.COMB_SYMBOL AS `股票代码`,\n    ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`\nFROM\n    AMERICAN_STOCK_MAIN A\nINNER JOIN\n    VIEW_US_EOD_EXPR V\n    ON A.FIU_ID = V.FIU_ID\nWHERE\n    A.COMB_SYMBOL = 'AAPL.US'\n    AND V.TRADE_DATE = '2026-08-25'\n    AND V.CLOSE_PRICE IS NOT NULL\n    AND V.OPEN_PRICE IS NOT NULL\n    AND V.HIGH_PRICE IS NOT NULL\n    AND V.LOW_PRICE IS NOT NULL\n    AND V.TRADE_AMOUNT IS NOT NULL\n    AND V.TOTAL_SHARES IS NOT NULL\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '成交额(亿美元)', '总股本(亿股)'], ['2026-08-25', '苹果', 'AAPL.US', '253.21', '256.95', '252.99', '255.00', '345.68', '156.58']]}\n该查询的主要目的是获取苹果公司在2026年8月25日的美股收盘价，以及相关的价格、成交额、总股本等信息。收盘价通过直接取值并保留两位小数。成交额以“成交额(亿美元) = 成交金额(美元) / 100000000”的公式进行了单位转换并保留两位小数，总股本同样以“总股本(亿股) = 总股本(股) / 100000000”的公式进行了单位转换并保留两位小数。\n\n查询结果符合要求。\n\n查询通过关联一个包含美股上市公司基本信息的表和一个记录美股每日行情数据的表，提取了交易日期、股票名称、展示代码、开盘价、最高价、最低价、收盘价、成交额和总股本等信息。筛选条件限定了展示代码为苹果公司的代码，仅选取2026年8月25日的数据，并确保关键价格、金额及总股本字段均不为空。最终结果限制为最多返回一条记录。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    V.TRADE_DATE AS `交易日期`,\n    A.CSNAME AS `股票名称`,\n    A.COMB_SYMBOL AS `股票代码`,\n    ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`\nFROM\n    AMERICAN_STOCK_MAIN A\nINNER JOIN\n    VIEW_US_EOD_EXPR V\n    ON A.FIU_ID = V.FIU_ID\nWHERE\n    A.COMB_SYMBOL = 'AAPL.US'\n    AND V.TRADE_DATE = '2026-08-25'\n    AND V.CLOSE_PRICE IS NOT NULL\n    AND V.OPEN_PRICE IS NOT NULL\n    AND V.HIGH_PRICE IS NOT NULL\n    AND V.LOW_PRICE IS NOT NULL\n    AND V.TRADE_AMOUNT IS NOT NULL\n    AND V.TOTAL_SHARES IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT\n    V.TRADE_DATE AS `交易日期`,\n    A.CSNAME AS `股票名称`,\n    A.COMB_SYMBOL AS `股票代码`,\n    ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`\nFROM\n    AMERICAN_STOCK_MAIN A\nINNER JOIN\n    VIEW_US_EOD_EXPR V\n    ON A.FIU_ID = V.FIU_ID\nWHERE\n    A.COMB_SYMBOL = 'AAPL.US'\n    AND V.TRADE_DATE = '2026-08-25'\n    AND V.CLOSE_PRICE IS NOT NULL\n    AND V.OPEN_PRICE IS NOT NULL\n    AND V.HIGH_PRICE IS NOT NULL\n    AND V.LOW_PRICE IS NOT NULL\n    AND V.TRADE_AMOUNT IS NOT NULL\n    AND V.TOTAL_SHARES IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "AAPL 255.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 苹果 AAPL.US 253.21 256.95 252.99 255.0 345.68 156.58",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 47.1,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_8_cb6b009a.0",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 44.18,
+  "llm_seconds_max": 6.39,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   13458
+  ],
+  "prompt_columns_raw_len": 4634
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1134,
+   "prompt_tokens": 19156,
+   "total_tokens": 20290,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19156,
+  "completion": 1134,
+  "total": 20290
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1134,
+   "prompt_tokens": 19156,
+   "total_tokens": 20290,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

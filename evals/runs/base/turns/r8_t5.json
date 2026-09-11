@@ -1,0 +1,149 @@
+{
+ "round_id": 8,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "阿里巴巴最新一个交易日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：收盘价（Closing Price）\n\n[2] 计算公式：  \n收盘价 = 某一交易日该股票在股票交易所的最后一笔成交价格\n\n一般由交易所直接发布，无需复杂计算，直接采集交易数据即可。\n['阿里巴巴', '收盘价', 'Closing Price', '股票', '股票交易所', '成交价格', '交易日', '交易所', '交易数据']\n该问题可能涉及美股-'阿里巴巴', 它的美股股票代码为：BABA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-商贸零售。该问题可能涉及美股-'阿里巴巴集团 (OTC)', 它的美股股票代码为：BABAF.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n美股相关\n['美股基本信息', '美股行情']\n['STK2401', 'VIEW_US_EOD_EXPR', 'VIEW_US_EXPR_IDX', 'VIEW_STOCK_US_TURNOUT_SHARES']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    FORMAT(OPEN_PRICE, 2) AS `开盘价(美元)`,\n    FORMAT(HIGH_PRICE, 2) AS `最高价(美元)`,\n    FORMAT(LOW_PRICE, 2) AS `最低价(美元)`,\n    FORMAT(CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    FORMAT(CHG, 2) AS `涨跌额(美元)`,\n    FORMAT(CHG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM VIEW_US_EOD_EXPR\nWHERE COMB_SYMBOL LIKE '%BABA.US%'\n  AND TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) \n        FROM VIEW_US_EOD_EXPR \n        WHERE COMB_SYMBOL LIKE '%BABA.US%' AND CLOSE_PRICE IS NOT NULL\n    )\n  AND CLOSE_PRICE IS NOT NULL\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)'], ['2026-08-25', '阿里巴巴-W', 'BABA.US', '106.63', '107.05', '104.86', '105.00', '-1.59', '-1.49']]}\n该查询的主要目的是获取阿里巴巴在最新一个交易日的收盘价，以及当天的相关行情数据。在此查询中，对于开盘价、最高价、最低价、收盘价、涨跌额和涨跌幅，都将原本的结果进行保留两位小数的格式化显示。\n\n收盘价（美元）直接取用已有的数据。在此查询中，我们直接使用了已有的行情数据。\n\n查询从美国股票日行情增强视图中获取数据，这个视图提供了美股每一天的详细行情信息，包括开盘、最高、最低、收盘价、涨跌额和涨跌幅等。\n\n通过筛选展示代码匹配阿里巴巴的记录，筛选出股票代码包含“BABA.US”的所有数据。只选取有收盘价的有效数据。通过选择交易日期为阿里巴巴最近一个有收盘价的最新日期，保证查询结果是最新的。最终返回该交易日的股票名称、股票代码、开盘价、最高价、最低价、收盘价、涨跌额和涨跌幅等数据，数据均已格式化保留两位小数。查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    FORMAT(OPEN_PRICE, 2) AS `开盘价(美元)`,\n    FORMAT(HIGH_PRICE, 2) AS `最高价(美元)`,\n    FORMAT(LOW_PRICE, 2) AS `最低价(美元)`,\n    FORMAT(CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    FORMAT(CHG, 2) AS `涨跌额(美元)`,\n    FORMAT(CHG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM VIEW_US_EOD_EXPR\nWHERE COMB_SYMBOL LIKE '%BABA.US%'\n  AND TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) \n        FROM VIEW_US_EOD_EXPR \n        WHERE COMB_SYMBOL LIKE '%BABA.US%' AND CLOSE_PRICE IS NOT NULL\n    )\n  AND CLOSE_PRICE IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    TRADE_DATE AS `交易日期`,\n    NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    FORMAT(OPEN_PRICE, 2) AS `开盘价(美元)`,\n    FORMAT(HIGH_PRICE, 2) AS `最高价(美元)`,\n    FORMAT(LOW_PRICE, 2) AS `最低价(美元)`,\n    FORMAT(CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    FORMAT(CHG, 2) AS `涨跌额(美元)`,\n    FORMAT(CHG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM VIEW_US_EOD_EXPR\nWHERE COMB_SYMBOL LIKE '%BABA.US%'\n  AND TRADE_DATE = (\n        SELECT MAX(TRADE_DATE) \n        FROM VIEW_US_EOD_EXPR \n        WHERE COMB_SYMBOL LIKE '%BABA.US%' AND CLOSE_PRICE IS NOT NULL\n    )\n  AND CLOSE_PRICE IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "105.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 阿里巴巴-W BABA.US 106.63 107.05 104.86 105.00 -1.59 -1.49",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 44.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_8_ac2aba71.5",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 43.09,
+  "llm_seconds_max": 6.39,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EOD_EXPR",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   14788
+  ],
+  "prompt_columns_raw_len": 4754
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1076,
+   "prompt_tokens": 19590,
+   "total_tokens": 20666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19590,
+  "completion": 1076,
+  "total": 20666
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1076,
+   "prompt_tokens": 19590,
+   "total_tokens": 20666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_US_EOD_EXPR",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

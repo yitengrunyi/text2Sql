@@ -1,0 +1,155 @@
+{
+ "round_id": 14,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "话题切换",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 预计净利润上限（Net Profit Upper Estimate）：公司对未来报告期预期的净利润的最高数值。\n- 半年报财报预告（Interim Earnings Forecast）：公司对当年上半年财务状况及净利润的预先披露。\n\n[2] 可能的计算公式：  \n- 预计净利润上限 = 公司公告中披露的 2026 年上半年净利润预测范围的最大值  \n  即：Net Profit Upper Estimate = max(预计净利润区间上限)\n\n- 前五家公司筛选：  \n   1. 收集所有披露2026年半年报业绩预告的上市公司及其净利润上限值  \n   2. 按净利润上限从高到低排序  \n   3. 取前五名公司\n\n总结  \n- 指标：预计净利润上限  \n- 公式：前五家公司 = TOP5（公司, 按照预计净利润上限降序排列）\n['预计净利润上限', 'Net Profit Upper Estimate', '半年报业绩预告', '半年报财报预告', 'Interim Earnings Forecast', '报告期', '净利润', '净利润预测范围', '最大值', 'max', '前五家公司', 'TOP5', '排序', '上市公司', '2026年上半年', '2026年半年报']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板业绩预告', '主板基本信息']\n['STK_COM_PROFILE', 'STK_HUMAN_RESOURCE', 'STK_ACHIEVE_FORECAST', 'STK_DS_POST', 'STK_LIST_PLAN']\n是否命中召回表：False\n生成查询代码\nSELECT\n    f.ENDDATE AS `业绩预告截止日`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.A_STOCKCODE AS `A股代码`,\n    f.MAX_VAL AS `净利润预测上限(万元)`,\n    ROUND(f.MAX_VAL / 10000, 3) AS `净利润预测上限(亿)`,\n    f.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    f.DECLAREDATE AS `预告发布日期`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE\n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MAX_VAL IS NOT NULL\nORDER BY\n    f.MAX_VAL DESC\nLIMIT 5\n200\n{table:[['业绩预告截止日', 'A股简称', 'A股代码', '净利润预测上限(万元)', '净利润预测上限(亿)', '净利润同比增长上限(%)', '预告发布日期'], ['2026-06-30', '中国人寿', '601628', '13,711,900.00', '1,371.19', '235.00', '2026-07-15'], ['2026-06-30', '紫金矿业', '601899', '3,910,000.00', '391.00', '68.00', '2026-07-10'], ['2026-06-30', '中国神华', '601088', '2,980,000.00', '298.00', '8.00', '2026-07-15'], ['2026-06-30', '工业富联', '601138', '2,440,000.00', '244.00', '101.00', '2026-07-10'], ['2026-06-30', '新华保险', '601336', '2,367,800.00', '236.78', '60.00', '2026-07-14']]}\n该查询主要目标是找到2026年半年报业绩预告中，预计净利润上限最高的前五家公司。\n\n净利润预测上限（亿）通过公式“净利润预测上限（亿）= 净利润预测上限（万元） / 10000”计算得出。这样可以将单位由万元转换为亿元，更便于比较。在此查询中，同时直接展示了已有的净利润同比增长上限和其他相关信息。查询结果符合要求。\n\n数据来源于上市公司业绩预告表，用于反映公司对未来业绩的预测。查询选择了业绩预告截止日、A股简称、A股代码、净利润预测上限（万元）、净利润预测上限（亿）、净利润同比增长上限（百分比）、预告发布日期等信息。筛选时剔除了无效和未披露净利润上限的记录，仅保留2026年6月30日这一会计期间的数据。最终按净利润预测上限从高到低排序，并只展示排名前五的公司。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    f.ENDDATE AS `业绩预告截止日`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.A_STOCKCODE AS `A股代码`,\n    f.MAX_VAL AS `净利润预测上限(万元)`,\n    ROUND(f.MAX_VAL / 10000, 3) AS `净利润预测上限(亿)`,\n    f.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    f.DECLAREDATE AS `预告发布日期`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE\n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MAX_VAL IS NOT NULL\nORDER BY\n    f.MAX_VAL DESC\nLIMIT 5",
+ "final_sql": "SELECT\n    f.ENDDATE AS `业绩预告截止日`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.A_STOCKCODE AS `A股代码`,\n    f.MAX_VAL AS `净利润预测上限(万元)`,\n    ROUND(f.MAX_VAL / 10000, 3) AS `净利润预测上限(亿)`,\n    f.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    f.DECLAREDATE AS `预告发布日期`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE\n    f.ISVALID = 1\n    AND f.ENDDATE = '2026-06-30 00:00:00'\n    AND f.MAX_VAL IS NOT NULL\nORDER BY\n    f.MAX_VAL DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "中国人寿 13711900.0000\n紫金矿业 3910000.0000\n中国神华 2980000.0000\n工业富联 2440000.0000\n新华保险 2367800.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "first_result_preview": "2026-06-30 00:00:00 中国人寿 601628 13711900.0000 1371.190 235.0000 2026-07-15 00:00:00\n2026-06-30 00:00:00 紫金矿业 601899 3910000.0000 391.000 68.0000 2026-07-10 00:00:00\n2026-06-30 00:00:00 中国神华 601088 298",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 60.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_14_41dbebcb.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.14,
+  "llm_seconds_max": 7.75,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   40962
+  ],
+  "prompt_columns_raw_len": 20143
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1497,
+   "prompt_tokens": 43692,
+   "total_tokens": 45189,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 43692,
+  "completion": 1497,
+  "total": 45189
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1497,
+   "prompt_tokens": 43692,
+   "total_tokens": 45189,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

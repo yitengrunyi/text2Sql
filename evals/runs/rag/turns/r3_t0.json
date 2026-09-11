@@ -1,0 +1,169 @@
+{
+ "round_id": 3,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "宁德时代2026年8月31日的收盘价是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "时间窗口",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）\n\n[2] 可能的计算公式：  \n- 收盘价 = 某一交易日最后一笔成交时的价格\n\n（注：收盘价一般由证券交易所根据交易日内最后一笔成交记录得出，不涉及预测或复杂计算。在金融领域，若需要预测未来收盘价，可用股价预测模型，如：  \n预测收盘价 = 函数（历史收盘价、成交量、财报数据、宏观经济指标等）  \n常见模型有时间序列模型（如ARIMA）、机器学习回归模型等，但标准定义为当日最后成交价。）\n['宁德时代', '收盘价', 'Closing Price', '证券交易所', '交易日', '成交量', '财报数据', '宏观经济指标', '时间序列模型', 'ARIMA', '机器学习回归模型', '历史收盘价', '股价预测模型']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n该问题可能涉及的题材包含：['动力电池']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '动力电池'。\n个股相关\n['主板行情', '主板基本信息']\n['VW_CONCEPT_STK', 'STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'VIEW_CONCEPT_DAILY_QUOTE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TOPEN, 2) AS `开盘价`,\n    ROUND(a.TCLOSE, 2) AS `收盘价`,\n    ROUND(a.THIGH, 2) AS `最高价`,\n    ROUND(a.TLOW, 2) AS `最低价`,\n    ROUND(a.LCLOSE, 2) AS `昨日收盘价`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(a.TVOLUME, 0) AS `成交量`,\n    ROUND(a.CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX a\nINNER JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE a.STOCKSNAME LIKE '%宁德时代%'\n  AND a.ENDDATE = '2026-08-31'\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.ENDDATE DESC\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价', '收盘价', '最高价', '最低价', '昨日收盘价', '成交额(亿)', '成交量', '涨跌幅(%)'], ['2026-08-31', '宁德时代', '300750', '366.60', '363.55', '367.33', '357.30', '368.50', '94.78', '26,242,387.00', '-1.34']]}\n该查询的主要目的是获取宁德时代在2026年8月31日的收盘价及相关市场表现数据。开盘价、收盘价、最高价、最低价、昨日收盘价均是在指定交易日直接获取的原始交易数据。成交额（亿）通过成交额除以一亿，并保留两位小数，计算公式为：成交额(亿) = 成交额 / 100000000。成交量为当天实际成交股数。涨跌幅（%）为该日涨跌幅数据，并保留两位小数。\n\n查询结果符合要求。\n\n查询从个股市场表现指标表中获取数据，通过公司内部代码与A股证券基础信息表进行关联。筛选了股票简称含有“宁德时代”，交易日期为2026年8月31日，同时收盘价数据不为空的记录。结果按交易日期降序排序，返回最新一条记录。数据项包括交易日期、股票名称、股票代码、当日开盘价、收盘价、最高价、最低价、昨日收盘价、成交额（单位为亿元）、成交量及当天涨跌幅。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.ENDDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TOPEN, 2) AS `开盘价`,\n    ROUND(a.TCLOSE, 2) AS `收盘价`,\n    ROUND(a.THIGH, 2) AS `最高价`,\n    ROUND(a.TLOW, 2) AS `最低价`,\n    ROUND(a.LCLOSE, 2) AS `昨日收盘价`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(a.TVOLUME, 0) AS `成交量`,\n    ROUND(a.CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX a\nINNER JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE a.STOCKSNAME LIKE '%宁德时代%'\n  AND a.ENDDATE = '2026-08-31'\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.ENDDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TOPEN, 2) AS `开盘价`,\n    ROUND(a.TCLOSE, 2) AS `收盘价`,\n    ROUND(a.THIGH, 2) AS `最高价`,\n    ROUND(a.TLOW, 2) AS `最低价`,\n    ROUND(a.LCLOSE, 2) AS `昨日收盘价`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(a.TVOLUME, 0) AS `成交量`,\n    ROUND(a.CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX a\nINNER JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE a.STOCKSNAME LIKE '%宁德时代%'\n  AND a.ENDDATE = '2026-08-31'\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "363.5500"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 宁德时代 300750 366.60 363.55 367.33 357.30 368.50 94.78 26242387 -1.34",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 57.0,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_3_3df3e5ac.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 63.45,
+  "llm_seconds_max": 9.35,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   28258
+  ],
+  "prompt_columns_raw_len": 5722
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1781,
+   "prompt_tokens": 42213,
+   "total_tokens": 43994,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 42213,
+  "completion": 1781,
+  "total": 43994
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1781,
+   "prompt_tokens": 42213,
+   "total_tokens": 43994,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

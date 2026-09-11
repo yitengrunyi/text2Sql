@@ -1,0 +1,126 @@
+{
+ "round_id": 26,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "好，明白了。对了确认一下，这些日频的份额变动和净流入，都是按交易所每天披露的份额数据算出来的吧？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 份额变动（Share Change）  \n- 净流入（Net Inflow）\n\n[2] 可能的计算公式  \n- 份额变动 = 当日份额 - 前一交易日份额  \n- 净流入 = 份额变动 × 当日基金份额净值（单位净值）\n\n说明：这些数据通常依据交易所每日披露的份额变动数据进行计算。\n['份额变动', 'Share Change', '净流入', 'Net Inflow', '份额', '交易所', '每日披露', '当日份额', '前一交易日份额', '基金份额净值', '单位净值']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n基金相关\n['基金份额变动', '基金产品净值']\n['FUND_SHARES_CHANGE', 'ETF_SHARES_CHANGE_ROLL', 'INDEX_STATISTICS_YEAR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.FLOAT_SHARES_CHANGE, 0) AS `日份额变动(份)`,\n    ROUND(t.NET_INFLOW/100000000, 2) AS `资金净流入(亿)`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`,\n    t.ROLL_NUM AS `滚动区间(日)`\nFROM \n    ETF_SHARES_CHANGE_ROLL t\nWHERE \n    t.ROLL_NUM = 1\n    AND t.TRADING_DAY IS NOT NULL\n    AND t.FUND_NAME IS NOT NULL\n    AND t.FUND_SYMBOL IS NOT NULL\n    AND t.HISVALID = 1\nORDER BY \n    t.TRADING_DAY DESC, t.FUND_SYMBOL\n\n200\n{table:[['日期', '基金名称', '基金代码', '日份额变动(份)', '资金净流入(亿)', '基金规模(亿)', '滚动区间(日)'], ['2026-09-02', '鹏华中证港股通内地金融ETF', '158000.SZ', '-8,000,000.00', '-0.08', '-', '1'], ['2026-09-02', '嘉实国证价值100ETF', '158001.SZ', '-6,000,000.00', '-0.06', '-', '1'], ['2026-09-02', '嘉实中证港股通医疗主题ETF', '158003.SZ', '-3,000,000.00', '-0.03', '-', '1'], ['2026-09-02', '博时中证工程机械主题ETF', '158005.SZ', '0.00', '0.00', '-', '1'], ['2026-09-02', '博时中证细分化工产业主题ETF', '158006.SZ', '0.00', '0.00', '-', '1'], ['2026-09-02', '华夏国证新能源电池ETF', '158008.SZ', '1,000,000.00', '0.01', '-', '1'], ['2026-09-02', '南方国证航天航空行业ETF', '158009.SZ', '0.00', '0.00', '-', '1'], ['2026-09-02', '嘉实中证医疗ETF', '158010.SZ', '9,000,000.00', '0.09', '-', '1'], ['2026",
+ "route_gold": "NON_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.FLOAT_SHARES_CHANGE, 0) AS `日份额变动(份)`,\n    ROUND(t.NET_INFLOW/100000000, 2) AS `资金净流入(亿)`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`,\n    t.ROLL_NUM AS `滚动区间(日)`\nFROM \n    ETF_SHARES_CHANGE_ROLL t\nWHERE \n    t.ROLL_NUM = 1\n    AND t.TRADING_DAY IS NOT NULL\n    AND t.FUND_NAME IS NOT NULL\n    AND t.FUND_SYMBOL IS NOT NULL\n    AND t.HISVALID = 1\nORDER BY \n    t.TRADING_DAY DESC, t.FUND_SYMBOL",
+ "final_sql": "SELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.FLOAT_SHARES_CHANGE, 0) AS `日份额变动(份)`,\n    ROUND(t.NET_INFLOW/100000000, 2) AS `资金净流入(亿)`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`,\n    t.ROLL_NUM AS `滚动区间(日)`\nFROM \n    ETF_SHARES_CHANGE_ROLL t\nWHERE \n    t.ROLL_NUM = 1\n    AND t.TRADING_DAY IS NOT NULL\n    AND t.FUND_NAME IS NOT NULL\n    AND t.FUND_SYMBOL IS NOT NULL\n    AND t.HISVALID = 1\nORDER BY \n    t.TRADING_DAY DESC, t.FUND_SYMBOL",
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": false,
+ "answer_ok": null,
+ "elapsed_seconds": 106.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_26_d81cc86d.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 52.72,
+  "llm_seconds_max": 6.29,
+  "selected_tables": [
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "FUND_NETVALUE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "FUND_SHARES_CHANGE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   17190
+  ],
+  "prompt_columns_raw_len": 7463
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1059,
+   "prompt_tokens": 24022,
+   "total_tokens": 25081,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24022,
+  "completion": 1059,
+  "total": 25081
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1059,
+   "prompt_tokens": 24022,
+   "total_tokens": 25081,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "FUND_NETVALUE"
+  ],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

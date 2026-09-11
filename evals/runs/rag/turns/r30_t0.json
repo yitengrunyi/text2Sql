@@ -1,0 +1,146 @@
+{
+ "round_id": 30,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 市值（Market Capitalization）：用于衡量一家公司的总市场价值，是选取排名依据的核心指标。\n\n[2] 可能的计算公式：\n\n市值 = 股票当前价格 × 已发行普通股总数\n\n即：\nMarket Cap = Current Share Price × Total Number of Outstanding Shares\n\n（注：此查询需要筛选具有“中概股”标签的美股公司，根据其最新市值进行排序，取前五家公司。）\n['中概股', '美股', '市值', 'Market Capitalization', '股票当前价格', 'Current Share Price', '已发行普通股总数', 'Total Number of Outstanding Shares']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['中字头概念']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '中字头概念'。\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'COM3101']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N / 10, 1) AS `市值(亿美元)`,\n    c.F021N AS `市盈率`,\n    c.F015N AS `市净率`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5\n200\n{table:[['美股名称', '美股代码', '市值更新日期', '市值(亿美元)', '市盈率', '市净率'], ['阿里巴巴-W', 'BABA.US', '-', '166,320.00', '17.11', '2.14'], ['拼多多-W', 'PDD.US', '-', '120,960.00', '15.00', '1.88'], ['网易-W', 'NTES.US', '-', '50,688.00', '15.71', '1.96'], ['京东-W', 'JD.US', '-', '32,313.60', '9.35', '1.17'], ['百度-W', 'BIDU.US', '-', '21,420.00', '10.44', '1.30']]}\n市值以百万元为单位，换算为亿美元时，使用的计算公式为：市值(亿美元) = 市值(百万元) / 10，结果保留一位小数。市盈率和市净率则是直接取已有的财务指标数据。在此查询中，只有市值进行了换算，其他指标均为直接提取。\n\n查询返回挂着中概股标签的美股公司信息，包括美股名称、美股代码、市值更新日期、市值（亿美元）、市盈率和市净率。查询数据以市值从高到低排序，返回前五家。只包括市值有有效数据的记录。查询结果符合“中概股美股按市值排前五”的要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N / 10, 1) AS `市值(亿美元)`,\n    c.F021N AS `市盈率`,\n    c.F015N AS `市净率`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5",
+ "final_sql": "SELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F014D AS `市值更新日期`,\n    ROUND(c.F013N / 10, 1) AS `市值(亿美元)`,\n    c.F021N AS `市盈率`,\n    c.F015N AS `市净率`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\nORDER BY \n    c.F013N DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "阿里巴巴-W BABA 1663200.0\n拼多多-W PDD 1209600.0\n网易-W NTES 506880.0\n京东-W JD 323136.0\n百度-W BIDU 214200.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "first_result_preview": "阿里巴巴-W BABA.US  166320.0 17.11 2.139\n拼多多-W PDD.US  120960.0 15.0 1.875\n网易-W NTES.US  50688.0 15.71 1.964\n京东-W JD.US  32313.6 9.35 1.169\n百度-W BIDU.US  21420.0 10.44 1.305",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 51.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_30_02da0411.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 48.12,
+  "llm_seconds_max": 9.29,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   13108
+  ],
+  "prompt_columns_raw_len": 3732
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1050,
+   "prompt_tokens": 18947,
+   "total_tokens": 19997,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18947,
+  "completion": 1050,
+  "total": 19997
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1050,
+   "prompt_tokens": 18947,
+   "total_tokens": 19997,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

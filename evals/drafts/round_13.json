@@ -1,0 +1,74 @@
+{
+  "round_id": 13,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+  "initial": {
+    "question": "中国神华2025年年报的利润分配方案是怎么安排的？每10股派多少现金红利，有没有送股或者转增？",
+    "judge": "entity",
+    "gold_value": "10.30",
+    "gold_display": "每10股派现金红利10.30元（含税），无送红股、无转增，纯现金分红，方案已实施",
+    "gold_entities": ["中国神华"],
+    "gold_date": null,
+    "gold_sql": "SELECT CASH_BT,BONUS_SHR,CAP_SHR,PRG FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2025-12-31' AND ISVALID=1 AND DIV_TYPE='分红'",
+    "gold_tables": ["STK_DIV_INFO"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "absolute"}
+  },
+  "feedbacks": [
+    {
+      "question": "这次分红的股权登记日和除权除息日分别是哪天？",
+      "judge": "entity",
+      "gold_value": "2026-07-13",
+      "gold_display": "股权登记日2026-07-10，除权除息日2026-07-13",
+      "gold_entities": ["中国神华"],
+      "gold_date": "2026-07-13",
+      "gold_sql": "SELECT REG_DATE,EX_DIVI_DATE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2025-12-31' AND ISVALID=1",
+      "gold_tables": ["STK_DIV_INFO"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "它现在的股息率大概什么水平？",
+      "judge": "numeric",
+      "gold_value": "4.0119",
+      "gold_display": "按最新交易日（2026-09-02）计算，滚动股息率（TTM）约4.01%",
+      "gold_entities": ["中国神华"],
+      "gold_date": null,
+      "gold_sql": "SELECT d.TRD_DATE,d.DIV_RATE_TTM FROM ANA_STK_DIV_RATE_IDX d JOIN (SELECT DISTINCT INNER_CODE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND ISVALID=1) i ON d.INNER_CODE=i.INNER_CODE WHERE d.ISVALID=1 ORDER BY d.TRD_DATE DESC LIMIT 1",
+      "gold_tables": ["ANA_STK_DIV_RATE_IDX", "STK_DIV_INFO"],
+      "labels": {"difficulty": "多表join", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "那2023年度呢，当时每10股派了多少？",
+      "judge": "numeric",
+      "gold_value": "22.60",
+      "gold_display": "2023年度每10股派现金红利22.60元（含税），除权除息日2024-07-08",
+      "gold_entities": ["中国神华"],
+      "gold_date": null,
+      "gold_sql": "SELECT CASH_BT,PER_SHR_DIV,EX_DIVI_DATE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2023-12-31' AND ISVALID=1",
+      "gold_tables": ["STK_DIV_INFO"],
+      "labels": {"difficulty": "单表", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "换个话题，最近三年A股里累计现金分红最多的前五家公司是哪几家？",
+      "judge": "list",
+      "gold_value": null,
+      "gold_display": "工商银行（3295.69亿元）、建设银行（3024.43亿元）、农业银行（2527.93亿元）、中国石油（2525.69亿元）、中国银行（2138.70亿元）",
+      "gold_entities": ["工商银行", "建设银行", "农业银行", "中国石油", "中国银行"],
+      "gold_date": null,
+      "gold_sql": "SELECT A_STOCKSNAME,SUM(TOT_ACCUM_DIV) AS total_div FROM STK_DIV_STAT WHERE DIV_YEAR BETWEEN 2023 AND 2025 AND ISVALID=1 GROUP BY A_STOCKCODE,A_STOCKSNAME ORDER BY total_div DESC LIMIT 5",
+      "gold_tables": ["STK_DIV_STAT"],
+      "labels": {"difficulty": "聚合", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "好的，谢谢，我先把股权登记日和除息日记到日历里，回头再核对一下持仓。",
+      "judge": "nonquery",
+      "gold_value": null,
+      "gold_display": null,
+      "gold_entities": [],
+      "gold_date": null,
+      "gold_sql": null,
+      "gold_tables": [],
+      "labels": {"difficulty": "单表", "followup_type": "非查询", "route_gold": "NON_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

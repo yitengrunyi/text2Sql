@@ -1,0 +1,142 @@
+{
+ "round_id": 22,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "它的累计净值呢？顺便一起报一下。",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n累计净值（通常涉及基金累计净值、理财产品累计净值等）\n\n[2] 可能的计算公式：  \n累计净值 = 单位净值 × 累计分红再投资因子  \n或者：  \n累计净值 = （期末资产净值 + 历史累计分红）÷ 基金成立时的总份额\n\n（实际公式可能基于具体产品公告略有不同，以上为通用方式）\n['累计净值', '基金累计净值', '理财产品累计净值', '单位净值', '累计分红再投资因子', '期末资产净值', '历史累计分红', '基金成立时的总份额', '分红']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及的题材包含：['资产管理']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '资产管理'。\n基金相关\n['基金产品净值']\n['FUND_NETVALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    FUND_SYMBOL AS `基金代码`,\n    FUND_NAME AS `基金名称`,\n    TRADING_DAY AS `交易日期`,\n    ROUND(ACCU_NAV, 4) AS `累计净值`\nFROM\n    FUND_NETVALUE\nWHERE\n    TRADING_DAY = '2026-09-02'\n    AND ACCU_NAV IS NOT NULL\nORDER BY\n    TRADING_DAY DESC,\n    FUND_SYMBOL\n\n200\n{table:[['基金代码', '基金名称', '交易日期', '累计净值'], ['000001.OF', '华夏成长混合A', '2026-09-02', '8.35'], ['000003.OF', '中海可转债债券A', '2026-09-02', '1.18'], ['000004.OF', '中海可转债债券C', '2026-09-02', '1.15'], ['000005.OF', '嘉实增强信用定期债券', '2026-09-02', '1.73'], ['000006.OF', '西部利得量化成长混合A', '2026-09-02', '3.45'], ['000008.OF', '嘉实中证500ETF联接A', '2026-09-02', '2.40'], ['000011.OF', '华夏大盘精选混合A', '2026-09-02', '49.45'], ['000014.OF', '华夏聚利债券A', '2026-09-02', '2.25'], ['000015.OF', '华夏纯债债券A', '2026-09-02', '1.66'], ['000016.OF', '华夏纯债债券C', '2026-09-02', '1.57'], ['000017.OF', '财通可持续混合', '2026-09-02', '9.98'], ['000021.OF', '华夏优势增长混合', '2026-09-02', '7.45'], ['000024.OF', '大摩双利增强债券A', '2026-09-02', '1.90'], ['000025.OF', '大摩双利增强债券C', '2026-09-02', '1.82'], ['000028.OF', '华富安鑫债券', '2026-09-02', '1.80'], ['000029.OF', '富国宏观策略灵活配置混合A/B', '2026-09-02', '3.64'], ['000030.OF', '长城核心优选混合A', '2026-09-02', '2.38'], ['000031.OF', '华夏复兴混合A', '2026-09-02', '2.69'], ['000032.OF', '易方达信用债债券A', '2026-09-02', '1.76'], ['000033.OF', '易方达信用债债券C', '2026-09-02', '1.68'], ['000037.OF', '广发景宁纯债A', '2026-09-02', '1.27'], ['000039.OF', '农银高增长混合', '2026-09-02', '5.79'], ['000042.OF', '财通中证ESG100指数增强A', '2026-09-02', '2.97'], ['000045.OF', '工银产业债券A'",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    FUND_SYMBOL AS `基金代码`,\n    FUND_NAME AS `基金名称`,\n    TRADING_DAY AS `交易日期`,\n    ROUND(ACCU_NAV, 4) AS `累计净值`\nFROM\n    FUND_NETVALUE\nWHERE\n    TRADING_DAY = '2026-09-02'\n    AND ACCU_NAV IS NOT NULL\nORDER BY\n    TRADING_DAY DESC,\n    FUND_SYMBOL",
+ "final_sql": "SELECT\n    FUND_SYMBOL AS `基金代码`,\n    FUND_NAME AS `基金名称`,\n    TRADING_DAY AS `交易日期`,\n    ROUND(ACCU_NAV, 4) AS `累计净值`\nFROM\n    FUND_NETVALUE\nWHERE\n    TRADING_DAY = '2026-09-02'\n    AND ACCU_NAV IS NOT NULL\nORDER BY\n    TRADING_DAY DESC,\n    FUND_SYMBOL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.12330000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "000001.OF 华夏成长混合A 2026-09-02 8.3461\n000003.OF 中海可转债债券A 2026-09-02 1.1840\n000004.OF 中海可转债债券C 2026-09-02 1.1522\n000005.OF 嘉实增强信用定期债券 2026-09-02 1.7309\n000006.OF 西部利得量化成长混合A 2026-09-02 3.4487\n000008.OF 嘉",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 46.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_22_eac67131.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 43.35,
+  "llm_seconds_max": 5.19,
+  "selected_tables": [
+   "FUND_NETVALUE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   13252
+  ],
+  "prompt_columns_raw_len": 1304
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 788,
+   "prompt_tokens": 20211,
+   "total_tokens": 20999,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 20211,
+  "completion": 788,
+  "total": 20999
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 788,
+   "prompt_tokens": 20211,
+   "total_tokens": 20999,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_NETVALUE"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_NETVALUE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

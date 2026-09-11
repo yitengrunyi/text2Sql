@@ -1,0 +1,170 @@
+{
+ "round_id": 21,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "它最近一个月整体走势怎么样，累计涨跌幅大概多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 累计涨跌幅（区间收益率）\n- 收盘价（一个月前与最近一天）\n\n[2] 可能的计算公式  \n累计涨跌幅 = （最近收盘价 - 一月前收盘价）/ 一月前收盘价 × 100%\n['累计涨跌幅', '区间收益率', '收盘价', '最近收盘价', '一月前收盘价', '收益率']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'VIEW_CONCEPT_DAILY_QUOTE', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(a.AVG_TVALUE_MONTH/100000000, 2) AS `近一月日均成交额(亿)`\nFROM\n    ANA_STK_EXPR_IDX a\nWHERE\n    a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_MONTH IS NOT NULL\n    AND a.STOCKSNAME IS NOT NULL\nORDER BY\n    a.CHNG_PCT_MONTH DESC\n200\nQuery execution timed out.\n本查询的主要目的是获取每只股票截至指定日期（2026年9月2日）最近1个月的累计涨跌幅、收盘价以及近一月日均成交额，并从高到低进行排序。\n\n近1月累计涨跌幅的计算方式为：累计涨跌幅等于（累计复权系数乘以当日收盘价除以一月前收盘价减1）再乘以100。近一月日均成交额的结果通过将原始的日均成交额单位由元转换为亿元来体现，换算公式为：近一月日均成交额（亿）等于近一月日均成交额（元）除以100000000。收盘价直接取值，并保留两位小数。查询结果符合要求。\n\n查询的数据来源为： 用于存储个股每日市场表现指标的数据表。该表筛选了截止日期为2026年9月2日、近1月涨跌幅不为空且股票简称不为空的记录，并按照近1月累计涨跌幅从高到低排序。查询展示了截止日期、股票名称、股票代码、收盘价、近1月累计涨跌幅和近一月日均成交额（单位已换算为亿元）。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(a.AVG_TVALUE_MONTH/100000000, 2) AS `近一月日均成交额(亿)`\nFROM\n    ANA_STK_EXPR_IDX a\nWHERE\n    a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_MONTH IS NOT NULL\n    AND a.STOCKSNAME IS NOT NULL\nORDER BY\n    a.CHNG_PCT_MONTH DESC",
+ "final_sql": "SELECT \n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(a.AVG_TVALUE_MONTH/100000000, 2) AS `近一月日均成交额(亿)`\nFROM\n    ANA_STK_EXPR_IDX a\nWHERE\n    a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_MONTH IS NOT NULL\n    AND a.STOCKSNAME IS NOT NULL\nORDER BY\n    a.CHNG_PCT_MONTH DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7.18"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 240.0,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_21_0f8c5d29.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 67.86,
+  "llm_seconds_max": 11.79,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   28251
+  ],
+  "prompt_columns_raw_len": 6729
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1833,
+   "prompt_tokens": 40247,
+   "total_tokens": 42080,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 40247,
+  "completion": 1833,
+  "total": 42080
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1833,
+   "prompt_tokens": 40247,
+   "total_tokens": 42080,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

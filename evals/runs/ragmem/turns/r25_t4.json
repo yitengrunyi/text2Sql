@@ -1,0 +1,172 @@
+{
+ "round_id": 25,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "那2025年末的时候呢？当时它的规模有多大？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT TRADING_DAY AS `交易日`, FUND_SYMBOL AS `基金代码`, FUND_NAME AS `基金名称`, ROUND(FUND_SIZE, 2) AS `基金规模(亿)` FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL LIKE '512170%' AND TRADING_DAY <= '2025-12-31' AND FUND_SIZE IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1;\n200\n{table:[['交易日', '基金代码', '基金名称', '基金规模(亿)'], ['2025-12-31', '512170.SH', '华宝中证医疗ETF', '25,304,098,970.00']]}\n该查询获取了华宝中证医疗ETF（基金代码以512170开头）截至2025年末的最新基金规模、基金名称、基金代码和对应的交易日期。数据来源为ETF历史表现信息表。筛选条件包括：仅选择基金代码为512170相关、基金规模数据不为空且为有效记录、交易日不晚于2025年12月31日。查询会根据交易日期从新到旧排序，并仅返回截至2025年末的最后一个有效交易日的数据。基金规模数值以亿元为单位，保留2位小数，直接调用了已有的基金规模指标。查询结果能够准确反映该基金在2025年末时的最新规模数据，完全满足用户需求。\n{table:[['交易日', '基金代码', '基金名称', '基金规模(亿)'], ['2025-12-31', '512170.SH', '华宝中证医疗ETF', '25,304,098,970.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT TRADING_DAY AS `交易日`, FUND_SYMBOL AS `基金代码`, FUND_NAME AS `基金名称`, ROUND(FUND_SIZE, 2) AS `基金规模(亿)` FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL LIKE '512170%' AND TRADING_DAY <= '2025-12-31' AND FUND_SIZE IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1",
+ "final_sql": "SELECT TRADING_DAY AS `交易日`, FUND_SYMBOL AS `基金代码`, FUND_NAME AS `基金名称`, ROUND(FUND_SIZE, 2) AS `基金规模(亿)` FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL LIKE '512170%' AND TRADING_DAY <= '2025-12-31' AND FUND_SIZE IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "25304098970.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 512170.SH 华宝中证医疗ETF 25304098970.00",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 27.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_25_d1bdac40.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 26.22,
+  "llm_seconds_max": 21.87,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2136,
+   "prompt_tokens": 10939,
+   "total_tokens": 13075,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1735,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10939,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 162,
+   "prompt_tokens": 4740,
+   "total_tokens": 4902,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 15679,
+  "completion": 2298,
+  "total": 17977
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2136,
+   "prompt_tokens": 10939,
+   "total_tokens": 13075,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1735,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10939,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 162,
+   "prompt_tokens": 4740,
+   "total_tokens": 4902,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

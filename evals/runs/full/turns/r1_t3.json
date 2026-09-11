@@ -1,0 +1,172 @@
+{
+ "round_id": 1,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "加权净资产收益率是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT sc.SEC_SNAME AS `股票名称`, sc.SEC_CODE AS `股票代码`, idx.ENDDATE AS `报表截止日`, ROUND(idx.F111701, 2) AS `加权净资产收益率(%)` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID=1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID=1 AND idx.F111701 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报表截止日', '加权净资产收益率(%)'], ['宁德时代', '300750', '2025-12-31', '24.91']]}\n该查询获取了宁德时代在2025年年报中的加权净资产收益率指标。查询联合了股票基本信息和公司财务指标数据，通过公司简称筛选目标公司，并限定报告期为2025年12月31日的有效年报数据，按报告截止日降序，仅取最新一条。查询结果显示股票简称、股票代码、报告截止日和加权净资产收益率（百分比，保留两位小数）。加权净资产收益率是反映公司当年归属于股东的净利润与加权净资产之间关系的核心盈利能力指标，计算逻辑通常为：加权净资产收益率 = 年度归母净利润 ÷ 年内加权平均净资产 × 100%，其中加权平均净资产已由公司或数据供应方按规定口径提前计算好。本查询中，直接引用了现成的财务指标数据，无需额外单位换算和复杂算法，结果满足用户关于宁德时代2025年加权净资产收益率的查询需求。\n{table:[['股票名称', '股票代码', '报表截止日', '加权净资产收益率(%)'], ['宁德时代', '300750', '2025-12-31', '24.91']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT sc.SEC_SNAME AS `股票名称`, sc.SEC_CODE AS `股票代码`, idx.ENDDATE AS `报表截止日`, ROUND(idx.F111701, 2) AS `加权净资产收益率(%)` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID=1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID=1 AND idx.F111701 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1",
+ "final_sql": "SELECT sc.SEC_SNAME AS `股票名称`, sc.SEC_CODE AS `股票代码`, idx.ENDDATE AS `报表截止日`, ROUND(idx.F111701, 2) AS `加权净资产收益率(%)` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID=1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID=1 AND idx.F111701 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "24.9100"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "宁德时代 300750 2025-12-31 00:00:00 24.91",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 38.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_1_4b84a6c0.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 37.05,
+  "llm_seconds_max": 20.73,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1811,
+   "prompt_tokens": 25008,
+   "total_tokens": 26819,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1326,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 25008,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 231,
+   "prompt_tokens": 17882,
+   "total_tokens": 18113,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 42890,
+  "completion": 2042,
+  "total": 44932
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1811,
+   "prompt_tokens": 25008,
+   "total_tokens": 26819,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1326,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 25008,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 231,
+   "prompt_tokens": 17882,
+   "total_tokens": 18113,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

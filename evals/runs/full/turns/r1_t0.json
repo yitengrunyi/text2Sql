@@ -1,0 +1,188 @@
+{
+ "round_id": 1,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润  \n[2] 计算公式：归属于母公司股东的净利润 = 净利润 – 少数股东损益  \n其中，净利润 = 营业收入 – 营业成本 – 税费及其他相关费用 + 投资收益等。\n['宁德时代', '2025年年报', '归属于母公司股东的净利润', '净利润', '少数股东损益', '营业收入', '营业成本', '税费及其他相关费用', '投资收益', '母公司股东净利润', '归母净利润']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'VIEW_STK_FIN_IDX', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    fa.ENDDATE AS `报表截止日`,\n    ROUND(fa.F110101/10000, 1) AS `归属于母公司股东的净利润(万)`\nFROM\n    VIEW_STK_FIN_IDX fa\nJOIN\n    GET_A_SEC_CODE sc\n    ON fa.COMCODE = sc.COMCODE AND sc.ISVALID=1\nWHERE\n    sc.SEC_SNAME LIKE '%宁德时代%'\n    AND fa.ISVALID = 1\n    AND YEAR(fa.ENDDATE) = 2025 \n    AND MONTH(fa.ENDDATE) = 12 \n    AND DAY(fa.ENDDATE) = 31\nORDER BY\n    fa.ENDDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报表截止日', '归属于母公司股东的净利润(万)'], ['宁德时代', '300750', '2025-12-31', '7,220,128.20']]}\n本查询的主要目的是获得宁德时代在2025年年报中归属于母公司股东的净利润。\n\n归属于母公司股东的净利润（万）通过公式 归属于母公司股东的净利润（万）= 归属于母公司股东的净利润（元）除以10000 得到，即对财务数据进行了单位换算。\n\n查询选取了主板公司主要财务指标的数据表，与用于记录A股证券基本信息的数据表，通过公司代码进行连接。查询结果限定为公司简称包含“宁德时代”的记录，只筛选有效数据，并限定报表截止日期为2025年12月31日。结果按照报表截止日进行降序排序，并只取其中最新的一条数据。\n\n查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    fa.ENDDATE AS `报表截止日`,\n    ROUND(fa.F110101/10000, 1) AS `归属于母公司股东的净利润(万)`\nFROM\n    VIEW_STK_FIN_IDX fa\nJOIN\n    GET_A_SEC_CODE sc\n    ON fa.COMCODE = sc.COMCODE AND sc.ISVALID=1\nWHERE\n    sc.SEC_SNAME LIKE '%宁德时代%'\n    AND fa.ISVALID = 1\n    AND YEAR(fa.ENDDATE) = 2025 \n    AND MONTH(fa.ENDDATE) = 12 \n    AND DAY(fa.ENDDATE) = 31\nORDER BY\n    fa.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    fa.ENDDATE AS `报表截止日`,\n    ROUND(fa.F110101/10000, 1) AS `归属于母公司股东的净利润(万)`\nFROM\n    VIEW_STK_FIN_IDX fa\nJOIN\n    GET_A_SEC_CODE sc\n    ON fa.COMCODE = sc.COMCODE AND sc.ISVALID=1\nWHERE\n    sc.SEC_SNAME LIKE '%宁德时代%'\n    AND fa.ISVALID = 1\n    AND YEAR(fa.ENDDATE) = 2025 \n    AND MONTH(fa.ENDDATE) = 12 \n    AND DAY(fa.ENDDATE) = 31\nORDER BY\n    fa.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "72201282000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "宁德时代 300750 2025-12-31 00:00:00 7220128.2",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 58.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_1_4b84a6c0.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 78.21,
+  "llm_seconds_max": 9.38,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   38054
+  ],
+  "prompt_columns_raw_len": 4143
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2101,
+   "prompt_tokens": 57055,
+   "total_tokens": 59156,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 57055,
+  "completion": 2101,
+  "total": 59156
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2101,
+   "prompt_tokens": 57055,
+   "total_tokens": 59156,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

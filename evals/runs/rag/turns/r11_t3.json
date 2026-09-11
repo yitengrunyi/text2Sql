@@ -1,0 +1,200 @@
+{
+ "round_id": 11,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 国外收入（Foreign Revenue）\n- 总收入（Total Revenue）\n- 国外收入占比（Foreign Revenue Ratio）\n\n[2] 可能的计算公式：\n\n国外收入占比 = 国外收入 ÷ 总收入 × 100%\n['国外收入', 'Foreign Revenue', '总收入', 'Total Revenue', '国外收入占比', 'Foreign Revenue Ratio']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['出海']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '出海'。\n个股相关\n['主板经营', '主板基本信息']\n['VW_CONCEPT_STK', 'STK_PRI_INCOME_DISTRICT', 'ASTK_REVENUE_OVERSEAS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n['国外']\nquery抽取的主体词是['国外']\n生成查询代码\ntop30召回:{}\nSELECT \n    astk.SEC_CSNAME AS `股票简称`,\n    astk.COMB_SYMBOL AS `股票代码`,\n    astk.END_DATE AS `日期`,\n    '出海' AS `概念名称`,\n    ROUND(\n        (\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n        ) / NULLIF(\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    astk.SEC_CSNAME AS `股票简称`,\n    astk.COMB_SYMBOL AS `股票代码`,\n    astk.END_DATE AS `日期`,\n    '出海' AS `概念名称`,\n    ROUND(\n        (\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n        ) / NULLIF(\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n            + COALESCE(astk.REVENUE_ASIA_CNY, 0) --重复加国内时处理\n        , 0) * 100, 2) AS `2025年国外收入占比(%)`,\n    ROUND(\n        (\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n        ) / 100 , 3) AS `2025年国外收入(亿人民币)`\nFROM ASTK_REVENUE_OVERSEAS astk\nINNER JOIN VW_CONCEPT_STK stk ON astk.COMB_SYMBOL = stk.COMB_SYMBOL AND stk.CONCEPT_NAME = '出海' AND stk.HISVALID = 1\nWHERE \n    astk.END_DATE = '2025-12-31'\n    AND astk.HISVALID = 1\n    AND astk.SEC_CSNAME IS NOT NULL\n    AND astk.COMB_SYMBOL IS NOT NULL\nORDER BY `2025年国外收入占比(%)` DESC",
+ "final_sql": "SELECT \n    astk.SEC_CSNAME AS `股票简称`,\n    astk.COMB_SYMBOL AS `股票代码`,\n    astk.END_DATE AS `日期`,\n    '出海' AS `概念名称`,\n    ROUND(\n        (\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n        ) / NULLIF(\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n            + COALESCE(astk.REVENUE_ASIA_CNY, 0) --重复加国内时处理\n        , 0) * 100, 2) AS `2025年国外收入占比(%)`,\n    ROUND(\n        (\n            COALESCE(astk.REVENUE_ASIA_CNY, 0)\n            + COALESCE(astk.REVENUE_OCEANIA_CNY, 0)\n            + COALESCE(astk.REVENUE_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_NON_EU_CNY, 0)\n            + COALESCE(astk.REVENUE_AFRICA_CNY, 0)\n            + COALESCE(astk.REVENUE_MID_EAST_CNY, 0)\n            + COALESCE(astk.REVENUE_LATIN_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_NORTH_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_AMERICA_CNY, 0)\n            + COALESCE(astk.REVENUE_JAPAN_CNY, 0)\n            + COALESCE(astk.REVENUE_KOREA_CNY, 0)\n            + COALESCE(astk.REVENUE_TW_CNY, 0)\n            + COALESCE(astk.REVENUE_RUSSIA_CNY, 0)\n        ) / 100 , 3) AS `2025年国外收入(亿人民币)`\nFROM ASTK_REVENUE_OVERSEAS astk\nINNER JOIN VW_CONCEPT_STK stk ON astk.COMB_SYMBOL = stk.COMB_SYMBOL AND stk.CONCEPT_NAME = '出海' AND stk.HISVALID = 1\nWHERE \n    astk.END_DATE = '2025-12-31'\n    AND astk.HISVALID = 1\n    AND astk.SEC_CSNAME IS NOT NULL\n    AND astk.COMB_SYMBOL IS NOT NULL\nORDER BY `2025年国外收入占比(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "47.39"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column '重复加国内时处理' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 52.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_11_89d68257.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 55.11,
+  "llm_seconds_max": 8.18,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   21317
+  ],
+  "prompt_columns_raw_len": 12570
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2084,
+   "prompt_tokens": 32623,
+   "total_tokens": 34707,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33051,
+  "completion": 2085,
+  "total": 35136
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2084,
+   "prompt_tokens": 32623,
+   "total_tokens": 34707,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_DISTRICT"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 9,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年营业收入比2024财年增长了百分之多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, ROUND(c1.F048N / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(c2.F048N / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((c1.F048N - c2.F048N) / NULLIF(c2.F048N, 0) * 100, 2) AS `营业收入同比增长率(%)`, c1.F005V AS `货币` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3103_CUM c1 ON m.FIU_ID = c1.FIU_ID INNER JOIN VIEW_COM3103_CUM c2 ON m.FIU_ID = c2.FIU_ID WHERE m.CSNAME LIKE '%苹果%' AND c1.F056N = 2025 AND c1.F003V = 'FY' AND c1.F048N IS NOT NULL AND c1.F001D IS NOT NULL AND c2.F056N = 2024 AND c2.F003V = 'FY' AND c2.F048N IS NOT NULL AND c2.F001D IS NOT NULL ORDER BY c1.F001D DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '2025财年营业收入(亿美元)', '2024财年营业收入(亿美元)', '营业收入同比增长率(%)', '货币'], ['苹果', 'AAPL.US', '5,393.14', '5,251.04', '2.71', 'USD']]}\n该查询获取了苹果公司2025财年和2024财年营业收入，以及2025年营业收入相较2024年的同比增长百分比。查询关联了公司基本信息表和年度累计财务数据表，通过公司名称筛选出苹果，并只选取年报和有效数据。结果优先展示最新的财报周期。营业收入原始数据为百万美元，查询时换算为亿美元并保留三位小数；同比增长率计算方式为（2025年营业收入-2024年营业收入）除以2024年营业收入，再乘以100%，结果保留两位小数。货币种类直接取自财报数据。该计算准确反映了用户期望的年度营业收入增长百分比，查询结果符合要求。\n{table:[['股票名称', '股票代码', '2025财年营业收入(亿美元)', '2024财年营业收入(亿美元)', '营业收入同比增长率(%)', '货币'], ['苹果', 'AAPL.US', '5,393.14', '5,251.04', '2.71', 'USD']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, ROUND(c1.F048N / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(c2.F048N / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((c1.F048N - c2.F048N) / NULLIF(c2.F048N, 0) * 100, 2) AS `营业收入同比增长率(%)`, c1.F005V AS `货币` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3103_CUM c1 ON m.FIU_ID = c1.FIU_ID INNER JOIN VIEW_COM3103_CUM c2 ON m.FIU_ID = c2.FIU_ID WHERE m.CSNAME LIKE '%苹果%' AND c1.F056N = 2025 AND c1.F003V = 'FY' AND c1.F048N IS NOT NULL AND c1.F001D IS NOT NULL AND c2.F056N = 2024 AND c2.F003V = 'FY' AND c2.F048N IS NOT NULL AND c2.F001D IS NOT NULL ORDER BY c1.F001D DESC LIMIT 1",
+ "final_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, ROUND(c1.F048N / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(c2.F048N / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((c1.F048N - c2.F048N) / NULLIF(c2.F048N, 0) * 100, 2) AS `营业收入同比增长率(%)`, c1.F005V AS `货币` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3103_CUM c1 ON m.FIU_ID = c1.FIU_ID INNER JOIN VIEW_COM3103_CUM c2 ON m.FIU_ID = c2.FIU_ID WHERE m.CSNAME LIKE '%苹果%' AND c1.F056N = 2025 AND c1.F003V = 'FY' AND c1.F048N IS NOT NULL AND c1.F001D IS NOT NULL AND c2.F056N = 2024 AND c2.F003V = 'FY' AND c2.F048N IS NOT NULL AND c2.F001D IS NOT NULL ORDER BY c1.F001D DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.71"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 5393.142 5251.038 2.71 USD",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 57.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_9_b146dcc3.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 56.44,
+  "llm_seconds_max": 50.32,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6260,
+   "prompt_tokens": 13576,
+   "total_tokens": 19836,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5466,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13576,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 170,
+   "prompt_tokens": 7963,
+   "total_tokens": 8133,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21539,
+  "completion": 6430,
+  "total": 27969
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6260,
+   "prompt_tokens": 13576,
+   "total_tokens": 19836,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5466,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13576,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 170,
+   "prompt_tokens": 7963,
+   "total_tokens": 8133,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

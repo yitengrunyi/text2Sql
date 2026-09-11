@@ -1,0 +1,166 @@
+{
+ "round_id": 16,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "换个票，海康威视今年以来累计涨了多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 海康威视股票今年以来的累计涨幅（即：年初至今涨幅，英文常用YTD Return，Year-to-Date Return）\n\n[2] 计算公式：  \n累计涨幅 = （当前股价 - 年初股价）/ 年初股价 × 100%\n['海康威视', '累计涨幅', '年初至今涨幅', 'YTD Return', 'Year-to-Date Return', '当前股价', '年初股价']\n该问题可能涉及A股-'海康威视'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-计算机。\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_EXPR_IDX', 'STK_MKT', 'GET_A_INDICS_LATEST', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    a.ENDDATE AS `统计截止日期`,\n    ROUND(a.CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX a\nINNER JOIN \n    GET_A_SEC_CODE b \n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.SEC_SNAME LIKE '%海康威视%'\n    AND a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_YEAR_SOFAR IS NOT NULL\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '统计截止日期', '今年以来累计涨跌幅(%)'], ['海康威视', '002415', '2026-09-02', '22.52']]}\n今年以来累计涨跌幅的计算方式是：用统计截止日期当天的收盘价除以年初第一个有效交易日的收盘价，减去1后乘以100。实际计算时，会根据复权系数修正价格，确保涨跌幅反映真实投资收益。比如公式为：今年以来累计涨跌幅等于（累计复权系数乘以当前收盘价除以当年首个有效交易日的收盘价减1）再乘以100。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n本次查询从个股表现指标表中获取海康威视的股票简称、股票代码、统计截止日期以及今年以来累计涨跌幅，连接了汇总A股股票信息的表，通过内部代码对接。筛选了证券简称包含“海康威视”的记录，并限定统计截止日期为2026年9月2日，只保留今年以来累计涨跌幅有数据的记录。结果仅取一条，返回海康威视今年以来累计涨跌幅数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    a.ENDDATE AS `统计截止日期`,\n    ROUND(a.CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX a\nINNER JOIN \n    GET_A_SEC_CODE b \n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.SEC_SNAME LIKE '%海康威视%'\n    AND a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_YEAR_SOFAR IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    a.ENDDATE AS `统计截止日期`,\n    ROUND(a.CHNG_PCT_YEAR_SOFAR, 2) AS `今年以来累计涨跌幅(%)`\nFROM \n    ANA_STK_EXPR_IDX a\nINNER JOIN \n    GET_A_SEC_CODE b \n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.SEC_SNAME LIKE '%海康威视%'\n    AND a.ENDDATE = '2026-09-02'\n    AND a.CHNG_PCT_YEAR_SOFAR IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "22.5206"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "海康威视 002415 2026-09-02 00:00:00 22.52",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 45.3,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_16_aa3b5fee.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 53.72,
+  "llm_seconds_max": 6.15,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   25951
+  ],
+  "prompt_columns_raw_len": 3942
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1457,
+   "prompt_tokens": 39498,
+   "total_tokens": 40955,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39498,
+  "completion": 1457,
+  "total": 40955
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1457,
+   "prompt_tokens": 39498,
+   "total_tokens": 40955,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9984,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_STK_EXPR_IDX",
+  "GET_A_SEC_CODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

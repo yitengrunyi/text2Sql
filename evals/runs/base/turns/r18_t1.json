@@ -1,0 +1,167 @@
+{
+ "round_id": 18,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "它今年以来累计上涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n累计涨幅（Year-to-Date Return, YTD Return）\n\n[2] 可能的计算公式  \n累计涨幅 = （当前价格 - 年初价格）÷ 年初价格 × 100%\n['累计涨幅', 'Year-to-Date Return', 'YTD Return', '当前价格', '年初价格']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['VW_CONCEPT_STK', 'STK_LIST_PLAN', 'ANA_STK_DIV_RATE_IDX', 'ANA_STK_VAL_IDX', 'STK_COM_PROFILE', 'STK_DS_POST']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRIM(SEC_SNAME) AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    CAST(TCLOSE AS DECIMAL(18,2)) AS `期末收盘价`,\n    CAST((\n        SELECT TCLOSE\n        FROM VIEW_STK_STI_MKT t_start\n        WHERE t_start.STOCKCODE = t_end.STOCKCODE\n            AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                      FROM VIEW_STK_STI_MKT TRD\n                                      WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                        AND TRD.STOCKCODE = t_end.STOCKCODE\n                                        AND TRD.TCLOSE IS NOT NULL)\n            AND t_start.TRADE_DATE >= '2026-01-01'\n            AND t_start.TRADE_DATE <= '2026-09-02'\n            AND t_start.TCLOSE IS NOT NULL\n        LIMIT 1\n    ) AS DECIMAL(18,2)) AS `区间起始收盘价`,\n    CASE \n        WHEN (\n            SELECT TCLOSE\n            FROM VIEW_STK_STI_MKT t_start\n            WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                          FROM VIEW_STK_STI_MKT TRD\n                                          WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                            AND TRD.STOCKCODE = t_end.STOCKCODE\n                                            AND TRD.TCLOSE IS NOT NULL)\n                AND t_start.TRADE_DATE >= '2026-01-01'\n                AND t_start.TRADE_DATE <= '2026-09-02'\n                AND t_start.TCLOSE IS NOT NULL\n            LIMIT 1\n        ) IS NOT NULL AND \n        (\n            SELECT TCLOS",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    TRIM(SEC_SNAME) AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    CAST(TCLOSE AS DECIMAL(18,2)) AS `期末收盘价`,\n    CAST((\n        SELECT TCLOSE\n        FROM VIEW_STK_STI_MKT t_start\n        WHERE t_start.STOCKCODE = t_end.STOCKCODE\n            AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                      FROM VIEW_STK_STI_MKT TRD\n                                      WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                        AND TRD.STOCKCODE = t_end.STOCKCODE\n                                        AND TRD.TCLOSE IS NOT NULL)\n            AND t_start.TRADE_DATE >= '2026-01-01'\n            AND t_start.TRADE_DATE <= '2026-09-02'\n            AND t_start.TCLOSE IS NOT NULL\n        LIMIT 1\n    ) AS DECIMAL(18,2)) AS `区间起始收盘价`,\n    CASE \n        WHEN (\n            SELECT TCLOSE\n            FROM VIEW_STK_STI_MKT t_start\n            WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                          FROM VIEW_STK_STI_MKT TRD\n                                          WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                            AND TRD.STOCKCODE = t_end.STOCKCODE\n                                            AND TRD.TCLOSE IS NOT NULL)\n                AND t_start.TRADE_DATE >= '2026-01-01'\n                AND t_start.TRADE_DATE <= '2026-09-02'\n                AND t_start.TCLOSE IS NOT NULL\n            LIMIT 1\n        ) IS NOT NULL AND \n        (\n            SELECT TCLOSE\n            FROM VIEW_STK_STI_MKT t_start\n            WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                          FROM VIEW_STK_STI_MKT TRD\n                                          WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                            AND TRD.STOCKCODE = t_end.STOCKCODE\n                                            AND TRD.TCLOSE IS NOT NULL)\n                AND t_start.TRADE_DATE >= '2026-01-01'\n                AND t_start.TRADE_DATE <= '2026-09-02'\n                AND t_start.TCLOSE IS NOT NULL\n            LIMIT 1\n        ) != 0\n        THEN\n            ROUND((TCLOSE - (\n                SELECT TCLOSE\n                FROM VIEW_STK_STI_MKT t_start\n                WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                    AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                              FROM VIEW_STK_STI_MKT TRD\n                                              WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                                AND TRD.STOCKCODE = t_end.STOCKCODE\n                                                AND TRD.TCLOSE IS NOT NULL)\n                    AND t_start.TRADE_DATE >= '2026-01-01'\n                    AND t_start.TRADE_DATE <= '2026-09-02'\n                    AND t_start.TCLOSE IS NOT NULL\n                LIMIT 1\n            )) / (\n                SELECT TCLOSE\n                FROM VIEW_STK_STI_MKT t_start\n                WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                    AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                              FROM VIEW_STK_STI_MKT TRD\n                                              WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                                AND TRD.STOCKCODE = t_end.STOCKCODE\n                                                AND TRD.TCLOSE IS NOT NULL)\n                    AND t_start.TRADE_DATE >= '2026-01-01'\n                    AND t_start.TRADE_DATE <= '2026-09-02'\n                    AND t_start.TCLOSE IS NOT NULL\n                LIMIT 1\n            ) * 100, 2)\n        ELSE NULL \n    END AS `今年以来累计涨跌幅(%)`\nFROM \n    VIEW_STK_STI_MKT t_end\nWHERE \n    TRADE_DATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\n    AND SEC_SNAME IS NOT NULL\nORDER BY\n    `今年以来累计涨跌幅(%)` DESC",
+ "final_sql": "SELECT \n    TRIM(SEC_SNAME) AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    CAST(TCLOSE AS DECIMAL(18,2)) AS `期末收盘价`,\n    CAST((\n        SELECT TCLOSE\n        FROM VIEW_STK_STI_MKT t_start\n        WHERE t_start.STOCKCODE = t_end.STOCKCODE\n            AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                      FROM VIEW_STK_STI_MKT TRD\n                                      WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                        AND TRD.STOCKCODE = t_end.STOCKCODE\n                                        AND TRD.TCLOSE IS NOT NULL)\n            AND t_start.TRADE_DATE >= '2026-01-01'\n            AND t_start.TRADE_DATE <= '2026-09-02'\n            AND t_start.TCLOSE IS NOT NULL\n        LIMIT 1\n    ) AS DECIMAL(18,2)) AS `区间起始收盘价`,\n    CASE \n        WHEN (\n            SELECT TCLOSE\n            FROM VIEW_STK_STI_MKT t_start\n            WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                          FROM VIEW_STK_STI_MKT TRD\n                                          WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                            AND TRD.STOCKCODE = t_end.STOCKCODE\n                                            AND TRD.TCLOSE IS NOT NULL)\n                AND t_start.TRADE_DATE >= '2026-01-01'\n                AND t_start.TRADE_DATE <= '2026-09-02'\n                AND t_start.TCLOSE IS NOT NULL\n            LIMIT 1\n        ) IS NOT NULL AND \n        (\n            SELECT TCLOSE\n            FROM VIEW_STK_STI_MKT t_start\n            WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                          FROM VIEW_STK_STI_MKT TRD\n                                          WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                            AND TRD.STOCKCODE = t_end.STOCKCODE\n                                            AND TRD.TCLOSE IS NOT NULL)\n                AND t_start.TRADE_DATE >= '2026-01-01'\n                AND t_start.TRADE_DATE <= '2026-09-02'\n                AND t_start.TCLOSE IS NOT NULL\n            LIMIT 1\n        ) != 0\n        THEN\n            ROUND((TCLOSE - (\n                SELECT TCLOSE\n                FROM VIEW_STK_STI_MKT t_start\n                WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                    AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                              FROM VIEW_STK_STI_MKT TRD\n                                              WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                                AND TRD.STOCKCODE = t_end.STOCKCODE\n                                                AND TRD.TCLOSE IS NOT NULL)\n                    AND t_start.TRADE_DATE >= '2026-01-01'\n                    AND t_start.TRADE_DATE <= '2026-09-02'\n                    AND t_start.TCLOSE IS NOT NULL\n                LIMIT 1\n            )) / (\n                SELECT TCLOSE\n                FROM VIEW_STK_STI_MKT t_start\n                WHERE t_start.STOCKCODE = t_end.STOCKCODE\n                    AND t_start.TRADE_DATE = (SELECT MIN(TRD.TRADE_DATE) \n                                              FROM VIEW_STK_STI_MKT TRD\n                                              WHERE TRD.TRADE_DATE >= '2026-01-01' AND TRD.TRADE_DATE <= '2026-09-02'\n                                                AND TRD.STOCKCODE = t_end.STOCKCODE\n                                                AND TRD.TCLOSE IS NOT NULL)\n                    AND t_start.TRADE_DATE >= '2026-01-01'\n                    AND t_start.TRADE_DATE <= '2026-09-02'\n                    AND t_start.TCLOSE IS NOT NULL\n                LIMIT 1\n            ) * 100, 2)\n        ELSE NULL \n    END AS `今年以来累计涨跌幅(%)`\nFROM \n    VIEW_STK_STI_MKT t_end\nWHERE \n    TRADE_DATE = '2026-09-02'\n    AND TCLOSE IS NOT NULL\n    AND SEC_SNAME IS NOT NULL\nORDER BY\n    `今年以来累计涨跌幅(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.64"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'juling.VIEW_STK_STI_MKT' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 81.1,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_18_1103d433.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 88.78,
+  "llm_seconds_max": 27.24,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   43119
+  ],
+  "prompt_columns_raw_len": 22614
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2427,
+   "prompt_tokens": 47535,
+   "total_tokens": 49962,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 47535,
+  "completion": 2427,
+  "total": 49962
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2427,
+   "prompt_tokens": 47535,
+   "total_tokens": 49962,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

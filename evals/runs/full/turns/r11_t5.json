@@ -1,0 +1,232 @@
+{
+ "round_id": 11,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "换个标的看看，海康威视2025年年报的研发投入总额是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：研发投入总额（R&D支出）\n\n[2] 可能的计算公式：  \n研发投入总额 = 年度研发费用（可以在损益表“研发费用”科目中直接查得）\n\n公式：  \n研发投入总额 = 当年研发费用\n\n（如需人工计算，则可按：\"研发投入总额 = 研发人员薪酬 + 研发材料费 + 研发设备折旧 + 其他相关支出\" 进行加总）\n['海康威视', '2025年年报', '研发投入总额', 'R&D支出', '年度研发费用', '损益表', '研发费用', '当年研发费用', '研发人员薪酬', '研发材料费', '研发设备折旧', '其他相关支出']\n该问题可能涉及A股-'海康威视'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-计算机。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_FIX_ASS_DEP', 'STK_RD_DTL', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    gad.SEC_CODE AS `股票代码`, \n    gad.SEC_SNAME AS `股票简称`, \n    srdt.RPT_DATE AS `报告日期`, \n    ROUND(srdt.RD_SUM/100000000, 3) AS `研发投入总额（亿元）`\nFROM \n    GET_A_SEC_CODE gad\nINNER JOIN \n    STK_RD_DTL srdt ON gad.COMCODE = srdt.COMCODE\nWHERE \n    gad.SEC_SNAME LIKE '%海康威视%'\n    AND gad.ISVALID = 1\n    AND srdt.ISVALID = 1\n    AND srdt.RPT_DATE = '2025-12-31'\nORDER BY \n    srdt.RPT_DATE DESC\nLIMIT 1\n200\n{table:[['股票简称', '报告日期', '研发投入总额（亿元）'], ['海康威视', '2025-12-31', '117.53']]}\n查询结果给出了海康威视在2025年年报的研发投入总额。研发投入总额以亿元为单位呈现，通过将原始金额（单位为元）除以一亿，并保留三位小数。公式为：研发投入总额（亿元）= 研发投入原始金额 / 100000000。查询结果符合要求。\n\n本次查询关联了汇总A股基础信息的表和记录报告期研发投入的表，依据公司代码进行连接。筛选条件限定了证券简称为海康威视、公司和研发数据均为有效记录、报告日期为2025年年报。结果按报告日期降序排列，仅返回一条最新记录。查询返回海康威视2025年年报的研发投入总额数据。\n查询海康威视2025年年报的研发投入总额是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    gad.SEC_CODE AS `股票代码`, \n    gad.SEC_SNAME AS `股票简称`, \n    srdt.RPT_DATE AS `报告日期`, \n    ROUND(srdt.RD_SUM/100000000, 3) AS `研发投入总额（亿元）`\nFROM \n    GET_A_SEC_CODE gad\nINNER JOIN \n    STK_RD_DTL srdt ON gad.COMCODE = srdt.COMCODE\nWHERE \n    gad.SEC_SNAME LIKE '%海康威视%'\n    AND gad.ISVALID = 1\n    AND srdt.ISVALID = 1\n    AND srdt.RPT_DATE = '2025-12-31'\nORDER BY \n    srdt.RPT_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    gad.SEC_CODE AS `股票代码`, \n    gad.SEC_SNAME AS `股票简称`, \n    srdt.RPT_DATE AS `报告日期`, \n    ROUND(srdt.RD_SUM/100000000, 3) AS `研发投入总额（亿元）`\nFROM \n    GET_A_SEC_CODE gad\nINNER JOIN \n    STK_RD_DTL srdt ON gad.COMCODE = srdt.COMCODE\nWHERE \n    gad.SEC_SNAME LIKE '%海康威视%'\n    AND gad.ISVALID = 1\n    AND srdt.ISVALID = 1\n    AND srdt.RPT_DATE = '2025-12-31'\nORDER BY \n    srdt.RPT_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "11752624736.80"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "002415 海康威视 2025-12-31 00:00:00 117.526",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 69.7,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_11_a515b79f.5",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 87.14,
+  "llm_seconds_max": 11.39,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIX_ASS_DEP",
+   "STK_RD_DTL",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   35372
+  ],
+  "prompt_columns_raw_len": 4555
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 958,
+   "prompt_tokens": 13047,
+   "total_tokens": 14005,
+   "completion_tokens_details": {
+    "reasoning_tokens": 739,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13047,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2127,
+   "prompt_tokens": 54851,
+   "total_tokens": 56978,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 67898,
+  "completion": 3085,
+  "total": 70983
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 958,
+   "prompt_tokens": 13047,
+   "total_tokens": 14005,
+   "completion_tokens_details": {
+    "reasoning_tokens": 739,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13047,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2127,
+   "prompt_tokens": 54851,
+   "total_tokens": 56978,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_RD_DTL",
+  "GET_A_SEC_CODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIX_ASS_DEP",
+   "STK_RD_DTL",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,167 @@
+{
+ "round_id": 3,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "宁德时代2026年8月31日的收盘价是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "时间窗口",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n宁德时代（CATL）股票的收盘价（Closing Price）\n\n[2] 可能的计算公式  \n收盘价（Closing Price）= 当天最后一笔成交价格\n\n详细公式表达：  \n收盘价 = 当日最后成交的股票价格\n\n（注：该价格通常由证券交易所实际交易结果决定，无法通过传统金融计算公式预测未来的具体收盘价；如需估算，可应用金融模型如股价预测模型、时间序列分析等，但需大量历史数据支持，且仍无法给出精确值）\n['宁德时代', 'CATL', '收盘价', 'Closing Price', '股票', '成交价格', '证券交易所', '金融模型', '股价预测模型', '时间序列分析', '历史数据']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%宁德时代%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交额(亿元)', '成交量(百万股)', '涨跌幅(%)'], ['2026-08-31', '宁德时代', '300750', '363.55', '366.60', '367.33', '357.30', '94.78', '26.24', '-1.34']]}\n该查询的主要目的是获取宁德时代在2026年8月31日的收盘价及相关的行情信息。收盘价通过取该公司在指定日期的股票收盘价格字段进行四舍五入保留两位小数，成交金额通过将成交金额字段除以一亿并保留两位小数转换为亿元，成交量通过将成交量字段除以一百万并保留两位小数转换为百万股，开盘价、最高价、最低价均以同样方式进行数值显示，涨跌幅保留两位小数。在此查询中，对结果进行了必要的单位换算和数值精度调整。\n\n查询从股票行情明细表中提取数据。筛选条件包括上市公司简称中包含“宁德时代”、交易日期为2026年8月31日，只选择有效记录。最终返回满足条件的公司在该交易日的最详细一条行情数据。查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%宁德时代%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%宁德时代%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "363.5500"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 宁德时代 300750 363.55 366.60 367.33 357.30 94.78 26.24 -1.34",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 55.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_3_af250c53.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 66.34,
+  "llm_seconds_max": 9.7,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   27389
+  ],
+  "prompt_columns_raw_len": 5951
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1800,
+   "prompt_tokens": 40093,
+   "total_tokens": 41893,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1792,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 40093,
+  "completion": 1800,
+  "total": 41893
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1800,
+   "prompt_tokens": 40093,
+   "total_tokens": 41893,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 1792,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

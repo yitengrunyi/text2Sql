@@ -1,0 +1,174 @@
+{
+ "round_id": 9,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年的净利润是多少？",
+ "labels": {
+  "followup_type": "普通追问",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, c.F001D AS `财政周期结束日期`, c.F003V AS `报表种类`, c.F004N AS `财政期间长度(天数)`, ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`, CONCAT(ROUND(c.F032N / 100, 3), ' 亿美元') AS `净利润(亿)`, c.F005V AS `货币类型` FROM AMERICAN_STOCK_MAIN m JOIN VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID WHERE m.COMB_SYMBOL = 'AAPL.US' AND c.F056N = 2025 AND c.F003V = 'FY' AND c.F032N IS NOT NULL ORDER BY c.F001D DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '报表种类', '财政期间长度(天数)', '净利润(亿美元)', '净利润(亿)', '货币类型'], ['苹果', 'AAPL.US', '2025-12-31', 'FY', '365', '1,525.51', '1525.511 亿美元', 'USD']]}\n该查询提取了苹果公司在2025财年年报中的净利润信息，内容包括公司名称、股票代码、财报截止日期、报表类型（年报）、财报周期长度、净利润（亿美元，精确到小数点后三位）、净利润文本展示以及货币类型。数据来自股票基本信息表与公司财务累计数据表，通过股票代码进行关联。筛选条件限定为苹果公司2025年、年度报表且净利润数据不为空，结果按财报截止日期降序，仅取最新一条。净利润是直接使用报表中的财务指标数值，并将原始的百万美元金额转换为以亿美元为单位（即原值除以100），同时保留3位小数进行展示。结果已准确反映苹果公司2025财年最新的净利润，能够满足您的查询需求。\n{table:[['股票名称', '股票代码', '财政周期结束日期', '报表种类', '财政期间长度(天数)', '净利润(亿美元)', '净利润(亿)', '货币类型'], ['苹果', 'AAPL.US', '2025-12-31', 'FY', '365', '1,525.51', '1525.511 亿美元', 'USD']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, c.F001D AS `财政周期结束日期`, c.F003V AS `报表种类`, c.F004N AS `财政期间长度(天数)`, ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`, CONCAT(ROUND(c.F032N / 100, 3), ' 亿美元') AS `净利润(亿)`, c.F005V AS `货币类型` FROM AMERICAN_STOCK_MAIN m JOIN VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID WHERE m.COMB_SYMBOL = 'AAPL.US' AND c.F056N = 2025 AND c.F003V = 'FY' AND c.F032N IS NOT NULL ORDER BY c.F001D DESC LIMIT 1",
+ "final_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, c.F001D AS `财政周期结束日期`, c.F003V AS `报表种类`, c.F004N AS `财政期间长度(天数)`, ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`, CONCAT(ROUND(c.F032N / 100, 3), ' 亿美元') AS `净利润(亿)`, c.F005V AS `货币类型` FROM AMERICAN_STOCK_MAIN m JOIN VIEW_COM3103_CUM c ON m.FIU_ID = c.FIU_ID WHERE m.COMB_SYMBOL = 'AAPL.US' AND c.F056N = 2025 AND c.F003V = 'FY' AND c.F032N IS NOT NULL ORDER BY c.F001D DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "152551.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 2025-12-31 FY 365 1525.511 1525.511 亿美元 USD",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 35.7,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_9_d847654b.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 34.35,
+  "llm_seconds_max": 29.36,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3081,
+   "prompt_tokens": 13530,
+   "total_tokens": 16611,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2513,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13530,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 189,
+   "prompt_tokens": 7700,
+   "total_tokens": 7889,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21230,
+  "completion": 3270,
+  "total": 24500
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3081,
+   "prompt_tokens": 13530,
+   "total_tokens": 16611,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2513,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13530,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 189,
+   "prompt_tokens": 7700,
+   "total_tokens": 7889,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,169 @@
+{
+ "round_id": 16,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 月度涨跌幅（通常用收盘价计算）\n\n[2] 可能的计算公式：  \n月度涨跌幅 = （8月最后一个交易日收盘价 - 7月最后一个交易日收盘价） ÷ 7月最后一个交易日收盘价 × 100%\n['格力电器', '2026年8月', '月度涨跌幅', '涨跌幅', '收盘价', '交易日', '计算公式', '最后一个交易日收盘价', '月度涨跌幅公式', '百分比']\n该问题可能涉及A股-'格力电器'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-家用电器。\n该问题可能涉及的题材包含：['家用电器']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '家用电器'。\n个股相关\n['主板行情', '主板基本信息']\n['STK_DS_POST', 'STK_COMSUB_PROFILE', 'ANA_STK_VAL_IDX', 'STK_PRE_DISCLOSURE', 'VIEW_STK_STI_LIST_PLAN', 'STK_HUMAN_RESOURCE', 'STK_LIST_PLAN']\n是否命中召回表：False\n生成查询代码\nSELECT\n    t.SEC_SNAME AS `股票名称`,\n    t.STOCKCODE AS `股票代码`,\n    DATE_FORMAT(MIN(t.TRD_DATE), '%Y-%m-%d') AS `8月首个交易日`,\n    DATE_FORMAT(MAX(t.TRD_DATE), '%Y-%m-%d') AS `8月最后交易日`,\n    ROUND(MIN(t.TCAP_1)/100000000, 1) AS `8月初总市值(亿)`,\n    ROUND(MAX(t.TCAP_1)/100000000, 1) AS `8月末总市值(亿)`,\n    ROUND(MIN(t.TCAP_2)/100000000, 1) AS `8月初流通市值(亿)`,\n    ROUND(MAX(t.TCAP_2)/100000000, 1) AS `8月末流通市值(亿)`,\n    ROUND((MAX(t.TCAP_1) - MIN(t.TCAP_1)) / NULLIF(MIN(t.TCAP_1),0) * 100, 2) AS `8月总市值变动率(%)`,\n    ROUND((MAX(t.TCAP_2) - MIN(t.TCAP_2)) / NULLIF(MIN(t.TCAP_2),0) * 100, 2) AS `8月流通市值变动率(%)`\nFROM\n    ANA_STK_VAL_IDX t\nWHERE\n    t.SEC_SNAME LIKE '%格力电器%'\n    AND t.ISVALID = 1\n    AND t.TRD_DATE >= '2026-08-01'\n    AND t.TRD_DATE <= '2026-08-31'\n    AND t.TCAP_1 IS NOT NULL\n    AND t.TCAP_2 IS NOT NULL\nGROUP BY\n    t.SEC_SNAME,\n    t.STOCKCODE\n\n200\n{table:[['股票名称', '股票代码', '8月首个交易日', '8月最后交易日', '8月初总市值(亿)', '8月末总市值(亿)', '8月初流通市值(亿)', '8月末流通市值(亿)', '8月总市值变动率(%)', '8月流通市值变动率(%)'], ['格力电器', '000651', '2026-08-03', '2026-08-31', '2,181.70', '2,331.30', '2,181.70', '2,331.30', '6.85', '6.85']]}\n该查询通过计算格力电器在2026年8月的首个交易日和最后交易日的总市值、流通市值以及它们的涨跌幅，实现了8月单月的涨跌幅统计。\n\n首先，8月初和8月末的总市值以及流通市值分别取该月第一个和最后一个交易日的市值数据，然后将单位从元转换为亿元，公式为：市值(亿) = 市值(元) / 100000000。涨跌幅的计算方法是：涨跌幅(%) = (月末市值 - 月初市值) / 月初市值 × 100，结果保留两位小数。\n\n查询结果包括股票名称、股票代码、8月首个与最后交易日日期、8月初与8月末的总市值和流通市值（单位为亿元），以及对应的月度涨跌幅和流通市值涨跌幅百分比。在此查询中，针对结果进行了涨跌幅的计算与单位转换。\n\n本查询针对股票估值指标表，筛选了公司名称包含“格力电器”的有效记录，限定交易日期在2026年8月，并要求市值数据不为空。最",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    t.SEC_SNAME AS `股票名称`,\n    t.STOCKCODE AS `股票代码`,\n    DATE_FORMAT(MIN(t.TRD_DATE), '%Y-%m-%d') AS `8月首个交易日`,\n    DATE_FORMAT(MAX(t.TRD_DATE), '%Y-%m-%d') AS `8月最后交易日`,\n    ROUND(MIN(t.TCAP_1)/100000000, 1) AS `8月初总市值(亿)`,\n    ROUND(MAX(t.TCAP_1)/100000000, 1) AS `8月末总市值(亿)`,\n    ROUND(MIN(t.TCAP_2)/100000000, 1) AS `8月初流通市值(亿)`,\n    ROUND(MAX(t.TCAP_2)/100000000, 1) AS `8月末流通市值(亿)`,\n    ROUND((MAX(t.TCAP_1) - MIN(t.TCAP_1)) / NULLIF(MIN(t.TCAP_1),0) * 100, 2) AS `8月总市值变动率(%)`,\n    ROUND((MAX(t.TCAP_2) - MIN(t.TCAP_2)) / NULLIF(MIN(t.TCAP_2),0) * 100, 2) AS `8月流通市值变动率(%)`\nFROM\n    ANA_STK_VAL_IDX t\nWHERE\n    t.SEC_SNAME LIKE '%格力电器%'\n    AND t.ISVALID = 1\n    AND t.TRD_DATE >= '2026-08-01'\n    AND t.TRD_DATE <= '2026-08-31'\n    AND t.TCAP_1 IS NOT NULL\n    AND t.TCAP_2 IS NOT NULL\nGROUP BY\n    t.SEC_SNAME,\n    t.STOCKCODE",
+ "final_sql": "SELECT\n    t.SEC_SNAME AS `股票名称`,\n    t.STOCKCODE AS `股票代码`,\n    DATE_FORMAT(MIN(t.TRD_DATE), '%Y-%m-%d') AS `8月首个交易日`,\n    DATE_FORMAT(MAX(t.TRD_DATE), '%Y-%m-%d') AS `8月最后交易日`,\n    ROUND(MIN(t.TCAP_1)/100000000, 1) AS `8月初总市值(亿)`,\n    ROUND(MAX(t.TCAP_1)/100000000, 1) AS `8月末总市值(亿)`,\n    ROUND(MIN(t.TCAP_2)/100000000, 1) AS `8月初流通市值(亿)`,\n    ROUND(MAX(t.TCAP_2)/100000000, 1) AS `8月末流通市值(亿)`,\n    ROUND((MAX(t.TCAP_1) - MIN(t.TCAP_1)) / NULLIF(MIN(t.TCAP_1),0) * 100, 2) AS `8月总市值变动率(%)`,\n    ROUND((MAX(t.TCAP_2) - MIN(t.TCAP_2)) / NULLIF(MIN(t.TCAP_2),0) * 100, 2) AS `8月流通市值变动率(%)`\nFROM\n    ANA_STK_VAL_IDX t\nWHERE\n    t.SEC_SNAME LIKE '%格力电器%'\n    AND t.ISVALID = 1\n    AND t.TRD_DATE >= '2026-08-01'\n    AND t.TRD_DATE <= '2026-08-31'\n    AND t.TCAP_1 IS NOT NULL\n    AND t.TCAP_2 IS NOT NULL\nGROUP BY\n    t.SEC_SNAME,\n    t.STOCKCODE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-7.9196"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "格力电器 000651 2026-08-03 2026-08-31 2181.7 2331.3 2181.7 2331.3 6.85 6.85",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 60.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_16_21de337b.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 68.12,
+  "llm_seconds_max": 10.17,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "VW_CONCEPT_STK",
+   "STK_MKT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   40382
+  ],
+  "prompt_columns_raw_len": 22654
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2230,
+   "prompt_tokens": 47818,
+   "total_tokens": 50048,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 47818,
+  "completion": 2230,
+  "total": 50048
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2230,
+   "prompt_tokens": 47818,
+   "total_tokens": 50048,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "VW_CONCEPT_STK",
+   "STK_MKT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

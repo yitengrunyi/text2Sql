@@ -1,0 +1,149 @@
+{
+ "round_id": 8,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "微软最新一个交易日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）\n\n[2] 可能的计算公式：  \n- 收盘价 = 当日最后一笔成交价格\n\n说明：收盘价是指某只股票在某一个交易日内的最后一笔成交价格，通常用于衡量该股票在该交易日的最终市场价格。对于微软而言，就是其股票在最近一个交易日收盘时的价格。\n['微软', '收盘价', 'Closing Price', '股票', '成交价格', '市场价格', '股票价格']\n该问题可能涉及美股-'微软', 它的美股股票代码为：MSFT.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'STK2401', 'VIEW_ADS_STOCK_US_EOD_DI', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.COMB_SYMBOL AS `美股代码`,\n    v.NAME AS `股票名称`,\n    v.TRADE_DATE AS `交易日期`,\n    ROUND(v.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(v.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(v.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(v.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(v.CHG, 2) AS `涨跌额(美元)`,\n    ROUND(v.CHG_PCT_DAY, 2) AS `涨跌幅(%)`,\n    ROUND(v.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(v.TOTAL_SHARES/100000000, 2) AS `股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    VIEW_US_EOD_EXPR v\n    ON a.FIU_ID = v.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'MSFT.US'\n    AND v.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'MSFT'\n          AND CLOSE_PRICE IS NOT NULL\n    )\n    AND v.CLOSE_PRICE IS NOT NULL\nLIMIT 1\n200\n{table:[['美股代码', '股票名称', '交易日期', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '股本(亿股)'], ['MSFT.US', '微软', '2026-08-25', '483.64', '495.21', '478.93', '495.00', '11.96', '2.48', '535.73', '76.23']]}\n该查询的目的是获取微软公司在最近一个交易日的收盘价信息以及相关行情数据。\n\n收盘价通过公式“收盘价(美元) = 收盘价保留两位小数”进行展示。查询还对开盘价、最高价、最低价、涨跌额、涨跌幅、成交额和股本进行了单位转换和保留两位小数处理。其中，成交额通过“成交额(亿美元) = 成交额(美元) / 100000000”，股本通过“股本(亿股) = 总股本 / 100000000”进行转换。涨跌额和涨跌幅分别通过“收盘价减昨收”和“(收盘价-昨收)/昨收*100”公式计算。查询结果符合要求。\n\n数据来源包括美股上市股票列表信息表和美股日行情增强视图，通过内部代码关联。筛选条件为美股展示代码为“MSFT.US”，交易日期为该股票行情数据中的最新日期且收盘价不为空，仅返回一条最新的微软股票行情数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.COMB_SYMBOL AS `美股代码`,\n    v.NAME AS `股票名称`,\n    v.TRADE_DATE AS `交易日期`,\n    ROUND(v.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(v.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(v.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(v.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(v.CHG, 2) AS `涨跌额(美元)`,\n    ROUND(v.CHG_PCT_DAY, 2) AS `涨跌幅(%)`,\n    ROUND(v.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(v.TOTAL_SHARES/100000000, 2) AS `股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    VIEW_US_EOD_EXPR v\n    ON a.FIU_ID = v.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'MSFT.US'\n    AND v.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'MSFT'\n          AND CLOSE_PRICE IS NOT NULL\n    )\n    AND v.CLOSE_PRICE IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    a.COMB_SYMBOL AS `美股代码`,\n    v.NAME AS `股票名称`,\n    v.TRADE_DATE AS `交易日期`,\n    ROUND(v.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(v.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(v.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(v.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(v.CHG, 2) AS `涨跌额(美元)`,\n    ROUND(v.CHG_PCT_DAY, 2) AS `涨跌幅(%)`,\n    ROUND(v.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(v.TOTAL_SHARES/100000000, 2) AS `股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    VIEW_US_EOD_EXPR v\n    ON a.FIU_ID = v.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'MSFT.US'\n    AND v.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'MSFT'\n          AND CLOSE_PRICE IS NOT NULL\n    )\n    AND v.CLOSE_PRICE IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "495.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "MSFT.US 微软 2026-08-25 483.64 495.21 478.93 495.0 11.96 2.48 535.73 76.23",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 45.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_8_eea4361f.4",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 42.99,
+  "llm_seconds_max": 6.19,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   13453
+  ],
+  "prompt_columns_raw_len": 4634
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1178,
+   "prompt_tokens": 19078,
+   "total_tokens": 20256,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19078,
+  "completion": 1178,
+  "total": 20256
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1178,
+   "prompt_tokens": 19078,
+   "total_tokens": 20256,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

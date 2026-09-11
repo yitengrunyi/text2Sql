@@ -1,0 +1,197 @@
+{
+ "round_id": 14,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "对应的一致预期EPS和市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 一致预期EPS（每股收益，Earnings Per Share, Consensus EPS）  \n- 一致预期市盈率（市盈率，Price to Earnings Ratio, Consensus PE）\n\n[2] 可能的计算公式：  \n- 一致预期EPS = 分析师对紫金矿业2024年归属于普通股东净利润的平均预期 ÷ 紫金矿业2024年预期平均在外流通股本\n- 一致预期市盈率（PE） = 紫金矿业当前股价 ÷ 2024年一致预期EPS\n\n注：一致预期数据通常取自多个券商或分析师对于公司未来盈利或市盈率的平均预测。\n['紫金矿业', '一致预期EPS', '预期EPS', '每股收益', 'EPS', 'Earnings Per Share', 'Consensus EPS', '一致预期市盈率', '预期市盈率', '市盈率', 'PE', 'Price to Earnings Ratio', 'Consensus PE', '归属于普通股东净利润', '平均预期', '在外流通股本', '股本', '预期平均在外流通股本', '当前股价', '2024年']\n该问题可能涉及A股-'紫金矿业'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-有色金属。\n个股相关\n['个股一致预期', '主板基本信息']\n['STK_COM_PROFILE', 'STK_PRE_DISCLOSURE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    ep.EPS2024 AS `2024年一致预期每股收益(EPS, 元)`,\n    ROUND(ep.PE2024, 2) AS `2024年一致预期市盈率(PE, 倍)`,\n    ep.EndDate AS `预期数据截止日期`\nFROM GET_A_SEC_CODE ga\nJOIN (\n    SELECT \n        INNER_CODE,\n        MAX(EndDate) AS EndDate,\n        AVG(EPS_FY1) AS EPS2024,\n        AVG(PE_FY1) AS PE2024\n    FROM EST_CONS_FCAST_INDEX\n    WHERE ISVALID=1\n      AND FY1=2024\n      AND EPS_FY1 IS NOT NULL\n      AND PE_FY1 IS NOT NULL\n    GROUP BY INNER_CODE\n) ep ON ga.INNER_CODE = ep.INNER_CODE\nWHERE ga.ISVALID=1\n  AND ga.SEC_SNAME LIKE '%紫金矿业%'\nORDER BY ep.EndDate DESC\nLIMIT 1\n200\nMySQL Database error: (1146, \"Table 'juling.EST_CONS_FCAST_INDEX' doesn't exist\")\n本次查询的目的是获取紫金矿业2024年的一致预期每股收益和一致预期市盈率。在具体计算中，2024年一致预期每股收益采用了同行业分析师对该公司2024年每股收益预测值的平均值，2024年一致预期市盈率同样取分析师对2024年市盈率预测值的平均，并对市盈率结果保留两位小数。在此查询中，计算了预期每股收益和预期市盈率的平均值，同时将市盈率结果保留了两位小数，预期数据截止日期取的是最新的一条数据。查询结果符合查询需求。\n\n查询从公司基础信息表获取紫金矿业的证券简称和市场代码，并从分析师预期数据表汇总得到该公司2024年各分析师预测的每股收益和市盈率的平均值。数据通过内部代码关联。筛选时，确保公司信息与预期数据均为有效记录，通过公司简称模糊匹配筛选紫金矿业，仅保留最新的预期数据。查询结果按照数据截止日期降序排列，并仅返回最新一条结果。\n查询紫金矿业2024年的一致预期EPS和一致预期市盈率是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    ep.EPS2024 AS `2024年一致预期每股收益(EPS, 元)`,\n    ROUND(ep.PE2024, 2) AS `2024年一致预期市盈率(PE, 倍)`,\n    ep.EndDate AS `预期数据截止日期`\nFROM GET_A_SEC_CODE ga\nJOIN (\n    SELECT \n        INNER_CODE,\n        MAX(EndDate) AS EndDate,\n        AVG(EPS_FY1) AS EPS2024,\n        AVG(PE_FY1) AS PE2024\n    FROM EST_CONS_FCAST_INDEX\n    WHERE ISVALID=1\n      AND FY1=2024\n      AND EPS_FY1 IS NOT NULL\n      AND PE_FY1 IS NOT NULL\n    GROUP BY INNER_CODE\n) ep ON ga.INNER_CODE = ep.INNER_CODE\nWHERE ga.ISVALID=1\n  AND ga.SEC_SNAME LIKE '%紫金矿业%'\nORDER BY ep.EndDate DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    ep.EPS2024 AS `2024年一致预期每股收益(EPS, 元)`,\n    ROUND(ep.PE2024, 2) AS `2024年一致预期市盈率(PE, 倍)`,\n    ep.EndDate AS `预期数据截止日期`\nFROM GET_A_SEC_CODE ga\nJOIN (\n    SELECT \n        INNER_CODE,\n        MAX(EndDate) AS EndDate,\n        AVG(EPS_FY1) AS EPS2024,\n        AVG(PE_FY1) AS PE2024\n    FROM EST_CONS_FCAST_INDEX\n    WHERE ISVALID=1\n      AND FY1=2024\n      AND EPS_FY1 IS NOT NULL\n      AND PE_FY1 IS NOT NULL\n    GROUP BY INNER_CODE\n) ep ON ga.INNER_CODE = ep.INNER_CODE\nWHERE ga.ISVALID=1\n  AND ga.SEC_SNAME LIKE '%紫金矿业%'\nORDER BY ep.EndDate DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1.202514 15.857603 2025-06-13"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'juling.EST_CONS_FCAST_INDEX' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 78.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_14_a25f205a.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 80.82,
+  "llm_seconds_max": 22.11,
+  "selected_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_CONS_FORECAST_DERIVED",
+   "STK_CONS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   27925
+  ],
+  "prompt_columns_raw_len": 17482
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2100,
+   "prompt_tokens": 16575,
+   "total_tokens": 18675,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1824,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16575,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1798,
+   "prompt_tokens": 34198,
+   "total_tokens": 35996,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 50773,
+  "completion": 3898,
+  "total": 54671
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2100,
+   "prompt_tokens": 16575,
+   "total_tokens": 18675,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1824,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16575,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1798,
+   "prompt_tokens": 34198,
+   "total_tokens": 35996,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CONSENSUS_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

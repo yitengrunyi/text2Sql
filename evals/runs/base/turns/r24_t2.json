@@ -1,0 +1,147 @@
+{
+ "round_id": 24,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "那这批在管基金里面，最新一期披露规模最大的是哪只？规模有多大？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 基金规模（通常指管理资产规模，AUM, Assets Under Management）\n\n[2] 可能的计算公式  \n基金规模 = 基金所持有的所有资产的公允价值总和  \n简化表达为：  \n基金规模 = ∑（各项资产市值）\n\n判断“规模最大”的基金步骤：  \n在当前在管基金池内，筛选出最新披露日期下，AUM数值最大的那一只基金，并输出该数值。\n['基金规模', '管理资产规模', 'AUM', 'Assets Under Management', '资产公允价值', '资产市值', '在管基金', '最新披露日期', '规模最大', '基金', '资产']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品基本信息']\n['FUND_AND_COMPANY_MAPPING', 'FUND_FRONT_CONTROL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    s.REPORT_DATE AS `最新报告期`,\n    ROUND(t.FUND_SCALE/100000000, 2) AS `最新基金规模（亿）`\nFROM (\n    SELECT \n        m.FUND_HCODE, \n        m.FUND_SYMBOL, \n        m.FUND_NAME,\n        c.REPORT_DATE,\n        m.FUND_SCALE\n    FROM FUND_AND_COMPANY_MAPPING m\n    JOIN FUND_FRONT_CONTROL c \n        ON m.FUND_HCODE = c.ID\n    WHERE m.HISVALID = 1\n      AND c.HISVALID = 1\n      AND c.REPORT_DATE = (\n            SELECT MAX(REPORT_DATE) \n            FROM FUND_FRONT_CONTROL \n            WHERE HISVALID = 1\n        )\n      AND m.FUND_SCALE IS NOT NULL\n) t\nJOIN FUND_FRONT_CONTROL s \n    ON t.FUND_HCODE = s.ID\nWHERE s.HISVALID = 1\nORDER BY t.FUND_SCALE DESC\nLIMIT 1\n200\nMySQL Database error: (1054, \"Unknown column 'm.FUND_SCALE' in 'field list'\")\n该查询主要目的是找出当前管理的基金中，在最新一期报告期披露规模最大的基金，并计算其规模。\n\n基金规模通过公式 “最新基金规模（亿）= 基金规模数值 / 100000000” 转换为以亿为单位并保留两位小数。在此查询中，对基金规模进行了单位换算处理。查询结果符合要求。\n\n查询主要从两个表获取数据：一个表用于记录基金与基金公司关系及基金基本信息，另一个表用于提供基金最新报告期的信息。通过基金内部代码和自增列进行关联。\n\n查询选择了基金内部代码、基金代码、基金简称、最新报告期，以及最新基金规模（亿）。只筛选有效的基金和有效的报告期。选取报告期为最新有效的一期，并确保基金规模不为空。最终按基金规模降序排列，仅返回规模最大的基金。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    s.REPORT_DATE AS `最新报告期`,\n    ROUND(t.FUND_SCALE/100000000, 2) AS `最新基金规模（亿）`\nFROM (\n    SELECT \n        m.FUND_HCODE, \n        m.FUND_SYMBOL, \n        m.FUND_NAME,\n        c.REPORT_DATE,\n        m.FUND_SCALE\n    FROM FUND_AND_COMPANY_MAPPING m\n    JOIN FUND_FRONT_CONTROL c \n        ON m.FUND_HCODE = c.ID\n    WHERE m.HISVALID = 1\n      AND c.HISVALID = 1\n      AND c.REPORT_DATE = (\n            SELECT MAX(REPORT_DATE) \n            FROM FUND_FRONT_CONTROL \n            WHERE HISVALID = 1\n        )\n      AND m.FUND_SCALE IS NOT NULL\n) t\nJOIN FUND_FRONT_CONTROL s \n    ON t.FUND_HCODE = s.ID\nWHERE s.HISVALID = 1\nORDER BY t.FUND_SCALE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    s.REPORT_DATE AS `最新报告期`,\n    ROUND(t.FUND_SCALE/100000000, 2) AS `最新基金规模（亿）`\nFROM (\n    SELECT \n        m.FUND_HCODE, \n        m.FUND_SYMBOL, \n        m.FUND_NAME,\n        c.REPORT_DATE,\n        m.FUND_SCALE\n    FROM FUND_AND_COMPANY_MAPPING m\n    JOIN FUND_FRONT_CONTROL c \n        ON m.FUND_HCODE = c.ID\n    WHERE m.HISVALID = 1\n      AND c.HISVALID = 1\n      AND c.REPORT_DATE = (\n            SELECT MAX(REPORT_DATE) \n            FROM FUND_FRONT_CONTROL \n            WHERE HISVALID = 1\n        )\n      AND m.FUND_SCALE IS NOT NULL\n) t\nJOIN FUND_FRONT_CONTROL s \n    ON t.FUND_HCODE = s.ID\nWHERE s.HISVALID = 1\nORDER BY t.FUND_SCALE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "景顺长城新兴成长混合A 10762688560.8700"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'm.FUND_SCALE' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False, '日期': False})"
+ ],
+ "elapsed_seconds": 46.1,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_24_d534acc1.2",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 43.7,
+  "llm_seconds_max": 5.52,
+  "selected_tables": [
+   "FUND_FRONT_CONTROL",
+   "FUND_ASSET_ALLOCATION"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   12666
+  ],
+  "prompt_columns_raw_len": 2468
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 958,
+   "prompt_tokens": 21355,
+   "total_tokens": 22313,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3456,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21355,
+  "completion": 958,
+  "total": 22313
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 958,
+   "prompt_tokens": 21355,
+   "total_tokens": 22313,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3456,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_AND_MANAGER_MAPPING",
+  "FUND_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_FRONT_CONTROL",
+   "FUND_ASSET_ALLOCATION"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

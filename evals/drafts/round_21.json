@@ -1,0 +1,74 @@
+{
+  "round_id": 21,
+  "source": "MYSQL-2",
+  "domain": "指数",
+  "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+  "initial": {
+    "question": "帮我看看中证1000指数最新收盘在多少点？",
+    "judge": "numeric",
+    "gold_value": "7583.7559",
+    "gold_display": "7583.76点（2026-09-02收盘）",
+    "gold_entities": ["中证1000"],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE SECCODE='000852' AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1",
+    "gold_tables": ["INDX_MKT"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "relative"}
+  },
+  "feedbacks": [
+    {
+      "question": "它最近一个月整体走势怎么样，累计涨跌幅大概多少？",
+      "judge": "numeric",
+      "gold_value": "7.18",
+      "gold_display": "最近一个月累计上涨7.18%（7075.51点→7583.76点）",
+      "gold_entities": ["中证1000"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS chg_pct_1m FROM (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1) a, (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<=(SELECT DATE_SUB(MAX(TRADEDATE),INTERVAL 1 MONTH) FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1) ORDER BY TRADEDATE DESC LIMIT 1) b",
+      "gold_tables": ["INDX_MKT"],
+      "labels": {"difficulty": "时间窗口", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "那2025年全年呢，累计涨幅有多少？",
+      "judge": "numeric",
+      "gold_value": "27.49",
+      "gold_display": "2025年全年累计上涨27.49%（5957.72点→7595.28点）",
+      "gold_entities": ["中证1000"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS chg_pct_2025 FROM (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<='2025-12-31' ORDER BY TRADEDATE DESC LIMIT 1) a, (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<='2024-12-31' ORDER BY TRADEDATE DESC LIMIT 1) b",
+      "gold_tables": ["INDX_MKT"],
+      "labels": {"difficulty": "子查询", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+      "judge": "entity",
+      "gold_value": "43.0869",
+      "gold_display": "中证1000市盈率43.09倍 > 上证50市盈率10.64倍，中证1000估值明显更高",
+      "gold_entities": ["中证1000", "上证50"],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT INDX_CNAME, PE FROM ANA_INDX_VAL_IDX WHERE INNER_CODE IN (106006433,106000255) AND ISVALID=1 AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE INNER_CODE IN (106006433,106000255) AND ISVALID=1)",
+      "gold_tables": ["ANA_INDX_VAL_IDX"],
+      "labels": {"difficulty": "子查询", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+    },
+    {
+      "question": "明白了，谢谢。顺便确认下，这些点位和涨跌幅都是交易所收盘后公布的官方行情口径吧？",
+      "judge": "nonquery",
+      "gold_value": null,
+      "gold_display": null,
+      "gold_entities": [],
+      "gold_date": null,
+      "gold_sql": null,
+      "gold_tables": [],
+      "labels": {"difficulty": null, "followup_type": "非查询", "route_gold": "NON_QUERY", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "对了，再帮我查一下万华化学2025年年报的归属于母公司股东的净利润是多少？",
+      "judge": "numeric",
+      "gold_value": "12527201094.1500",
+      "gold_display": "125.27亿元",
+      "gold_entities": ["万华化学"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+      "gold_tables": ["VIEW_STK_FIN_IDX"],
+      "labels": {"difficulty": "单表", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

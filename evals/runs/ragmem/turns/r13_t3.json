@@ -1,0 +1,172 @@
+{
+ "round_id": 13,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "那2023年度呢，当时每10股派了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT d.PERIODDATE AS `报告期`, d.A_STOCKCODE AS `股票代码`, d.A_STOCKSNAME AS `股票简称`, d.CASH_BT AS `每10股派现(含税)` FROM STK_DIV_INFO d JOIN GET_A_SEC_CODE s ON d.COMCODE = s.COMCODE AND s.ISVALID = 1 WHERE d.ISVALID = 1 AND s.SEC_SNAME LIKE '%中国神华%' AND d.PERIODDATE >= '2023-01-01' AND d.PERIODDATE <= '2023-12-31' ORDER BY d.PERIODDATE DESC, d.PRG_CODE DESC LIMIT 10;\n200\n{table:[['报告期', '股票代码', '股票简称', '每10股派现(含税)'], ['2023-12-31', '601088', '中国神华', '22.60'], ['2023-06-30', '601088', '中国神华', '-']]}\n该查询用于获取中国神华2023年度的分红派息方案，关注的是当年每10股派发的现金红利金额，并呈现了相关的报告期、股票代码与简称等信息。数据来源于分红派息数据表和股票基本信息表，借助公司名称筛选出中国神华，且要求相关记录为有效状态。查询仅针对2023年1月1日至2023年12月31日之间的分红方案记录，并按照最新报告期和方案进度倒序排列，保证展示最近正式实施的分红方案。现金红利金额字段反映的是每10股股东可获得的派现金额（含税），结果直接引用数据库中已披露的分红数据，无需额外计算。查询结果能完整满足“2023年度中国神华每10股派多少”这一用户需求。\n{table:[['报告期', '股票代码', '股票简称', '每10股派现(含税)'], ['2023-12-31', '601088', '中国神华', '22.60'], ['2023-06-30', '601088', '中国神华', '-']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT d.PERIODDATE AS `报告期`, d.A_STOCKCODE AS `股票代码`, d.A_STOCKSNAME AS `股票简称`, d.CASH_BT AS `每10股派现(含税)` FROM STK_DIV_INFO d JOIN GET_A_SEC_CODE s ON d.COMCODE = s.COMCODE AND s.ISVALID = 1 WHERE d.ISVALID = 1 AND s.SEC_SNAME LIKE '%中国神华%' AND d.PERIODDATE >= '2023-01-01' AND d.PERIODDATE <= '2023-12-31' ORDER BY d.PERIODDATE DESC, d.PRG_CODE DESC LIMIT 10",
+ "final_sql": "SELECT d.PERIODDATE AS `报告期`, d.A_STOCKCODE AS `股票代码`, d.A_STOCKSNAME AS `股票简称`, d.CASH_BT AS `每10股派现(含税)` FROM STK_DIV_INFO d JOIN GET_A_SEC_CODE s ON d.COMCODE = s.COMCODE AND s.ISVALID = 1 WHERE d.ISVALID = 1 AND s.SEC_SNAME LIKE '%中国神华%' AND d.PERIODDATE >= '2023-01-01' AND d.PERIODDATE <= '2023-12-31' ORDER BY d.PERIODDATE DESC, d.PRG_CODE DESC LIMIT 10",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "22.600000 2.260000 2024-07-08 00:00:00"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2023-12-31 00:00:00 601088 中国神华 22.600000\n2023-06-30 00:00:00 601088 中国神华 ",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 30.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_13_7fc3b23e.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.34,
+  "llm_seconds_max": 23.1,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2343,
+   "prompt_tokens": 21290,
+   "total_tokens": 23633,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1851,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 21290,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 191,
+   "prompt_tokens": 14084,
+   "total_tokens": 14275,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 35374,
+  "completion": 2534,
+  "total": 37908
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2343,
+   "prompt_tokens": 21290,
+   "total_tokens": 23633,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1851,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 21290,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 191,
+   "prompt_tokens": 14084,
+   "total_tokens": 14275,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

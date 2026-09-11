@@ -1,0 +1,172 @@
+{
+ "round_id": 25,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "回到这只医疗ETF，它目前最新的基金规模有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n基金规模（Asset Under Management，简称AUM）\n\n[2] 可能的计算公式  \n基金规模 = ∑（各持有人份额 × 每单位基金净值）\n或  \n基金规模 = 基金总份额 × 最新基金单位净值\n['医疗ETF', '基金规模', 'Asset Under Management', 'AUM', '关键金融指标', '持有人份额', '每单位基金净值', '基金总份额', '最新基金单位净值', '基金单位净值']\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n基金相关\n['基金产品持仓', '基金产品基本信息', 'ETF相关信息']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'FUND_INDUSTRY_HOLDING_MV_DETAIL_HY', 'FUND_PORTFOLIO_DETAIL', 'ETF_LABEL_INFO_CHINA', 'ETF_INFO_DETAIL', 'FUND_ASSET_ALLOCATION', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t3.`TRADING_DAY` AS `日期`,\n    t3.`FUND_NAME` AS `基金名称`,\n    t3.`FUND_SYMBOL` AS `基金代码`,\n    ROUND(t3.`FUND_SIZE`/100000000, 2) AS `基金规模（亿）`\nFROM \n    ETF_LABEL_INFO_CHINA t1\nJOIN \n    ETF_PERFORMANCE_DETAIL t3\n    ON t1.ETF_CODE = t3.FUND_SYMBOL AND t3.TYPE = 1\nWHERE \n    t1.HISVALID = 1\n    AND t3.HISVALID = 1\n    AND t1.SECTOR LIKE '%医药生物%'\n    AND t3.TRADING_DAY = '2026-09-02'\nORDER BY \n    t3.FUND_SIZE DESC\nLIMIT 1\n200\n{table:[['日期', '基金名称', '基金代码', '基金规模（亿）'], ['2026-09-02', '广发中证香港创新药ETF(QDII)', '513120.SH', '242.66']]}\n基金规模（亿）是通过基金规模除以一亿后保留两位小数计算得出，即基金规模（亿）等于基金规模除以一亿。该查询直接对结果进行了单位转换和小数处理。在此查询中，基金规模的原始数据来源于基金表现数据表，并进行了换算和格式化。\n\n本查询从两个表中提取数据，通过ETF代码进行连接。一个表用于提供ETF详细标签信息，另一个表用于记录ETF的表现数据。只选取有效数据，筛选申万一级行业为医药生物，限定交易日期为2026年9月2日。最终按基金规模降序排列，仅返回最大规模的最新有效医疗ETF信息。\n\n查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t3.`TRADING_DAY` AS `日期`,\n    t3.`FUND_NAME` AS `基金名称`,\n    t3.`FUND_SYMBOL` AS `基金代码`,\n    ROUND(t3.`FUND_SIZE`/100000000, 2) AS `基金规模（亿）`\nFROM \n    ETF_LABEL_INFO_CHINA t1\nJOIN \n    ETF_PERFORMANCE_DETAIL t3\n    ON t1.ETF_CODE = t3.FUND_SYMBOL AND t3.TYPE = 1\nWHERE \n    t1.HISVALID = 1\n    AND t3.HISVALID = 1\n    AND t1.SECTOR LIKE '%医药生物%'\n    AND t3.TRADING_DAY = '2026-09-02'\nORDER BY \n    t3.FUND_SIZE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    t3.`TRADING_DAY` AS `日期`,\n    t3.`FUND_NAME` AS `基金名称`,\n    t3.`FUND_SYMBOL` AS `基金代码`,\n    ROUND(t3.`FUND_SIZE`/100000000, 2) AS `基金规模（亿）`\nFROM \n    ETF_LABEL_INFO_CHINA t1\nJOIN \n    ETF_PERFORMANCE_DETAIL t3\n    ON t1.ETF_CODE = t3.FUND_SYMBOL AND t3.TYPE = 1\nWHERE \n    t1.HISVALID = 1\n    AND t3.HISVALID = 1\n    AND t1.SECTOR LIKE '%医药生物%'\n    AND t3.TRADING_DAY = '2026-09-02'\nORDER BY \n    t3.FUND_SIZE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "24231835329.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 广发中证香港创新药ETF(QDII) 513120.SH 242.66",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 45.3,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_25_9dcfb6e5.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 49.34,
+  "llm_seconds_max": 5.47,
+  "selected_tables": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL",
+   "FUND_ASSET_ALLOCATION",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_LIST_FREQUENCY",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "FUND_TURNOVER_RATE",
+   "STOCK_HOLD_STATISTICS_HY",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "STOCK_FACTOR_VALUE",
+   "ETF_DAILY_QUOTE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   26040
+  ],
+  "prompt_columns_raw_len": 17474
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1484,
+   "prompt_tokens": 37136,
+   "total_tokens": 38620,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 37136,
+  "completion": 1484,
+  "total": 38620
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1484,
+   "prompt_tokens": 37136,
+   "total_tokens": 38620,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL",
+   "FUND_ASSET_ALLOCATION",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

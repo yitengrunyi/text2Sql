@@ -1,0 +1,199 @@
+{
+ "round_id": 29,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "主营业务占它各板块收入合计的比例大概多少？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 主营业务收入  \n- 各板块收入合计  \n- 主营业务占比\n\n[2] 可能的计算公式  \n主营业务占比 = 主营业务收入 ÷ 各板块收入总和 × 100%\n['主营业务收入', '主营业务', '各板块收入合计', '各板块收入总和', '各板块收入', '主营业务占比', '比例']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_PRODUCT', 'STK_PRI_INCOME_DISTRICT', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n    t.PERIODDATE AS `报表日期`,\n    g.SEC_SNAME AS `股票简称`,\n    g.SEC_CODE AS `股票代码`,\n    t.ITEM_NAME AS `产品名称`,\n    ROUND(t.INCOME/10000,3) AS `主营业务收入(亿元)`,\n    t.PRI_RVNU_PCT AS `营业收入占比(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT t\n    LEFT JOIN GET_A_SEC_CODE g ON t.COMCODE = g.COMCODE\nWHERE\n    t.ISVALID = 1\n    AND t.RPT_TYPE = '合并'\n    AND t.PERIODDATE = '2026-03-31 00:00:00.000'\n    AND t.PRI_RVNU_PCT IS NOT NULL\n    AND g.ISVALID = 1\nORDER BY\n    t.PRI_RVNU_PCT DESC,\n    t.INCOME DESC\n200\n{table:[['报表日期', '股票简称', '产品名称', '主营业务收入(亿元)', '营业收入占比(%)'], ['2026-03-31', '津富士达', '合计', '13.54', '99.51'], ['2026-03-31', '津富士达', '整车类小计', '11.78', '86.57'], ['2026-03-31', '云南铜业', '阴极铜', '385.63', '72.82'], ['2026-03-31', '津富士达', '自行车', '5.56', '40.85'], ['2026-03-31', '中国巨石', '电子纱及电子布', '12.57', '23.79'], ['2026-03-31', '云南铜业', '贵金属', '119.93', '22.65'], ['2026-03-31', '津富士达', '电助力自行车', '2.91', '21.37'], ['2026-03-31', '津富士达', '共享单车', '2.40', '17.64'], ['2026-03-31', '津富士达', '零配件类', '1.76', '12.95'], ['2026-03-31', '津富士达', '其他', '0.91', '6.71'], ['2026-03-31', '云南铜业', '稀贵金属及其他附产品', '12.84', '2.42'], ['2026-03-31', '云南铜业', '硫酸', '11.19', '2.11'], ['2026-03-31', '中国巨石', '其他项目', '1.10', '2.08'], ['2026-03-31', '中国巨石', '其他主营业务', '0.48', '0.91'], ['2026-03-31', '云南铜业', '其他项目', '0.00', '0.00']]}\n该查询统计了各公司不同产品板块在总体营业收入中的占比情况。主营业务收入（亿元）通过主营业务收入数据除以一万元进行单位转换。营业收入占比以主营业务收入占总营业收入的百分比形式给出。公式为：营业收入占比 = 某产品主营业务收入 / 公司全部主营业务收入 × 100%。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n查询从主营业务收入按产品分布表和A股证券基础信息表提取数据，通过公司代码进行关联。筛选了有效记录，只关注合并报表，筛选报表日期为2026年3月31日的数据，并要求产品收入占比数据不为空。结果按照产品收入占比和主营业务收入进行降序排序，返回各公司各板块的收入情况及对应占比。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.PERIODDATE AS `报表日期`,\n    g.SEC_SNAME AS `股票简称`,\n    g.SEC_CODE AS `股票代码`,\n    t.ITEM_NAME AS `产品名称`,\n    ROUND(t.INCOME/10000,3) AS `主营业务收入(亿元)`,\n    t.PRI_RVNU_PCT AS `营业收入占比(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT t\n    LEFT JOIN GET_A_SEC_CODE g ON t.COMCODE = g.COMCODE\nWHERE\n    t.ISVALID = 1\n    AND t.RPT_TYPE = '合并'\n    AND t.PERIODDATE = '2026-03-31 00:00:00.000'\n    AND t.PRI_RVNU_PCT IS NOT NULL\n    AND g.ISVALID = 1\nORDER BY\n    t.PRI_RVNU_PCT DESC,\n    t.INCOME DESC",
+ "final_sql": "SELECT \n    t.PERIODDATE AS `报表日期`,\n    g.SEC_SNAME AS `股票简称`,\n    g.SEC_CODE AS `股票代码`,\n    t.ITEM_NAME AS `产品名称`,\n    ROUND(t.INCOME/10000,3) AS `主营业务收入(亿元)`,\n    t.PRI_RVNU_PCT AS `营业收入占比(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT t\n    LEFT JOIN GET_A_SEC_CODE g ON t.COMCODE = g.COMCODE\nWHERE\n    t.ISVALID = 1\n    AND t.RPT_TYPE = '合并'\n    AND t.PERIODDATE = '2026-03-31 00:00:00.000'\n    AND t.PRI_RVNU_PCT IS NOT NULL\n    AND g.ISVALID = 1\nORDER BY\n    t.PRI_RVNU_PCT DESC,\n    t.INCOME DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "62.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.STK_PRI_INCOME_PRODUCT' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 53.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_29_67f4f9f9.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 52.76,
+  "llm_seconds_max": 6.46,
+  "selected_tables": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   17100
+  ],
+  "prompt_columns_raw_len": 7495
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1148,
+   "prompt_tokens": 29272,
+   "total_tokens": 30420,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 517,
+   "total_tokens": 518,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 517,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29789,
+  "completion": 1149,
+  "total": 30938
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1148,
+   "prompt_tokens": 29272,
+   "total_tokens": 30420,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 517,
+   "total_tokens": 518,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 517,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

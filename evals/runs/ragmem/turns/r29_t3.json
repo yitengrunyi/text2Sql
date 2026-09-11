@@ -1,0 +1,173 @@
+{
+ "round_id": 29,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "往回看一个财年，2024年主营业务板块这块做了多少收入？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F008N AS `主营业务收入`,\n        ROUND(b.F007N / NULLIF(SUM(b.F007N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `销售收入占比(%)`,\n        ROUND(b.F008N / NULLIF(SUM(b.F008N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `主营业务收入占比(%)`,\n        b.F005V AS `币种`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F001D >= '2024-01-01' AND b.F001D <= '2024-12-31'\n        AND b.F007N IS NOT NULL\n        AND b.F008N IS NOT NULL\n        AND b.F005V = 'USD'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(`主营业务收入` / 100000000, 3) AS `主营业务收入(亿美元)`,\n    `销售收入占比(%)`,\n    `主营业务收入占比(%)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `板块中文名` LIKE '%北美%' \n    OR `板块英文名` LIKE '%North America%' \n    OR `板块中文名` LIKE '%美国%' \n    OR `板块英文名` LIKE '%United States%' \n    OR `板块中文名` LIKE '%美洲%' \n    OR `板块英文名` LIKE '%Americas%'\nORDER BY\n    `财报周期结束日期` DESC,\n    `板块英文名`,\n    `板块中文名`;\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询获取了谷歌A在2024财年北美及相关板块的销售收入和主营业务收入信息。数据来源于股票基本信息表和板块收入分布表，通过关联券商展示代码筛选出谷歌A，并限制报告周期为2024年全年，币种为美元，同时仅保留包含北美、美洲、美国等关键词的板块数据。结果按报告周期和板块名称降序排列。销售收入和主营业务收入均以原始金额除以1亿，计为亿美元，保留3位小数。查询还统计了板块销售收入和主营业务收入在当期总收入中的占比，占比为该板块收入除以所有板块合计收入再乘以100，保留2位小数。所有收入直接取自已有财务数据，计算方式和单位换算均符合行业惯例。本查询能准确反映谷歌A在2024年北美区域各板块的主营收入情况，结果符合用户需求。\nNo rows fetched. 查找结果为空，请检查SQL语句",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F008N AS `主营业务收入`,\n        ROUND(b.F007N / NULLIF(SUM(b.F007N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `销售收入占比(%)`,\n        ROUND(b.F008N / NULLIF(SUM(b.F008N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `主营业务收入占比(%)`,\n        b.F005V AS `币种`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F001D >= '2024-01-01' AND b.F001D <= '2024-12-31'\n        AND b.F007N IS NOT NULL\n        AND b.F008N IS NOT NULL\n        AND b.F005V = 'USD'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(`主营业务收入` / 100000000, 3) AS `主营业务收入(亿美元)`,\n    `销售收入占比(%)`,\n    `主营业务收入占比(%)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `板块中文名` LIKE '%北美%' \n    OR `板块英文名` LIKE '%North America%' \n    OR `板块中文名` LIKE '%美国%' \n    OR `板块英文名` LIKE '%United States%' \n    OR `板块中文名` LIKE '%美洲%' \n    OR `板块英文名` LIKE '%Americas%'\nORDER BY\n    `财报周期结束日期` DESC,\n    `板块英文名`,\n    `板块中文名`",
+ "final_sql": "WITH CTE AS (\n    SELECT\n        a.CSNAME AS `股票名称`,\n        a.COMB_SYMBOL AS `股票代码`,\n        b.F001D AS `财报周期结束日期`,\n        b.F006V AS `板块英文名`,\n        b.SECTOR_CNAME AS `板块中文名`,\n        b.F007N AS `销售收入`,\n        b.F008N AS `主营业务收入`,\n        ROUND(b.F007N / NULLIF(SUM(b.F007N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `销售收入占比(%)`,\n        ROUND(b.F008N / NULLIF(SUM(b.F008N) OVER(PARTITION BY a.COMB_SYMBOL, b.F001D), 0) * 100, 2) AS `主营业务收入占比(%)`,\n        b.F005V AS `币种`\n    FROM\n        AMERICAN_STOCK_MAIN a\n    INNER JOIN\n        VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\n    WHERE\n        a.COMB_SYMBOL = 'GOOGL.US'\n        AND b.F001D >= '2024-01-01' AND b.F001D <= '2024-12-31'\n        AND b.F007N IS NOT NULL\n        AND b.F008N IS NOT NULL\n        AND b.F005V = 'USD'\n)\nSELECT\n    `股票名称`,\n    `股票代码`,\n    `财报周期结束日期`,\n    `板块英文名`,\n    `板块中文名`,\n    ROUND(`销售收入` / 100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(`主营业务收入` / 100000000, 3) AS `主营业务收入(亿美元)`,\n    `销售收入占比(%)`,\n    `主营业务收入占比(%)`,\n    `币种`\nFROM\n    CTE\nWHERE\n    `板块中文名` LIKE '%北美%' \n    OR `板块英文名` LIKE '%North America%' \n    OR `板块中文名` LIKE '%美国%' \n    OR `板块英文名` LIKE '%United States%' \n    OR `板块中文名` LIKE '%美洲%' \n    OR `板块英文名` LIKE '%Americas%'\nORDER BY\n    `财报周期结束日期` DESC,\n    `板块英文名`,\n    `板块中文名`",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "238700.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 38.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_29_4db67a7c.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 37.82,
+  "llm_seconds_max": 33.98,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3423,
+   "prompt_tokens": 8785,
+   "total_tokens": 12208,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2405,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8785,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 224,
+   "prompt_tokens": 2972,
+   "total_tokens": 3196,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 11757,
+  "completion": 3647,
+  "total": 15404
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3423,
+   "prompt_tokens": 8785,
+   "total_tokens": 12208,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2405,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8785,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 224,
+   "prompt_tokens": 2972,
+   "total_tokens": 3196,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

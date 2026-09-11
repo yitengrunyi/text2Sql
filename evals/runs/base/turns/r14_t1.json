@@ -1,0 +1,158 @@
+{
+ "round_id": 14,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润（简称“归母净利润”）\n\n[2] 可能的计算公式：  \n归母净利润 = 净利润 - 少数股东损益  \n其中，  \n净利润 = 营业总收入 - 营业总成本 - 税金及附加 - 销售费用 - 管理费用 - 财务费用 - 资产减值损失 + 其他收益 - 所得税费用  \n归母净利润表示归属于母公司股东的部分，是上市公司公开财报的核心利润指标。\n['归母净利润', '归属于母公司股东的净利润', '净利润', '少数股东损益', '营业总收入', '营业总成本', '税金及附加', '销售费用', '管理费用', '财务费用', '资产减值损失', '其他收益', '所得税费用', '母公司股东', '上市公司', '财报', '核心利润指标']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板业绩预告', '主板基本信息']\n['VIEW_STK_STI_LIST_PLAN', 'STK_LIST_RESULT', 'STK_COMSUB_PROFILE', 'STK_DS_POST', 'STK_COM_PROFILE', 'STK_PRE_DISCLOSURE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.PERIODDATE AS `业绩预告期间`,\n    ROUND(fgmin.FORECAST_NET_PROFIT_MIN/10000, 1) AS `预计归母净利润下限(万元)`,\n    ROUND(fgmax.FORECAST_NET_PROFIT_MAX/10000, 1) AS `预计归母净利润上限(万元)`\nFROM\n    STK_PRE_DISCLOSURE p\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MIN(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MIN\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmin ON p.COMCODE = fgmin.COMCODE AND p.PERIODDATE = fgmin.PERIODDATE\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MAX(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MAX\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmax ON p.COMCODE = fgmax.COMCODE AND p.PERIODDATE = fgmax.PERIODDATE\nWHERE\n    p.ISVALID = 1\n    AND p.PERIODDATE >= '2026-01-01' AND p.PERIODDATE <= '2026-06-30'\n    AND fgmin.FORECAST_NET_PROFIT_MIN IS NOT NULL\n    AND fgmax.FORECAST_NET_PROFIT_MAX IS NOT NULL\nORDER BY\n    p.A_STOCKCODE ASC, p.PERIODDATE DESC\n200\nMySQL Database error: (1054, \"Unknown column 'FORECAST_NET_PROFIT' in 'field list'\")\n查询通过将预计归母净利润的取值范围从元单位转换为万元后，得出未来2026年上半年各上市公司业",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.PERIODDATE AS `业绩预告期间`,\n    ROUND(fgmin.FORECAST_NET_PROFIT_MIN/10000, 1) AS `预计归母净利润下限(万元)`,\n    ROUND(fgmax.FORECAST_NET_PROFIT_MAX/10000, 1) AS `预计归母净利润上限(万元)`\nFROM\n    STK_PRE_DISCLOSURE p\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MIN(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MIN\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmin ON p.COMCODE = fgmin.COMCODE AND p.PERIODDATE = fgmin.PERIODDATE\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MAX(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MAX\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmax ON p.COMCODE = fgmax.COMCODE AND p.PERIODDATE = fgmax.PERIODDATE\nWHERE\n    p.ISVALID = 1\n    AND p.PERIODDATE >= '2026-01-01' AND p.PERIODDATE <= '2026-06-30'\n    AND fgmin.FORECAST_NET_PROFIT_MIN IS NOT NULL\n    AND fgmax.FORECAST_NET_PROFIT_MAX IS NOT NULL\nORDER BY\n    p.A_STOCKCODE ASC, p.PERIODDATE DESC",
+ "final_sql": "SELECT\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.PERIODDATE AS `业绩预告期间`,\n    ROUND(fgmin.FORECAST_NET_PROFIT_MIN/10000, 1) AS `预计归母净利润下限(万元)`,\n    ROUND(fgmax.FORECAST_NET_PROFIT_MAX/10000, 1) AS `预计归母净利润上限(万元)`\nFROM\n    STK_PRE_DISCLOSURE p\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MIN(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MIN\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmin ON p.COMCODE = fgmin.COMCODE AND p.PERIODDATE = fgmin.PERIODDATE\n    INNER JOIN (\n        SELECT COMCODE, PERIODDATE,\n            MAX(FORECAST_NET_PROFIT) AS FORECAST_NET_PROFIT_MAX\n        FROM STK_PRE_DISCLOSURE\n        WHERE ISVALID = 1\n            AND PERIODDATE >= '2026-01-01' AND PERIODDATE <= '2026-06-30'\n            AND FORECAST_NET_PROFIT IS NOT NULL\n        GROUP BY COMCODE, PERIODDATE\n    ) fgmax ON p.COMCODE = fgmax.COMCODE AND p.PERIODDATE = fgmax.PERIODDATE\nWHERE\n    p.ISVALID = 1\n    AND p.PERIODDATE >= '2026-01-01' AND p.PERIODDATE <= '2026-06-30'\n    AND fgmin.FORECAST_NET_PROFIT_MIN IS NOT NULL\n    AND fgmax.FORECAST_NET_PROFIT_MAX IS NOT NULL\nORDER BY\n    p.A_STOCKCODE ASC, p.PERIODDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3910000.0000 3910000.0000"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'FORECAST_NET_PROFIT' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 51.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_14_41dbebcb.1",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 53.59,
+  "llm_seconds_max": 10.11,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   50384
+  ],
+  "prompt_columns_raw_len": 20167
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1666,
+   "prompt_tokens": 49319,
+   "total_tokens": 50985,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 49319,
+  "completion": 1666,
+  "total": 50985
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1666,
+   "prompt_tokens": 49319,
+   "total_tokens": 50985,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

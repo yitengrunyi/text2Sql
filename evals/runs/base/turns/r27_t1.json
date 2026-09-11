@@ -1,0 +1,196 @@
+{
+ "round_id": 27,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "这个财年它最终落到净利润有多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：净利润（Net Profit）\n\n[2] 可能的计算公式：  \n净利润 = 营业收入 - 营业成本 - 税费 - 销售费用 - 管理费用 - 财务费用 - 其他费用\n\n或更简化公式：  \n净利润 = 总收入 - 总成本 - 所有相关费用 - 所得税\n\n（具体计算需结合公司财报明细，但核心为“净利润”指标及上述公式）\n['净利润', 'Net Profit', '营业收入', '营业成本', '税费', '销售费用', '管理费用', '财务费用', '其他费用', '总收入', '总成本', '所有相关费用', '所得税']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务', '主板基本信息']\n['STK_COM_PROFILE', 'STK_PREEXP', 'STK_COM_RELA_NBALA', 'ANA_STK_QTR_IDX', 'VIEW_STK_CONSENSUS_FORECAST', 'STK_LIST_PLAN', 'VIEW_STK_INCOME_GEN_QTR', 'ANA_STK_DIV_RATE_IDX', 'STK_ASSETS', 'STK_TAX_RATIO', 'VIEW_STK_STI_LIST_PLAN', 'STK_ACCT_RCV']\n是否命中召回表：False\n生成查询代码\nSELECT\n    q.ENDDATE AS `报表截止日`,\n    q.A_STOCKSNAME AS `股票简称`,\n    q.A_STOCKCODE AS `股票代码`,\n    q.COMCODE AS `公司代码`,\n    ROUND(q.P160101/10000, 1) AS `归母净利润（万）`\nFROM\n    VIEW_STK_INCOME_GEN_QTR q\nWHERE\n    q.RPT_TYPE = '合并'\n    AND q.ENDDATE = '2026-03-31 00:00:00'\n    AND q.ISVALID = 1\n    AND q.P160101 IS NOT NULL\nORDER BY\n    q.P160101 DESC\n\n200\n{table:[['报表截止日', '股票简称', '股票代码', '归母净利润（万）'], ['2026-03-31', '工商银行', '601398', '8,694,100.00'], ['2026-03-31', '建设银行', '601939', '8,629,100.00'], ['2026-03-31', '农业银行', '601288', '7,518,500.00'], ['2026-03-31', '中国银行', '601988', '5,663,100.00'], ['2026-03-31', '中国石油', '601857', '4,833,200.00'], ['2026-03-31', '中国海油', '600938', '3,914,400.00'], ['2026-03-31', '招商银行', '600036', '3,785,200.00'], ['2026-03-31', '中国移动', '600941', '2,934,200.00'], ['2026-03-31', '贵州茅台', '600519', '2,724,251.30'], ['2026-03-31', '交通银行', '601328', '2,616,200.00'], ['2026-03-31', '邮储银行', '601658', '2,572,600.00'], ['2026-03-31', '中国平安', '601318', '2,502,200.00'], ['2026-03-31', '兴业银行', '601166', '2,383,200.00'], ['2026-03-31', '宁德时代', '300750', '2,073,771.00'], ['2026-03-31', '中信银行', '601998', '2,009,800.00'], ['2026-03-31', '紫金矿业', '601899', '2,007,939.20'], ['2026-03-31', '中国人寿', '601628', '1,950,500.00'], ['2026-03-31', '浦发银行', '600000', '1,786,100.00'], ['2026-03-31', '中国石化', '600028', '1,700,600.00'], ['2026-03-31', '平安银行', '000001', '1,452,300.00'], ['2026-03-31', '",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    q.ENDDATE AS `报表截止日`,\n    q.A_STOCKSNAME AS `股票简称`,\n    q.A_STOCKCODE AS `股票代码`,\n    q.COMCODE AS `公司代码`,\n    ROUND(q.P160101/10000, 1) AS `归母净利润（万）`\nFROM\n    VIEW_STK_INCOME_GEN_QTR q\nWHERE\n    q.RPT_TYPE = '合并'\n    AND q.ENDDATE = '2026-03-31 00:00:00'\n    AND q.ISVALID = 1\n    AND q.P160101 IS NOT NULL\nORDER BY\n    q.P160101 DESC",
+ "final_sql": "SELECT\n    q.ENDDATE AS `报表截止日`,\n    q.A_STOCKSNAME AS `股票简称`,\n    q.A_STOCKCODE AS `股票代码`,\n    q.COMCODE AS `公司代码`,\n    ROUND(q.P160101/10000, 1) AS `归母净利润（万）`\nFROM\n    VIEW_STK_INCOME_GEN_QTR q\nWHERE\n    q.RPT_TYPE = '合并'\n    AND q.ENDDATE = '2026-03-31 00:00:00'\n    AND q.ISVALID = 1\n    AND q.P160101 IS NOT NULL\nORDER BY\n    q.P160101 DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "30504.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.VIEW_STK_INCOME_GEN_QTR' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 67.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_27_7991d800.1",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 79.26,
+  "llm_seconds_max": 14.55,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   73323
+  ],
+  "prompt_columns_raw_len": 22735
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2473,
+   "prompt_tokens": 79973,
+   "total_tokens": 82446,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 79973,
+  "completion": 2473,
+  "total": 82446
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2473,
+   "prompt_tokens": 79973,
+   "total_tokens": 82446,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

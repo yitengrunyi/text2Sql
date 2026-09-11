@@ -1,0 +1,169 @@
+{
+ "round_id": 10,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "按最新总市值排名，前三名是哪几家公司？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n总市值（Market Capitalization）\n\n[2] 计算公式：  \n总市值 = 当前股价 × 已发行股份总数\n\n说明：  \n“总市值”用于衡量一家上市公司当前的市场价值，是金融领域常用的公司规模指标。此query需查询总市值排名前列的公司名单。\n['总市值', '市值', 'Market Capitalization', '当前股价', '股价', '已发行股份总数', '发行股份', '公司', '上市公司', '公司名单']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_EXPR_IDX', 'ANA_STK_VAL_IDX', 'STK_COM_PROFILE', 'GET_A_INDICS_LATEST', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    MAX_TRADATE AS `最新交易日`,\n    SEC_SNAME AS `公司名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`\nFROM\n    GET_A_INDICS_LATEST\nWHERE\n    MAX_TRADATE = '2026-09-02'\n    AND TCAP IS NOT NULL\nORDER BY\n    TCAP DESC\nLIMIT 3\n200\n{table:[['最新交易日', '公司名称', '总市值(亿)'], ['2026-09-02', '长鑫科技', '36,874.60'], ['2026-09-02', '工商银行', '29,296.60'], ['2026-09-02', '建设银行', '29,142.30']]}\n该查询的主要目的是获取A股公司截至指定最新交易日按照总市值排名前列的前三家公司。在这个查询中，计算了总市值（亿元），具体做法是将原有的总市值除以一亿并保留一位小数。查询结果符合要求。\n\n查询从记录A股公司最近交易日行情数据的表中提取信息。查询选择了最新交易日、公司名称、股票代码以及折算后的总市值（亿元）等信息。只选取最近交易日等于2026年9月2日，且总市值不为空的数据。最终按照总市值从高到低进行排序，并限制只展示前3名公司。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    MAX_TRADATE AS `最新交易日`,\n    SEC_SNAME AS `公司名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`\nFROM\n    GET_A_INDICS_LATEST\nWHERE\n    MAX_TRADATE = '2026-09-02'\n    AND TCAP IS NOT NULL\nORDER BY\n    TCAP DESC\nLIMIT 3",
+ "final_sql": "SELECT\n    MAX_TRADATE AS `最新交易日`,\n    SEC_SNAME AS `公司名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`\nFROM\n    GET_A_INDICS_LATEST\nWHERE\n    MAX_TRADATE = '2026-09-02'\n    AND TCAP IS NOT NULL\nORDER BY\n    TCAP DESC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "BRK.B 伯克希尔B 77400000.0\nNVDA 英伟达 30870000.0\nAAPL 苹果 27907200.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.GET_A_INDICS_LATEST' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 52.0,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_10_bafaaa6c.2",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 58.59,
+  "llm_seconds_max": 7.22,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_COM_PROFILE",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   38137
+  ],
+  "prompt_columns_raw_len": 22645
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1414,
+   "prompt_tokens": 44031,
+   "total_tokens": 45445,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 44031,
+  "completion": 1414,
+  "total": 45445
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1414,
+   "prompt_tokens": 44031,
+   "total_tokens": 45445,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_COM_PROFILE",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

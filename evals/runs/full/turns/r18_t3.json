@@ -1,0 +1,174 @@
+{
+ "round_id": 18,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "那2025年全年它涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH t1 AS (SELECT SECCODE, INDX_SNAME, LCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND LCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE ASC LIMIT 1), t2 AS (SELECT SECCODE, TCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND TCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE DESC LIMIT 1) SELECT t1.INDX_SNAME AS `指数名称`, t1.SECCODE AS `指数代码`, ROUND((t2.TCLOSE / t1.LCLOSE - 1) * 100, 2) AS `2025年涨跌幅(%)` FROM t1 JOIN t2 ON t1.SECCODE = t2.SECCODE;\n200\n{table:[['指数名称', '指数代码', '2025年涨跌幅(%)'], ['上证50', '000016', '12.90']]}\n该查询获取了上证50指数在2025年全年的累计涨跌幅。数据来源于指数基本信息表和指数行情数据表。筛选条件限定为上证50指数、2025年第一个有效交易日和最后一个有效交易日的点位，确保仅选取有效的交易记录。本次统计通过取2025年第一个交易日的前一日收盘值作为年初基准价，再获取2025年最后一个交易日的收盘点，通过“年度累计涨跌幅 =（年末点位 ÷ 年初基准价 − 1）× 100%”的方式计算百分比，结果保留两位小数。该指标直接反映了上证50在2025年全年的整体涨跌幅度，查询结果符合你的需求。\n{table:[['指数名称', '指数代码', '2025年涨跌幅(%)'], ['上证50', '000016', '12.90']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH t1 AS (SELECT SECCODE, INDX_SNAME, LCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND LCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE ASC LIMIT 1), t2 AS (SELECT SECCODE, TCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND TCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE DESC LIMIT 1) SELECT t1.INDX_SNAME AS `指数名称`, t1.SECCODE AS `指数代码`, ROUND((t2.TCLOSE / t1.LCLOSE - 1) * 100, 2) AS `2025年涨跌幅(%)` FROM t1 JOIN t2 ON t1.SECCODE = t2.SECCODE",
+ "final_sql": "WITH t1 AS (SELECT SECCODE, INDX_SNAME, LCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND LCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE ASC LIMIT 1), t2 AS (SELECT SECCODE, TCLOSE FROM INDX_MKT WHERE SECCODE = '000016' AND TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND TCLOSE IS NOT NULL AND ISVALID = 1 ORDER BY TRADEDATE DESC LIMIT 1) SELECT t1.INDX_SNAME AS `指数名称`, t1.SECCODE AS `指数代码`, ROUND((t2.TCLOSE / t1.LCLOSE - 1) * 100, 2) AS `2025年涨跌幅(%)` FROM t1 JOIN t2 ON t1.SECCODE = t2.SECCODE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "29.87"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "上证50 000016 12.90",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 55.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_18_b48fed34.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 40.47,
+  "llm_seconds_max": 34.63,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3964,
+   "prompt_tokens": 12312,
+   "total_tokens": 16276,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3374,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12312,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 175,
+   "prompt_tokens": 4863,
+   "total_tokens": 5038,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17175,
+  "completion": 4139,
+  "total": 21314
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3964,
+   "prompt_tokens": 12312,
+   "total_tokens": 16276,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3374,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12312,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 175,
+   "prompt_tokens": 4863,
+   "total_tokens": 5038,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

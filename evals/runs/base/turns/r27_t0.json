@@ -1,0 +1,152 @@
+{
+ "round_id": 27,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：营业收入（Revenue 或 Total Revenue）\n\n[2] 可能的计算公式：\n\n营业收入 = 产品和服务的销售额总和 + 其他经营性收入\n\n（具体等于企业在一个财年内通过主营业务获取的全部收入，不扣除成本和费用）\n['沃尔玛', '年报', '财年', '营业收入', 'Revenue', 'Total Revenue', '产品和服务的销售额总和', '销售额', '其他经营性收入', '主营业务', '收入']\n该问题可能涉及美股-'沃尔玛', 它的美股股票代码为：WMT.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-商贸零售。\n美股相关\n['美股基本信息', '美股财务']\n['VIEW_COM3102_CUM', 'COM3104', 'VIEW_COM3102_Q', 'VIEW_COM3103_Q']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    f.F001D AS `报告期结束日期`,\n    f.F003V AS `报表种类`,\n    f.F004N AS `财政期间长度(天)`,\n    f.F005V AS `货币`,\n    ROUND(f.F048N / 100, 3) AS `营业收入(亿美元)`,\n    f.F048N AS `营业收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        F001D,\n        F003V,\n        F004N,\n        F005V,\n        F048N\n    FROM VIEW_COM3103_Q\n    WHERE F048N IS NOT NULL\n          AND F003V = 'Q4'\n          AND FIU_ID IN (\n              SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL = 'WMT.US'\n          )\n    ORDER BY F001D DESC, F004N DESC\n    LIMIT 1\n) f ON m.FIU_ID = f.FIU_ID\nWHERE m.COMB_SYMBOL = 'WMT.US'\n200\n{table:[['股票名称', '股票代码', '报告期结束日期', '报表种类', '财政期间长度(天)', '货币', '营业收入(亿美元)', '营业收入(百万美元)'], ['沃尔玛', 'WMT.US', '2025-12-31', 'Q4', '91', 'USD', '2,724.94', '272,494.00']]}\n该查询的目的是获取沃尔玛最新一个财年全年的营业收入。在这里，对营业收入进行了单位换算计算。营业收入（亿美元）通过下面的公式得到：营业收入（亿美元）= 营业收入（百万美元）除以100，结果保留三位小数。营业收入（百万美元）直接取值。查询结果符合要求。\n\n查询从两个表中获取数据，一个表用于存储美国上市公司的基本信息，另一个表用于记录美国上市公司单季度综合收益表的相关财务数据。通过公司内部唯一标识将两表的数据匹配。查询筛选公司代码为沃尔玛，并且选择报表种类为四季度，即年度综合季报数据，确保营业收入数据不为空。数据按照报告期结束日期和财政期间长度降序排列，选取最新一条作为结果。最终提供了股票名称、股票代码、报告期结束日期、报表种类、财政期间长度、货币以及营业收入（分别以亿美元和百万美元表示）。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    f.F001D AS `报告期结束日期`,\n    f.F003V AS `报表种类`,\n    f.F004N AS `财政期间长度(天)`,\n    f.F005V AS `货币`,\n    ROUND(f.F048N / 100, 3) AS `营业收入(亿美元)`,\n    f.F048N AS `营业收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        F001D,\n        F003V,\n        F004N,\n        F005V,\n        F048N\n    FROM VIEW_COM3103_Q\n    WHERE F048N IS NOT NULL\n          AND F003V = 'Q4'\n          AND FIU_ID IN (\n              SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL = 'WMT.US'\n          )\n    ORDER BY F001D DESC, F004N DESC\n    LIMIT 1\n) f ON m.FIU_ID = f.FIU_ID\nWHERE m.COMB_SYMBOL = 'WMT.US'",
+ "final_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    f.F001D AS `报告期结束日期`,\n    f.F003V AS `报表种类`,\n    f.F004N AS `财政期间长度(天)`,\n    f.F005V AS `货币`,\n    ROUND(f.F048N / 100, 3) AS `营业收入(亿美元)`,\n    f.F048N AS `营业收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        F001D,\n        F003V,\n        F004N,\n        F005V,\n        F048N\n    FROM VIEW_COM3103_Q\n    WHERE F048N IS NOT NULL\n          AND F003V = 'Q4'\n          AND FIU_ID IN (\n              SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL = 'WMT.US'\n          )\n    ORDER BY F001D DESC, F004N DESC\n    LIMIT 1\n) f ON m.FIU_ID = f.FIU_ID\nWHERE m.COMB_SYMBOL = 'WMT.US'",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "926942.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "沃尔玛 WMT.US 2025-12-31 Q4 91 USD 2724.939 272494.0",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 49.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_27_7991d800.0",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 47.81,
+  "llm_seconds_max": 9.12,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   27775
+  ],
+  "prompt_columns_raw_len": 17209
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 945,
+   "prompt_tokens": 31349,
+   "total_tokens": 32294,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31349,
+  "completion": 945,
+  "total": 32294
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 945,
+   "prompt_tokens": 31349,
+   "total_tokens": 32294,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

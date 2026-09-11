@@ -1,0 +1,146 @@
+{
+ "round_id": 18,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "深证成指最近一个交易日的收盘点位是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：深证成指（深圳成分指数）收盘点位\n\n[2] 可能的计算公式：  \n收盘点位 = 最后一个交易日所有成分股收盘价按指数权重加权计算后的指数点数  \n一般公式为：  \n指数点位 = ∑（成分股收盘价 × 权重）/ 基期价 × 基数\n['深证成指', '深圳成分指数', '收盘点位', '成分股收盘价', '权重', '指数点位', '基期价', '基数', '指数权重']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT\n    im.TRADEDATE AS `交易日期`,\n    im.INDX_SNAME AS `指数名称`,\n    im.SECCODE AS `指数代码`,\n    ROUND(im.TOPEN, 2) AS `开盘价`,\n    ROUND(im.TCLOSE, 2) AS `收盘价`,\n    ROUND(im.THIGH, 2) AS `最高价`,\n    ROUND(im.TLOW, 2) AS `最低价`,\n    ROUND(im.CHNG, 2) AS `涨跌额`,\n    ROUND(im.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM\n    INDX_MKT im\nWHERE\n    im.SECCODE = '399001'\n    AND im.TRADEDATE = '2026-09-02'\n    AND im.TCLOSE IS NOT NULL\n    AND im.ISVALID = 1\nLIMIT 1\n200\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '收盘价', '最高价', '最低价', '涨跌额', '涨跌幅(%)'], ['2026-09-02', '深证成指', '399001', '13,732.18', '13,611.55', '13,732.18', '13,549.77', '-260.83', '-1.88']]}\n收盘点位通过公式收盘点位=收盘价，直接取值并保留两位小数。在此查询中，我们直接使用了已有的行情数据。查询结果符合要求。\n\n该查询主要获取指数行情表中关于深证成指的最近一个交易日的各项价格数据，包括交易日期、指数名称、指数代码、开盘价、收盘价、最高价、最低价、涨跌额和涨跌幅。通过筛选指数代码等于深证成指代码，限定交易日期为最近一个交易日，保证收盘价不为空，并只选择有效的数据。结果返回深证成指最近一个交易日的收盘点位以及其他相关行情信息。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    im.TRADEDATE AS `交易日期`,\n    im.INDX_SNAME AS `指数名称`,\n    im.SECCODE AS `指数代码`,\n    ROUND(im.TOPEN, 2) AS `开盘价`,\n    ROUND(im.TCLOSE, 2) AS `收盘价`,\n    ROUND(im.THIGH, 2) AS `最高价`,\n    ROUND(im.TLOW, 2) AS `最低价`,\n    ROUND(im.CHNG, 2) AS `涨跌额`,\n    ROUND(im.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM\n    INDX_MKT im\nWHERE\n    im.SECCODE = '399001'\n    AND im.TRADEDATE = '2026-09-02'\n    AND im.TCLOSE IS NOT NULL\n    AND im.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT\n    im.TRADEDATE AS `交易日期`,\n    im.INDX_SNAME AS `指数名称`,\n    im.SECCODE AS `指数代码`,\n    ROUND(im.TOPEN, 2) AS `开盘价`,\n    ROUND(im.TCLOSE, 2) AS `收盘价`,\n    ROUND(im.THIGH, 2) AS `最高价`,\n    ROUND(im.TLOW, 2) AS `最低价`,\n    ROUND(im.CHNG, 2) AS `涨跌额`,\n    ROUND(im.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM\n    INDX_MKT im\nWHERE\n    im.SECCODE = '399001'\n    AND im.TRADEDATE = '2026-09-02'\n    AND im.TCLOSE IS NOT NULL\n    AND im.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "13611.5470"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 深证成指 399001 13732.18 13611.55 13732.18 13549.77 -260.83 -1.88",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.3,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_18_b48fed34.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 45.95,
+  "llm_seconds_max": 7.29,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   20279
+  ],
+  "prompt_columns_raw_len": 1874
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 886,
+   "prompt_tokens": 24750,
+   "total_tokens": 25636,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3072,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24750,
+  "completion": 886,
+  "total": 25636
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 886,
+   "prompt_tokens": 24750,
+   "total_tokens": 25636,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3072,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

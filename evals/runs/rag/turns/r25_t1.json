@@ -1,0 +1,172 @@
+{
+ "round_id": 25,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "那这只基金在标签体系里怎么归类的？算行业类还是主题类，落在哪个行业？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金类型（行业类、主题类等）\n- 行业分类（如“医药生物”“新能源”等）\n\n[2] 可能的计算/判定逻辑：  \n- 查询基金的持仓结构、基金招募说明书、基金合同等文档，依据基金80%以上资产配置方向（如主要投向某一行业或主题）进行归类。  \n- 归类规则：  \n  - 若基金主要投资于某一特定行业相关标的（如医药、科技、消费等），归为行业类，行业以Wind、申万等行业标准为准。  \n  - 若基金按照特定投资主题（如双碳、智能制造、ESG等）配置，归为主题类。  \n  - 公式表达：  \n    - 行业配置比例 = 该行业资产市值 / 基金总资产市值；\n    - 若行业配置比例 > 80%，归为行业类，对应行业为配置最多的行业；\n    - 若无单一行业配置超过80%，且明显以主题导向配置，归为主题类。\n\n总结：指标为基金类型、行业分类，归类方式依据持仓配置比例或招募说明书主题内容判定。\n['基金', '行业类', '主题类', '行业分类', '医药生物', '新能源', '持仓结构', '基金招募说明书', '基金合同', '资产配置方向', '特定行业', '标的', 'Wind', '申万', '行业标准', '投资主题', '双碳', '智能制造', 'ESG', '行业配置比例', '资产市值', '基金总资产市值', '主题导向', '持仓配置比例']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓', '基金标签', '股票标签']\n['FUND_LABEL_INFO', 'FUND_LABEL_VALUE_SECTION', 'FUND_INDUSTRY_HOLDING_MV_DETAIL_HY', 'FUND_INDUSTRY_CHANGE_HY', 'FUND_TRACK_HOLDING', 'LABEL_INFO', 'FUND_INDUSTRY_ASSET_RATIO_ALL', 'MUTUAL_FUND_SECTOR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    t.REPORT_DATE AS `报告期`,\n    t.LABEL_TYPE AS `标签类型`,\n    CASE t.LABEL_TYPE \n        WHEN 1 THEN '行业'\n        WHEN 7 THEN '主题'\n        WHEN 8 THEN '细分主题'\n        ELSE '其他'\n    END AS `标签类型名称`,\n    t.LABEL_NAME AS `标签名称`,\n    t.LABEL_CODE AS `标签代码`,\n    t.INDEX_HCODE AS `标签对应指数标准代码`,\n    ROUND(t.MARKET_VALUE/100000000,1) AS `持股市值(亿)`,\n    ROUND(t.RATIO_IN_NV*100,2) AS `占基金净值比例(%)`\nFROM\n    FUND_INDUSTRY_HOLDING_MV_DETAIL_HY t\nWHERE\n    t.FUND_HCODE = '{基金内部代码}' \n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_INDUSTRY_HOLDING_MV_DETAIL_HY\n        WHERE FUND_HCODE = t.FUND_HCODE AND HISVALID = 1\n    )\nORDER BY\n    t.LABEL_TYPE ASC,\n    t.MARKET_VALUE DESC\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询主要用于获取指定基金在标签体系中的分类情况及最晚一个报告期的持股信息。查询结果详细显示基金在行业、主题、细分主题等类别的归属，以及对应的标签名称和相关指数代码。\n\n持股市值（亿）是通过将原始持股市值（元）除以一亿计算得出，公式为“持股市值（亿） = 持股市值（元） / 100000000”。占基金净值比例（%）是通过将原始比例数值乘以100后保留两位小数，公式为“占基金净值比例（%） = 占基金经理持有净资产比例 × 100”。查询结果符合要求。\n\n数据来源于基金持有行业和题材市值具体情况的表。查询选取基金内部代码、基金代码、",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    t.REPORT_DATE AS `报告期`,\n    t.LABEL_TYPE AS `标签类型`,\n    CASE t.LABEL_TYPE \n        WHEN 1 THEN '行业'\n        WHEN 7 THEN '主题'\n        WHEN 8 THEN '细分主题'\n        ELSE '其他'\n    END AS `标签类型名称`,\n    t.LABEL_NAME AS `标签名称`,\n    t.LABEL_CODE AS `标签代码`,\n    t.INDEX_HCODE AS `标签对应指数标准代码`,\n    ROUND(t.MARKET_VALUE/100000000,1) AS `持股市值(亿)`,\n    ROUND(t.RATIO_IN_NV*100,2) AS `占基金净值比例(%)`\nFROM\n    FUND_INDUSTRY_HOLDING_MV_DETAIL_HY t\nWHERE\n    t.FUND_HCODE = '{基金内部代码}' \n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_INDUSTRY_HOLDING_MV_DETAIL_HY\n        WHERE FUND_HCODE = t.FUND_HCODE AND HISVALID = 1\n    )\nORDER BY\n    t.LABEL_TYPE ASC,\n    t.MARKET_VALUE DESC",
+ "final_sql": "SELECT \n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.FUND_NAME AS `基金简称`,\n    t.REPORT_DATE AS `报告期`,\n    t.LABEL_TYPE AS `标签类型`,\n    CASE t.LABEL_TYPE \n        WHEN 1 THEN '行业'\n        WHEN 7 THEN '主题'\n        WHEN 8 THEN '细分主题'\n        ELSE '其他'\n    END AS `标签类型名称`,\n    t.LABEL_NAME AS `标签名称`,\n    t.LABEL_CODE AS `标签代码`,\n    t.INDEX_HCODE AS `标签对应指数标准代码`,\n    ROUND(t.MARKET_VALUE/100000000,1) AS `持股市值(亿)`,\n    ROUND(t.RATIO_IN_NV*100,2) AS `占基金净值比例(%)`\nFROM\n    FUND_INDUSTRY_HOLDING_MV_DETAIL_HY t\nWHERE\n    t.FUND_HCODE = '{基金内部代码}' \n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_INDUSTRY_HOLDING_MV_DETAIL_HY\n        WHERE FUND_HCODE = t.FUND_HCODE AND HISVALID = 1\n    )\nORDER BY\n    t.LABEL_TYPE ASC,\n    t.MARKET_VALUE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "行业 医药生物"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 62.3,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_25_af8c3086.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 75.85,
+  "llm_seconds_max": 8.99,
+  "selected_tables": [
+   "FUND_LABEL_INFO",
+   "FUND_LABEL_VALUE_SECTION",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "LABEL_INFO",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "MUTUAL_FUND_SECTOR"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_LABEL_INFO",
+   "FUND_LABEL_VALUE_SECTION",
+   "FUND_LABEL_VALUE_SERIES",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "LABEL_INFO",
+   "SECU_LABEL_INFO",
+   "MUTUAL_FUND_SECTOR",
+   "STOCK_HOLD_STATISTICS_HY",
+   "FUND_BENCHMARK",
+   "CT_TRACK_DEFINE",
+   "STOCK_FACTOR_VALUE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "FUND_BENCHMARK",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   22688
+  ],
+  "prompt_columns_raw_len": 15851
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2310,
+   "prompt_tokens": 37416,
+   "total_tokens": 39726,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 37416,
+  "completion": 2310,
+  "total": 39726
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2310,
+   "prompt_tokens": 37416,
+   "total_tokens": 39726,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_LABEL_INFO_CHINA"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_LABEL_INFO",
+   "FUND_LABEL_VALUE_SECTION",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "LABEL_INFO",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "MUTUAL_FUND_SECTOR"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

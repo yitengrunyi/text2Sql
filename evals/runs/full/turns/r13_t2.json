@@ -1,0 +1,173 @@
+{
+ "round_id": 13,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "它现在的股息率大概什么水平？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    d.PERIODDATE AS `报告期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    c.TCLOSE AS `最新收盘价(元)`,\n    ROUND((d.CASH_BT / 10) / c.TCLOSE * 100, 2) AS `当前股息率(%)`,\n    ROUND(d.DIV_RATE, 2) AS `股息发放率(%)`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\n    AND d.CASH_BT IS NOT NULL\n    AND c.TCLOSE IS NOT NULL\n    AND c.TCLOSE <> 0\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5;\n200\n{table:[['报告期', '股票简称', '股票代码', '每10股派现金红利(元,含税)', '最新收盘价(元)', '当前股息率(%)', '股息发放率(%)'], ['2025-12-31', '中国神华', '601088', '10.30', '48.05', '2.14', '38.72'], ['2025-06-30', '中国神华', '601088', '9.80', '48.05', '2.04', '79.03']]}\n该查询获取了中国神华在2025年度最新一次分红方案对应的每10股派现金红利金额、股票简称、股票代码、最新收盘价、股息率和股息发放率。信息来源于上市公司分红公告信息及股票行情数据，主要通过公司名称匹配选出中国神华，并限定在2025年内的有效分红记录，同时要求有最新收盘价和分红数据。结果按照报告期和董事会公告日倒序排列，优先展示最近的数据。股息率的计算方式为：每10股派发现金红利（单位：元）先换算成每股派现（即除以10），再除以最新收盘价，最后乘以100%得到百分比，计算结果保留2位小数。例如，如果每10股派现25元，当前股价为50元，则股息率为(25/10)/50 × 100% = 5%。股息发放率则直接引用现有财务披露数据。整体来看，查询结果可以准确反映中国神华分红方案发布后，按最新收盘价计算的当前股息率水平，完全满足用户关于“现在股息率大概什么水平”的需求。\n{table:[['报告期', '股票简称', '股票代码', '每10股派现金红利(元,含税)', '最新收盘价(元)', '当前股息率(%)', '股息发放率(%)'], ['2025-12-31', '中国神华', '601088', '10.30', '48.05', '2.14', '38.72'], ['2025-06-30', '中国神华', '601088', '9.80', '48.05', '2.04', '79.03']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    d.PERIODDATE AS `报告期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    c.TCLOSE AS `最新收盘价(元)`,\n    ROUND((d.CASH_BT / 10) / c.TCLOSE * 100, 2) AS `当前股息率(%)`,\n    ROUND(d.DIV_RATE, 2) AS `股息发放率(%)`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\n    AND d.CASH_BT IS NOT NULL\n    AND c.TCLOSE IS NOT NULL\n    AND c.TCLOSE <> 0\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5",
+ "final_sql": "SELECT\n    d.PERIODDATE AS `报告期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    d.CASH_BT AS `每10股派现金红利(元,含税)`,\n    c.TCLOSE AS `最新收盘价(元)`,\n    ROUND((d.CASH_BT / 10) / c.TCLOSE * 100, 2) AS `当前股息率(%)`,\n    ROUND(d.DIV_RATE, 2) AS `股息发放率(%)`\nFROM\n    STK_DIV_INFO d\nJOIN\n    GET_A_SEC_CODE c\n    ON d.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    d.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND d.PERIODDATE >= '2025-01-01' AND d.PERIODDATE <= '2025-12-31'\n    AND d.CASH_BT IS NOT NULL\n    AND c.TCLOSE IS NOT NULL\n    AND c.TCLOSE <> 0\nORDER BY \n    d.PERIODDATE DESC,\n    d.DIR_DCL_DATE DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-09-02 00:00:00 4.0119"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2025-12-31 00:00:00 中国神华 601088 10.300000 48.0500 2.14 38.72\n2025-06-30 00:00:00 中国神华 601088 9.800000 48.0500 2.04 79.03",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 41.3,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_13_9fca7235.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 40.62,
+  "llm_seconds_max": 32.81,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3777,
+   "prompt_tokens": 12411,
+   "total_tokens": 16188,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3094,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12411,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 275,
+   "prompt_tokens": 6528,
+   "total_tokens": 6803,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18939,
+  "completion": 4052,
+  "total": 22991
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3777,
+   "prompt_tokens": 12411,
+   "total_tokens": 16188,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3094,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12411,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 275,
+   "prompt_tokens": 6528,
+   "total_tokens": 6803,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_STK_DIV_RATE_IDX",
+  "STK_DIV_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

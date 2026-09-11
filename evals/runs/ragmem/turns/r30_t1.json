@@ -1,0 +1,173 @@
+{
+ "round_id": 30,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    ak.COMB_SYMBOL AS `股票代码`, \n    ak.CSNAME AS `股票名称`, \n    ROUND(c.F021N, 2) AS `市盈率`, \n    c.F022D AS `市盈率更新日期`, \n    ROUND((c.F013N / 10.0), 1) AS `市值(亿美元)`, \n    c.F014D AS `市值数据日期`, \n    ak.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN ak\nINNER JOIN \n    COM3101 c\n    ON ak.FIU_ID = c.FIU_ID\nWHERE \n    ak.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\n    AND c.F021N IS NOT NULL\n    AND c.F022D IS NOT NULL\n    AND c.F021N > 0\nORDER BY \n    c.F021N ASC\nLIMIT 3;\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询获取了在美国上市、当前被标识为中概股的公司中，按最新市盈率从低到高排序，筛选出前三家市盈率最低的公司，并同时展示它们的股票代码、股票名称、市值和相关数据日期。数据来源于美股公司基本信息和最新财务指标数据，筛选条件包括必须为中概股、最新市值和市盈率数据不为空且市盈率大于0（即排除亏损企业），以保证数据的有效性。市盈率以最新公布值展示，保留2位小数，市值通过将原始百万元数据除以1000换算为亿美元，并保留1位小数。此查询直接使用了已有的财务指标数据，各项数据均由系统自动按指定精度处理。查询结果符合用户要求，将市盈率最低的美股中概股按升序排列，仅展示前三名。\nNo rows fetched. 查找结果为空，请检查SQL语句",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    ak.COMB_SYMBOL AS `股票代码`, \n    ak.CSNAME AS `股票名称`, \n    ROUND(c.F021N, 2) AS `市盈率`, \n    c.F022D AS `市盈率更新日期`, \n    ROUND((c.F013N / 10.0), 1) AS `市值(亿美元)`, \n    c.F014D AS `市值数据日期`, \n    ak.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN ak\nINNER JOIN \n    COM3101 c\n    ON ak.FIU_ID = c.FIU_ID\nWHERE \n    ak.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\n    AND c.F021N IS NOT NULL\n    AND c.F022D IS NOT NULL\n    AND c.F021N > 0\nORDER BY \n    c.F021N ASC\nLIMIT 3",
+ "final_sql": "SELECT \n    ak.COMB_SYMBOL AS `股票代码`, \n    ak.CSNAME AS `股票名称`, \n    ROUND(c.F021N, 2) AS `市盈率`, \n    c.F022D AS `市盈率更新日期`, \n    ROUND((c.F013N / 10.0), 1) AS `市值(亿美元)`, \n    c.F014D AS `市值数据日期`, \n    ak.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN ak\nINNER JOIN \n    COM3101 c\n    ON ak.FIU_ID = c.FIU_ID\nWHERE \n    ak.IS_CHINESE_STOCK = '中概股'\n    AND c.F013N IS NOT NULL\n    AND c.F014D IS NOT NULL\n    AND c.F021N IS NOT NULL\n    AND c.F022D IS NOT NULL\n    AND c.F021N > 0\nORDER BY \n    c.F021N ASC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "京东-W JD 9.35\n百度-W BIDU 10.44\n理想汽车-W LI 14.4"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 43.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_30_68f3a460.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 42.72,
+  "llm_seconds_max": 34.8,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2444,
+   "prompt_tokens": 9425,
+   "total_tokens": 11869,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1836,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9425,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 209,
+   "prompt_tokens": 3763,
+   "total_tokens": 3972,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13188,
+  "completion": 2653,
+  "total": 15841
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2444,
+   "prompt_tokens": 9425,
+   "total_tokens": 11869,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1836,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9425,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 209,
+   "prompt_tokens": 3763,
+   "total_tokens": 3972,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

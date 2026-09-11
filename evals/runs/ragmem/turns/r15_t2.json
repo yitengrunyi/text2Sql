@@ -1,0 +1,173 @@
+{
+ "round_id": 15,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "那当天成交额有多大？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1;\n200\n{table:[['股票名称', '股票代码', '交易日期', '成交额(亿)'], ['腾讯控股', '00700.HK', '2026-09-02', '93.37']]}\n该查询提取了腾讯控股在指定交易日的股票成交额信息。数据来自“股票基本信息表”、“公司基本信息表”和“股票每日市场表现表”，通过公司名称筛选出腾讯控股，限定股票上市状态为正常、股票类型为主要流通类别，以及在香港联合交易所主板交易，排除特定类型代码。并明确限定交易日期为2026年9月2日。最终输出了股票名称、股票代码、交易日期和成交额，其中成交额以原始金额除以1亿来转换为“亿元”单位，并保留两位小数输出。此查询使用了已有的市场成交额数据，结果能准确反映腾讯控股在该交易日的实际成交额，查询结果符合要求。\n{table:[['股票名称', '股票代码', '交易日期', '成交额(亿)'], ['腾讯控股', '00700.HK', '2026-09-02', '93.37']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "9336637626.7000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "腾讯控股 00700.HK 2026-09-02 00:00:00 93.37",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 27.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_15_4812469b.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 27.07,
+  "llm_seconds_max": 21.09,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2190,
+   "prompt_tokens": 16980,
+   "total_tokens": 19170,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1677,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16980,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 168,
+   "prompt_tokens": 10231,
+   "total_tokens": 10399,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27211,
+  "completion": 2358,
+  "total": 29569
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2190,
+   "prompt_tokens": 16980,
+   "total_tokens": 19170,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1677,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16980,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 168,
+   "prompt_tokens": 10231,
+   "total_tokens": 10399,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_STKDMK",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

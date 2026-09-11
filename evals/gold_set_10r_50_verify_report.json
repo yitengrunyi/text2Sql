@@ -1,0 +1,407 @@
+{
+ "set": "evals/gold_set_10r_50.json",
+ "failures": 0,
+ "total": 50,
+ "report": [
+  {
+   "turn": "r1.t1",
+   "question": "那它2025年的营业收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['423701834000.00']"
+  },
+  {
+   "turn": "r1.t0",
+   "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['72201282000.0000']"
+  },
+  {
+   "turn": "r1.t2",
+   "question": "它2025年的基本每股收益是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['16.140000']"
+  },
+  {
+   "turn": "r1.t3",
+   "question": "加权净资产收益率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['24.9100']"
+  },
+  {
+   "turn": "r1.t4",
+   "question": "和招商银行相比，谁2025年的归母净利润更高？高多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['招商银行', '150181000000.0000']"
+  },
+  {
+   "turn": "r2.t0",
+   "question": "中国平安2025年年报的营业收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1050506000000.00']"
+  },
+  {
+   "turn": "r2.t1",
+   "question": "中国平安2025年的归母净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['134778000000.0000']"
+  },
+  {
+   "turn": "r2.t3",
+   "question": "长江电力2025年的归母净利润呢？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['34502809176.3900']"
+  },
+  {
+   "turn": "r2.t4",
+   "question": "中国平安、兴业银行、长江电力这三家公司里，2025年归母净利润最高的是谁？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中国平安', '134778000000.0000']"
+  },
+  {
+   "turn": "r2.t2",
+   "question": "兴业银行2025年的归母净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['77469000000.0000']"
+  },
+  {
+   "turn": "r3.t1",
+   "question": "招商银行同一天的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['40.1200']"
+  },
+  {
+   "turn": "r3.t0",
+   "question": "宁德时代2026年8月31日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['363.5500']"
+  },
+  {
+   "turn": "r3.t2",
+   "question": "2026年8月31日那天，宁德时代和招商银行谁的收盘价更高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['宁德时代', '300750', '363.5500']"
+  },
+  {
+   "turn": "r3.t4",
+   "question": "兴业银行2026年8月31日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['17.5400']"
+  },
+  {
+   "turn": "r3.t3",
+   "question": "美的集团2026年8月收盘价最高的是哪一天？最高收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-08-31 00:00:00', '87.7300']"
+  },
+  {
+   "turn": "r4.t0",
+   "question": "中证500指数2026年8月31日的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7952.0986']"
+  },
+  {
+   "turn": "r4.t3",
+   "question": "创业板指2026年8月31日当天的涨跌幅是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['0.4170']"
+  },
+  {
+   "turn": "r4.t2",
+   "question": "科创50指数同一天的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1684.3873']"
+  },
+  {
+   "turn": "r4.t1",
+   "question": "创业板指同一天的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3438.6810']"
+  },
+  {
+   "turn": "r5.t0",
+   "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.09270000']"
+  },
+  {
+   "turn": "r5.t1",
+   "question": "它同一天的累计净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.14830000']"
+  },
+  {
+   "turn": "r5.t2",
+   "question": "华夏上证50ETF(510050)2026年9月1日的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3.05320000']"
+  },
+  {
+   "turn": "r4.t4",
+   "question": "招商银行2026年9月1日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['40.8600']"
+  },
+  {
+   "turn": "r5.t3",
+   "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['0.068629']"
+  },
+  {
+   "turn": "r5.t4",
+   "question": "2025年年度收益率最高的基金是哪只？收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['022364.OF', '永赢科技智选混合发起A', '2.332892']"
+  },
+  {
+   "turn": "r6.t2",
+   "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[4, '32284557164.1000']"
+  },
+  {
+   "turn": "r6.t3",
+   "question": "按2026年9月3日评测库快照，并列在管基金数量最多的基金经理都有谁？最多管几只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['单宽之', '华夏基金', 21]"
+  },
+  {
+   "turn": "r6.t1",
+   "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['张坤']"
+  },
+  {
+   "turn": "r7.t0",
+   "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3.025000']"
+  },
+  {
+   "turn": "r6.t4",
+   "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['20415804144.7600']"
+  },
+  {
+   "turn": "r7.t1",
+   "question": "它当天的涨跌幅是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['-0.009820']"
+  },
+  {
+   "turn": "r7.t2",
+   "question": "它2026年9月2日的基金规模是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['19579514570.0000']"
+  },
+  {
+   "turn": "r8.t0",
+   "question": "苹果公司2026年8月25日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['AAPL', 255.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t1",
+   "question": "特斯拉2026年8月25日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['TSLA', 340.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t2",
+   "question": "英伟达2026年8月25日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['NVDA', 175.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t3",
+   "question": "2026年8月25日，苹果、特斯拉、英伟达中谁的收盘价最高？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['TSLA', 340.0]"
+  },
+  {
+   "turn": "r8.t4",
+   "question": "微软2026年8月25日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['MSFT', 495.0, '2026-08-25']"
+  },
+  {
+   "turn": "r9.t0",
+   "question": "苹果公司2025财年的营业收入是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[539314.0]"
+  },
+  {
+   "turn": "r9.t1",
+   "question": "苹果公司2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[152551.0]"
+  },
+  {
+   "turn": "r9.t2",
+   "question": "特斯拉2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[26445.1]"
+  },
+  {
+   "turn": "r9.t3",
+   "question": "英伟达2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[131143.0]"
+  },
+  {
+   "turn": "r9.t4",
+   "question": "苹果公司2025财年营业收入比2024财年增长了百分之多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[2.71]"
+  },
+  {
+   "turn": "r10.t0",
+   "question": "苹果公司当前样本的总市值是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['苹果', 27907200.0]"
+  },
+  {
+   "turn": "r10.t1",
+   "question": "微软的呢？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['微软', 26373600.0]"
+  },
+  {
+   "turn": "r10.t2",
+   "question": "苹果、微软和英伟达中，谁的当前样本总市值最高？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['NVDA', '英伟达', 30870000.0]"
+  },
+  {
+   "turn": "r7.t3",
+   "question": "目前境内的ETF一共有多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[11699]"
+  },
+  {
+   "turn": "r10.t3",
+   "question": "换成特斯拉，它当前样本的市盈率是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['特斯拉', 73.27]"
+  },
+  {
+   "turn": "r10.t4",
+   "question": "当前本地美股样本中，市盈率最低的是哪只股票？市盈率是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['JD', '京东-W', 9.35]"
+  },
+  {
+   "turn": "r7.t4",
+   "question": "其中QDII类型的ETF有多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[285]"
+  },
+  {
+   "turn": "r6.t0",
+   "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['腾讯控股', '0.057200']"
+  }
+ ]
+}

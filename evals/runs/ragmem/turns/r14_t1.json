@@ -1,0 +1,172 @@
+{
+ "round_id": 14,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT f.A_STOCKSNAME AS `股票简称`, f.A_STOCKCODE AS `股票代码`, f.FORE_CLS AS `业绩预告类型`, ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`, ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`, DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`, DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`, f.SUMMARY AS `业绩预告摘要` FROM STK_ACHIEVE_FORECAST f WHERE f.ISVALID = 1 AND f.A_STOCKSNAME LIKE '%紫金矿业%' AND f.A_STOCKCODE IS NOT NULL AND f.ENDDATE = '2026-06-30 00:00:00.000' AND f.DECLAREDATE IS NOT NULL AND f.DECLAREDATE = (SELECT MAX(DECLAREDATE) FROM STK_ACHIEVE_FORECAST WHERE ISVALID = 1 AND A_STOCKSNAME LIKE '%紫金矿业%' AND A_STOCKCODE IS NOT NULL AND ENDDATE = '2026-06-30 00:00:00.000' AND DECLAREDATE IS NOT NULL) ORDER BY f.DECLAREDATE DESC LIMIT 1;\n200\n{table:[['股票简称', '股票代码', '业绩预告类型', '归母净利润预测下限(万)', '归母净利润预测上限(万)', '报告期截止日', '预告发布日期', '业绩预告摘要'], ['紫金矿业', '601899', '业绩大幅上升', '3,910,000.00', '3,910,000.00', '2026-06-30', '2026-07-10', '预计2026年1-6月归属于上市公司股东的净利润同比增幅约68%']]}\n该查询获取了紫金矿业在2026年上半年最近一次业绩预告中对归属于母公司的净利润预测区间及相关信息。数据来源于上市公司业绩预告表，内容包括股票简称、股票代码、业绩预告类型、归母净利润预测下限和上限（单位为万元）、报告期截止日、预告发布日期和预告摘要。查询条件限定为有效记录、公司名称包含“紫金矿业”、A股代码存在、报告期截止日在2026年6月30日，且只选取发布日期最新的一条记录。结果按发布日期由近及远排列，仅返回最新一条。归母净利润的上下限直接使用公司在预告中披露的预测区间数据，为方便查看，保留一位小数，金额单位为万元。查询结果能够满足用户关于“本次预告预计2026年上半年归母净利润大概多少钱”的需求。\n{table:[['股票简称', '股票代码', '业绩预告类型', '归母净利润预测下限(万)', '归母净利润预测上限(万)', '报告期截止日', '预告发布日期', '业绩预告摘要'], ['紫金矿业', '601899', '业绩大幅上升', '3,910,000.00', '3,910,000.00', '2026-06-30', '2026-07-10', '预计2026年1-6月归属于上市公司股东的净利润同比增幅约68%']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT f.A_STOCKSNAME AS `股票简称`, f.A_STOCKCODE AS `股票代码`, f.FORE_CLS AS `业绩预告类型`, ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`, ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`, DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`, DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`, f.SUMMARY AS `业绩预告摘要` FROM STK_ACHIEVE_FORECAST f WHERE f.ISVALID = 1 AND f.A_STOCKSNAME LIKE '%紫金矿业%' AND f.A_STOCKCODE IS NOT NULL AND f.ENDDATE = '2026-06-30 00:00:00.000' AND f.DECLAREDATE IS NOT NULL AND f.DECLAREDATE = (SELECT MAX(DECLAREDATE) FROM STK_ACHIEVE_FORECAST WHERE ISVALID = 1 AND A_STOCKSNAME LIKE '%紫金矿业%' AND A_STOCKCODE IS NOT NULL AND ENDDATE = '2026-06-30 00:00:00.000' AND DECLAREDATE IS NOT NULL) ORDER BY f.DECLAREDATE DESC LIMIT 1",
+ "final_sql": "SELECT f.A_STOCKSNAME AS `股票简称`, f.A_STOCKCODE AS `股票代码`, f.FORE_CLS AS `业绩预告类型`, ROUND(f.MIN_VAL, 1) AS `归母净利润预测下限(万)`, ROUND(f.MAX_VAL, 1) AS `归母净利润预测上限(万)`, DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`, DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`, f.SUMMARY AS `业绩预告摘要` FROM STK_ACHIEVE_FORECAST f WHERE f.ISVALID = 1 AND f.A_STOCKSNAME LIKE '%紫金矿业%' AND f.A_STOCKCODE IS NOT NULL AND f.ENDDATE = '2026-06-30 00:00:00.000' AND f.DECLAREDATE IS NOT NULL AND f.DECLAREDATE = (SELECT MAX(DECLAREDATE) FROM STK_ACHIEVE_FORECAST WHERE ISVALID = 1 AND A_STOCKSNAME LIKE '%紫金矿业%' AND A_STOCKCODE IS NOT NULL AND ENDDATE = '2026-06-30 00:00:00.000' AND DECLAREDATE IS NOT NULL) ORDER BY f.DECLAREDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3910000.0000 3910000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "紫金矿业 601899 业绩大幅上升 3910000.0 3910000.0 2026-06-30 2026-07-10 预计2026年1-6月归属于上市公司股东的净利润同比增幅约68%",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 75.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_14_a25f205a.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 73.57,
+  "llm_seconds_max": 68.56,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8079,
+   "prompt_tokens": 10753,
+   "total_tokens": 18832,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7403,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10753,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 210,
+   "prompt_tokens": 4740,
+   "total_tokens": 4950,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 15493,
+  "completion": 8289,
+  "total": 23782
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8079,
+   "prompt_tokens": 10753,
+   "total_tokens": 18832,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7403,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10753,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 210,
+   "prompt_tokens": 4740,
+   "total_tokens": 4950,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

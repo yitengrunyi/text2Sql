@@ -1,0 +1,1443 @@
+{
+ "failures": 9,
+ "total": 180,
+ "report": [
+  {
+   "turn": "r13.t5",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r18.t4",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r21.t4",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r23.t5",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r26.t4",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r27.t4",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r30.t4",
+   "status": "skip",
+   "reason": "nonquery/无SQL"
+  },
+  {
+   "turn": "r1.t1",
+   "question": "那它2025年的营业收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['423701834000.00']"
+  },
+  {
+   "turn": "r1.t0",
+   "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['72201282000.0000']"
+  },
+  {
+   "turn": "r1.t4",
+   "question": "和招商银行相比，谁2025年的归母净利润更高？高多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['150181000000.0000']"
+  },
+  {
+   "turn": "r1.t3",
+   "question": "加权净资产收益率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['24.9100']"
+  },
+  {
+   "turn": "r1.t2",
+   "question": "它2025年的基本每股收益是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['16.140000']"
+  },
+  {
+   "turn": "r2.t0",
+   "question": "中国平安2025年年报的营业收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1050506000000.00']"
+  },
+  {
+   "turn": "r1.t5",
+   "question": "美的集团2025年的归母净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['43945411000.0000']"
+  },
+  {
+   "turn": "r2.t1",
+   "question": "中国平安2025年的归母净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['134778000000.0000']"
+  },
+  {
+   "turn": "r2.t3",
+   "question": "长江电力2025年的归母净利润呢？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['34502809176.3900']"
+  },
+  {
+   "turn": "r2.t5",
+   "question": "中国平安2025年的基本每股收益是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7.680000']"
+  },
+  {
+   "turn": "r2.t4",
+   "question": "中国平安、兴业银行、长江电力这三家公司里，2025年归母净利润最高的是谁？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['77469000000.0000']"
+  },
+  {
+   "turn": "r2.t2",
+   "question": "兴业银行2025年的归母净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['77469000000.0000']"
+  },
+  {
+   "turn": "r3.t1",
+   "question": "招商银行同一天的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['40.1200']"
+  },
+  {
+   "turn": "r3.t2",
+   "question": "2026年8月31日那天，宁德时代和招商银行谁的收盘价更高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['600036', '40.1200']"
+  },
+  {
+   "turn": "r3.t0",
+   "question": "宁德时代2026年8月31日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['363.5500']"
+  },
+  {
+   "turn": "r3.t4",
+   "question": "兴业银行2026年8月31日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['17.5400']"
+  },
+  {
+   "turn": "r3.t5",
+   "question": "中国平安2026年8月收盘价最低的是哪一天？最低收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-08-18 00:00:00', '51.3200']"
+  },
+  {
+   "turn": "r3.t3",
+   "question": "美的集团2026年8月收盘价最高的是哪一天？最高收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-08-31 00:00:00', '87.7300']"
+  },
+  {
+   "turn": "r4.t1",
+   "question": "创业板指同一天的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3438.6810']"
+  },
+  {
+   "turn": "r4.t2",
+   "question": "科创50指数同一天的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1684.3873']"
+  },
+  {
+   "turn": "r4.t0",
+   "question": "中证500指数2026年8月31日的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7952.0986']"
+  },
+  {
+   "turn": "r4.t3",
+   "question": "创业板指2026年8月31日当天的涨跌幅是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['0.4170']"
+  },
+  {
+   "turn": "r5.t0",
+   "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.09270000']"
+  },
+  {
+   "turn": "r4.t4",
+   "question": "招商银行2026年9月1日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['40.8600']"
+  },
+  {
+   "turn": "r4.t5",
+   "question": "长江电力2026年9月1日的收盘价是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['28.4000']"
+  },
+  {
+   "turn": "r5.t1",
+   "question": "它同一天的累计净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.14830000']"
+  },
+  {
+   "turn": "r5.t2",
+   "question": "华夏上证50ETF(510050)2026年9月1日的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3.05320000']"
+  },
+  {
+   "turn": "r5.t3",
+   "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['0.068629']"
+  },
+  {
+   "turn": "r5.t4",
+   "question": "2025年年度收益率最高的基金是哪只？收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['022364.OF', '永赢科技智选混合发起A', '2.332892']"
+  },
+  {
+   "turn": "r5.t5",
+   "question": "天弘余额宝货币基金最新的资产净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['679946059599.3200']"
+  },
+  {
+   "turn": "r6.t2",
+   "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[4, '32284557164.1000']"
+  },
+  {
+   "turn": "r6.t1",
+   "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['张坤']"
+  },
+  {
+   "turn": "r6.t3",
+   "question": "全市场在管基金数量最多的基金经理是谁？管了几只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['董瑾', '汇添富', 21]"
+  },
+  {
+   "turn": "r6.t4",
+   "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['20415804144.7600']"
+  },
+  {
+   "turn": "r7.t0",
+   "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3.025000']"
+  },
+  {
+   "turn": "r7.t1",
+   "question": "它当天的涨跌幅是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['-0.009820']"
+  },
+  {
+   "turn": "r6.t5",
+   "question": "全市场规模最大的基金是哪只？资产净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['000198.OF', '天弘余额宝货币', '679946059599.3200']"
+  },
+  {
+   "turn": "r7.t2",
+   "question": "它2026年9月2日的基金规模是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['19579514570.0000']"
+  },
+  {
+   "turn": "r7.t3",
+   "question": "华夏上证50ETF今年以来（YTD）的收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "warn",
+   "problems": [
+    "gold_value=-2.58 不在执行结果中"
+   ],
+   "preview": "['-0.023835']"
+  },
+  {
+   "turn": "r8.t0",
+   "question": "苹果公司最新一个交易日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[255.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t1",
+   "question": "特斯拉最新一个交易日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[340.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t2",
+   "question": "英伟达最新一个交易日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[175.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t3",
+   "question": "苹果、特斯拉、英伟达这三只股票，最新收盘价最高的是谁？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['TSLA', 340.0]"
+  },
+  {
+   "turn": "r8.t4",
+   "question": "微软最新一个交易日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[495.0, '2026-08-25']"
+  },
+  {
+   "turn": "r8.t5",
+   "question": "阿里巴巴最新一个交易日的收盘价是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[105.0, '2026-08-25']"
+  },
+  {
+   "turn": "r9.t0",
+   "question": "苹果公司2025财年的营业收入是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[539314.0]"
+  },
+  {
+   "turn": "r9.t1",
+   "question": "苹果公司2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[152551.0]"
+  },
+  {
+   "turn": "r9.t2",
+   "question": "特斯拉2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[26445.1]"
+  },
+  {
+   "turn": "r9.t3",
+   "question": "英伟达2025财年的净利润是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[131143.0]"
+  },
+  {
+   "turn": "r7.t4",
+   "question": "目前境内的ETF一共有多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[11693]"
+  },
+  {
+   "turn": "r9.t4",
+   "question": "苹果公司2025财年营业收入比2024财年增长了百分之多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[2.71]"
+  },
+  {
+   "turn": "r10.t0",
+   "question": "美股数据库目前一共收录了多少只股票的行情？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[43]"
+  },
+  {
+   "turn": "r9.t5",
+   "question": "苹果公司2025财年收入最高的业务板块是哪个？收入多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['手机', 246017.0]"
+  },
+  {
+   "turn": "r10.t1",
+   "question": "其中的中概股都有哪些？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['BABA', '阿里巴巴-W']"
+  },
+  {
+   "turn": "r10.t2",
+   "question": "按最新总市值排名，前三名是哪几家公司？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['BRK.B', '伯克希尔B', 77400000.0]"
+  },
+  {
+   "turn": "r10.t3",
+   "question": "特斯拉最新的市盈率是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[73.27]"
+  },
+  {
+   "turn": "r10.t4",
+   "question": "全部美股里市盈率最低的是哪只股票？市盈率是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['JD', '京东-W', 9.35]"
+  },
+  {
+   "turn": "r10.t5",
+   "question": "美股按申万一级行业划分，股票数量最多的是哪个行业？有多少只？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['电子', 7]"
+  },
+  {
+   "turn": "r7.t5",
+   "question": "其中QDII类型的ETF有多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[285]"
+  },
+  {
+   "turn": "r6.t0",
+   "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['腾讯控股', '0.057200']"
+  },
+  {
+   "turn": "r11.t2",
+   "question": "它的毛利率大概是什么水平？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['26.88']"
+  },
+  {
+   "turn": "r11.t0",
+   "question": "万华化学2025年年报里，聚氨酯系列产品实现的营业收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7505822.44']"
+  },
+  {
+   "turn": "r11.t1",
+   "question": "这块业务占了公司总营收多大比重？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['36.93']"
+  },
+  {
+   "turn": "r11.t5",
+   "question": "换个标的看看，海康威视2025年年报的研发投入总额是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['11752624736.80']"
+  },
+  {
+   "turn": "r11.t4",
+   "question": "那2024年呢？这块业务收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7584415.01']"
+  },
+  {
+   "turn": "r11.t3",
+   "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['47.39']"
+  },
+  {
+   "turn": "r12.t1",
+   "question": "名单里排第一的是谁？持有多少股、占比多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['江苏恒瑞医药集团有限公司', '1538184187', '23.18']"
+  },
+  {
+   "turn": "r12.t2",
+   "question": "这十家股东加起来，合计持股比例是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['55.85']"
+  },
+  {
+   "turn": "r12.t3",
+   "question": "那2025年年报的时候呢，前十大合计持股是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['58.96']"
+  },
+  {
+   "turn": "r12.t0",
+   "question": "恒瑞医药2026年中报披露的前十大股东都是哪些？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['江苏恒瑞医药集团有限公司']"
+  },
+  {
+   "turn": "r12.t5",
+   "question": "换家公司看看，中国神华2025年度累计现金分红总额是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['41811266889.02']"
+  },
+  {
+   "turn": "r13.t1",
+   "question": "这次分红的股权登记日和除权除息日分别是哪天？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-07-10 00:00:00', '2026-07-13 00:00:00']"
+  },
+  {
+   "turn": "r13.t0",
+   "question": "中国神华2025年年报的利润分配方案是怎么安排的？每10股派多少现金红利，有没有送股或者转增？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['10.300000', None, None, '实施']"
+  },
+  {
+   "turn": "r13.t2",
+   "question": "它现在的股息率大概什么水平？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-09-02 00:00:00', '4.0119']"
+  },
+  {
+   "turn": "r12.t4",
+   "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['258197600']"
+  },
+  {
+   "turn": "r13.t4",
+   "question": "换个话题，最近三年A股里累计现金分红最多的前五家公司是哪几家？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['工商银行', '329568865930.198300']"
+  },
+  {
+   "turn": "r13.t3",
+   "question": "那2023年度呢，当时每10股派了多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['22.600000', '2.260000', '2024-07-08 00:00:00']"
+  },
+  {
+   "turn": "r14.t3",
+   "question": "预告之外，再看看机构预测这边：紫金矿业2024年的一致预期净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3196059.835439']"
+  },
+  {
+   "turn": "r14.t4",
+   "question": "对应的一致预期EPS和市盈率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.202514', '15.857603', '2025-06-13']"
+  },
+  {
+   "turn": "r14.t0",
+   "question": "紫金矿业最近一次业绩预告是什么类型？针对哪个报告期？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['紫金矿业', '业绩大幅上升', '2026-06-30 00:00:00', '2026-07-10 00:00:00', '临时公告']"
+  },
+  {
+   "turn": "r14.t2",
+   "question": "去年同期那次预告呢？当时预计2025年上半年能赚多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2320000.0000', '2320000.0000', '业绩大幅上升']"
+  },
+  {
+   "turn": "r14.t1",
+   "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['3910000.0000', '3910000.0000']"
+  },
+  {
+   "turn": "r14.t5",
+   "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中国人寿', '13711900.0000']"
+  },
+  {
+   "turn": "r15.t0",
+   "question": "我组合里配了腾讯控股，先看下它2025年年报的营业额有多大？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['751766000000.0000']"
+  },
+  {
+   "turn": "r15.t3",
+   "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['401243000000.0000']"
+  },
+  {
+   "turn": "r15.t2",
+   "question": "那当天成交额有多大？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['9336637626.7000']"
+  },
+  {
+   "turn": "r15.t1",
+   "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['438.2000']"
+  },
+  {
+   "turn": "r15.t4",
+   "question": "再帮我看个港股，香港交易所最新的市净率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['8.2839']"
+  },
+  {
+   "turn": "r15.t5",
+   "question": "它现在的总市值有多大？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['512713240338.0000']"
+  },
+  {
+   "turn": "r16.t0",
+   "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['-7.9196']"
+  },
+  {
+   "turn": "r16.t4",
+   "question": "换个票，海康威视今年以来累计涨了多少？",
+   "source": "MYSQL-2",
+   "status": "warn",
+   "problems": [
+    "gold_value=22.5206 不在执行结果中"
+   ],
+   "preview": "['21.8241']"
+  },
+  {
+   "turn": "r16.t2",
+   "question": "8月它平均每天的成交额有多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1891138748.95238095']"
+  },
+  {
+   "turn": "r16.t3",
+   "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2026-08-19 00:00:00', '3.1453']"
+  },
+  {
+   "turn": "r16.t1",
+   "question": "那7月呢？是涨还是跌，幅度多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['12.8000']"
+  },
+  {
+   "turn": "r16.t5",
+   "question": "它8月整月下来总共成交了多少股？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1660107902']"
+  },
+  {
+   "turn": "r17.t0",
+   "question": "万华化学2025年年报的营业总收入是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['203234573814.42']"
+  },
+  {
+   "turn": "r17.t1",
+   "question": "那它2025年末的资产负债率大概有多高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['62.81']"
+  },
+  {
+   "turn": "r17.t2",
+   "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2.36']"
+  },
+  {
+   "turn": "r17.t3",
+   "question": "那换成2024年年报，这个倍数是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2.03']"
+  },
+  {
+   "turn": "r17.t4",
+   "question": "再加一家海尔智家做参照，同样按2025年年报算净现比，两家谁更高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['万华化学', '2.36']"
+  },
+  {
+   "turn": "r18.t0",
+   "question": "深证成指最近一个交易日的收盘点位是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['13625.1220']"
+  },
+  {
+   "turn": "r18.t2",
+   "question": "上证50在同一个交易日收在多少点？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2919.4986']"
+  },
+  {
+   "turn": "r18.t1",
+   "question": "它今年以来累计上涨了多少？",
+   "source": "MYSQL-2",
+   "status": "warn",
+   "problems": [
+    "gold_value=0.64 不在执行结果中"
+   ],
+   "preview": "['0.74']"
+  },
+  {
+   "turn": "r18.t3",
+   "question": "那2025年全年它涨了多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['29.87']"
+  },
+  {
+   "turn": "r18.t5",
+   "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['43.0869']"
+  },
+  {
+   "turn": "r19.t0",
+   "question": "中证1000指数最新的市盈率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['43.0869']"
+  },
+  {
+   "turn": "r19.t1",
+   "question": "那它同一个交易日的市净率呢？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2.3227']"
+  },
+  {
+   "turn": "r19.t2",
+   "question": "我在做宽基之间的估值比较，把中证红利指数和上证180指数同一交易日的市盈率也拉出来，这三个指数里谁的估值最便宜？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中证红利指数', '8.0386']"
+  },
+  {
+   "turn": "r19.t3",
+   "question": "往回看，2025年末的时候它的市盈率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['45.9128']"
+  },
+  {
+   "turn": "r19.t4",
+   "question": "换个话题，深证100指数2026年半年报的净资产收益率是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7.3965']"
+  },
+  {
+   "turn": "r19.t5",
+   "question": "和中证1000同期相比，两者的净资产收益率谁更高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['深证100指数', '7.3965']"
+  },
+  {
+   "turn": "r20.t0",
+   "question": "中证军工指数今年以来涨跌幅是多少？",
+   "source": "MYSQL-2",
+   "status": "warn",
+   "problems": [
+    "gold_value=-17.58 不在执行结果中"
+   ],
+   "preview": "['-17.67']"
+  },
+  {
+   "turn": "r20.t3",
+   "question": "今年以来它的日均成交额大概什么量级？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['870.61']"
+  },
+  {
+   "turn": "r20.t2",
+   "question": "那中证军工2025年全年涨了多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['31.55']"
+  },
+  {
+   "turn": "r20.t1",
+   "question": "同样的时间区间，中证银行指数表现怎么样？",
+   "source": "MYSQL-2",
+   "status": "warn",
+   "problems": [
+    "gold_value=-0.49 不在执行结果中"
+   ],
+   "preview": "['-0.98']"
+  },
+  {
+   "turn": "r20.t4",
+   "question": "再看个短线问题，9月2日上证50、中证白酒、中证医疗这三个指数谁的日涨幅最大？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "[106006473, '中证医疗', '-0.8133']"
+  },
+  {
+   "turn": "r21.t1",
+   "question": "它最近一个月整体走势怎么样，累计涨跌幅大概多少？",
+   "source": "MYSQL-2",
+   "status": "warn",
+   "problems": [
+    "gold_value=7.18 不在执行结果中"
+   ],
+   "preview": "['7.35']"
+  },
+  {
+   "turn": "r20.t5",
+   "question": "把这三个指数今年以来涨跌幅从高到低排一下，谁最抗跌？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中证医疗指数', '-1.03']"
+  },
+  {
+   "turn": "r21.t2",
+   "question": "那2025年全年呢，累计涨幅有多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['27.49']"
+  },
+  {
+   "turn": "r21.t3",
+   "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['上证50指数', '10.6404']"
+  },
+  {
+   "turn": "r22.t0",
+   "question": "我组合里拿了中欧医疗健康混合A，先帮我看下它最新一个交易日的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.92790000']"
+  },
+  {
+   "turn": "r22.t1",
+   "question": "它的累计净值呢？顺便一起报一下。",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['2.12330000']"
+  },
+  {
+   "turn": "r22.t2",
+   "question": "今年以来这只基金整体是赚是亏？按复权净值给我算个收益率出来。",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['8.69']"
+  },
+  {
+   "turn": "r17.t5",
+   "question": "换个标的，帮我查一下隆基绿能2025年年报经营活动产生的现金流量净额是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['4359382755.77']"
+  },
+  {
+   "turn": "r22.t3",
+   "question": "那2025年一整年下来，它的年度收益率是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['13.07']"
+  },
+  {
+   "turn": "r21.t5",
+   "question": "对了，再帮我查一下万华化学2025年年报的归属于母公司股东的净利润是多少？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['12527201094.1500']"
+  },
+  {
+   "turn": "r23.t0",
+   "question": "帮我拆一下大成高新技术产业股票A 2026年二季报的前十大重仓股，按持股市值从高到低排一下。",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['福耀玻璃', '9.71']"
+  },
+  {
+   "turn": "r22.t4",
+   "question": "把范围放大点，中欧基金旗下2025年收益率最高的基金是哪只？当年涨了多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['018993.OF', '中欧数字经济混合发起A', '143.07']"
+  },
+  {
+   "turn": "r22.t5",
+   "question": "对了，最近想配点黄金，华安黄金易ETF(518880)最近一年涨了多少？",
+   "source": "MYSQL-1",
+   "status": "warn",
+   "problems": [
+    "gold_value=16.41 不在执行结果中"
+   ],
+   "preview": "['18.71']"
+  },
+  {
+   "turn": "r23.t1",
+   "question": "排第一的这只重仓股，占了基金净值多大比例？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['福耀玻璃', '9.71']"
+  },
+  {
+   "turn": "r23.t2",
+   "question": "这十只重仓股加在一起，合计占到净值的多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['59.29']"
+  },
+  {
+   "turn": "r23.t3",
+   "question": "跟2026年一季报相比，二季报前十大有什么换仓动作？新进了谁、又剔出了谁？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['安琪酵母', '新进入前10大']"
+  },
+  {
+   "turn": "r23.t4",
+   "question": "换个角度，2026年二季报全市场公募基金持有市值最大的个股是哪只？一共被多少只基金持有？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中际旭创', '258826608330.0000', 2636]"
+  },
+  {
+   "turn": "r24.t0",
+   "question": "我关注景顺长城的刘彦春挺久了，他目前在管的总规模有多大？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['24048631916.3500']"
+  },
+  {
+   "turn": "r24.t1",
+   "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['景顺长城新兴成长混合A', 4164]"
+  },
+  {
+   "turn": "r24.t3",
+   "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['42726346909.0300']"
+  },
+  {
+   "turn": "r24.t2",
+   "question": "那这批在管基金里面，最新一期披露规模最大的是哪只？规模有多大？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['景顺长城新兴成长混合A', '10762688560.8700']"
+  },
+  {
+   "turn": "r24.t4",
+   "question": "换个经理帮我看看，兴证全球的谢治宇，他最新的在管总规模有多大？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['39275132159.3200']"
+  },
+  {
+   "turn": "r25.t0",
+   "question": "华宝中证医疗ETF，代码512170，它跟踪的标的指数是哪一个？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['中证医疗指数']"
+  },
+  {
+   "turn": "r24.t5",
+   "question": "那在兴证全球内部，目前在管规模比他大的基金经理有几位？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[6]"
+  },
+  {
+   "turn": "r25.t1",
+   "question": "那这只基金在标签体系里怎么归类的？算行业类还是主题类，落在哪个行业？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['行业', '医药生物']"
+  },
+  {
+   "turn": "r25.t2",
+   "question": "顺着问一句，全市场行业类的ETF里面，数量最多的行业是哪一个？大概多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['医药生物', 80]"
+  },
+  {
+   "turn": "r25.t3",
+   "question": "回到这只医疗ETF，它目前最新的基金规模有多大？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['24231835329.0000']"
+  },
+  {
+   "turn": "r25.t5",
+   "question": "再问个跨境的：境内全市场的QDII类ETF，把LOF剔除掉不算，一共有多少只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "[78]"
+  },
+  {
+   "turn": "r26.t1",
+   "question": "它现在最新规模做到多大了？",
+   "source": "MYSQL-1",
+   "status": "warn",
+   "problems": [
+    "gold_value=104347826801.6000 不在执行结果中"
+   ],
+   "preview": "[None]"
+  },
+  {
+   "turn": "r25.t4",
+   "question": "那2025年末的时候呢？当时它的规模有多大？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['25304098970.0000']"
+  },
+  {
+   "turn": "r26.t3",
+   "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['-12698692650.0000']"
+  },
+  {
+   "turn": "r26.t5",
+   "question": "再帮我查个别的，中欧医疗健康混合A最新的单位净值是多少？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['1.92790000']"
+  },
+  {
+   "turn": "r27.t0",
+   "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[926942.0]"
+  },
+  {
+   "turn": "r27.t1",
+   "question": "这个财年它最终落到净利润有多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[30504.0]"
+  },
+  {
+   "turn": "r27.t2",
+   "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[2.07]"
+  },
+  {
+   "turn": "r27.t3",
+   "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[8919.7]"
+  },
+  {
+   "turn": "r27.t5",
+   "question": "换家公司看看：可口可乐最新一份年报期末的总资产是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[148431.0]"
+  },
+  {
+   "turn": "r28.t0",
+   "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['奈飞', 56.19]"
+  },
+  {
+   "turn": "r28.t1",
+   "question": "那它们俩的市净率呢？差距也这么明显吗？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[7.024]"
+  },
+  {
+   "turn": "r28.t2",
+   "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['雪佛龙', 3.334]"
+  },
+  {
+   "turn": "r28.t3",
+   "question": "估值先放一边，那过去一年呢？迪士尼这段时间股价累计涨跌了多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[6.65]"
+  },
+  {
+   "turn": "r28.t4",
+   "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[14.34]"
+  },
+  {
+   "turn": "r28.t5",
+   "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[36.89]"
+  },
+  {
+   "turn": "r29.t0",
+   "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[262570.0]"
+  },
+  {
+   "turn": "r29.t1",
+   "question": "主营业务占它各板块收入合计的比例大概多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[62.0]"
+  },
+  {
+   "turn": "r29.t2",
+   "question": "同期它在北美市场实现的销售收入呢？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[245630.0]"
+  },
+  {
+   "turn": "r29.t3",
+   "question": "往回看一个财年，2024年主营业务板块这块做了多少收入？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[238700.0]"
+  },
+  {
+   "turn": "r29.t4",
+   "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['北美', 245630.0]"
+  },
+  {
+   "turn": "r29.t5",
+   "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[156534.0]"
+  },
+  {
+   "turn": "r30.t0",
+   "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['阿里巴巴-W', 'BABA', 1663200.0]"
+  },
+  {
+   "turn": "r30.t1",
+   "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "['京东-W', 'JD', 9.35]"
+  },
+  {
+   "turn": "r30.t2",
+   "question": "刚才市盈率最低的那三只中概股，今年以来整体走得怎么样？平均涨跌幅有多少？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[13.41]"
+  },
+  {
+   "turn": "r30.t3",
+   "question": "那把窗口拉长到最近一年呢，平均下来大概什么收益水平？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[33.96]"
+  },
+  {
+   "turn": "r30.t5",
+   "question": "再看个别的，迪士尼现在的股息率大概什么水平？",
+   "source": "MYSQL-4",
+   "status": "ok",
+   "problems": [],
+   "preview": "[0.592]"
+  },
+  {
+   "turn": "r26.t0",
+   "question": "最近黄金ETF吸金很猛，帮我看看华安黄金ETF（518880）最近一周资金净流入大概有多少？",
+   "source": "MYSQL-1",
+   "status": "warn",
+   "problems": [
+    "gold_value=460969725.0000 不在执行结果中"
+   ],
+   "preview": "[None]"
+  },
+  {
+   "turn": "r26.t2",
+   "question": "放到同类里比一下呢，商品型基金按最新规模排前五的都是哪几只？",
+   "source": "MYSQL-1",
+   "status": "ok",
+   "problems": [],
+   "preview": "['华安黄金易(ETF)', '104347826801.6000']"
+  },
+  {
+   "turn": "r21.t0",
+   "question": "帮我看看中证1000指数最新收盘在多少点？",
+   "source": "MYSQL-2",
+   "status": "ok",
+   "problems": [],
+   "preview": "['7600.0971']"
+  }
+ ]
+}

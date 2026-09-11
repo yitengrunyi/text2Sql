@@ -1,0 +1,172 @@
+{
+ "round_id": 3,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "招商银行同一天的收盘价是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%招商银行%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交额(亿元)', '成交量(百万股)', '涨跌幅(%)'], ['2026-08-31', '招商银行', '600036', '40.12', '39.51', '40.28', '39.50', '45.45', '113.63', '1.96']]}\n该查询提取了招商银行在2026年8月31日的股票交易信息，包括交易日期、股票简称、股票代码、收盘价、开盘价、最高价、最低价、成交金额、成交量和涨跌幅等关键指标。数据来自股票日行情数据表，通过筛选有效记录、指定股票名称包含“招商银行”以及指定交易日期为2026年8月31日，保证结果只显示该公司当天的最新有效数据，并按交易日期降序排序，仅返回一条结果。收盘价、开盘价、最高价、最低价等数值直接引用已有交易指标，并均保留两位小数；成交额除以1亿将原单位转换为亿元，同时保留两位小数；成交量除以100万转换为百万股，同样保留两位小数；涨跌幅直接展示为百分数并保留两位小数。该查询结果完全覆盖用户所需的招商银行指定日期收盘价及相关行情指标，查询结果符合要求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交额(亿元)', '成交量(百万股)', '涨跌幅(%)'], ['2026-08-31', '招商银行', '600036', '40.12', '39.51', '40.28', '39.50', '45.45', '113.63', '1.96']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%招商银行%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    m.TRADEDATE AS `交易日期`,\n    m.STOCKSNAME AS `股票名称`,\n    m.SECCODE AS `股票代码`,\n    ROUND(m.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(m.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(m.THIGH, 2) AS `最高价(元)`,\n    ROUND(m.TLOW, 2) AS `最低价(元)`,\n    ROUND(m.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(m.TVOLUME / 1000000, 2) AS `成交量(百万股)`,\n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`\nFROM STK_MKT m\nWHERE \n    m.ISVALID = 1\n    AND m.STOCKSNAME LIKE '%招商银行%'\n    AND m.TRADEDATE = '2026-08-31'\nORDER BY m.TRADEDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "40.1200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 招商银行 600036 40.12 39.51 40.28 39.50 45.45 113.63 1.96",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 25.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_3_af250c53.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 24.57,
+  "llm_seconds_max": 18.23,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1562,
+   "prompt_tokens": 17907,
+   "total_tokens": 19469,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1024,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17907,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 226,
+   "prompt_tokens": 11005,
+   "total_tokens": 11231,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28912,
+  "completion": 1788,
+  "total": 30700
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1562,
+   "prompt_tokens": 17907,
+   "total_tokens": 19469,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1024,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17907,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 226,
+   "prompt_tokens": 11005,
+   "total_tokens": 11231,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

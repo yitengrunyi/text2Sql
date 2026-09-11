@@ -1,0 +1,3951 @@
+{
+ "meta": {
+  "name": "gold_set_180",
+  "created": "2026-09-03",
+  "structure": "30轮×6问(1初始+5追问)；不含宏观/EDB主题、不依赖DashVector",
+  "route_rule": "route_gold 按二级域表上下文机械计算: 同域可解=SQL_GENERATION, 跨域新表=NEW_QUERY, 闲聊=NON_QUERY(对齐 common/prompt/prompt_template.py 三分类定义)",
+  "sources": {
+   "MYSQL-2": "生产 juling（真实数据，只读）",
+   "MYSQL-1": "测试 Nacos FUND_INFO（测试数据）",
+   "MYSQL-4": "本地 fiu（43只美股样本，合成数值，gold以库内值为准）"
+  },
+  "judge_types": {
+   "numeric": "数值命中(相对容差0.5%,亿/百万/万换算)；gold_date/gold_entities 给出则必须命中",
+   "entity": "实体命中；数值/日期软校验",
+   "list": "名单重叠率≥80%",
+   "nonquery": "仅判路由"
+  }
+ },
+ "rounds": [
+  {
+   "round_id": 1,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "A股年报财务·宁德时代",
+   "initial": {
+    "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+    "judge": "numeric",
+    "gold_value": "72201282000",
+    "gold_display": "722.01亿元",
+    "gold_entities": [
+     "宁德时代"
+    ],
+    "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='300750' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+    "gold_date": null,
+    "gold_tables": [
+     "VIEW_STK_FIN_IDX"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那它2025年的营业收入是多少？",
+     "judge": "numeric",
+     "gold_value": "423701834000",
+     "gold_display": "4237.02亿元",
+     "gold_entities": [
+      "宁德时代"
+     ],
+     "gold_sql": "SELECT P110101 FROM STK_INCOME_GEN WHERE A_STOCKCODE='300750' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_INCOME_GEN"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "它2025年的基本每股收益是多少？",
+     "judge": "numeric",
+     "gold_value": "16.14",
+     "gold_display": "16.14元/股",
+     "gold_entities": [
+      "宁德时代"
+     ],
+     "gold_sql": "SELECT F111001 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='300750' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "加权净资产收益率是多少？",
+     "judge": "numeric",
+     "gold_value": "24.91",
+     "gold_display": "24.91%",
+     "gold_entities": [
+      "宁德时代"
+     ],
+     "gold_sql": "SELECT F111701 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='300750' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "和招商银行相比，谁2025年的归母净利润更高？高多少？",
+     "judge": "entity",
+     "gold_entities": [
+      "招商银行"
+     ],
+     "gold_value": "150181000000",
+     "gold_display": "招商银行1501.81亿 > 宁德时代722.01亿，高约779.80亿元",
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE IN ('300750','600036') AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "美的集团2025年的归母净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "43945411000",
+     "gold_display": "439.45亿元",
+     "gold_entities": [
+      "美的集团"
+     ],
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='000333' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 2,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "A股金融股对比",
+   "initial": {
+    "question": "中国平安2025年年报的营业收入是多少？",
+    "judge": "numeric",
+    "gold_value": "1050506000000",
+    "gold_display": "10505.06亿元",
+    "gold_entities": [
+     "中国平安"
+    ],
+    "gold_sql": "SELECT P110101 FROM STK_INCOME_GEN WHERE A_STOCKCODE='601318' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+    "gold_date": null,
+    "gold_tables": [
+     "STK_INCOME_GEN"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "中国平安2025年的归母净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "134778000000",
+     "gold_display": "1347.78亿元",
+     "gold_entities": [
+      "中国平安"
+     ],
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='601318' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "普通追问",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "兴业银行2025年的归母净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "77469000000",
+     "gold_display": "774.69亿元",
+     "gold_entities": [
+      "兴业银行"
+     ],
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='601166' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "长江电力2025年的归母净利润呢？",
+     "judge": "numeric",
+     "gold_value": "34502809176.39",
+     "gold_display": "345.03亿元",
+     "gold_entities": [
+      "长江电力"
+     ],
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='600900' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "中国平安、兴业银行、长江电力这三家公司里，2025年归母净利润最高的是谁？",
+     "judge": "entity",
+     "gold_entities": [
+      "中国平安"
+     ],
+     "gold_value": "134778000000",
+     "gold_display": "中国平安 1347.78亿元",
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE IN ('601318','601166','600900') AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "中国平安2025年的基本每股收益是多少？",
+     "judge": "numeric",
+     "gold_value": "7.68",
+     "gold_display": "7.68元/股",
+     "gold_entities": [
+      "中国平安"
+     ],
+     "gold_sql": "SELECT F111001 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='601318' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "followup_type": "普通追问",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 3,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "A股行情·固定日期",
+   "initial": {
+    "question": "宁德时代2026年8月31日的收盘价是多少？",
+    "judge": "numeric",
+    "gold_value": "363.55",
+    "gold_display": "363.55元",
+    "gold_entities": [
+     "宁德时代"
+    ],
+    "gold_sql": "SELECT TCLOSE FROM STK_MKT WHERE SECCODE='300750' AND TRADEDATE='2026-08-31' AND ISVALID=1",
+    "gold_date": null,
+    "gold_tables": [
+     "STK_MKT"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "时间窗口",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "招商银行同一天的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "40.12",
+     "gold_display": "40.12元",
+     "gold_entities": [
+      "招商银行"
+     ],
+     "gold_sql": "SELECT TCLOSE FROM STK_MKT WHERE SECCODE='600036' AND TRADEDATE='2026-08-31' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "2026年8月31日那天，宁德时代和招商银行谁的收盘价更高？",
+     "judge": "entity",
+     "gold_entities": [
+      "宁德时代"
+     ],
+     "gold_value": "363.55",
+     "gold_display": "宁德时代 363.55元 > 招商银行 40.12元",
+     "gold_sql": "SELECT SECCODE, TCLOSE FROM STK_MKT WHERE SECCODE IN ('300750','600036') AND TRADEDATE='2026-08-31' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "美的集团2026年8月收盘价最高的是哪一天？最高收盘价是多少？",
+     "judge": "numeric",
+     "asked_date": true,
+     "gold_value": "87.73",
+     "gold_date": "2026-08-31",
+     "gold_display": "2026年8月31日，87.73元",
+     "gold_entities": [
+      "美的集团"
+     ],
+     "gold_sql": "SELECT TRADEDATE, TCLOSE FROM STK_MKT WHERE SECCODE='000333' AND TRADEDATE>='2026-08-01' AND TRADEDATE<'2026-09-01' AND ISVALID=1 ORDER BY TCLOSE DESC, TRADEDATE ASC LIMIT 1",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "兴业银行2026年8月31日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "17.54",
+     "gold_display": "17.54元",
+     "gold_entities": [
+      "兴业银行"
+     ],
+     "gold_sql": "SELECT TCLOSE FROM STK_MKT WHERE SECCODE='601166' AND TRADEDATE='2026-08-31' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "中国平安2026年8月收盘价最低的是哪一天？最低收盘价是多少？",
+     "judge": "numeric",
+     "asked_date": true,
+     "gold_value": "51.32",
+     "gold_date": "2026-08-18",
+     "gold_display": "2026年8月18日，51.32元",
+     "gold_entities": [
+      "中国平安"
+     ],
+     "gold_sql": "SELECT TRADEDATE, TCLOSE FROM STK_MKT WHERE SECCODE='601318' AND TRADEDATE>='2026-08-01' AND TRADEDATE<'2026-09-01' AND ISVALID=1 ORDER BY TCLOSE ASC, TRADEDATE ASC LIMIT 1",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 4,
+   "source": "MYSQL-2",
+   "domain": "指数",
+   "theme": "A股指数与跨日行情",
+   "initial": {
+    "question": "中证500指数2026年8月31日的收盘点位是多少？",
+    "judge": "numeric",
+    "gold_value": "7952.0986",
+    "gold_display": "7952.0986点",
+    "gold_entities": [
+     "中证500"
+    ],
+    "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE SECCODE='000905' AND TRADEDATE='2026-08-31'",
+    "gold_date": null,
+    "gold_tables": [
+     "INDX_MKT"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "创业板指同一天的收盘点位是多少？",
+     "judge": "numeric",
+     "gold_value": "3438.681",
+     "gold_display": "3438.681点",
+     "gold_entities": [
+      "创业板"
+     ],
+     "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE SECCODE='399006' AND TRADEDATE='2026-08-31'",
+     "gold_date": null,
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "科创50指数同一天的收盘点位是多少？",
+     "judge": "numeric",
+     "gold_value": "1684.3873",
+     "gold_display": "1684.3873点",
+     "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE SECCODE='000688' AND TRADEDATE='2026-08-31'",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "创业板指2026年8月31日当天的涨跌幅是多少？",
+     "judge": "numeric",
+     "gold_value": "0.417",
+     "gold_display": "+0.4170%",
+     "gold_entities": [
+      "创业板"
+     ],
+     "gold_sql": "SELECT CHNG_PCT FROM INDX_MKT WHERE SECCODE='399006' AND TRADEDATE='2026-08-31'",
+     "gold_date": null,
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "招商银行2026年9月1日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "40.86",
+     "gold_display": "40.86元",
+     "gold_entities": [
+      "招商银行"
+     ],
+     "gold_sql": "SELECT TCLOSE FROM STK_MKT WHERE SECCODE='600036' AND TRADEDATE='2026-09-01' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "单表",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "长江电力2026年9月1日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "28.40",
+     "gold_display": "28.40元",
+     "gold_entities": [
+      "长江电力"
+     ],
+     "gold_sql": "SELECT TCLOSE FROM STK_MKT WHERE SECCODE='600900' AND TRADEDATE='2026-09-01' AND ISVALID=1",
+     "gold_date": null,
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 5,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金净值与收益",
+   "initial": {
+    "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+    "judge": "numeric",
+    "gold_value": "1.0927",
+    "gold_display": "1.0927元",
+    "gold_entities": [
+     "华夏上证50ETF联接"
+    ],
+    "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='001051.OF' AND TRADING_DAY='2026-09-01'",
+    "gold_date": null,
+    "gold_tables": [
+     "FUND_NETVALUE"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它同一天的累计净值是多少？",
+     "judge": "numeric",
+     "gold_value": "1.1483",
+     "gold_display": "1.1483元",
+     "gold_entities": [
+      "华夏上证50ETF联接"
+     ],
+     "gold_sql": "SELECT ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='001051.OF' AND TRADING_DAY='2026-09-01'",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_NETVALUE"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "华夏上证50ETF(510050)2026年9月1日的单位净值是多少？",
+     "judge": "numeric",
+     "gold_value": "3.0532",
+     "gold_display": "3.0532元",
+     "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='510050.SH' AND TRADING_DAY='2026-09-01'",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_NETVALUE"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+     "judge": "numeric",
+     "gold_value": "6.86",
+     "gold_display": "+6.86%",
+     "gold_entities": [
+      "易方达蓝筹精选"
+     ],
+     "gold_sql": "SELECT YIELD FROM FUND_STATISTICS_YEAR WHERE FUND_SYMBOL='005827.OF' AND YEAR=2025",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_STATISTICS_YEAR"
+     ],
+     "labels": {
+      "followup_type": "普通追问",
+      "difficulty": "子查询",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "2025年年度收益率最高的基金是哪只？收益率是多少？",
+     "judge": "entity",
+     "gold_entities": [
+      "永赢科技智选"
+     ],
+     "gold_value": "233.2892",
+     "gold_display": "永赢科技智选混合发起A(022364.OF) +233.29%",
+     "gold_sql": "SELECT FUND_SYMBOL, FUND_NAME, YIELD FROM FUND_STATISTICS_YEAR WHERE YEAR=2025 ORDER BY YIELD DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_STATISTICS_YEAR"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "子查询",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "天弘余额宝货币基金最新的资产净值是多少？",
+     "judge": "numeric",
+     "gold_value": "679946059599.32",
+     "gold_display": "6799.46亿元(2026-06-30)",
+     "gold_entities": [
+      "天弘余额宝"
+     ],
+     "gold_sql": "SELECT NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE FUND_SYMBOL='000198.OF' ORDER BY REPORT_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_ASSET_ALLOCATION"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "单表",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 6,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金持仓与基金经理",
+   "initial": {
+    "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+    "judge": "list",
+    "gold_entities": [
+     "腾讯控股",
+     "贵州茅台",
+     "百胜中国"
+    ],
+    "gold_display": "腾讯控股(5.72%)、贵州茅台(5.62%)、百胜中国(5.49%)",
+    "gold_sql": "SELECT SEC_NAME, RATIO_IN_NV FROM FUND_PORTFOLIO_DETAIL WHERE FUND_SYMBOL='005827.OF' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 3",
+    "gold_date": null,
+    "gold_tables": [
+     "FUND_PORTFOLIO_DETAIL"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "聚合",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+     "judge": "entity",
+     "gold_entities": [
+      "张坤"
+     ],
+     "gold_display": "张坤、杨思亮、何一铖（共管）",
+     "gold_sql": "SELECT PSN_NAME FROM FUND_AND_MANAGER_MAPPING WHERE FUND_SYMBOL='005827.OF' AND END_DATE IS NULL",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_AND_MANAGER_MAPPING"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "单表",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+     "judge": "numeric",
+     "gold_value": "32285000000",
+     "gold_display": "4只，322.85亿元",
+     "gold_entities": [
+      "张坤"
+     ],
+     "gold_sql": "SELECT FUND_NUM_ACTUAL, NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='张坤'",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_MANAGER_INFO"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "单表",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "全市场在管基金数量最多的基金经理是谁？管了几只？",
+     "judge": "entity",
+     "gold_entities": [
+      "单宽之"
+     ],
+     "gold_value": "21",
+     "gold_display": "单宽之(华夏基金) 21只",
+     "gold_sql": "SELECT PSN_NAME, INST_NAME, FUND_NUM_ACTUAL FROM FUND_MANAGER_INFO ORDER BY FUND_NUM_ACTUAL DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_MANAGER_INFO"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+     "judge": "numeric",
+     "gold_value": "20416000000",
+     "gold_display": "204.16亿元(2026-06-30)",
+     "gold_entities": [
+      "易方达蓝筹精选"
+     ],
+     "gold_sql": "SELECT NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE FUND_SYMBOL='005827.OF' ORDER BY REPORT_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_ASSET_ALLOCATION"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "单表",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "全市场规模最大的基金是哪只？资产净值是多少？",
+     "judge": "entity",
+     "gold_entities": [
+      "天弘余额宝"
+     ],
+     "gold_value": "679946059599.32",
+     "gold_display": "天弘余额宝货币 6799.46亿元(2026-06-30)",
+     "gold_sql": "SELECT FUND_SYMBOL, FUND_NAME, NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE REPORT_DATE='2026-06-30' ORDER BY NET_VALUE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "FUND_ASSET_ALLOCATION"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 7,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "ETF行情与统计",
+   "initial": {
+    "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+    "judge": "numeric",
+    "gold_value": "3.025",
+    "gold_display": "3.025元",
+    "gold_sql": "SELECT CLOSE_PRICE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+    "gold_entities": [],
+    "gold_date": null,
+    "gold_tables": [
+     "ETF_PERFORMANCE_DETAIL"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它当天的涨跌幅是多少？",
+     "judge": "numeric",
+     "gold_value": "-0.98",
+     "gold_display": "-0.98%",
+     "gold_sql": "SELECT CHANGE_PCT FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "它2026年9月2日的基金规模是多少？",
+     "judge": "numeric",
+     "gold_value": "19579514570",
+     "gold_display": "195.80亿元(2026-09-02)",
+     "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "多表join",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "华夏上证50ETF今年以来（YTD）的收益率是多少？",
+     "judge": "numeric",
+     "gold_value": "-2.58",
+     "gold_display": "-2.58%(截至2026-09-02)",
+     "gold_sql": "SELECT YTD FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "子查询",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "目前境内的ETF一共有多少只？",
+     "judge": "numeric",
+     "gold_value": "11681",
+     "gold_display": "11,681只",
+     "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE TYPE=1",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "ETF_INFO_DETAIL"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "其中QDII类型的ETF有多少只？",
+     "judge": "numeric",
+     "gold_value": "285",
+     "gold_display": "285只",
+     "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE IF_QDII=1",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_tables": [
+      "ETF_INFO_DETAIL"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 8,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股行情",
+   "initial": {
+    "question": "苹果公司最新一个交易日的收盘价是多少？",
+    "judge": "numeric",
+    "gold_value": "255.00",
+    "gold_display": "255.00美元(2026-08-25)",
+    "gold_entities": [
+     "苹果"
+    ],
+    "gold_sql": "SELECT CLOSE_PRICE, TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE SYMBOL='AAPL' ORDER BY TRADE_DATE DESC LIMIT 1",
+    "gold_date": null,
+    "gold_tables": [
+     "VIEW_US_EOD_EXPR"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "特斯拉最新一个交易日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "340.00",
+     "gold_display": "340.00美元(2026-08-25)",
+     "gold_entities": [
+      "特斯拉"
+     ],
+     "gold_sql": "SELECT CLOSE_PRICE, TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE SYMBOL='TSLA' ORDER BY TRADE_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_US_EOD_EXPR"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "英伟达最新一个交易日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "175.00",
+     "gold_display": "175.00美元(2026-08-25)",
+     "gold_entities": [
+      "英伟达"
+     ],
+     "gold_sql": "SELECT CLOSE_PRICE, TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE SYMBOL='NVDA' ORDER BY TRADE_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_US_EOD_EXPR"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "苹果、特斯拉、英伟达这三只股票，最新收盘价最高的是谁？",
+     "judge": "entity",
+     "gold_entities": [
+      "特斯拉"
+     ],
+     "gold_value": "340.00",
+     "gold_display": "特斯拉 340.00美元",
+     "gold_sql": "SELECT SYMBOL, CLOSE_PRICE FROM VIEW_US_EOD_EXPR WHERE SYMBOL IN ('AAPL','TSLA','NVDA') AND TRADE_DATE='2026-08-25' ORDER BY CLOSE_PRICE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_US_EOD_EXPR"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "微软最新一个交易日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "495.00",
+     "gold_display": "495.00美元(2026-08-25)",
+     "gold_entities": [
+      "微软"
+     ],
+     "gold_sql": "SELECT CLOSE_PRICE, TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE SYMBOL='MSFT' ORDER BY TRADE_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_US_EOD_EXPR"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "阿里巴巴最新一个交易日的收盘价是多少？",
+     "judge": "numeric",
+     "gold_value": "105.00",
+     "gold_display": "105.00美元(2026-08-25)",
+     "gold_entities": [
+      "阿里巴巴"
+     ],
+     "gold_sql": "SELECT CLOSE_PRICE, TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE SYMBOL='BABA' ORDER BY TRADE_DATE DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_US_EOD_EXPR"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 9,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股财务",
+   "initial": {
+    "question": "苹果公司2025财年的营业收入是多少？",
+    "judge": "numeric",
+    "gold_value": "539314",
+    "gold_display": "5393.14亿美元(539,314百万美元)",
+    "gold_entities": [
+     "苹果"
+    ],
+    "gold_sql": "SELECT F048N FROM COM3103 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='AAPL' AND c.F003V='FY' AND c.F056N=2025",
+    "gold_date": null,
+    "gold_tables": [
+     "COM3103",
+     "AMERICAN_STOCK_MAIN"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "单表",
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "苹果公司2025财年的净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "152551",
+     "gold_display": "1525.51亿美元(152,551百万美元)",
+     "gold_entities": [
+      "苹果"
+     ],
+     "gold_sql": "SELECT F032N FROM COM3103 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='AAPL' AND c.F003V='FY' AND c.F056N=2025",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3103",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "普通追问",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "特斯拉2025财年的净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "26445.1",
+     "gold_display": "264.45亿美元(26,445.1百万美元)",
+     "gold_entities": [
+      "特斯拉"
+     ],
+     "gold_sql": "SELECT F032N FROM COM3103 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='TSLA' AND c.F003V='FY' AND c.F056N=2025",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3103",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "英伟达2025财年的净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "131143",
+     "gold_display": "1311.43亿美元(131,143百万美元)",
+     "gold_entities": [
+      "英伟达"
+     ],
+     "gold_sql": "SELECT F032N FROM COM3103 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='NVDA' AND c.F003V='FY' AND c.F056N=2025",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3103",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "苹果公司2025财年营业收入比2024财年增长了百分之多少？",
+     "judge": "numeric",
+     "gold_value": "2.71",
+     "gold_display": "+2.71%",
+     "gold_entities": [
+      "苹果"
+     ],
+     "gold_sql": "SELECT ROUND(100*(MAX(CASE WHEN c.F056N=2025 THEN c.F048N END)/MAX(CASE WHEN c.F056N=2024 THEN c.F048N END)-1),2) AS growth_pct FROM COM3103 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='AAPL' AND c.F003V='FY' AND c.F056N IN (2024,2025)",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3103",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "多表join",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "苹果公司2025财年收入最高的业务板块是哪个？收入多少？",
+     "judge": "entity",
+     "gold_entities": [
+      "手机"
+     ],
+     "gold_value": "246017",
+     "gold_display": "手机 2460.17亿美元(246,017百万美元)",
+     "gold_sql": "SELECT SECTOR_CNAME, F007N FROM VIEW_COM3105 v JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=v.FIU_ID WHERE m.SYMBOL='AAPL' AND v.F001D='2025-12-31' ORDER BY F007N DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "VIEW_COM3105",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "话题切换",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 10,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股全库统计",
+   "initial": {
+    "question": "美股数据库目前一共收录了多少只股票的行情？",
+    "judge": "numeric",
+    "gold_value": "43",
+    "gold_display": "43只",
+    "gold_sql": "SELECT COUNT(*) FROM AMERICAN_STOCK_MAIN",
+    "gold_entities": [],
+    "gold_date": null,
+    "gold_tables": [
+     "AMERICAN_STOCK_MAIN"
+    ],
+    "labels": {
+     "followup_type": null,
+     "difficulty": "聚合",
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "其中的中概股都有哪些？",
+     "judge": "list",
+     "gold_entities": [
+      "阿里巴巴",
+      "百度",
+      "京东",
+      "理想",
+      "蔚来",
+      "网易",
+      "拼多多"
+     ],
+     "gold_display": "7只：阿里巴巴、百度、京东、理想汽车、蔚来、网易、拼多多",
+     "gold_sql": "SELECT SYMBOL, CSNAME FROM AMERICAN_STOCK_MAIN WHERE IS_CHINESE_STOCK='中概股'",
+     "gold_date": null,
+     "gold_tables": [
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "指代继承",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "按最新总市值排名，前三名是哪几家公司？",
+     "judge": "entity",
+     "gold_entities": [
+      "伯克希尔",
+      "英伟达",
+      "苹果"
+     ],
+     "gold_display": "伯克希尔B、英伟达、苹果",
+     "gold_sql": "SELECT m.SYMBOL, m.CSNAME, c.F013N FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID ORDER BY c.F013N DESC LIMIT 3",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3101",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "多表join",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "特斯拉最新的市盈率是多少？",
+     "judge": "numeric",
+     "gold_value": "73.27",
+     "gold_display": "73.27倍",
+     "gold_entities": [
+      "特斯拉"
+     ],
+     "gold_sql": "SELECT F021N FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE m.SYMBOL='TSLA'",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3101",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件修改",
+      "difficulty": "单表",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "全部美股里市盈率最低的是哪只股票？市盈率是多少？",
+     "judge": "entity",
+     "gold_entities": [
+      "京东"
+     ],
+     "gold_value": "9.35",
+     "gold_display": "京东(JD) 9.35倍",
+     "gold_sql": "SELECT m.SYMBOL, m.CSNAME, c.F021N FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON m.FIU_ID=c.FIU_ID WHERE c.F021N IS NOT NULL ORDER BY c.F021N ASC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "COM3101",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "美股按申万一级行业划分，股票数量最多的是哪个行业？有多少只？",
+     "judge": "entity",
+     "gold_entities": [
+      "电子"
+     ],
+     "gold_value": "7",
+     "gold_display": "电子行业，7只",
+     "gold_sql": "SELECT SW_INDU_CODE_2021_1, COUNT(*) FROM AMERICAN_STOCK_MAIN GROUP BY SW_INDU_CODE_2021_1 ORDER BY 2 DESC LIMIT 1",
+     "gold_date": null,
+     "gold_tables": [
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "followup_type": "条件追加",
+      "difficulty": "聚合",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ]
+  },
+  {
+   "round_id": 11,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+   "initial": {
+    "question": "万华化学2025年年报里，聚氨酯系列产品实现的营业收入是多少？",
+    "judge": "numeric",
+    "gold_value": "7505822.44",
+    "gold_display": "750.58亿元（表内单位为万元，即7,505,822.44万元）",
+    "gold_entities": [
+     "万华化学",
+     "聚氨酯系列"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND(INCOME,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+    "gold_tables": [
+     "STK_PRI_INCOME_PRODUCT"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "这块业务占了公司总营收多大比重？",
+     "judge": "numeric",
+     "gold_value": "36.93",
+     "gold_display": "36.93%",
+     "gold_entities": [
+      "万华化学",
+      "聚氨酯系列"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(PRI_RVNU_PCT,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+     "gold_tables": [
+      "STK_PRI_INCOME_PRODUCT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "它的毛利率大概是什么水平？",
+     "judge": "numeric",
+     "gold_value": "26.88",
+     "gold_display": "26.88%",
+     "gold_entities": [
+      "万华化学",
+      "聚氨酯系列"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(GP_RATIO,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+     "gold_tables": [
+      "STK_PRI_INCOME_PRODUCT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+     "judge": "numeric",
+     "gold_value": "47.39",
+     "gold_display": "47.39%（国外收入963.21亿元，仅次于中国大陆的52.19%）",
+     "gold_entities": [
+      "万华化学"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(PRI_RVNU_PCT,2) FROM STK_PRI_INCOME_DISTRICT WHERE A_STOCKCODE='600309' AND ITEM_NAME='国外' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+     "gold_tables": [
+      "STK_PRI_INCOME_DISTRICT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "那2024年呢？这块业务收入是多少？",
+     "judge": "numeric",
+     "gold_value": "7584415.01",
+     "gold_display": "758.44亿元，较2025年的750.58亿元微降约0.79亿元（-1.04%）",
+     "gold_entities": [
+      "万华化学",
+      "聚氨酯系列"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(INCOME,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2024-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+     "gold_tables": [
+      "STK_PRI_INCOME_PRODUCT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个标的看看，海康威视2025年年报的研发投入总额是多少？",
+     "judge": "numeric",
+     "gold_value": "11752624736.80",
+     "gold_display": "117.53亿元",
+     "gold_entities": [
+      "海康威视"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(RD_SUM,2) FROM STK_RD_DTL WHERE COMCODE=(SELECT COMCODE FROM GET_A_SEC_CODE WHERE SEC_CODE='002415' AND ISVALID=1 LIMIT 1) AND RPT_DATE='2025-12-31' AND ISVALID=1",
+     "gold_tables": [
+      "STK_RD_DTL",
+      "GET_A_SEC_CODE"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "话题切换",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_11.json"
+  },
+  {
+   "round_id": 12,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+   "initial": {
+    "question": "恒瑞医药2026年中报披露的前十大股东都是哪些？",
+    "judge": "list",
+    "gold_value": "江苏恒瑞医药集团有限公司、上海启创达远企业管理有限公司、香港中央结算有限公司、HKSCC NOMINEES LIMITED、中国医药投资有限公司、上海汇智联成科技有限公司、连云港市金融控股集团有限公司、中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金、中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金、太白投资有限公司-自有资金(R)",
+    "gold_display": "共10家：恒瑞集团23.18%、上海启创达远14.35%、香港中央结算5.48%、HKSCC NOMINEES 3.89%、中国医药投资2.52%、上海汇智联成2.40%、连云港金控1.71%、易方达沪深300医药ETF 1.09%、中欧医疗健康混合0.71%、太白投资0.52%",
+    "gold_entities": [
+     "江苏恒瑞医药集团有限公司",
+     "上海启创达远企业管理有限公司",
+     "香港中央结算有限公司",
+     "HKSCC NOMINEES LIMITED",
+     "中国医药投资有限公司",
+     "上海汇智联成科技有限公司",
+     "连云港市金融控股集团有限公司",
+     "中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金",
+     "中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金",
+     "太白投资有限公司-自有资金(R)"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT NAME FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1 ORDER BY `RANK`",
+    "gold_tables": [
+     "GET_STK_SHR_CLS_DTL"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "名单里排第一的是谁？持有多少股、占比多少？",
+     "judge": "entity",
+     "gold_value": "1538184187",
+     "gold_display": "江苏恒瑞医药集团有限公司，持股1,538,184,187股，占总股本23.18%",
+     "gold_entities": [
+      "江苏恒瑞医药集团有限公司"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT NAME,HOLD_NUM,ROUND(HOLD_PCT,2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1 AND `RANK`=1",
+     "gold_tables": [
+      "GET_STK_SHR_CLS_DTL"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "这十家股东加起来，合计持股比例是多少？",
+     "judge": "numeric",
+     "gold_value": "55.85",
+     "gold_display": "55.85%",
+     "gold_entities": [
+      "恒瑞医药"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(SUM(HOLD_PCT),2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2026-06-30' AND ISVALID=1",
+     "gold_tables": [
+      "GET_STK_SHR_CLS_DTL"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "那2025年年报的时候呢，前十大合计持股是多少？",
+     "judge": "numeric",
+     "gold_value": "58.96",
+     "gold_display": "58.96%，较2026年中报的55.85%下降3.11个百分点",
+     "gold_entities": [
+      "恒瑞医药"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(SUM(HOLD_PCT),2) FROM GET_STK_SHR_CLS_DTL WHERE A_STOCKCODE='600276' AND ENDDATE='2025-12-31' AND ISVALID=1",
+     "gold_tables": [
+      "GET_STK_SHR_CLS_DTL"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+     "judge": "numeric",
+     "gold_value": "258197600",
+     "gold_display": "增加258,197,600股（约2.58亿股），总股本由6,379,002,274股增至6,637,199,874股",
+     "gold_entities": [
+      "恒瑞医药"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SUM(NEW_TOT-EX_TOT) FROM STK_SHR_STRU_CHNG WHERE A_STOCKCODE='600276' AND ISVALID=1 AND CHANGEDATE>='2025-01-01' AND CHANGEDATE<='2025-12-31'",
+     "gold_tables": [
+      "STK_SHR_STRU_CHNG"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换家公司看看，中国神华2025年度累计现金分红总额是多少？",
+     "judge": "numeric",
+     "gold_value": "41811266889.02",
+     "gold_display": "418.11亿元（约占当年净利润528.49亿元的79.11%）",
+     "gold_entities": [
+      "中国神华"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(TOT_ACCUM_DIV,2) FROM STK_DIV_STAT WHERE A_STOCKCODE='601088' AND DIV_YEAR=2025 AND ISVALID=1",
+     "gold_tables": [
+      "STK_DIV_STAT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_12.json"
+  },
+  {
+   "round_id": 13,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+   "initial": {
+    "question": "中国神华2025年年报的利润分配方案是怎么安排的？每10股派多少现金红利，有没有送股或者转增？",
+    "judge": "entity",
+    "gold_value": "10.30",
+    "gold_display": "每10股派现金红利10.30元（含税），无送红股、无转增，纯现金分红，方案已实施",
+    "gold_entities": [
+     "中国神华"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT CASH_BT,BONUS_SHR,CAP_SHR,PRG FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2025-12-31' AND ISVALID=1 AND DIV_TYPE='分红'",
+    "gold_tables": [
+     "STK_DIV_INFO"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "这次分红的股权登记日和除权除息日分别是哪天？",
+     "judge": "entity",
+     "gold_value": "2026-07-13",
+     "gold_display": "股权登记日2026-07-10，除权除息日2026-07-13",
+     "gold_entities": [
+      "中国神华"
+     ],
+     "gold_date": "2026-07-13",
+     "gold_sql": "SELECT REG_DATE,EX_DIVI_DATE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2025-12-31' AND ISVALID=1",
+     "gold_tables": [
+      "STK_DIV_INFO"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "它现在的股息率大概什么水平？",
+     "judge": "numeric",
+     "gold_value": "4.0119",
+     "gold_display": "按最新交易日（2026-09-02）计算，滚动股息率（TTM）约4.01%",
+     "gold_entities": [
+      "中国神华"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT d.TRD_DATE,d.DIV_RATE_TTM FROM ANA_STK_DIV_RATE_IDX d JOIN (SELECT DISTINCT INNER_CODE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND ISVALID=1) i ON d.INNER_CODE=i.INNER_CODE WHERE d.ISVALID=1 ORDER BY d.TRD_DATE DESC LIMIT 1",
+     "gold_tables": [
+      "ANA_STK_DIV_RATE_IDX",
+      "STK_DIV_INFO"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那2023年度呢，当时每10股派了多少？",
+     "judge": "numeric",
+     "gold_value": "22.60",
+     "gold_display": "2023年度每10股派现金红利22.60元（含税），除权除息日2024-07-08",
+     "gold_entities": [
+      "中国神华"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT CASH_BT,PER_SHR_DIV,EX_DIVI_DATE FROM STK_DIV_INFO WHERE A_STOCKCODE='601088' AND PERIODDATE='2023-12-31' AND ISVALID=1",
+     "gold_tables": [
+      "STK_DIV_INFO"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个话题，最近三年A股里累计现金分红最多的前五家公司是哪几家？",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "工商银行（3295.69亿元）、建设银行（3024.43亿元）、农业银行（2527.93亿元）、中国石油（2525.69亿元）、中国银行（2138.70亿元）",
+     "gold_entities": [
+      "工商银行",
+      "建设银行",
+      "农业银行",
+      "中国石油",
+      "中国银行"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT A_STOCKSNAME,SUM(TOT_ACCUM_DIV) AS total_div FROM STK_DIV_STAT WHERE DIV_YEAR BETWEEN 2023 AND 2025 AND ISVALID=1 GROUP BY A_STOCKCODE,A_STOCKSNAME ORDER BY total_div DESC LIMIT 5",
+     "gold_tables": [
+      "STK_DIV_STAT"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "好的，谢谢，我先把股权登记日和除息日记到日历里，回头再核对一下持仓。",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_13.json"
+  },
+  {
+   "round_id": 14,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+   "initial": {
+    "question": "紫金矿业最近一次业绩预告是什么类型？针对哪个报告期？",
+    "judge": "entity",
+    "gold_value": "业绩大幅上升",
+    "gold_display": "最近一次业绩预告为“业绩大幅上升”（临时公告），针对2026年半年报（报告期截至2026-06-30），公告日2026-07-10",
+    "gold_entities": [
+     "紫金矿业"
+    ],
+    "gold_date": "2026-07-10",
+    "gold_sql": "SELECT A_STOCKSNAME,FORE_CLS,ENDDATE,DECLAREDATE,SRC FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ISVALID=1 ORDER BY DECLAREDATE DESC LIMIT 1",
+    "gold_tables": [
+     "STK_ACHIEVE_FORECAST"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "这次预告预计2026年上半年归母净利润大概多少钱？",
+     "judge": "numeric",
+     "gold_value": "3910000",
+     "gold_display": "预计2026年1-6月归母净利润3910000万元（约391亿元），预告上限与下限一致，同比增幅约68%",
+     "gold_entities": [
+      "紫金矿业"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT MAX_VAL,MIN_VAL FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ENDDATE='2026-06-30' AND ISVALID=1",
+     "gold_tables": [
+      "STK_ACHIEVE_FORECAST"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "去年同期那次预告呢？当时预计2025年上半年能赚多少？",
+     "judge": "numeric",
+     "gold_value": "2320000",
+     "gold_display": "2025-07-14的预告为“业绩大幅上升”，预计2025年1-6月归母净利润2320000万元（约232亿元），同比增加约54%",
+     "gold_entities": [
+      "紫金矿业"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT MAX_VAL,MIN_VAL,FORE_CLS FROM STK_ACHIEVE_FORECAST WHERE A_STOCKCODE='601899' AND ENDDATE='2025-06-30' AND ISVALID=1",
+     "gold_tables": [
+      "STK_ACHIEVE_FORECAST"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "预告之外，再看看机构预测这边：紫金矿业2024年的一致预期净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "3196059.835439",
+     "gold_display": "一致预期净利润约3196059.84万元（约319.61亿元），取最新数据日2025-06-13的一致预期值",
+     "gold_entities": [
+      "紫金矿业"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT CONSENSUS_PROFIT FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1 AND END_DATE=(SELECT MAX(END_DATE) FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1)",
+     "gold_tables": [
+      "VIEW_STK_CONSENSUS_FORECAST"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "话题切换",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "对应的一致预期EPS和市盈率是多少？",
+     "judge": "numeric",
+     "gold_value": "1.202514",
+     "gold_display": "一致预期EPS约1.20元/股，对应一致预期PE约15.86倍（数据日2025-06-13）",
+     "gold_entities": [
+      "紫金矿业"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT CONSENSUS_EPS,CONSENSUS_PE,END_DATE FROM VIEW_STK_CONSENSUS_FORECAST WHERE COMB_SYMBOL='601899.SH' AND FORECAST_YEAR=2024 AND ISVALID=1 ORDER BY END_DATE DESC LIMIT 1",
+     "gold_tables": [
+      "VIEW_STK_CONSENSUS_FORECAST"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "中国人寿（上限1371.19亿元）、紫金矿业（391亿元）、中国神华（298亿元）、工业富联（244亿元）、新华保险（236.78亿元）",
+     "gold_entities": [
+      "中国人寿",
+      "紫金矿业",
+      "中国神华",
+      "工业富联",
+      "新华保险"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT A_STOCKSNAME,MAX(MAX_VAL) AS mv FROM STK_ACHIEVE_FORECAST WHERE ENDDATE='2026-06-30' AND ISVALID=1 GROUP BY A_STOCKCODE,A_STOCKSNAME ORDER BY mv DESC LIMIT 5",
+     "gold_tables": [
+      "STK_ACHIEVE_FORECAST"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "话题切换",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_14.json"
+  },
+  {
+   "round_id": 15,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+   "initial": {
+    "question": "我组合里配了腾讯控股，先看下它2025年年报的营业额有多大？",
+    "judge": "numeric",
+    "gold_value": "751766000000",
+    "gold_display": "7517.66亿元（人民币，腾讯以人民币列报）",
+    "gold_entities": [
+     "腾讯控股"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT n.TTO FROM HK_NFINIS_NSTD n JOIN HK_STKCODE c ON n.COMUNIC=c.COMUNIC WHERE c.STKCODE='00700' AND c.ISVALID=1 AND n.EDATE='2025-12-31' AND n.RPTSOUREFC=17",
+    "gold_tables": [
+     "HK_NFINIS_NSTD",
+     "HK_STKCODE"
+    ],
+    "labels": {
+     "difficulty": "多表join",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+     "judge": "numeric",
+     "gold_value": "438.20",
+     "gold_display": "438.20港元（2026-09-02收盘）",
+     "gold_entities": [
+      "腾讯控股"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT CLPR FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1) ORDER BY TRDATE DESC LIMIT 1",
+     "gold_tables": [
+      "HK_STKDMK",
+      "HK_STKCODE"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "指代继承",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那当天成交额有多大？",
+     "judge": "numeric",
+     "gold_value": "9336637626.70",
+     "gold_display": "约93.37亿港元（2026-09-02成交额）",
+     "gold_entities": [
+      "腾讯控股"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT TRTO FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1) AND TRDATE=(SELECT MAX(TRDATE) FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1))",
+     "gold_tables": [
+      "HK_STKDMK",
+      "HK_STKCODE"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+     "judge": "numeric",
+     "gold_value": "401243000000",
+     "gold_display": "4012.43亿元（人民币，2026年中报）",
+     "gold_entities": [
+      "腾讯控股"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT n.TTO FROM HK_NFINIS_NSTD n JOIN HK_STKCODE c ON n.COMUNIC=c.COMUNIC WHERE c.STKCODE='00700' AND c.ISVALID=1 AND n.EDATE='2026-06-30' AND n.RPTSOUREFC=15",
+     "gold_tables": [
+      "HK_NFINIS_NSTD",
+      "HK_STKCODE"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "时间漂移",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再帮我看个港股，香港交易所最新的市净率是多少？",
+     "judge": "numeric",
+     "gold_value": "8.2839",
+     "gold_display": "8.28倍（2026-09-02）",
+     "gold_entities": [
+      "香港交易所"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT v.PB FROM HK_IDC_STKVIDC v JOIN HK_STKCODE c ON v.STKUNICODE=c.STKUNICODE WHERE c.STKCODE='00388' AND c.ISVALID=1 ORDER BY v.EDATE DESC LIMIT 1",
+     "gold_tables": [
+      "HK_IDC_STKVIDC",
+      "HK_STKCODE"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "它现在的总市值有多大？",
+     "judge": "numeric",
+     "gold_value": "512713240338",
+     "gold_display": "约5127.13亿港元（2026-09-02）",
+     "gold_entities": [
+      "香港交易所"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT p.TMKCAP FROM HK_IDC_STKPFMIDC p JOIN HK_STKCODE c ON p.STKUNICODE=c.STKUNICODE WHERE c.STKCODE='00388' AND c.ISVALID=1 ORDER BY p.EDATE DESC LIMIT 1",
+     "gold_tables": [
+      "HK_IDC_STKPFMIDC",
+      "HK_STKCODE"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_15.json"
+  },
+  {
+   "round_id": 16,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+   "initial": {
+    "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+    "judge": "numeric",
+    "gold_value": "-7.9196",
+    "gold_display": "-7.92%（8月末收盘38.95元 vs 7月末42.30元）",
+    "gold_entities": [
+     "格力电器"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND((cur.TCLOSE/prev.TCLOSE-1)*100,4) AS chg_pct FROM (SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31' ORDER BY TRADEDATE DESC LIMIT 1) cur,(SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-07-01' AND '2026-07-31' ORDER BY TRADEDATE DESC LIMIT 1) prev",
+    "gold_tables": [
+     "STK_MKT"
+    ],
+    "labels": {
+     "difficulty": "时间窗口",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那7月呢？是涨还是跌，幅度多少？",
+     "judge": "numeric",
+     "gold_value": "12.8",
+     "gold_display": "+12.80%（7月末收盘42.30元 vs 6月末37.50元）",
+     "gold_entities": [
+      "格力电器"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND((cur.TCLOSE/prev.TCLOSE-1)*100,4) AS chg_pct FROM (SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-07-01' AND '2026-07-31' ORDER BY TRADEDATE DESC LIMIT 1) cur,(SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-06-01' AND '2026-06-30' ORDER BY TRADEDATE DESC LIMIT 1) prev",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "8月它平均每天的成交额有多少？",
+     "judge": "numeric",
+     "gold_value": "1891138748.95",
+     "gold_display": "约18.91亿元/日（8月共21个交易日，全月成交397.14亿元）",
+     "gold_entities": [
+      "格力电器"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT AVG(TVALUE) FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31'",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+     "judge": "entity",
+     "gold_value": "3.1453",
+     "gold_display": "2026-08-19，单日上涨3.15%",
+     "gold_entities": [
+      "格力电器"
+     ],
+     "gold_date": "2026-08-19",
+     "gold_sql": "SELECT TRADEDATE,CHNG_PCT FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31' ORDER BY CHNG_PCT DESC LIMIT 1",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个票，海康威视今年以来累计涨了多少？",
+     "judge": "numeric",
+     "gold_value": "22.5206",
+     "gold_display": "约+22.52%（截至2026-09-02）",
+     "gold_entities": [
+      "海康威视"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT a.CHNG_PCT_YEAR_SOFAR FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE g ON a.INNER_CODE=g.INNER_CODE WHERE g.SEC_CODE='002415' ORDER BY a.ENDDATE DESC LIMIT 1",
+     "gold_tables": [
+      "ANA_STK_EXPR_IDX",
+      "GET_A_SEC_CODE"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "它8月整月下来总共成交了多少股？",
+     "judge": "numeric",
+     "gold_value": "1660107902",
+     "gold_display": "约16.60亿股（8月全月成交量）",
+     "gold_entities": [
+      "海康威视"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SUM(TVOLUME) FROM STK_MKT WHERE SECCODE='002415' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31'",
+     "gold_tables": [
+      "STK_MKT"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_16.json"
+  },
+  {
+   "round_id": 17,
+   "source": "MYSQL-2",
+   "domain": "个股",
+   "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+   "initial": {
+    "question": "万华化学2025年年报的营业总收入是多少？",
+    "judge": "numeric",
+    "gold_value": "203234573814.42",
+    "gold_display": "2032.35亿元",
+    "gold_entities": [
+     "万华化学"
+    ],
+    "gold_date": "2025-12-31",
+    "gold_sql": "SELECT P110100 FROM VIEW_STK_INCOME_GEN WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+    "gold_tables": [
+     "VIEW_STK_INCOME_GEN"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那它2025年末的资产负债率大概有多高？",
+     "judge": "numeric",
+     "gold_value": "62.81",
+     "gold_display": "62.81%（负债合计约2028.80亿元/资产总计约3230.09亿元）",
+     "gold_entities": [
+      "万华化学"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND(B200000/B100000*100,2) FROM VIEW_STK_BALA_GEN WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+     "gold_tables": [
+      "VIEW_STK_BALA_GEN"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+     "judge": "numeric",
+     "gold_value": "2.36",
+     "gold_display": "2.36倍（经营现金流净额约331.05亿元，净利润约140.40亿元）",
+     "gold_entities": [
+      "万华化学"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND(c.C100000/i.P150101,2) FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE='600309' AND c.ENDDATE='2025-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1",
+     "gold_tables": [
+      "VIEW_STK_CASH_GEN",
+      "VIEW_STK_INCOME_GEN"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "那换成2024年年报，这个倍数是多少？",
+     "judge": "numeric",
+     "gold_value": "2.03",
+     "gold_display": "2.03倍（经营现金流净额约300.53亿元，净利润约147.91亿元）",
+     "gold_entities": [
+      "万华化学"
+     ],
+     "gold_date": "2024-12-31",
+     "gold_sql": "SELECT ROUND(c.C100000/i.P150101,2) FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE='600309' AND c.ENDDATE='2024-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1",
+     "gold_tables": [
+      "VIEW_STK_CASH_GEN",
+      "VIEW_STK_INCOME_GEN"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再加一家海尔智家做参照，同样按2025年年报算净现比，两家谁更高？",
+     "judge": "entity",
+     "gold_value": "2.36",
+     "gold_display": "万华化学2.36倍 > 海尔智家1.29倍，万华化学更高",
+     "gold_entities": [
+      "万华化学",
+      "海尔智家"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT t.A_STOCKSNAME, ROUND(t.ocf/t.np,2) AS nocf_np_ratio FROM (SELECT c.A_STOCKSNAME, c.C100000 AS ocf, i.P150101 AS np FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE IN ('600309','600690') AND c.ENDDATE='2025-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1) t ORDER BY nocf_np_ratio DESC",
+     "gold_tables": [
+      "VIEW_STK_CASH_GEN",
+      "VIEW_STK_INCOME_GEN"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个标的，帮我查一下隆基绿能2025年年报经营活动产生的现金流量净额是多少？",
+     "judge": "numeric",
+     "gold_value": "4359382755.77",
+     "gold_display": "43.59亿元",
+     "gold_entities": [
+      "隆基绿能"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT C100000 FROM VIEW_STK_CASH_GEN WHERE A_STOCKCODE='601012' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+     "gold_tables": [
+      "VIEW_STK_CASH_GEN"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_17.json"
+  },
+  {
+   "round_id": 18,
+   "source": "MYSQL-2",
+   "domain": "指数",
+   "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+   "initial": {
+    "question": "深证成指最近一个交易日的收盘点位是多少？",
+    "judge": "numeric",
+    "gold_value": "13611.5470",
+    "gold_display": "13611.55点（2026-09-02收盘）",
+    "gold_entities": [
+     "深证成指"
+    ],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1",
+    "gold_tables": [
+     "INDX_MKT"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它今年以来累计上涨了多少？",
+     "judge": "numeric",
+     "gold_value": "0.64",
+     "gold_display": "上涨0.64%（2026-09-02收13611.55点，较2025-12-31收13525.02点）",
+     "gold_entities": [
+      "深证成指"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM INDX_MKT a JOIN INDX_MKT b ON b.INNER_CODE=a.INNER_CODE AND b.ISVALID=1 WHERE a.INNER_CODE=106000028 AND a.ISVALID=1 AND a.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1) AND b.TRADEDATE='2025-12-31'",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "上证50在同一个交易日收在多少点？",
+     "judge": "numeric",
+     "gold_value": "2914.4449",
+     "gold_display": "2914.44点（2026-09-02收盘）",
+     "gold_entities": [
+      "上证50"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106000255 AND ISVALID=1 AND TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=106000028 AND ISVALID=1)",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那2025年全年它涨了多少？",
+     "judge": "numeric",
+     "gold_value": "29.87",
+     "gold_display": "上涨29.87%（2025-12-31收13525.02点，2024-12-31收10414.61点）",
+     "gold_entities": [
+      "深证成指"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS ret_2025 FROM INDX_MKT a JOIN INDX_MKT b ON b.INNER_CODE=a.INNER_CODE AND b.ISVALID=1 WHERE a.INNER_CODE=106000028 AND a.ISVALID=1 AND a.TRADEDATE='2025-12-31' AND b.TRADEDATE='2024-12-31'",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "这些点位是交易所发布的官方收盘行情吗，还是复权价？",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+     "judge": "numeric",
+     "gold_value": "43.0869",
+     "gold_display": "43.09倍（2026-09-02）",
+     "gold_entities": [
+      "中证1000"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE INNER_CODE=106006433 AND ISVALID=1 ORDER BY TRD_DATE DESC LIMIT 1",
+     "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_18.json"
+  },
+  {
+   "round_id": 19,
+   "source": "MYSQL-2",
+   "domain": "指数",
+   "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+   "initial": {
+    "question": "中证1000指数最新的市盈率是多少？",
+    "judge": "numeric",
+    "gold_value": "43.0869",
+    "gold_display": "43.09倍（2026-09-02）",
+    "gold_entities": [
+     "中证1000指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433)",
+    "gold_tables": [
+     "ANA_INDX_VAL_IDX"
+    ],
+    "labels": {
+     "difficulty": "子查询",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那它同一个交易日的市净率呢？",
+     "judge": "numeric",
+     "gold_value": "2.3227",
+     "gold_display": "2.32倍",
+     "gold_entities": [
+      "中证1000指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT PB FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 ORDER BY TRD_DATE DESC LIMIT 1",
+     "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "我在做宽基之间的估值比较，把中证红利指数和上证180指数同一交易日的市盈率也拉出来，这三个指数里谁的估值最便宜？",
+     "judge": "entity",
+     "gold_value": "8.0386",
+     "gold_display": "中证红利指数8.04倍最低，上证180为10.87倍，中证1000为43.09倍",
+     "gold_entities": [
+      "中证红利指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT INDX_CNAME, PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE IN (106006433,106001369,106000016) AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433) ORDER BY PE",
+     "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "往回看，2025年末的时候它的市盈率是多少？",
+     "judge": "numeric",
+     "gold_value": "45.9128",
+     "gold_display": "45.91倍（2025-12-31）",
+     "gold_entities": [
+      "中证1000指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 AND TRD_DATE='2025-12-31'",
+     "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个话题，深证100指数2026年半年报的净资产收益率是多少？",
+     "judge": "numeric",
+     "gold_value": "7.3965",
+     "gold_display": "7.40%",
+     "gold_entities": [
+      "深证100指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT f.ROE FROM ANA_INDX_FIN_IDX f JOIN GET_INDX_GEN_INFO g ON f.INNER_CODE=g.INNER_CODE WHERE g.ISVALID=1 AND f.ISVALID=1 AND g.INDX_CNAME='深证100指数' AND f.ENDDATE='2026-06-30'",
+     "gold_tables": [
+      "ANA_INDX_FIN_IDX",
+      "GET_INDX_GEN_INFO"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "和中证1000同期相比，两者的净资产收益率谁更高？",
+     "judge": "entity",
+     "gold_value": "7.3965",
+     "gold_display": "深证100指数7.40% > 中证1000指数3.75%",
+     "gold_entities": [
+      "深证100指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT g.INDX_CNAME, f.ROE FROM ANA_INDX_FIN_IDX f JOIN GET_INDX_GEN_INFO g ON f.INNER_CODE=g.INNER_CODE WHERE g.ISVALID=1 AND f.ISVALID=1 AND g.INDX_CNAME IN ('深证100指数','中证1000指数') AND f.ENDDATE='2026-06-30' ORDER BY f.ROE DESC",
+     "gold_tables": [
+      "ANA_INDX_FIN_IDX",
+      "GET_INDX_GEN_INFO"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_19.json"
+  },
+  {
+   "round_id": 20,
+   "source": "MYSQL-2",
+   "domain": "指数",
+   "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+   "initial": {
+    "question": "中证军工指数今年以来涨跌幅是多少？",
+    "judge": "numeric",
+    "gold_value": "-17.58",
+    "gold_display": "-17.58%（2025-12-31收盘14011.14点 → 2026-09-02收盘11548.66点）",
+    "gold_entities": [
+     "中证军工指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证军工指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1)",
+    "gold_tables": [
+     "GET_INDX_GEN_INFO",
+     "INDX_MKT"
+    ],
+    "labels": {
+     "difficulty": "时间窗口",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "同样的时间区间，中证银行指数表现怎么样？",
+     "judge": "numeric",
+     "gold_value": "-0.49",
+     "gold_display": "-0.49%",
+     "gold_entities": [
+      "中证银行指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证银行指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1)",
+     "gold_tables": [
+      "GET_INDX_GEN_INFO",
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那中证军工2025年全年涨了多少？",
+     "judge": "numeric",
+     "gold_value": "31.55",
+     "gold_display": "+31.55%（2024-12-31收盘10650.79点 → 2025-12-31收盘14011.14点）",
+     "gold_entities": [
+      "中证军工指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS pct_2025 FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME='中证军工指数' AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2025-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01')",
+     "gold_tables": [
+      "GET_INDX_GEN_INFO",
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "今年以来它的日均成交额大概什么量级？",
+     "judge": "numeric",
+     "gold_value": "873.18",
+     "gold_display": "873.18亿元",
+     "gold_entities": [
+      "中证军工指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(AVG(TVALUE)/100000000,2) AS avg_amt_yi FROM INDX_MKT WHERE ISVALID=1 AND TRADEDATE>='2026-01-01' AND INNER_CODE=(SELECT INNER_CODE FROM GET_INDX_GEN_INFO WHERE INDX_CNAME='中证军工指数' AND ISVALID=1)",
+     "gold_tables": [
+      "INDX_MKT",
+      "GET_INDX_GEN_INFO"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "再看个短线问题，9月2日上证50、中证白酒、中证医疗这三个指数谁的日涨幅最大？",
+     "judge": "entity",
+     "gold_value": "-0.8133",
+     "gold_display": "中证医疗 -0.81% 最大（上证50 -0.93%、中证白酒 -1.34%）",
+     "gold_entities": [
+      "中证医疗"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT INNER_CODE, INDX_SNAME, CHNG_PCT FROM INDX_MKT WHERE ISVALID=1 AND INNER_CODE IN (106000255,106006657,106006473) AND TRADEDATE='2026-09-02' ORDER BY CHNG_PCT DESC",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "把这三个指数今年以来涨跌幅从高到低排一下，谁最抗跌？",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "中证医疗 -1.18% > 上证50 -3.85% > 中证白酒 -26.11%，中证医疗最抗跌",
+     "gold_entities": [
+      "中证医疗指数",
+      "上证50指数",
+      "中证白酒指数"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT g.INDX_CNAME, ROUND((e.TCLOSE/b.TCLOSE-1)*100,2) AS ytd_pct FROM GET_INDX_GEN_INFO g JOIN INDX_MKT b ON b.INNER_CODE=g.INNER_CODE JOIN INDX_MKT e ON e.INNER_CODE=g.INNER_CODE WHERE g.INDX_CNAME IN ('中证医疗指数','上证50指数','中证白酒指数') AND g.ISVALID=1 AND b.ISVALID=1 AND e.ISVALID=1 AND b.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1 AND TRADEDATE<'2026-01-01') AND e.TRADEDATE=(SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE INNER_CODE=g.INNER_CODE AND ISVALID=1) ORDER BY ytd_pct DESC",
+     "gold_tables": [
+      "GET_INDX_GEN_INFO",
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_20.json"
+  },
+  {
+   "round_id": 21,
+   "source": "MYSQL-2",
+   "domain": "指数",
+   "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+   "initial": {
+    "question": "帮我看看中证1000指数最新收盘在多少点？",
+    "judge": "numeric",
+    "gold_value": "7583.7559",
+    "gold_display": "7583.76点（2026-09-02收盘）",
+    "gold_entities": [
+     "中证1000"
+    ],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT TCLOSE FROM INDX_MKT WHERE SECCODE='000852' AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1",
+    "gold_tables": [
+     "INDX_MKT"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它最近一个月整体走势怎么样，累计涨跌幅大概多少？",
+     "judge": "numeric",
+     "gold_value": "7.18",
+     "gold_display": "最近一个月累计上涨7.18%（7075.51点→7583.76点）",
+     "gold_entities": [
+      "中证1000"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS chg_pct_1m FROM (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 ORDER BY TRADEDATE DESC LIMIT 1) a, (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<=(SELECT DATE_SUB(MAX(TRADEDATE),INTERVAL 1 MONTH) FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1) ORDER BY TRADEDATE DESC LIMIT 1) b",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那2025年全年呢，累计涨幅有多少？",
+     "judge": "numeric",
+     "gold_value": "27.49",
+     "gold_display": "2025年全年累计上涨27.49%（5957.72点→7595.28点）",
+     "gold_entities": [
+      "中证1000"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND((a.TCLOSE/b.TCLOSE-1)*100,2) AS chg_pct_2025 FROM (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<='2025-12-31' ORDER BY TRADEDATE DESC LIMIT 1) a, (SELECT TCLOSE FROM INDX_MKT WHERE INNER_CODE=106006433 AND ISVALID=1 AND TRADEDATE<='2024-12-31' ORDER BY TRADEDATE DESC LIMIT 1) b",
+     "gold_tables": [
+      "INDX_MKT"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+     "judge": "entity",
+     "gold_value": "43.0869",
+     "gold_display": "中证1000市盈率43.09倍 > 上证50市盈率10.64倍，中证1000估值明显更高",
+     "gold_entities": [
+      "中证1000",
+      "上证50"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT INDX_CNAME, PE FROM ANA_INDX_VAL_IDX WHERE INNER_CODE IN (106006433,106000255) AND ISVALID=1 AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE INNER_CODE IN (106006433,106000255) AND ISVALID=1)",
+     "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "明白了，谢谢。顺便确认下，这些点位和涨跌幅都是交易所收盘后公布的官方行情口径吧？",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "对了，再帮我查一下万华化学2025年年报的归属于母公司股东的净利润是多少？",
+     "judge": "numeric",
+     "gold_value": "12527201094.1500",
+     "gold_display": "125.27亿元",
+     "gold_entities": [
+      "万华化学"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT F110101 FROM VIEW_STK_FIN_IDX WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_SRC='年报' AND ISVALID=1",
+     "gold_tables": [
+      "VIEW_STK_FIN_IDX"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_21.json"
+  },
+  {
+   "round_id": 22,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+   "initial": {
+    "question": "我组合里拿了中欧医疗健康混合A，先帮我看下它最新一个交易日的单位净值是多少？",
+    "judge": "numeric",
+    "gold_value": "1.9279",
+    "gold_display": "1.9279元（2026-09-02）",
+    "gold_entities": [
+     "中欧医疗健康混合A"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1",
+    "gold_tables": [
+     "FUND_NETVALUE"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它的累计净值呢？顺便一起报一下。",
+     "judge": "numeric",
+     "gold_value": "2.1233",
+     "gold_display": "2.1233元（2026-09-02）",
+     "gold_entities": [
+      "中欧医疗健康混合A"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_NETVALUE"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "今年以来这只基金整体是赚是亏？按复权净值给我算个收益率出来。",
+     "judge": "numeric",
+     "gold_value": "8.69",
+     "gold_display": "+8.69%（截至2026-09-02，按复权累计净值计算，基准为上年末2025-12-31复权净值）",
+     "gold_entities": [
+      "中欧医疗健康混合A"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(100*((SELECT RESTORED_ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' ORDER BY TRADING_DAY DESC LIMIT 1)/(SELECT RESTORED_ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' AND TRADING_DAY<'2026-01-01' ORDER BY TRADING_DAY DESC LIMIT 1)-1),2) AS ytd_pct",
+     "gold_tables": [
+      "FUND_NETVALUE"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那2025年一整年下来，它的年度收益率是多少？",
+     "judge": "numeric",
+     "gold_value": "13.07",
+     "gold_display": "+13.07%",
+     "gold_entities": [
+      "中欧医疗健康混合A"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(YIELD*100,2) AS yield_pct FROM FUND_STATISTICS_YEAR WHERE FUND_SYMBOL='003095.OF' AND YEAR=2025",
+     "gold_tables": [
+      "FUND_STATISTICS_YEAR"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "把范围放大点，中欧基金旗下2025年收益率最高的基金是哪只？当年涨了多少？",
+     "judge": "entity",
+     "gold_value": "143.07",
+     "gold_display": "中欧数字经济混合发起A(018993.OF)，2025年度收益率+143.07%",
+     "gold_entities": [
+      "中欧数字经济混合发起A"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT s.FUND_SYMBOL, s.FUND_NAME, ROUND(s.YIELD*100,2) AS yield_pct FROM FUND_STATISTICS_YEAR s JOIN FUND_AND_COMPANY_MAPPING c ON s.FUND_SYMBOL=c.FUND_SYMBOL AND c.END_DATE IS NULL WHERE c.COMPANY_ABBR='中欧基金' AND s.YEAR=2025 ORDER BY s.YIELD DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_STATISTICS_YEAR",
+      "FUND_AND_COMPANY_MAPPING"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "对了，最近想配点黄金，华安黄金易ETF(518880)最近一年涨了多少？",
+     "judge": "numeric",
+     "gold_value": "16.41",
+     "gold_display": "+16.41%（截至2026-09-02）",
+     "gold_entities": [
+      "华安黄金易ETF",
+      "华安黄金易(ETF)"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(RETURN_1Y*100,2) AS ret_1y_pct FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='518880.SH' AND TYPE=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_22.json"
+  },
+  {
+   "round_id": 23,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+   "initial": {
+    "question": "帮我拆一下大成高新技术产业股票A 2026年二季报的前十大重仓股，按持股市值从高到低排一下。",
+    "judge": "list",
+    "gold_value": null,
+    "gold_display": "福耀玻璃(9.71%)、美的集团(9.50%)、豪迈科技(8.37%)、中国移动(6.59%)、宏发股份(6.55%)、宁德时代(4.79%)、海尔智家(4.60%)、浙江龙盛(3.73%)、中国海洋石油(2.83%)、安琪酵母(2.62%)",
+    "gold_entities": [
+     "福耀玻璃",
+     "美的集团",
+     "豪迈科技",
+     "中国移动",
+     "宏发股份",
+     "宁德时代",
+     "海尔智家",
+     "浙江龙盛",
+     "中国海洋石油",
+     "安琪酵母"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT SEC_NAME, ROUND(RATIO_IN_NV*100,2) AS ratio_pct FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 10",
+    "gold_tables": [
+     "FUND_PORTFOLIO_DETAIL"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "排第一的这只重仓股，占了基金净值多大比例？",
+     "judge": "numeric",
+     "gold_value": "9.71",
+     "gold_display": "福耀玻璃，占基金净资产9.71%",
+     "gold_entities": [
+      "福耀玻璃"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SEC_NAME, ROUND(RATIO_IN_NV*100,2) AS ratio_pct FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_PORTFOLIO_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "这十只重仓股加在一起，合计占到净值的多少？",
+     "judge": "numeric",
+     "gold_value": "59.29",
+     "gold_display": "前十大重仓合计占基金净资产59.29%",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(SUM(RATIO_IN_NV)*100,2) AS top10_ratio_pct FROM (SELECT RATIO_IN_NV FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 10) t",
+     "gold_tables": [
+      "FUND_PORTFOLIO_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "跟2026年一季报相比，二季报前十大有什么换仓动作？新进了谁、又剔出了谁？",
+     "judge": "entity",
+     "gold_value": null,
+     "gold_display": "新进入前十大：安琪酵母；新剔出前十大：华域汽车",
+     "gold_entities": [
+      "安琪酵母",
+      "华域汽车"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SEC_NAME, CHANGE_INFO FROM FUND_TOP10_STOCK_CHANGE_Q WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30'",
+     "gold_tables": [
+      "FUND_TOP10_STOCK_CHANGE_Q"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个角度，2026年二季报全市场公募基金持有市值最大的个股是哪只？一共被多少只基金持有？",
+     "judge": "entity",
+     "gold_value": "258826608330",
+     "gold_display": "中际旭创，基金合计持有市值2588.27亿元，被2636只基金持有",
+     "gold_entities": [
+      "中际旭创"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SEC_NAME, MV_BY_FUND, FUND_NUM FROM STOCK_HOLD_STATISTICS_Q WHERE REPORT_DATE='2026-06-30' ORDER BY MV_BY_FUND DESC LIMIT 1",
+     "gold_tables": [
+      "STOCK_HOLD_STATISTICS_Q"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "好，明白了，谢谢。这些持仓明细我回头再对着他们家季报原文核一遍。",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_23.json"
+  },
+  {
+   "round_id": 24,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+   "initial": {
+    "question": "我关注景顺长城的刘彦春挺久了，他目前在管的总规模有多大？",
+    "judge": "numeric",
+    "gold_value": "24048631916.35",
+    "gold_display": "约240.49亿元（FUND_MANAGER_INFO.NET_VALUE，名下全部在管基金各自最新披露资产净值加总，单位元）",
+    "gold_entities": [
+     "刘彦春"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='刘彦春' AND HISVALID=1",
+    "gold_tables": [
+     "FUND_MANAGER_INFO"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+     "judge": "entity",
+     "gold_value": "4164",
+     "gold_display": "景顺长城新兴成长混合A（260108.OF），自2015-04-09起任职至今4164天（约11.4年）",
+     "gold_entities": [
+      "刘彦春",
+      "景顺长城新兴成长混合A"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT FUND_NAME, DAYS_IN_OFFICE FROM FUND_AND_MANAGER_MAPPING WHERE PSN_NAME='刘彦春' AND END_DATE IS NULL AND HISVALID=1 ORDER BY DAYS_IN_OFFICE DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_AND_MANAGER_MAPPING"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那这批在管基金里面，最新一期披露规模最大的是哪只？规模有多大？",
+     "judge": "entity",
+     "gold_value": "10762688560.87",
+     "gold_display": "景顺长城新兴成长混合A（260108.OF），2026-06-30报告期规模约107.63亿元",
+     "gold_entities": [
+      "刘彦春",
+      "景顺长城新兴成长混合A"
+     ],
+     "gold_date": "2026-06-30",
+     "gold_sql": "SELECT a.FUND_NAME, b.NET_VALUE FROM FUND_AND_MANAGER_MAPPING a JOIN FUND_ASSET_ALLOCATION b ON a.FUND_HCODE=b.FUND_HCODE WHERE a.PSN_NAME='刘彦春' AND a.END_DATE IS NULL AND a.HISVALID=1 AND b.HISVALID=1 AND b.REPORT_DATE='2026-06-30' ORDER BY b.NET_VALUE DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_AND_MANAGER_MAPPING",
+      "FUND_ASSET_ALLOCATION"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+     "judge": "numeric",
+     "gold_value": "42726346909.03",
+     "gold_display": "约427.26亿元（2024-12-31报告期，FUND_MANAGER_ASSET_ALLOCATION口径，较当前约240.49亿元明显缩量）",
+     "gold_entities": [
+      "刘彦春"
+     ],
+     "gold_date": "2024-12-31",
+     "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_ASSET_ALLOCATION WHERE PSN_NAME='刘彦春' AND HISVALID=1 AND REPORT_DATE='2024-12-31'",
+     "gold_tables": [
+      "FUND_MANAGER_ASSET_ALLOCATION"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "时间漂移",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换个经理帮我看看，兴证全球的谢治宇，他最新的在管总规模有多大？",
+     "judge": "numeric",
+     "gold_value": "39275132159.32",
+     "gold_display": "约392.75亿元（FUND_MANAGER_INFO.NET_VALUE，在管基金最新披露资产净值加总）",
+     "gold_entities": [
+      "谢治宇"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='谢治宇' AND HISVALID=1",
+     "gold_tables": [
+      "FUND_MANAGER_INFO"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那在兴证全球内部，目前在管规模比他大的基金经理有几位？",
+     "judge": "numeric",
+     "gold_value": "6",
+     "gold_display": "6位（兴证全球旗下在管规模高于谢治宇约392.75亿元的基金经理人数，规模最大为翟秀华约2307.05亿元）",
+     "gold_entities": [
+      "谢治宇",
+      "兴证全球"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT COUNT(*) FROM FUND_MANAGER_INFO WHERE INST_NAME='兴证全球' AND HISVALID=1 AND NET_VALUE > (SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='谢治宇' AND HISVALID=1)",
+     "gold_tables": [
+      "FUND_MANAGER_INFO"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_24.json"
+  },
+  {
+   "round_id": 25,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+   "initial": {
+    "question": "华宝中证医疗ETF，代码512170，它跟踪的标的指数是哪一个？",
+    "judge": "entity",
+    "gold_value": "中证医疗指数",
+    "gold_display": "中证医疗指数（华宝基金发行，ETF_INFO_DETAIL.INDEX_TRACKED）",
+    "gold_entities": [
+     "华宝中证医疗ETF",
+     "中证医疗指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT INDEX_TRACKED FROM ETF_INFO_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1",
+    "gold_tables": [
+     "ETF_INFO_DETAIL"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那这只基金在标签体系里怎么归类的？算行业类还是主题类，落在哪个行业？",
+     "judge": "entity",
+     "gold_value": "医药生物",
+     "gold_display": "行业类ETF，行业标签为医药生物（赛道：医药），口径：ETF_LABEL_INFO_CHINA",
+     "gold_entities": [
+      "华宝中证医疗ETF",
+      "医药生物"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT FUND_CATEGORY, SECTOR FROM ETF_LABEL_INFO_CHINA WHERE ETF_CODE='512170.SH' AND HISVALID=1",
+     "gold_tables": [
+      "ETF_LABEL_INFO_CHINA"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "顺着问一句，全市场行业类的ETF里面，数量最多的行业是哪一个？大概多少只？",
+     "judge": "entity",
+     "gold_value": "80",
+     "gold_display": "医药生物，共80只（口径：ETF_LABEL_INFO_CHINA，FUND_CATEGORY='行业'且SECTOR非空，按SECTOR分组计数居首；另有212只行业类ETF未打行业标签，不参与行业排名）",
+     "gold_entities": [
+      "医药生物"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT SECTOR, COUNT(*) AS cnt FROM ETF_LABEL_INFO_CHINA WHERE HISVALID=1 AND FUND_CATEGORY='行业' AND SECTOR IS NOT NULL GROUP BY SECTOR ORDER BY cnt DESC LIMIT 1",
+     "gold_tables": [
+      "ETF_LABEL_INFO_CHINA"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "回到这只医疗ETF，它目前最新的基金规模有多大？",
+     "judge": "numeric",
+     "gold_value": "24231835329",
+     "gold_display": "约242.32亿元（2026-09-02，ETF_PERFORMANCE_DETAIL.FUND_SIZE，单位元）",
+     "gold_entities": [
+      "华宝中证医疗ETF"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那2025年末的时候呢？当时它的规模有多大？",
+     "judge": "numeric",
+     "gold_value": "25304098970",
+     "gold_display": "约253.04亿元（2025-12-31，较最新约242.32亿元小幅缩水）",
+     "gold_entities": [
+      "华宝中证医疗ETF"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 AND TRADING_DAY=(SELECT MAX(TRADING_DAY) FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='512170.SH' AND HISVALID=1 AND TRADING_DAY<='2025-12-31')",
+     "gold_tables": [
+      "ETF_PERFORMANCE_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再问个跨境的：境内全市场的QDII类ETF，把LOF剔除掉不算，一共有多少只？",
+     "judge": "numeric",
+     "gold_value": "78",
+     "gold_display": "78只（QDII口径：单一权威表ETF_INFO_DETAIL，TYPE=1境内且IF_QDII=1且IF_LOF=0；同表不剔LOF为111只，ETF_LABEL_INFO_CHINA.IF_QDII=1为147只，均因含LOF未采用）",
+     "gold_entities": [
+      "QDII类ETF"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE HISVALID=1 AND TYPE=1 AND IF_QDII=1 AND IF_LOF=0",
+     "gold_tables": [
+      "ETF_INFO_DETAIL"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_25.json"
+  },
+  {
+   "round_id": 26,
+   "source": "MYSQL-1",
+   "domain": "基金",
+   "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+   "initial": {
+    "question": "最近黄金ETF吸金很猛，帮我看看华安黄金ETF（518880）最近一周资金净流入大概有多少？",
+    "judge": "numeric",
+    "gold_value": "460969725.0000",
+    "gold_display": "最近5个交易日累计净流入约4.61亿元（截至2026-09-02）",
+    "gold_entities": [
+     "华安黄金易"
+    ],
+    "gold_date": "2026-09-02",
+    "gold_sql": "SELECT NET_INFLOW FROM ETF_SHARES_CHANGE_ROLL WHERE FUND_SYMBOL='518880.SH' AND ROLL_NUM=5 AND HISVALID=1 AND TRADING_DAY=(SELECT MAX(TRADING_DAY) FROM ETF_SHARES_CHANGE_ROLL WHERE FUND_SYMBOL='518880.SH' AND ROLL_NUM=5 AND HISVALID=1)",
+    "gold_tables": [
+     "ETF_SHARES_CHANGE_ROLL"
+    ],
+    "labels": {
+     "difficulty": "子查询",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "它现在最新规模做到多大了？",
+     "judge": "numeric",
+     "gold_value": "104347826801.6000",
+     "gold_display": "约1043.48亿元（2026-09-02）",
+     "gold_entities": [
+      "华安黄金ETF"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT NET_VALUE FROM FUND_SHARES_CHANGE WHERE FUND_SYMBOL='518880.SH' AND HISVALID=1 ORDER BY END_DATE DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_SHARES_CHANGE"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "放到同类里比一下呢，商品型基金按最新规模排前五的都是哪几只？",
+     "judge": "list",
+     "gold_value": "华安黄金易(ETF)、博时黄金ETF、易方达黄金ETF、国泰黄金ETF、华夏黄金ETF",
+     "gold_display": "商品型基金最新规模前五：华安黄金易(ETF)约1043.48亿、博时黄金ETF约419.42亿、易方达黄金ETF约366.67亿、国泰黄金ETF约350.75亿、华夏黄金ETF约172.51亿（2026-09-02）",
+     "gold_entities": [
+      "华安黄金易(ETF)",
+      "博时黄金ETF",
+      "易方达黄金ETF",
+      "国泰黄金ETF",
+      "华夏黄金ETF"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT s.FUND_NAME, f.NET_VALUE FROM MUTUAL_FUND_SECTOR s JOIN FUND_SHARES_CHANGE f ON s.FUND_SYMBOL=f.FUND_SYMBOL WHERE s.HISVALID=1 AND s.CUR_SIGN='1' AND s.SECTOR_NAME_1='基金投资范围板块' AND s.SECTOR_NAME_3='商品型基金' AND f.HISVALID=1 AND f.NET_VALUE IS NOT NULL AND f.END_DATE=(SELECT MAX(END_DATE) FROM FUND_SHARES_CHANGE WHERE HISVALID=1 AND NET_VALUE IS NOT NULL) GROUP BY s.FUND_SYMBOL, s.FUND_NAME, f.NET_VALUE ORDER BY f.NET_VALUE DESC LIMIT 5",
+     "gold_tables": [
+      "MUTUAL_FUND_SECTOR",
+      "FUND_SHARES_CHANGE"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+     "judge": "numeric",
+     "gold_value": "-12698692650.0000",
+     "gold_display": "净流出：2026年二季度合计净流出约126.99亿元",
+     "gold_entities": [
+      "华安黄金ETF"
+     ],
+     "gold_date": "2026-06-30",
+     "gold_sql": "SELECT SUM(NET_INFLOW) FROM FUND_SHARES_CHANGE WHERE FUND_SYMBOL='518880.SH' AND HISVALID=1 AND END_DATE>='2026-04-01' AND END_DATE<'2026-07-01'",
+     "gold_tables": [
+      "FUND_SHARES_CHANGE"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "好，明白了。对了确认一下，这些日频的份额变动和净流入，都是按交易所每天披露的份额数据算出来的吧？",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再帮我查个别的，中欧医疗健康混合A最新的单位净值是多少？",
+     "judge": "numeric",
+     "gold_value": "1.92790000",
+     "gold_display": "1.9279元（2026-09-02）",
+     "gold_entities": [
+      "中欧医疗健康混合A"
+     ],
+     "gold_date": "2026-09-02",
+     "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='003095.OF' AND HISVALID=1 ORDER BY TRADING_DAY DESC LIMIT 1",
+     "gold_tables": [
+      "FUND_NETVALUE"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "NEW_QUERY",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_26.json"
+  },
+  {
+   "round_id": 27,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+   "initial": {
+    "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+    "judge": "numeric",
+    "gold_value": "926942.0",
+    "gold_display": "926942百万美元（约9269.42亿美元，2025财年，财年截止2025-12-31）",
+    "gold_entities": [
+     "沃尔玛"
+    ],
+    "gold_date": "2025-12-31",
+    "gold_sql": "SELECT F048N AS revenue FROM COM3103 WHERE FIU_ID='00000015' AND F003V='FY' ORDER BY F001D DESC LIMIT 1",
+    "gold_tables": [
+     "COM3103"
+    ],
+    "labels": {
+     "difficulty": "单表",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "这个财年它最终落到净利润有多少？",
+     "judge": "numeric",
+     "gold_value": "30504.0",
+     "gold_display": "30504百万美元（约305.04亿美元，2025财年）",
+     "gold_entities": [
+      "沃尔玛"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT F032N AS net_profit FROM COM3103 WHERE FIU_ID='00000015' AND F003V='FY' AND F001D='2025-12-31'",
+     "gold_tables": [
+      "COM3103"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+     "judge": "numeric",
+     "gold_value": "2.07",
+     "gold_display": "约2.07%（2025财年净利润30504百万美元 ÷ 期末总资产1470720百万美元）",
+     "gold_entities": [
+      "沃尔玛"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND(100 * i.F032N / b.F008N, 2) AS roa_pct FROM COM3103 i JOIN COM3102 b ON i.FIU_ID = b.FIU_ID AND i.F001D = b.F001D AND b.F003V = 'FY' WHERE i.FIU_ID = '00000015' AND i.F003V = 'FY' AND i.F001D = '2025-12-31'",
+     "gold_tables": [
+      "COM3103",
+      "COM3102"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+     "judge": "numeric",
+     "gold_value": "8919.7",
+     "gold_display": "8919.7百万美元（约89.20亿美元；2025财年为-4289.2百万美元，同比由正转负、明显恶化）",
+     "gold_entities": [
+      "沃尔玛"
+     ],
+     "gold_date": "2024-12-31",
+     "gold_sql": "SELECT ROUND(F036N - F008N, 1) AS fcf FROM COM3104 WHERE FIU_ID = '00000015' AND F003V = 'FY' AND F001D = '2024-12-31'",
+     "gold_tables": [
+      "COM3104"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "行，大致有数了。顺便确认一下：这些美股报表都是美元列报的吧？用的是审计后的年报口径吗？",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "换家公司看看：可口可乐最新一份年报期末的总资产是多少？",
+     "judge": "numeric",
+     "gold_value": "148431.0",
+     "gold_display": "148431百万美元（约1484.31亿美元，2025财年末）",
+     "gold_entities": [
+      "可口可乐"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT F008N AS total_assets FROM COM3102 WHERE FIU_ID = '00000018' AND F003V = 'FY' ORDER BY F001D DESC LIMIT 1",
+     "gold_tables": [
+      "COM3102"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_27.json"
+  },
+  {
+   "round_id": 28,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+   "initial": {
+    "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+    "judge": "entity",
+    "gold_value": "56.19",
+    "gold_display": "奈飞市盈率56.19倍 > 迪士尼35.5倍，奈飞更高，高约20.69倍",
+    "gold_entities": [
+     "奈飞",
+     "迪士尼"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT m.CSNAME, c.F021N AS pe FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON c.FIU_ID = m.FIU_ID WHERE c.FIU_ID IN ('00000032', '00000033') ORDER BY c.F021N DESC",
+    "gold_tables": [
+     "COM3101",
+     "AMERICAN_STOCK_MAIN"
+    ],
+    "labels": {
+     "difficulty": "多表join",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "那它们俩的市净率呢？差距也这么明显吗？",
+     "judge": "entity",
+     "gold_value": "7.024",
+     "gold_display": "奈飞市净率7.02倍 > 迪士尼4.44倍，奈飞按账面估值同样明显更贵（高约2.59倍）",
+     "gold_entities": [
+      "奈飞",
+      "迪士尼"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT F015N AS pb FROM COM3101 WHERE FIU_ID IN ('00000032', '00000033') ORDER BY F015N DESC",
+     "gold_tables": [
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "共4家：雪佛龙3.33%、卡特彼勒3.03%、联合健康2.76%、思科2.53%",
+     "gold_entities": [
+      "雪佛龙",
+      "卡特彼勒",
+      "联合健康",
+      "思科"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT m.CSNAME, c.F007N AS div_yield FROM COM3101 c JOIN AMERICAN_STOCK_MAIN m ON c.FIU_ID = m.FIU_ID WHERE c.F007N > 2.5 AND (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK <> '中概股') ORDER BY c.F007N DESC",
+     "gold_tables": [
+      "COM3101",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "估值先放一边，那过去一年呢？迪士尼这段时间股价累计涨跌了多少？",
+     "judge": "numeric",
+     "gold_value": "6.65",
+     "gold_display": "最近一年累计上涨6.65%（截至2026-08-25收盘）",
+     "gold_entities": [
+      "迪士尼"
+     ],
+     "gold_date": "2026-08-25",
+     "gold_sql": "SELECT CHG_PCT_YEAR FROM VIEW_US_EXPR_IDX WHERE SYMBOL_NASDAQ = 'DIS' AND TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+     "gold_tables": [
+      "VIEW_US_EXPR_IDX"
+     ],
+     "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+     "judge": "entity",
+     "gold_value": "14.34",
+     "gold_display": "雪佛龙14.34倍 < 埃克森美孚15.21倍，雪佛龙估值更低",
+     "gold_entities": [
+      "雪佛龙",
+      "埃克森美孚"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT F021N AS pe FROM COM3101 WHERE FIU_ID IN ('00000012', '00000023') ORDER BY F021N ASC",
+     "gold_tables": [
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "单表",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+     "judge": "numeric",
+     "gold_value": "36.89",
+     "gold_display": "约36.89倍（按41家市盈率非空且为正的公司平均）",
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": "SELECT ROUND(AVG(F021N), 2) AS avg_pe FROM COM3101 WHERE F021N > 0",
+     "gold_tables": [
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "条件修改",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_28.json"
+  },
+  {
+   "round_id": 29,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+   "initial": {
+    "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+    "judge": "numeric",
+    "gold_value": "262570.0",
+    "gold_display": "262570百万美元（约2625.7亿美元）",
+    "gold_entities": [
+     "谷歌A"
+    ],
+    "gold_date": "2025-12-31",
+    "gold_sql": "SELECT F007N FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2025-12-31' AND SECTOR_CNAME='主营业务'",
+    "gold_tables": [
+     "VIEW_COM3105",
+     "AMERICAN_STOCK_MAIN"
+    ],
+    "labels": {
+     "difficulty": "子查询",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "absolute"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "主营业务占它各板块收入合计的比例大概多少？",
+     "judge": "numeric",
+     "gold_value": "62.0",
+     "gold_display": "62.00%（262570/423500）",
+     "gold_entities": [
+      "谷歌A"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT ROUND(SUM(CASE WHEN SECTOR_CNAME='主营业务' THEN F007N ELSE 0 END)/SUM(F007N)*100,2) AS pct FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2025-12-31'",
+     "gold_tables": [
+      "VIEW_COM3105",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "同期它在北美市场实现的销售收入呢？",
+     "judge": "numeric",
+     "gold_value": "245630.0",
+     "gold_display": "245630百万美元（约2456.3亿美元）",
+     "gold_entities": [
+      "谷歌A"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT v.F007N FROM VIEW_COM3106 v JOIN AMERICAN_STOCK_MAIN m ON v.FIU_ID=m.FIU_ID WHERE m.CSNAME='谷歌A' AND v.F001D='2025-12-31' AND v.REGION_CNAME='北美'",
+     "gold_tables": [
+      "VIEW_COM3106",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "往回看一个财年，2024年主营业务板块这块做了多少收入？",
+     "judge": "numeric",
+     "gold_value": "238700.0",
+     "gold_display": "238700百万美元（约2387.0亿美元）",
+     "gold_entities": [
+      "谷歌A"
+     ],
+     "gold_date": "2024-12-31",
+     "gold_sql": "SELECT F007N FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2024-12-31' AND SECTOR_CNAME='主营业务'",
+     "gold_tables": [
+      "VIEW_COM3105",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "北美245630 > 欧洲84700 > 大中华区33880 = 亚太(除中国)33880 > 其他25410（百万美元，2025财年）",
+     "gold_entities": [
+      "北美",
+      "欧洲",
+      "大中华区",
+      "亚太(除中国)",
+      "其他"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT v.REGION_CNAME, v.F007N FROM VIEW_COM3106 v JOIN AMERICAN_STOCK_MAIN m ON v.FIU_ID=m.FIU_ID WHERE m.CSNAME='谷歌A' AND v.F001D=(SELECT MAX(F001D) FROM VIEW_COM3106 WHERE FIU_ID=v.FIU_ID) ORDER BY v.F007N DESC",
+     "gold_tables": [
+      "VIEW_COM3106",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "条件追加",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+     "judge": "numeric",
+     "gold_value": "156534.0",
+     "gold_display": "156534百万美元（约1565.3亿美元）",
+     "gold_entities": [
+      "波音"
+     ],
+     "gold_date": "2025-12-31",
+     "gold_sql": "SELECT F048N FROM COM3103 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='波音') AND F001D='2025-12-31' AND F003V='FY'",
+     "gold_tables": [
+      "COM3103",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "absolute"
+     }
+    }
+   ],
+   "_draft": "round_29.json"
+  },
+  {
+   "round_id": 30,
+   "source": "MYSQL-4",
+   "domain": "美股",
+   "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+   "initial": {
+    "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+    "judge": "list",
+    "gold_value": null,
+    "gold_display": "阿里巴巴-W(BABA)1663200、拼多多-W(PDD)1209600、网易-W(NTES)506880、京东-W(JD)323136、百度-W(BIDU)214200（百万美元）",
+    "gold_entities": [
+     "阿里巴巴-W",
+     "拼多多-W",
+     "网易-W",
+     "京东-W",
+     "百度-W"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT m.CSNAME, m.SYMBOL, t.F013N FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' ORDER BY t.F013N DESC LIMIT 5",
+    "gold_tables": [
+     "AMERICAN_STOCK_MAIN",
+     "COM3101"
+    ],
+    "labels": {
+     "difficulty": "多表join",
+     "followup_type": null,
+     "route_gold": null,
+     "time_sensitivity": "relative"
+    }
+   },
+   "feedbacks": [
+    {
+     "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+     "judge": "list",
+     "gold_value": null,
+     "gold_display": "京东-W(9.35倍)、百度-W(10.44倍)、理想汽车-W(14.4倍)",
+     "gold_entities": [
+      "京东-W",
+      "百度-W",
+      "理想汽车-W"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT m.CSNAME, m.SYMBOL, t.F021N FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3",
+     "gold_tables": [
+      "AMERICAN_STOCK_MAIN",
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "多表join",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "刚才市盈率最低的那三只中概股，今年以来整体走得怎么样？平均涨跌幅有多少？",
+     "judge": "numeric",
+     "gold_value": "13.41",
+     "gold_display": "今年以来平均上涨13.41%（市盈率最低的3只：京东-W、百度-W、理想汽车-W的算术平均，截至2026-08-25）",
+     "gold_entities": [
+      "京东-W",
+      "百度-W",
+      "理想汽车-W"
+     ],
+     "gold_date": "2026-08-25",
+     "gold_sql": "SELECT ROUND(AVG(e.CHG_PCT_YTD),2) AS avg_ytd FROM VIEW_US_EXPR_IDX e JOIN (SELECT m.FIU_ID FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3) s ON e.FIU_ID=s.FIU_ID WHERE e.TRADE_DATE=(SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+     "gold_tables": [
+      "VIEW_US_EXPR_IDX",
+      "AMERICAN_STOCK_MAIN",
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "指代继承",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "那把窗口拉长到最近一年呢，平均下来大概什么收益水平？",
+     "judge": "numeric",
+     "gold_value": "33.96",
+     "gold_display": "近一年平均上涨33.96%（仍是这3只：京东-W、百度-W、理想汽车-W的算术平均，截至2026-08-25）",
+     "gold_entities": [
+      "京东-W",
+      "百度-W",
+      "理想汽车-W"
+     ],
+     "gold_date": "2026-08-25",
+     "gold_sql": "SELECT ROUND(AVG(e.CHG_PCT_YEAR),2) AS avg_year FROM VIEW_US_EXPR_IDX e JOIN (SELECT m.FIU_ID FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3) s ON e.FIU_ID=s.FIU_ID WHERE e.TRADE_DATE=(SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+     "gold_tables": [
+      "VIEW_US_EXPR_IDX",
+      "AMERICAN_STOCK_MAIN",
+      "COM3101"
+     ],
+     "labels": {
+      "difficulty": "聚合",
+      "followup_type": "时间漂移",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    },
+    {
+     "question": "行，清楚了。顺便确认下，这些涨跌幅都是按分红拆股调整后的复权口径算的吧？",
+     "judge": "nonquery",
+     "gold_value": null,
+     "gold_display": null,
+     "gold_entities": [],
+     "gold_date": null,
+     "gold_sql": null,
+     "gold_tables": [],
+     "labels": {
+      "difficulty": null,
+      "followup_type": "非查询",
+      "route_gold": "NON_QUERY",
+      "time_sensitivity": "absolute"
+     }
+    },
+    {
+     "question": "再看个别的，迪士尼现在的股息率大概什么水平？",
+     "judge": "numeric",
+     "gold_value": "0.592",
+     "gold_display": "股息率0.592%",
+     "gold_entities": [
+      "迪士尼"
+     ],
+     "gold_date": null,
+     "gold_sql": "SELECT F007N FROM COM3101 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='迪士尼')",
+     "gold_tables": [
+      "COM3101",
+      "AMERICAN_STOCK_MAIN"
+     ],
+     "labels": {
+      "difficulty": "子查询",
+      "followup_type": "话题切换",
+      "route_gold": "SQL_GENERATION",
+      "time_sensitivity": "relative"
+     }
+    }
+   ],
+   "_draft": "round_30.json"
+  }
+ ]
+}

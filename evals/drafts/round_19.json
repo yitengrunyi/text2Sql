@@ -1,0 +1,130 @@
+{
+  "round_id": 19,
+  "source": "MYSQL-2",
+  "domain": "指数",
+  "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+  "initial": {
+    "question": "中证1000指数最新的市盈率是多少？",
+    "judge": "numeric",
+    "gold_value": "43.0869",
+    "gold_display": "43.09倍（2026-09-02）",
+    "gold_entities": [
+      "中证1000指数"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433)",
+    "gold_tables": [
+      "ANA_INDX_VAL_IDX"
+    ],
+    "labels": {
+      "difficulty": "子查询",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "relative"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "那它同一个交易日的市净率呢？",
+      "judge": "numeric",
+      "gold_value": "2.3227",
+      "gold_display": "2.32倍",
+      "gold_entities": [
+        "中证1000指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT PB FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 ORDER BY TRD_DATE DESC LIMIT 1",
+      "gold_tables": [
+        "ANA_INDX_VAL_IDX"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "我在做宽基之间的估值比较，把中证红利指数和上证180指数同一交易日的市盈率也拉出来，这三个指数里谁的估值最便宜？",
+      "judge": "entity",
+      "gold_value": "8.0386",
+      "gold_display": "中证红利指数8.04倍最低，上证180为10.87倍，中证1000为43.09倍",
+      "gold_entities": [
+        "中证红利指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT INDX_CNAME, PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE IN (106006433,106001369,106000016) AND TRD_DATE=(SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433) ORDER BY PE",
+      "gold_tables": [
+        "ANA_INDX_VAL_IDX"
+      ],
+      "labels": {
+        "difficulty": "子查询",
+        "followup_type": "条件追加",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "往回看，2025年末的时候它的市盈率是多少？",
+      "judge": "numeric",
+      "gold_value": "45.9128",
+      "gold_display": "45.91倍（2025-12-31）",
+      "gold_entities": [
+        "中证1000指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT PE FROM ANA_INDX_VAL_IDX WHERE ISVALID=1 AND INNER_CODE=106006433 AND TRD_DATE='2025-12-31'",
+      "gold_tables": [
+        "ANA_INDX_VAL_IDX"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "换个话题，深证100指数2026年半年报的净资产收益率是多少？",
+      "judge": "numeric",
+      "gold_value": "7.3965",
+      "gold_display": "7.40%",
+      "gold_entities": [
+        "深证100指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT f.ROE FROM ANA_INDX_FIN_IDX f JOIN GET_INDX_GEN_INFO g ON f.INNER_CODE=g.INNER_CODE WHERE g.ISVALID=1 AND f.ISVALID=1 AND g.INDX_CNAME='深证100指数' AND f.ENDDATE='2026-06-30'",
+      "gold_tables": [
+        "ANA_INDX_FIN_IDX",
+        "GET_INDX_GEN_INFO"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "和中证1000同期相比，两者的净资产收益率谁更高？",
+      "judge": "entity",
+      "gold_value": "7.3965",
+      "gold_display": "深证100指数7.40% > 中证1000指数3.75%",
+      "gold_entities": [
+        "深证100指数"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT g.INDX_CNAME, f.ROE FROM ANA_INDX_FIN_IDX f JOIN GET_INDX_GEN_INFO g ON f.INNER_CODE=g.INNER_CODE WHERE g.ISVALID=1 AND f.ISVALID=1 AND g.INDX_CNAME IN ('深证100指数','中证1000指数') AND f.ENDDATE='2026-06-30' ORDER BY f.ROE DESC",
+      "gold_tables": [
+        "ANA_INDX_FIN_IDX",
+        "GET_INDX_GEN_INFO"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    }
+  ]
+}

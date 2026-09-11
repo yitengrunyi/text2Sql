@@ -1,0 +1,156 @@
+{
+ "round_id": 4,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "中证500指数2026年8月31日的收盘点位是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 中证500指数2026年8月31日的收盘点位（Closing Price of CSI 500 Index）\n\n[2] 可能的计算公式  \n中证500收盘点位 = ∑(成分股收盘价 × 相应权重) / 指数除数\n\n其中：  \n- 成分股收盘价：当天收盘时各成分股的价格  \n- 权重：每只成分股在指数中的市值或其他权重分配  \n- 指数除数：为保证历史连续性进行调整的系数\n['中证500指数', 'CSI 500 Index', '收盘点位', 'Closing Price', '成分股收盘价', '成分股收盘价格', '权重', '市值权重', '指数除数', '调整系数']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000905'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000905'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1\n200\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '收盘价', '最高价', '最低价', '昨收', '涨跌', '涨跌幅(%)', '成交金额(亿)'], ['2026-08-31', '中证500', '000905', '7,797.23', '7,952.10', '7,953.93', '7,764.98', '7,895.45', '56.65', '0.72', '3,913.53']]}\n该查询的目的是获取中证500指数在2026年8月31日的收盘点位等行情数据。其中收盘价是通过对该指数的收盘数据进行保留两位小数的处理，计算公式为收盘价结果等于原数据四舍五入保留两位小数。成交金额通过公式“成交金额（亿）＝成交金额（元）÷100000000”，即将成交金额单位转换为亿元，并保留两位小数。其他数据如开盘价、最高价、最低价、昨收、涨跌和涨跌幅，都是对原有数据进行两位小数的保留和展示。在此查询中，收盘点位直接取自已有的行情数据。查询结果符合要求。\n\n查询从两个表中提取数据，一个表用于查询指数的基本信息，另一个表记录指数每日行情。通过指数内部代码将两表关联。筛选了指数市场代码和指数代码为“000905”，且指数在数据库中有效，并且使用状态为“使用”；仅选择2026年8月31日的交易数据，并确保行情数据有效。最终只返回一条符合条件的数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000905'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000905'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000905'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000905'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7952.0986"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 中证500 000905 7797.23 7952.10 7953.93 7764.98 7895.45 56.65 0.72 3913.53",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.8,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_4_661b8fe8.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 45.73,
+  "llm_seconds_max": 6.79,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   20285
+  ],
+  "prompt_columns_raw_len": 1874
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1189,
+   "prompt_tokens": 25943,
+   "total_tokens": 27132,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25943,
+  "completion": 1189,
+  "total": 27132
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1189,
+   "prompt_tokens": 25943,
+   "total_tokens": 27132,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

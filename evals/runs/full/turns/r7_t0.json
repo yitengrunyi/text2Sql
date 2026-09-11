@@ -1,0 +1,141 @@
+{
+ "round_id": 7,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n收盘价（Closing Price）\n\n[2] 可能的计算公式  \n收盘价 = 当日最后一笔成交价格\n\n（注：收盘价通常由证券交易所直接发布，不通过复杂计算获得，仅为当天最后一笔成交价格）\n['华夏上证50ETF', '510050', '收盘价', 'Closing Price', '成交价格', '证券交易所', '当日最后一笔成交价格']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['ETF相关信息']\n['ETF_DAILY_QUOTE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRADING_DAY AS `交易日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`,\n    ROUND(OPEN_PRICE, 2) AS `开盘价（元）`,\n    ROUND(HIGH_PRICE, 2) AS `最高价（元）`,\n    ROUND(LOW_PRICE, 2) AS `最低价（元）`,\n    ROUND(TURNOVER_VALUE/100000000, 2) AS `成交额（亿元）`,\n    ROUND(TURNOVER_VOLUME, 2) AS `成交量`,\n    ROUND(CHANGE_PRICE, 2) AS `涨跌价格（元）`,\n    ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）`\nFROM \n    ETF_DAILY_QUOTE\nWHERE \n    FUND_SYMBOL = '510050.SH'\n    AND TRADING_DAY = '2026-09-02'\n    AND CLOSE_PRICE IS NOT NULL\n    AND HISVALID = 1\n200\n{table:[['交易日期', '基金名称', '基金代码', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）', '成交额（亿元）', '成交量', '涨跌价格（元）', '涨跌幅（%）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '3.03', '3.04', '3.04', '3.01', '12.28', '405,745,631.00', '-0.03', '-0.01']]}\n收盘价通过公式“收盘价（元） = 收盘价（字段值），保留两位小数”计算得出。开盘价、最高价、最低价、涨跌价格、涨跌幅、成交量类数据也都直接取值并保留两位小数。成交额（亿元）通过“成交额（亿元） = 成交额（元） / 100000000”，再保留两位小数。其他字段如基金名称、基金代码和交易日期直接展示，不做计算。在此查询中，我们直接使用了已有的行情数据。查询结果符合要求。\n\n本查询从ETF基金收盘行情数据表中提取信息，包含指定基金名称、基金代码、当天交易数据、价格变动、成交量、成交额等内容。通过筛选基金代码为“510050.SH”，交易日期为“2026-09-02”，并排除收盘价无效情况，保证结果有效，最终返回华夏上证50ETF在指定日期的收盘及相关行情数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    TRADING_DAY AS `交易日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`,\n    ROUND(OPEN_PRICE, 2) AS `开盘价（元）`,\n    ROUND(HIGH_PRICE, 2) AS `最高价（元）`,\n    ROUND(LOW_PRICE, 2) AS `最低价（元）`,\n    ROUND(TURNOVER_VALUE/100000000, 2) AS `成交额（亿元）`,\n    ROUND(TURNOVER_VOLUME, 2) AS `成交量`,\n    ROUND(CHANGE_PRICE, 2) AS `涨跌价格（元）`,\n    ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）`\nFROM \n    ETF_DAILY_QUOTE\nWHERE \n    FUND_SYMBOL = '510050.SH'\n    AND TRADING_DAY = '2026-09-02'\n    AND CLOSE_PRICE IS NOT NULL\n    AND HISVALID = 1",
+ "final_sql": "SELECT \n    TRADING_DAY AS `交易日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`,\n    ROUND(OPEN_PRICE, 2) AS `开盘价（元）`,\n    ROUND(HIGH_PRICE, 2) AS `最高价（元）`,\n    ROUND(LOW_PRICE, 2) AS `最低价（元）`,\n    ROUND(TURNOVER_VALUE/100000000, 2) AS `成交额（亿元）`,\n    ROUND(TURNOVER_VOLUME, 2) AS `成交量`,\n    ROUND(CHANGE_PRICE, 2) AS `涨跌价格（元）`,\n    ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）`\nFROM \n    ETF_DAILY_QUOTE\nWHERE \n    FUND_SYMBOL = '510050.SH'\n    AND TRADING_DAY = '2026-09-02'\n    AND CLOSE_PRICE IS NOT NULL\n    AND HISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3.025000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 华夏上证50ETF 510050.SH 3.03 3.04 3.04 3.01 12.28 405745631.00 -0.03 -0.01",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 59.3,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_7_b628968a.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.57,
+  "llm_seconds_max": 6.96,
+  "selected_tables": [
+   "ETF_DAILY_QUOTE"
+  ],
+  "candidate_tables": [
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   13119
+  ],
+  "prompt_columns_raw_len": 2550
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 20035,
+   "total_tokens": 20966,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2944,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 20035,
+  "completion": 931,
+  "total": 20966
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 20035,
+   "total_tokens": 20966,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2944,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_DAILY_QUOTE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

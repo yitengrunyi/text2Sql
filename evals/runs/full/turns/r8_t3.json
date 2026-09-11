@@ -1,0 +1,174 @@
+{
+ "round_id": 8,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "苹果、特斯拉、英伟达这三只股票，最新收盘价最高的是谁？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE (M.CSNAME LIKE '%苹果%' OR M.CSNAME LIKE '%特斯拉%' OR M.CSNAME LIKE '%英伟达%') AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '特斯拉', 'TSLA.US', '328.98', '341.23', '327.05', '340.00', '10.55', '3.20', '50.23', '15.03', '32.97']]}\n该查询获取了苹果、特斯拉和英伟达三只股票在最新一个交易日的市场行情信息，并找出收盘价最高的那只股票。数据来源于股票基本信息表与美股日行情表，通过公司名称筛选出指定三家公司，确保只提取有有效收盘价记录的最新交易日数据。最终选取这三家公司中收盘价（美元）最高的股票，将相关行情信息（包括交易日期、股票名称、展示代码、开盘价、最高价、最低价、收盘价、涨跌额、涨跌幅、成交额、成交量、总股本）按降序排列取第一条。成交额由美元单位转化为亿美元，成交量为百万股，总股本为亿股，相关金额与数量均按标准换算并保留两位小数。涨跌幅和涨跌额直接引用已有行情指标。查询结果能准确回答“苹果、特斯拉、英伟达三只股票最新收盘价最高的是谁”的问题，完全符合用户需求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '特斯拉', 'TSLA.US', '328.98', '341.23', '327.05', '340.00', '10.55', '3.20', '50.23', '15.03', '32.97']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE (M.CSNAME LIKE '%苹果%' OR M.CSNAME LIKE '%特斯拉%' OR M.CSNAME LIKE '%英伟达%') AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1",
+ "final_sql": "WITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE (M.CSNAME LIKE '%苹果%' OR M.CSNAME LIKE '%特斯拉%' OR M.CSNAME LIKE '%英伟达%') AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "TSLA 340.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 特斯拉 TSLA.US 328.98 341.23 327.05 340.0 10.55 3.2 50.23 15.03 32.97",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 58.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_8_3273ec10.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 57.88,
+  "llm_seconds_max": 52.73,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 7019,
+   "prompt_tokens": 9808,
+   "total_tokens": 16827,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6215,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9808,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 233,
+   "prompt_tokens": 4250,
+   "total_tokens": 4483,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14058,
+  "completion": 7252,
+  "total": 21310
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 7019,
+   "prompt_tokens": 9808,
+   "total_tokens": 16827,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6215,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9808,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 233,
+   "prompt_tokens": 4250,
+   "total_tokens": 4483,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

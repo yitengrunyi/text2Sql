@@ -1,0 +1,173 @@
+{
+ "round_id": 27,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    b.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报告期结束日`,\n    a.F004N AS `报告周期天数`,\n    a.F005V AS `货币单位`,\n    ROUND(a.F032N * 100, 1) AS `净利润(万美元)`,\n    ROUND(c.F008N * 100, 1) AS `期末总资产(万美元)`,\n    ROUND(a.F032N / NULLIF(c.F008N, 0) * 100, 2) AS `ROA(%)`\nFROM \n    VIEW_COM3103_CUM a\nJOIN\n    AMERICAN_STOCK_MAIN b\n    ON a.FIU_ID = b.FIU_ID\nJOIN \n    COM3102 c \n    ON a.FIU_ID = c.FIU_ID \n    AND a.F001D = c.F001D \n    AND c.F003V = 'FY'\nWHERE \n    b.COMB_SYMBOL = 'WMT.US'\n    AND a.F003V = 'FY'\n    AND a.F032N IS NOT NULL\n    AND c.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(F001D)\n        FROM VIEW_COM3103_CUM\n        WHERE FIU_ID = a.FIU_ID AND F003V = 'FY'\n    )\nORDER BY \n    a.F001D DESC\nLIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报告期结束日', '报告周期天数', '货币单位', '净利润(万美元)', '期末总资产(万美元)', 'ROA(%)'], ['沃尔玛', 'WMT.US', '2025-12-31', '365', 'USD', '3,050,398.80', '147,072,062.50', '2.07']]}\n该查询获得了沃尔玛最新财年年末的净利润、期末总资产以及净利润对应总资产的回报率（ROA）。信息来源于公司基本信息表、年度累计损益表和年度资产负债表，通过公司标识和报告期末日期关联，同步展示该财年主要财务数据。查询筛选了沃尔玛美国上市代码，限定报告种类为年报，并确保数据为最新一年度。数据按报告期降序提取，仅输出最新一期。净利润和总资产均以万美元为单位，保留一位小数；ROA的计算方式是净利润除以期末总资产再乘以100，结果保留两位小数。该查询直接利用了现有财报数据，所得ROA真实反映了沃尔玛在最新年度内通过全部资产取得的利润回报。查询结果符合要求。\n{table:[['股票名称', '股票代码', '报告期结束日', '报告周期天数', '货币单位', '净利润(万美元)', '期末总资产(万美元)', 'ROA(%)'], ['沃尔玛', 'WMT.US', '2025-12-31', '365', 'USD', '3,050,398.80', '147,072,062.50', '2.07']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    b.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报告期结束日`,\n    a.F004N AS `报告周期天数`,\n    a.F005V AS `货币单位`,\n    ROUND(a.F032N * 100, 1) AS `净利润(万美元)`,\n    ROUND(c.F008N * 100, 1) AS `期末总资产(万美元)`,\n    ROUND(a.F032N / NULLIF(c.F008N, 0) * 100, 2) AS `ROA(%)`\nFROM \n    VIEW_COM3103_CUM a\nJOIN\n    AMERICAN_STOCK_MAIN b\n    ON a.FIU_ID = b.FIU_ID\nJOIN \n    COM3102 c \n    ON a.FIU_ID = c.FIU_ID \n    AND a.F001D = c.F001D \n    AND c.F003V = 'FY'\nWHERE \n    b.COMB_SYMBOL = 'WMT.US'\n    AND a.F003V = 'FY'\n    AND a.F032N IS NOT NULL\n    AND c.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(F001D)\n        FROM VIEW_COM3103_CUM\n        WHERE FIU_ID = a.FIU_ID AND F003V = 'FY'\n    )\nORDER BY \n    a.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    b.CSNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报告期结束日`,\n    a.F004N AS `报告周期天数`,\n    a.F005V AS `货币单位`,\n    ROUND(a.F032N * 100, 1) AS `净利润(万美元)`,\n    ROUND(c.F008N * 100, 1) AS `期末总资产(万美元)`,\n    ROUND(a.F032N / NULLIF(c.F008N, 0) * 100, 2) AS `ROA(%)`\nFROM \n    VIEW_COM3103_CUM a\nJOIN\n    AMERICAN_STOCK_MAIN b\n    ON a.FIU_ID = b.FIU_ID\nJOIN \n    COM3102 c \n    ON a.FIU_ID = c.FIU_ID \n    AND a.F001D = c.F001D \n    AND c.F003V = 'FY'\nWHERE \n    b.COMB_SYMBOL = 'WMT.US'\n    AND a.F003V = 'FY'\n    AND a.F032N IS NOT NULL\n    AND c.F008N IS NOT NULL\n    AND a.F001D = (\n        SELECT MAX(F001D)\n        FROM VIEW_COM3103_CUM\n        WHERE FIU_ID = a.FIU_ID AND F003V = 'FY'\n    )\nORDER BY \n    a.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.07"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "沃尔玛 WMT.US 2025-12-31 365 USD 3050398.8 147072062.5 2.07",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 42.7,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_27_878d0752.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 41.86,
+  "llm_seconds_max": 35.97,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3692,
+   "prompt_tokens": 17167,
+   "total_tokens": 20859,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2918,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17167,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 198,
+   "prompt_tokens": 11400,
+   "total_tokens": 11598,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28567,
+  "completion": 3890,
+  "total": 32457
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3692,
+   "prompt_tokens": 17167,
+   "total_tokens": 20859,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2918,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17167,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 198,
+   "prompt_tokens": 11400,
+   "total_tokens": 11598,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "COM3102"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

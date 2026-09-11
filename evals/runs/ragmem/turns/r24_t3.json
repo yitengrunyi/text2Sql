@@ -1,0 +1,172 @@
+{
+ "round_id": 24,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '刘彦春' AND t1.BEGIN_DATE <= '2024-12-31' AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2024-12-31') AND t1.HISVALID = 1 AND t2.REPORT_DATE = '2024-12-31' AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE;\n200\n{table:[['基金经理', '报告期', '在管总规模(亿元)'], ['刘彦春', '2024-12-31', '783.14']]}\n该查询获取的是基金经理刘彦春截至2024年12月31日所管理的全部基金的净资产合计规模，单位为亿元。数据来源包括基金经理与基金产品的管理关系表，以及基金产品在各报告期披露的资产净值数据表。操作逻辑为：首先筛选出在2024年末刘彦春名下任职且记录有效的所有基金产品，再进一步匹配这些基金在2024年12月31日（年末）的资产净值，确保数据均为有效且已披露的最新数值。最终所有符合条件的基金净资产总额相加，并将金额从元转换为亿元（金额除以1亿），同时结果保留两位小数。查询结果能够准确反映刘彦春在2024年年末的在管基金净资产总规模，完全满足用户对历史时点管理规模的查询需求。\n{table:[['基金经理', '报告期', '在管总规模(亿元)'], ['刘彦春', '2024-12-31', '783.14']]}",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": false,
+ "first_sql": "SELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '刘彦春' AND t1.BEGIN_DATE <= '2024-12-31' AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2024-12-31') AND t1.HISVALID = 1 AND t2.REPORT_DATE = '2024-12-31' AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE",
+ "final_sql": "SELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '刘彦春' AND t1.BEGIN_DATE <= '2024-12-31' AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2024-12-31') AND t1.HISVALID = 1 AND t2.REPORT_DATE = '2024-12-31' AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "42726346909.0300"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "刘彦春 2024-12-31 783.14",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 64.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_24_e4094f67.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 63.68,
+  "llm_seconds_max": 59.24,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6882,
+   "prompt_tokens": 12272,
+   "total_tokens": 19154,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6226,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12272,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 199,
+   "prompt_tokens": 5573,
+   "total_tokens": 5772,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17845,
+  "completion": 7081,
+  "total": 24926
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6882,
+   "prompt_tokens": 12272,
+   "total_tokens": 19154,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6226,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12272,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 199,
+   "prompt_tokens": 5573,
+   "total_tokens": 5772,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

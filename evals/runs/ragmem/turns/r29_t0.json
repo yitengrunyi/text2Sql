@@ -1,0 +1,185 @@
+{
+ "round_id": 29,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 各板块（Segment）的销售收入（Sales Revenue by Segment）\n- 主营业务销售收入（Core/Primary Business Revenue）\n\n[2] 可能的计算公式  \n- 某板块销售收入 = 该板块2025财年所有产品/服务的收入总和  \n- 主营业务销售收入 = 2025财年主营业务相关板块的销售收入总和  \n  通常，主营业务 = 总销售收入中来自于公司核心业务（如广告、云服务等，依据谷歌A实际业务定义）的部分。\n\n计算示例：\n- 某板块销售收入 = ∑（该板块下各产品服务收入）\n- 主营业务销售收入 = ∑（主营业务各板块收入）\n\n通常数据来源为公司财报（Annual Report 或 10-K）的“Segment Information”部分。\n['谷歌A', '2025财年', '销售收入', '板块', 'Segment', '主营业务', 'Core Business', 'Primary Business', '主营业务销售收入', '核心业务', '广告', '云服务', '产品收入', '服务收入', '公司财报', 'Annual Report', '10-K', 'Segment Information']\n该问题可能涉及美股-'谷歌', 它的美股股票代码为：A，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n该问题可能涉及的题材包含：['互联网服务']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '互联网服务'。\n美股相关\n['美股基本信息', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3105']\n是否命中召回表：True\n['主营业务']\nquery抽取的主体词是['主营业务']\n生成查询代码\ntop30召回:{}\nSELECT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财报周期结束日期`,\n    b.F006V AS `板块英文名`,\n    b.SECTOR_CNAME AS `板块中文名`,\n    ROUND(b.F007N/100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(b.F008N/100000000, 3) AS `主营业务收入(亿美元)`,\n    b.F005V AS `币种`\nFROM\n    AMERICAN_STOCK_MAIN a\nINNER JOIN\n    VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01' AND b.F001D <= '2025-12-31'\n    AND b.F007N IS NOT NULL\n    AND b.F008N IS NOT NULL\n    AND b.F005V = 'USD'\nORDER BY\n    b.F001D DESC,\n    b.F006V,\n    b.SECTOR_CNAME\n200\n{table:[['股票名称', '股票代码', '财报周期结束日期', '板块英文名', '板块中文名', '销售收入(亿美元)', '主营业务收入(亿美元)', '币种'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'Main Business', '主营业务', '0.00', '0.00', 'USD'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'Others', '其他', '0.00', '0.00', 'USD'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'Secondary', '次主营', '0.00', '0.00', 'USD']]}\n查询的主要目的是获取谷歌A在2025财年按板块分类的销售收入及主营业务收入。销售收入（亿美元）是通过将销售数据除以一亿进行单位换算，主营业务收入（亿美元）同理也进行了单位换算。即，销售收入（亿美元）= 销售额 / 100000000，主营业务收入（亿美元）= 主营收入 / 100000000。查询结果符合要求。\n\n数据来源于美股股票基本信息表和板块收入分布表，两表通过内部代码关联。查询仅筛选谷歌A对应的股票代码，限定2025年财报周期内的数据，只提取销售和主营收入均有数据、并且为美元计价的记录。结果按财报周",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财报周期结束日期`,\n    b.F006V AS `板块英文名`,\n    b.SECTOR_CNAME AS `板块中文名`,\n    ROUND(b.F007N/100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(b.F008N/100000000, 3) AS `主营业务收入(亿美元)`,\n    b.F005V AS `币种`\nFROM\n    AMERICAN_STOCK_MAIN a\nINNER JOIN\n    VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01' AND b.F001D <= '2025-12-31'\n    AND b.F007N IS NOT NULL\n    AND b.F008N IS NOT NULL\n    AND b.F005V = 'USD'\nORDER BY\n    b.F001D DESC,\n    b.F006V,\n    b.SECTOR_CNAME",
+ "final_sql": "SELECT\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.F001D AS `财报周期结束日期`,\n    b.F006V AS `板块英文名`,\n    b.SECTOR_CNAME AS `板块中文名`,\n    ROUND(b.F007N/100000000, 3) AS `销售收入(亿美元)`,\n    ROUND(b.F008N/100000000, 3) AS `主营业务收入(亿美元)`,\n    b.F005V AS `币种`\nFROM\n    AMERICAN_STOCK_MAIN a\nINNER JOIN\n    VIEW_COM3105 b ON a.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'GOOGL.US'\n    AND b.F001D >= '2025-01-01' AND b.F001D <= '2025-12-31'\n    AND b.F007N IS NOT NULL\n    AND b.F008N IS NOT NULL\n    AND b.F005V = 'USD'\nORDER BY\n    b.F001D DESC,\n    b.F006V,\n    b.SECTOR_CNAME",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "262570.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "谷歌A GOOGL.US 2025-12-31 Main Business 主营业务 0.003 0.001 USD\n谷歌A GOOGL.US 2025-12-31 Others 其他 0.001 0.0 USD\n谷歌A GOOGL.US 2025-12-31 Secondary 次主营 0.001 0.0 USD",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 60.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_29_4db67a7c.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 58.63,
+  "llm_seconds_max": 8.39,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105",
+   "VIEW_COM3106"
+  ],
+  "sql_prompt_chars": [
+   11457
+  ],
+  "prompt_columns_raw_len": 2186
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1095,
+   "prompt_tokens": 17405,
+   "total_tokens": 18500,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 3,
+   "prompt_tokens": 467,
+   "total_tokens": 470,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 3,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17872,
+  "completion": 1098,
+  "total": 18970
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1095,
+   "prompt_tokens": 17405,
+   "total_tokens": 18500,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 3,
+   "prompt_tokens": 467,
+   "total_tokens": 470,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 3,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "round_id": 22,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "把范围放大点，中欧基金旗下2025年收益率最高的基金是哪只？当年涨了多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 收益率（2025年）\n- 基金名称（中欧基金旗下）\n\n[2] 可能的计算公式  \n- 收益率 = （期末基金净值－期初基金净值＋分红再投资）÷ 期初基金净值 × 100%\n  或  \n- 年化收益率 = （（期末净值＋分红再投资）／期初净值）^(1/持有年限) - 1\n\n需要对“中欧基金”旗下所有基金2025年度的收益率进行逐一计算和比较，找到收益率最高的一只，同时输出该基金在2025年全年的收益率。\n['中欧基金', '基金', '收益率', '2025年收益率', '年化收益率', '基金名称', '期末基金净值', '期初基金净值', '分红再投资', '持有年限']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金产品基本信息']\n['FUND_NETVALUE', 'FUND_TURNOVER_RATE', 'FUND_LIST_FREQUENCY', 'FUND_NETVALUE_SIMULATE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.YEAR AS `年份`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.YIELD * 100, 2) AS `年度收益率(%)`\nFROM (\n    SELECT \n        s.YEAR, \n        l.FUND_NAME, \n        l.FUND_HCODE, \n        l.FUND_SYMBOL, \n        s.YIELD\n    FROM FUND_STATISTICS_YEAR s\n    INNER JOIN FUND_LIST_FREQUENCY l\n        ON s.FUND_HCODE = l.FUND_HCODE\n        AND l.FREQUENCY = 4\n        AND l.HISVALID = 1\n        AND l.IF_STOCK_HOLDING = 1\n    WHERE \n        s.YEAR = 2025\n        AND l.FUND_NAME LIKE '%中欧%'\n        AND l.HISVALID = 1\n        AND s.YIELD IS NOT NULL\n) t\nORDER BY t.YIELD DESC\nLIMIT 1\n200\n{table:[['年份', '基金名称', '基金代码', '年度收益率(%)'], ['2,025', '中欧数字经济混合发起A', '018993.OF', '143.07']]}\n该查询的主要目的是找出2025年中欧基金旗下所有主动型、且持有股票仓位的基金中，年度收益率最高的基金名称、内部代码、基金代码及其年度收益率。在本次查询中，对年度收益率使用了转换计算：年度收益率百分比 = 年度收益率（小数） × 100，并保留两位小数。查询结果符合要求。\n\n查询首先在一个记录年度基金统计信息的表和一个用于分报告期统计主动型基金的表之间进行连接。仅选取频率为季度、且有效、且有股票持仓的基金数据。筛选条件限定了年份为2025年，基金名称包含“中欧”，并且要求数据有效、年度收益率数据不可为空。结果通过年度收益率从高到低排序，最后只返回一条年度收益率最高的基金记录。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.YEAR AS `年份`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.YIELD * 100, 2) AS `年度收益率(%)`\nFROM (\n    SELECT \n        s.YEAR, \n        l.FUND_NAME, \n        l.FUND_HCODE, \n        l.FUND_SYMBOL, \n        s.YIELD\n    FROM FUND_STATISTICS_YEAR s\n    INNER JOIN FUND_LIST_FREQUENCY l\n        ON s.FUND_HCODE = l.FUND_HCODE\n        AND l.FREQUENCY = 4\n        AND l.HISVALID = 1\n        AND l.IF_STOCK_HOLDING = 1\n    WHERE \n        s.YEAR = 2025\n        AND l.FUND_NAME LIKE '%中欧%'\n        AND l.HISVALID = 1\n        AND s.YIELD IS NOT NULL\n) t\nORDER BY t.YIELD DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    t.YEAR AS `年份`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_HCODE AS `基金内部代码`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.YIELD * 100, 2) AS `年度收益率(%)`\nFROM (\n    SELECT \n        s.YEAR, \n        l.FUND_NAME, \n        l.FUND_HCODE, \n        l.FUND_SYMBOL, \n        s.YIELD\n    FROM FUND_STATISTICS_YEAR s\n    INNER JOIN FUND_LIST_FREQUENCY l\n        ON s.FUND_HCODE = l.FUND_HCODE\n        AND l.FREQUENCY = 4\n        AND l.HISVALID = 1\n        AND l.IF_STOCK_HOLDING = 1\n    WHERE \n        s.YEAR = 2025\n        AND l.FUND_NAME LIKE '%中欧%'\n        AND l.HISVALID = 1\n        AND s.YIELD IS NOT NULL\n) t\nORDER BY t.YIELD DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "018993.OF 中欧数字经济混合发起A 143.07"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025 中欧数字经济混合发起A SEC098276356 018993.OF 143.07",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 67.1,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_22_8ec85681.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.06,
+  "llm_seconds_max": 7.03,
+  "selected_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_NETVALUE",
+   "FUND_NETVALUE_SIMULATE",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   16282
+  ],
+  "prompt_columns_raw_len": 4695
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1367,
+   "prompt_tokens": 26388,
+   "total_tokens": 27755,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 26388,
+  "completion": 1367,
+  "total": 27755
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1367,
+   "prompt_tokens": 26388,
+   "total_tokens": 27755,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_STATISTICS_YEAR",
+  "FUND_AND_COMPANY_MAPPING"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_NETVALUE",
+   "FUND_NETVALUE_SIMULATE",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

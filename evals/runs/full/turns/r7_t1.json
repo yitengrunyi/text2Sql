@@ -1,0 +1,172 @@
+{
+ "round_id": 7,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "它当天的涨跌幅是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT TRADING_DAY AS `交易日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`, ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）` FROM ETF_DAILY_QUOTE WHERE FUND_SYMBOL = '510050.SH' AND TRADING_DAY = '2026-09-02' AND CHANGE_PCT IS NOT NULL AND HISVALID = 1;\n200\n{table:[['交易日期', '基金名称', '基金代码', '收盘价（元）', '涨跌幅（%）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '3.03', '-0.01']]}\n该查询获取了华夏上证50ETF在2026年9月2日的交易信息，包括交易日期、基金名称、基金代码、收盘价（元）以及涨跌幅（%）。查询数据来源于基金日终行情信息表，仅筛选对应基金代码、指定日期、数据有效且涨跌幅有数据的记录。涨跌幅按百分比显示，保留两位小数，是指当天收盘价与前一日收盘价的变动百分比，计算公式为“涨跌幅 =（今日收盘价－昨日收盘价）÷ 昨日收盘价 × 100%”。收盘价直接取自日终行情中的已有数据，结果已符合用户关于涨跌幅的查询需求。\n{table:[['交易日期', '基金名称', '基金代码', '收盘价（元）', '涨跌幅（%）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '3.03', '-0.01']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT TRADING_DAY AS `交易日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`, ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）` FROM ETF_DAILY_QUOTE WHERE FUND_SYMBOL = '510050.SH' AND TRADING_DAY = '2026-09-02' AND CHANGE_PCT IS NOT NULL AND HISVALID = 1",
+ "final_sql": "SELECT TRADING_DAY AS `交易日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`, ROUND(CHANGE_PCT, 2) AS `涨跌幅（%）` FROM ETF_DAILY_QUOTE WHERE FUND_SYMBOL = '510050.SH' AND TRADING_DAY = '2026-09-02' AND CHANGE_PCT IS NOT NULL AND HISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-0.009820"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 华夏上证50ETF 510050.SH 3.03 -0.01",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 29.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_7_b628968a.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 28.81,
+  "llm_seconds_max": 22.95,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2038,
+   "prompt_tokens": 8812,
+   "total_tokens": 10850,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1705,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8812,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 165,
+   "prompt_tokens": 2366,
+   "total_tokens": 2531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 11178,
+  "completion": 2203,
+  "total": 13381
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2038,
+   "prompt_tokens": 8812,
+   "total_tokens": 10850,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1705,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8812,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 165,
+   "prompt_tokens": 2366,
+   "total_tokens": 2531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

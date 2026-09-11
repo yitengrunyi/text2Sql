@@ -1,0 +1,174 @@
+{
+ "round_id": 16,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT DATE_FORMAT(a.ENDDATE, '%Y-%m-%d') AS `日期`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(a.CHNG_PCT_DAY, 2) AS `单日涨幅(%)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.CHNG_PCT_DAY IS NOT NULL ORDER BY a.CHNG_PCT_DAY DESC LIMIT 1;\n200\n{table:[['日期', '股票名称', '股票代码', '单日涨幅(%)'], ['2026-08-19', '格力电器', '000651', '3.15']]}\n该查询获取了格力电器在2026年8月期间单日涨幅最大的交易日及当日的涨幅信息。查询采用股票基础信息表和市场表现指标数据，通过关联实现股票筛选，筛选条件为股票简称为格力电器、时间为2026年8月、当日涨跌幅数据有效且非空。最终结果按单日涨幅降序排列，仅返回涨幅最大的一天及其涨幅值。单日涨幅的数值表示为百分比，保留两位小数，直接引用了现有的市场表现指标数据。该查询结果能够准确反映用户要求，即找到格力电器8月内涨幅最大的交易日及具体涨幅。\n{table:[['日期', '股票名称', '股票代码', '单日涨幅(%)'], ['2026-08-19', '格力电器', '000651', '3.15']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT DATE_FORMAT(a.ENDDATE, '%Y-%m-%d') AS `日期`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(a.CHNG_PCT_DAY, 2) AS `单日涨幅(%)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.CHNG_PCT_DAY IS NOT NULL ORDER BY a.CHNG_PCT_DAY DESC LIMIT 1",
+ "final_sql": "SELECT DATE_FORMAT(a.ENDDATE, '%Y-%m-%d') AS `日期`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(a.CHNG_PCT_DAY, 2) AS `单日涨幅(%)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.CHNG_PCT_DAY IS NOT NULL ORDER BY a.CHNG_PCT_DAY DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-19 00:00:00 3.1453"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-19 格力电器 000651 3.15",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "elapsed_seconds": 27.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_16_d6f8214f.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 27.04,
+  "llm_seconds_max": 21.45,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2191,
+   "prompt_tokens": 13952,
+   "total_tokens": 16143,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1687,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13952,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 161,
+   "prompt_tokens": 7207,
+   "total_tokens": 7368,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21159,
+  "completion": 2352,
+  "total": 23511
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2191,
+   "prompt_tokens": 13952,
+   "total_tokens": 16143,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1687,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13952,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 161,
+   "prompt_tokens": 7207,
+   "total_tokens": 7368,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

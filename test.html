@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Data Table</title>
+<!--    <link rel="icon" href="data:;base64,iVBORw0KGgo=">-->
+    <!-- 引入 Bootstrap 或其他 CSS 框架来美化表格 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+    <h1>TEXT2SQL_查数据测试环境</h1>
+    <textarea rows="5" cols="50" id="textInput" placeholder="输入文本 如果结果不满意请继续这里输入反馈信息 下面的按钮是你多轮对话后最终对结果的反馈"></textarea>
+    <button id="submitBtn">提交</button>
+    <pre id="question-data" style="font-weight: bold;color:red;"></pre>
+    <pre id="stream-data" style="font-weight: bold;"></pre>
+
+
+    <div class="container">
+        <div id="table-container"></div>
+    </div>
+
+    <button id="isRightBtn">满意</button>
+    <pre id="question-data" style="font-weight: bold;color:red;"></pre>
+    <pre id="stream-data" style="font-weight: bold;"></pre>
+    <button id="notRightBtn">不满意</button>
+    <pre id="question-data" style="font-weight: bold;color:red;"></pre>
+    <pre id="stream-data" style="font-weight: bold;"></pre>
+
+
+<script>
+    const textInput = document.getElementById("textInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const contentData = document.getElementById("stream-data");
+    var tempAnswer = "";
+
+    // 用于存储上下文数据的数组
+    let context = {};
+     function getUrlParameter(name) {
+                name = name.replace(/[\[\]]/g, '\\$&');
+                const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+                const results = regex.exec(window.location.href);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
+
+        // 获取 name 参数
+    const name = getUrlParameter('name') || ""; // 默认值为 "默认名称"
+    // 创建WebSocket连接
+    //const ws = new WebSocket("ws://test-text2sql.rabyte.cn:5903/ws");
+    const ws = new WebSocket("ws://127.0.0.1:5903/ws");
+
+    // 处理后端返回的数据
+    ws.onmessage = function(event) {
+        console.log(event.data);
+        data = JSON.parse(event.data);
+
+        // 更新前端显示
+        contentData.innerHTML += format_data(data["data"]["answer"]);
+        tempAnswer += data["data"]["answer"];
+
+        // 当数据接收完成时
+        if (data["data"]["isEnd"]) {
+            contentData.innerHTML += "\n";
+            tempAnswer = "";
+            submitBtn.textContent = "提交反馈"
+        }
+
+        // 将后端返回的上下文信息存入 context 数组
+        if (data["context"]) {
+            context = data["context"];
+        }
+
+         console.log("Current context:", context);
+    };
+
+    // 提交按钮点击事件
+    submitBtn.addEventListener("click", () => {
+        const text = textInput.value;
+        contentData.innerHTML += "问题: " + text + "\n";
+
+        if (text) {
+            questionId = Number(new Date());
+            // 创建提交的请求
+            const request = {
+                userId: "11",
+                userName: "张三",
+                 name:name,
+                questionId: questionId,
+                taskId: questionId,
+                question: text,
+                context: context, // 传递上下文
+                tag: "【股票】",
+                system: "test-web"
+            };
+
+            console.log(request);
+
+            // 通过WebSocket发送请求
+            ws.send(JSON.stringify(request));
+            textInput.value = ""; // 清空输入框
+        }
+    });
+
+
+       // 满意按钮点击事件
+    isRightBtn.addEventListener("click", () => {
+        sendFeedback("1");
+    });
+
+    // 不满意按钮点击事件
+    notRightBtn.addEventListener("click", () => {
+        sendFeedback("0");
+    });
+
+    // 发送反馈信息
+    function sendFeedback(feedback) {
+
+            questionId = Number(new Date());
+            context['isRight'] = feedback
+            // 创建反馈的请求
+            const request = {
+                userId: "11",
+                userName: "张三",
+                question: "",
+                questionId: questionId,
+                taskId: questionId,
+                context: context, // 传递上下文
+                tag: "【股票】",
+                system: "test-web"
+            };
+
+            console.log(request);
+
+            // 通过WebSocket发送请求
+            ws.send(JSON.stringify(request));
+            textInput.value = ""; // 清空输入框
+
+    }
+
+
+    function displayTable(data) {
+            console.log(data);
+            const tableContainer = document.getElementById('table-container');
+            tableContainer.innerHTML = ''; // 清空容器
+
+            const table = document.createElement('table');
+            table.className = 'table table-striped';
+
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // 动态生成表头
+            const headerRow = document.createElement('tr');
+            for (const key in data[0]) {
+                const th = document.createElement('th');
+                th.textContent = decodeUnicode(key);
+                headerRow.appendChild(th);
+            }
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // 动态生成表格内容
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                for (const key in row) {
+                    const td = document.createElement('td');
+                    td.textContent = decodeUnicode(row[key]);
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            tableContainer.appendChild(table);
+        }
+
+    function decodeUnicode(str) {
+            return str.replace(/\\u([\d\w]{4})/gi, function (match, grp) {
+                return String.fromCharCode(parseInt(grp, 16));
+            });
+        }
+
+
+    // 处理返回文本的格式问题
+    const pattern = /{table:(.*?)}/;
+    function format_data(data) {
+        const match = data.match(pattern);
+        if (match) {
+            const tableData = match[1].replace(/'/g, '"');
+            try {
+                const tableArray = JSON.parse(tableData);
+                let tableHTML = '<table>';
+                tableHTML += '<thead><tr>';
+                tableArray.columns.forEach(column => {
+                    tableHTML += `<th>${column}</th>`;
+                });
+                tableHTML += '</tr></thead>';
+                tableHTML += '<tbody>';
+                tableArray.data.forEach(row => {
+                    tableHTML += '<tr>';
+                    row.forEach(cell => {
+                        tableHTML += `<td>${cell}</td>`;
+                    });
+                    tableHTML += '</tr>';
+                });
+                tableHTML += '</tbody></table>';
+                return data.replace(match[0], tableHTML);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                return data;
+            }
+        }
+        return data;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+{
+ "round_id": 12,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT b.SEC_SNAME AS `股票名称`, b.COMB_SYMBOL AS `股票代码`, a.CHANGEDATE AS `变动日期`, a.CHNG_REAS_NAME AS `变动原因`, ROUND(a.TOTAL / 100000000, 2) AS `总股本(亿)`, ROUND(a.H_SHR / 100000000, 2) AS `H股(亿)` FROM STK_SHR_STRU a JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE WHERE a.ISVALID = 1 AND b.ISVALID = 1 AND b.SEC_SNAME LIKE '%恒瑞医药%' AND a.CHANGEDATE >= '2025-01-01' AND a.CHANGEDATE <= '2025-06-30' AND a.TOTAL IS NOT NULL ORDER BY a.CHANGEDATE ASC;\n200\n{table:[['股票名称', '股票代码', '变动日期', '变动原因', '总股本(亿)', 'H股(亿)'], ['恒瑞医药', '600276.SH', '2025-05-14', '其他', '63.79', '-'], ['恒瑞医药', '600276.SH', '2025-05-23', 'H股上市', '66.04', '2.25'], ['恒瑞医药', '600276.SH', '2025-06-24', '超额配售', '66.37', '2.58'], ['恒瑞医药', '600276.SH', '2025-06-30', '来自中期业绩报告', '66.37', '2.58']]}\n该查询获取了恒瑞医药在2025年上半年因H股上市及超额配售导致的总股本和H股数量的变化明细。数据来源包括公司股票基本信息和股本结构变动历史信息，通过公司名称筛选出恒瑞医药相关数据。筛选条件限定了记录为有效数据，且时间范围为2025年1月1日至2025年6月30日，排除了未披露总股本的情况。每条记录包含变动日期、变动原因、总股本和H股数量等，便于追踪每次H股发行和超额配售对应的总股本增量。总股本和H股数量以亿股为单位（即原始股数除以1亿），保留两位小数。数据按照变动日期升序排列，方便用户按时间顺序审查H股上市及超额配售对总股本的累计影响。此次查询用于追踪股本变动过程，能够满足用户对于H股上市期间总股本增量的分析需求，因此查询结果符合要求。\n{table:[['股票名称', '股票代码', '变动日期', '变动原因', '总股本(亿)', 'H股(亿)'], ['恒瑞医药', '600276.SH', '2025-05-14', '其他', '63.79', '-'], ['恒瑞医药', '600276.SH', '2025-05-23', 'H股上市', '66.04', '2.25'], ['恒瑞医药', '600276.SH', '2025-06-24', '超额配售', '66.37', '2.58'], ['恒瑞医药', '600276.SH', '2025-06-30', '来自中期业绩报告', '66.37', '2.58']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT b.SEC_SNAME AS `股票名称`, b.COMB_SYMBOL AS `股票代码`, a.CHANGEDATE AS `变动日期`, a.CHNG_REAS_NAME AS `变动原因`, ROUND(a.TOTAL / 100000000, 2) AS `总股本(亿)`, ROUND(a.H_SHR / 100000000, 2) AS `H股(亿)` FROM STK_SHR_STRU a JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE WHERE a.ISVALID = 1 AND b.ISVALID = 1 AND b.SEC_SNAME LIKE '%恒瑞医药%' AND a.CHANGEDATE >= '2025-01-01' AND a.CHANGEDATE <= '2025-06-30' AND a.TOTAL IS NOT NULL ORDER BY a.CHANGEDATE ASC",
+ "final_sql": "SELECT b.SEC_SNAME AS `股票名称`, b.COMB_SYMBOL AS `股票代码`, a.CHANGEDATE AS `变动日期`, a.CHNG_REAS_NAME AS `变动原因`, ROUND(a.TOTAL / 100000000, 2) AS `总股本(亿)`, ROUND(a.H_SHR / 100000000, 2) AS `H股(亿)` FROM STK_SHR_STRU a JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE WHERE a.ISVALID = 1 AND b.ISVALID = 1 AND b.SEC_SNAME LIKE '%恒瑞医药%' AND a.CHANGEDATE >= '2025-01-01' AND a.CHANGEDATE <= '2025-06-30' AND a.TOTAL IS NOT NULL ORDER BY a.CHANGEDATE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "258197600"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "first_result_preview": "恒瑞医药 600276.SH 2025-05-14 00:00:00 其他 63.79 \n恒瑞医药 600276.SH 2025-05-23 00:00:00 H股上市 66.04 2.25\n恒瑞医药 600276.SH 2025-06-24 00:00:00 超额配售 66.37 2.58\n恒瑞医药 600276.SH 2025-06-30 00:00:00 来自中期业绩报告 66.37 2.5",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 101.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_12_50d4de07.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 99.99,
+  "llm_seconds_max": 91.21,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 10414,
+   "prompt_tokens": 23527,
+   "total_tokens": 33941,
+   "completion_tokens_details": {
+    "reasoning_tokens": 9801,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23527,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 245,
+   "prompt_tokens": 15167,
+   "total_tokens": 15412,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38694,
+  "completion": 10659,
+  "total": 49353
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 10414,
+   "prompt_tokens": 23527,
+   "total_tokens": 33941,
+   "completion_tokens_details": {
+    "reasoning_tokens": 9801,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23527,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 245,
+   "prompt_tokens": 15167,
+   "total_tokens": 15412,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_SHR_STRU_CHNG"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

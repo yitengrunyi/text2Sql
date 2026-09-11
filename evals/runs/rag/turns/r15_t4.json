@@ -1,0 +1,149 @@
+{
+ "round_id": 15,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "再帮我看个港股，香港交易所最新的市净率是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n市净率（P/B，Price-to-Book Ratio）\n\n[2] 计算公式：  \n市净率 = 公司当前总市值 / 净资产总额  \n或  \n市净率 = 每股股价 / 每股净资产（Book Value Per Share）\n['市净率', 'P/B', 'Price-to-Book Ratio', '公司当前总市值', '净资产总额', '每股股价', '每股净资产', 'Book Value Per Share']\n该问题可能涉及港股-'香港交易所',对应的港股行业名称为-非银金融。该问题可能涉及美股-'香港交易所 (OTC)', 它的美股股票代码为：HKXCY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['港股行情', '港股基本信息']\n['HK_IDC_STKVIDC', 'HK_COMBINFO', 'HK_STKCODE', 'VIEW_HK_INDUSTRY_TRACK']\n是否命中召回表：False\n生成查询代码\nSELECT \n    his.EDATE AS `日期`,\n    hsc.STKABB AS `股票简称`,\n    CONCAT(hsc.STKCODE, '.HK') AS `股票代码`,\n    ROUND(his.PB, 2) AS `市净率`\nFROM \n    HK_IDC_STKVIDC his\n    INNER JOIN HK_STKCODE hsc ON his.STKUNICODE = hsc.STKUNICODE AND hsc.ISVALID = 1 AND hsc.LSSTUREFC = 1 AND hsc.TRMKREFC = 7 AND LEFT(hsc.STKCODE, 1) != '8'\n    INNER JOIN HK_COMBINFO hci ON hsc.COMUNIC = hci.COMUNIC AND hci.ISVALID = 1\nWHERE \n    his.ISVALID = 1\n    AND his.EDATE = '2026-09-02'\n    AND (\n        hci.COMCNNAME LIKE '%香港交易所%' \n        OR hsc.STKABB LIKE '%香港交易所%' \n        OR hsc.STKCODE = '00388'\n    )\n    AND his.PB IS NOT NULL\nORDER BY his.EDATE DESC\nLIMIT 1\n200\n{table:[['日期', '股票简称', '股票代码', '市净率'], ['2026-09-02', '香港交易所', '00388.HK', '8.28']]}\n市净率的计算公式为：市净率 = 最新收盘价 / 每股净资产。在本次查询中，市净率的取值进行了保留两位小数的处理。\n\n该查询从提供港股估值指标的表中获取了最新交易日的数据，并与记录股票基本代码信息的表以及包含公司基本信息的表进行连接。筛选条件包括：股票和公司信息都为有效状态，仅选择处于正常上市状态并在香港联合交易所交易的股票（排除了以8开头的代码），且要求公司中文名称、股票简称包含“香港交易所”或股票代码为指定值。在查询结果中，仅呈现了最新交易日的记录。最终，结果顺序根据日期降序排列，并返回一条最新的数据。\n\n查询结果满足“香港交易所最新的市净率是多少”的要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    his.EDATE AS `日期`,\n    hsc.STKABB AS `股票简称`,\n    CONCAT(hsc.STKCODE, '.HK') AS `股票代码`,\n    ROUND(his.PB, 2) AS `市净率`\nFROM \n    HK_IDC_STKVIDC his\n    INNER JOIN HK_STKCODE hsc ON his.STKUNICODE = hsc.STKUNICODE AND hsc.ISVALID = 1 AND hsc.LSSTUREFC = 1 AND hsc.TRMKREFC = 7 AND LEFT(hsc.STKCODE, 1) != '8'\n    INNER JOIN HK_COMBINFO hci ON hsc.COMUNIC = hci.COMUNIC AND hci.ISVALID = 1\nWHERE \n    his.ISVALID = 1\n    AND his.EDATE = '2026-09-02'\n    AND (\n        hci.COMCNNAME LIKE '%香港交易所%' \n        OR hsc.STKABB LIKE '%香港交易所%' \n        OR hsc.STKCODE = '00388'\n    )\n    AND his.PB IS NOT NULL\nORDER BY his.EDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    his.EDATE AS `日期`,\n    hsc.STKABB AS `股票简称`,\n    CONCAT(hsc.STKCODE, '.HK') AS `股票代码`,\n    ROUND(his.PB, 2) AS `市净率`\nFROM \n    HK_IDC_STKVIDC his\n    INNER JOIN HK_STKCODE hsc ON his.STKUNICODE = hsc.STKUNICODE AND hsc.ISVALID = 1 AND hsc.LSSTUREFC = 1 AND hsc.TRMKREFC = 7 AND LEFT(hsc.STKCODE, 1) != '8'\n    INNER JOIN HK_COMBINFO hci ON hsc.COMUNIC = hci.COMUNIC AND hci.ISVALID = 1\nWHERE \n    his.ISVALID = 1\n    AND his.EDATE = '2026-09-02'\n    AND (\n        hci.COMCNNAME LIKE '%香港交易所%' \n        OR hsc.STKABB LIKE '%香港交易所%' \n        OR hsc.STKCODE = '00388'\n    )\n    AND his.PB IS NOT NULL\nORDER BY his.EDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "8.2839"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 香港交易所 00388.HK 8.28",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_15_86005a99.4",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.55,
+  "llm_seconds_max": 6.33,
+  "selected_tables": [
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "candidate_tables": [
+   "HK_STKDMK",
+   "HK_IDC_STKPFMIDC",
+   "HK_IDC_STKVIDC",
+   "VIEW_HK_INDUSTRY_TRACK",
+   "HK_OFCHGBDSCM",
+   "STK_HK_IPO"
+  ],
+  "sql_prompt_chars": [
+   18850
+  ],
+  "prompt_columns_raw_len": 4077
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 28252,
+   "total_tokens": 29183,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28252,
+  "completion": 931,
+  "total": 29183
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 931,
+   "prompt_tokens": 28252,
+   "total_tokens": 29183,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_IDC_STKVIDC",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

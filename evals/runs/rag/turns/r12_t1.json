@@ -1,0 +1,205 @@
+{
+ "round_id": 12,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "名单里排第一的是谁？持有多少股、占比多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 第一大股东（Top Shareholder）  \n- 持股数量（Number of Shares Held）  \n- 持股比例（Shareholding Ratio）\n\n[2] 可能的计算公式  \n- 持股数量 = 股东持有该公司股票的股数  \n- 持股比例 = 股东持有股票数量 ÷ 公司总股本 × 100%\n['第一大股东', 'Top Shareholder', '持股数量', 'Number of Shares Held', '持股比例', 'Shareholding Ratio', '公司总股本', '股东', '股数', '股票数量']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板股本股东', '主板基本信息']\n['GET_STK_SHR_CLS_DTL', 'STK_SHR_STRU', 'STK_ACCUM_IMPAWN', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n    combined.`报告期` AS `报告期`, \n    combined.`股票名称` AS `股票名称`, \n    combined.`股票代码` AS `股票代码`, \n    combined.`股东名称` AS `股东名称`, \n    combined.`持股数量(股)` AS `持股数量(股)`, \n    CONCAT(ROUND(combined.`持股比例(%)`, 2), '%') AS `持股比例(%)`\nFROM (\n    -- 主板+创业板：查询每只股票前十大股东名单中名次第一者（RANK=1）\n    SELECT \n        b.SEC_SNAME AS `股票名称`,\n        b.COMB_SYMBOL AS `股票代码`,\n        a.NAME AS `股东名称`,\n        a.HOLD_NUM AS `持股数量(股)`,\n        a.HOLD_PCT AS `持股比例(%)`,\n        a.ENDDATE AS `报告期`\n    FROM GET_STK_SHR_CLS_DTL a\n    JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n    WHERE a.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM GET_STK_SHR_CLS_DTL WHERE COMCODE = a.COMCODE\n        )\n      AND a.ISVALID = 1\n      AND a.`RANK` = 1\n      AND b.SEC_CODE NOT LIKE '688%'\n      AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND b.SEC_MKT_TYPE = 'A股'\n\n    UNION ALL\n\n    -- 科创板：只用ITEM=1那一行，股东第一名为TOP1_HOLDER_NAME相关字段\n    SELECT \n        d.SEC_SNAME AS `股票名称`,\n        d.SEC_CODE AS `股票代码`,\n        c.TOP1_HOLDER_NAME AS `股东名称`,\n        c.TOP1_HOLDER_NUM AS `持股数量(股)`,\n        c.TOP1_HOLDER_PCT AS `持股比例(%)`,\n        c.ENDDATE AS `报告期`\n    FROM STI_MAIN_HOLDER c\n    JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n    WHERE d.SEC_CODE LIKE '688%'\n      AND c.ISVALID = 1\n      AND c.ITEM = 1\n      AND c.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM STI_MAIN_HOLDER WHERE COMCODE = c.COMCODE\n        )\n      AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND d.SEC_MKT_TYPE = 'A股'\n) AS combined\nORDER BY combined.`",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    combined.`报告期` AS `报告期`, \n    combined.`股票名称` AS `股票名称`, \n    combined.`股票代码` AS `股票代码`, \n    combined.`股东名称` AS `股东名称`, \n    combined.`持股数量(股)` AS `持股数量(股)`, \n    CONCAT(ROUND(combined.`持股比例(%)`, 2), '%') AS `持股比例(%)`\nFROM (\n    -- 主板+创业板：查询每只股票前十大股东名单中名次第一者（RANK=1）\n    SELECT \n        b.SEC_SNAME AS `股票名称`,\n        b.COMB_SYMBOL AS `股票代码`,\n        a.NAME AS `股东名称`,\n        a.HOLD_NUM AS `持股数量(股)`,\n        a.HOLD_PCT AS `持股比例(%)`,\n        a.ENDDATE AS `报告期`\n    FROM GET_STK_SHR_CLS_DTL a\n    JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n    WHERE a.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM GET_STK_SHR_CLS_DTL WHERE COMCODE = a.COMCODE\n        )\n      AND a.ISVALID = 1\n      AND a.`RANK` = 1\n      AND b.SEC_CODE NOT LIKE '688%'\n      AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND b.SEC_MKT_TYPE = 'A股'\n\n    UNION ALL\n\n    -- 科创板：只用ITEM=1那一行，股东第一名为TOP1_HOLDER_NAME相关字段\n    SELECT \n        d.SEC_SNAME AS `股票名称`,\n        d.SEC_CODE AS `股票代码`,\n        c.TOP1_HOLDER_NAME AS `股东名称`,\n        c.TOP1_HOLDER_NUM AS `持股数量(股)`,\n        c.TOP1_HOLDER_PCT AS `持股比例(%)`,\n        c.ENDDATE AS `报告期`\n    FROM STI_MAIN_HOLDER c\n    JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n    WHERE d.SEC_CODE LIKE '688%'\n      AND c.ISVALID = 1\n      AND c.ITEM = 1\n      AND c.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM STI_MAIN_HOLDER WHERE COMCODE = c.COMCODE\n        )\n      AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND d.SEC_MKT_TYPE = 'A股'\n) AS combined\nORDER BY combined.`持股比例(%)` DESC, combined.`持股数量(股)` DESC",
+ "final_sql": "SELECT \n    combined.`报告期` AS `报告期`, \n    combined.`股票名称` AS `股票名称`, \n    combined.`股票代码` AS `股票代码`, \n    combined.`股东名称` AS `股东名称`, \n    combined.`持股数量(股)` AS `持股数量(股)`, \n    CONCAT(ROUND(combined.`持股比例(%)`, 2), '%') AS `持股比例(%)`\nFROM (\n    -- 主板+创业板：查询每只股票前十大股东名单中名次第一者（RANK=1）\n    SELECT \n        b.SEC_SNAME AS `股票名称`,\n        b.COMB_SYMBOL AS `股票代码`,\n        a.NAME AS `股东名称`,\n        a.HOLD_NUM AS `持股数量(股)`,\n        a.HOLD_PCT AS `持股比例(%)`,\n        a.ENDDATE AS `报告期`\n    FROM GET_STK_SHR_CLS_DTL a\n    JOIN GET_SEC_CODE b ON a.COMCODE = b.COMCODE\n    WHERE a.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM GET_STK_SHR_CLS_DTL WHERE COMCODE = a.COMCODE\n        )\n      AND a.ISVALID = 1\n      AND a.`RANK` = 1\n      AND b.SEC_CODE NOT LIKE '688%'\n      AND b.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND b.SEC_MKT_TYPE = 'A股'\n\n    UNION ALL\n\n    -- 科创板：只用ITEM=1那一行，股东第一名为TOP1_HOLDER_NAME相关字段\n    SELECT \n        d.SEC_SNAME AS `股票名称`,\n        d.SEC_CODE AS `股票代码`,\n        c.TOP1_HOLDER_NAME AS `股东名称`,\n        c.TOP1_HOLDER_NUM AS `持股数量(股)`,\n        c.TOP1_HOLDER_PCT AS `持股比例(%)`,\n        c.ENDDATE AS `报告期`\n    FROM STI_MAIN_HOLDER c\n    JOIN GET_SEC_CODE d ON c.COMCODE = d.COMCODE\n    WHERE d.SEC_CODE LIKE '688%'\n      AND c.ISVALID = 1\n      AND c.ITEM = 1\n      AND c.ENDDATE = (\n            SELECT MAX(ENDDATE) FROM STI_MAIN_HOLDER WHERE COMCODE = c.COMCODE\n        )\n      AND d.LIST_DATE < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)\n      AND d.SEC_MKT_TYPE = 'A股'\n) AS combined\nORDER BY combined.`持股比例(%)` DESC, combined.`持股数量(股)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "江苏恒瑞医药集团有限公司 1538184187 23.18"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'juling.GET_SEC_CODE' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 86.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_12_ac4daa2f.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 88.95,
+  "llm_seconds_max": 35.36,
+  "selected_tables": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   23850
+  ],
+  "prompt_columns_raw_len": 5975
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1788,
+   "prompt_tokens": 35840,
+   "total_tokens": 37628,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5376,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 591,
+   "total_tokens": 592,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 591,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 36431,
+  "completion": 1789,
+  "total": 38220
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1788,
+   "prompt_tokens": 35840,
+   "total_tokens": 37628,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5376,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 591,
+   "total_tokens": 592,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 591,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

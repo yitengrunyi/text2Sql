@@ -1,0 +1,200 @@
+{
+ "round_id": 11,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "万华化学2025年年报里，聚氨酯系列产品实现的营业收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n聚氨酯系列产品营业收入（Operating Revenue of Polyurethane Series Products）\n\n[2] 可能的计算公式：  \n聚氨酯系列产品营业收入 = 聚氨酯系列产品销量 × 平均销售单价  \n或  \n聚氨酯系列产品营业收入 = 该系列产品相关销售产生的总收入汇总（依据公司财报披露的分部/产品线营业收入科目）\n['万华化学', '2025年年报', '聚氨酯系列产品', '营业收入', 'Operating Revenue of Polyurethane Series Products', '销量', '平均销售单价', '销售总收入', '公司财报', '分部营业收入', '产品线营业收入', '收入汇总']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_PRODUCT', 'STK_PRI_INCOME_DISTRICT', 'STK_PRI_INCOME_PRODUCT', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n['聚氨酯系列产品']\nquery抽取的主体词是['聚氨酯系列产品']\n生成查询代码\ntop30召回:{}\nSELECT\n    p.PERIODDATE AS `报表日期`,\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.ITEM_NAME AS `产品名称`,\n    ROUND(p.INCOME/10000, 3) AS `聚氨酯系列营业收入(亿元)`,\n    ROUND(p.PRI_RVNU_PCT, 2) AS `该产品占营业收入比重(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT p\nINNER JOIN\n    GET_A_SEC_CODE s ON p.COMCODE = s.COMCODE\nWHERE\n    p.ISVALID = 1\n    AND s.ISVALID = 1\n    AND p.RPT_TYPE = '合并'\n    AND p.PERIODDATE = '2025-12-31'\n    AND s.SEC_SNAME LIKE '%万华化学%'\n    AND p.ITEM_NAME LIKE '%聚氨酯%'\n    AND p.INCOME IS NOT NULL\nORDER BY\n    p.PERIODDATE DESC\n200\n{table:[['报表日期', '股票名称', '股票代码', '产品名称', '聚氨酯系列营业收入(亿元)', '该产品占营业收入比重(%)'], ['2025-12-31', '万华化学', '600309', '聚氨酯系列', '750.58', '36.93']]}\n该查询的目的是获取万华化学在2025年年报中聚氨酯系列产品实现的营业收入及其占公司总营业收入的比重。聚氨酯系列营业收入采用主营业务收入除以一万，再保留三位小数，公式为：聚氨酯系列营业收入（亿元）等于主营业务收入（万元）除以一万。该产品占营业收入比重以现有百分比数据直接取值，然后保留两位小数。查询结果符合要求。\n\n该查询从主营业务收入按产品分布表和A股证券基础信息汇总表中提取数据，通过公司代码进行关联。主要筛选条件有：选择有效记录，要求报表类型为合并，报表日期为2025年12月31日，公司简称中包含“万华化学”，产品名称中包含“聚氨酯”，主营业务收入不为空。最后按报表日期降序排列，展示聚氨酯系列产品的收入及其占比信息。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    p.PERIODDATE AS `报表日期`,\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.ITEM_NAME AS `产品名称`,\n    ROUND(p.INCOME/10000, 3) AS `聚氨酯系列营业收入(亿元)`,\n    ROUND(p.PRI_RVNU_PCT, 2) AS `该产品占营业收入比重(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT p\nINNER JOIN\n    GET_A_SEC_CODE s ON p.COMCODE = s.COMCODE\nWHERE\n    p.ISVALID = 1\n    AND s.ISVALID = 1\n    AND p.RPT_TYPE = '合并'\n    AND p.PERIODDATE = '2025-12-31'\n    AND s.SEC_SNAME LIKE '%万华化学%'\n    AND p.ITEM_NAME LIKE '%聚氨酯%'\n    AND p.INCOME IS NOT NULL\nORDER BY\n    p.PERIODDATE DESC",
+ "final_sql": "SELECT\n    p.PERIODDATE AS `报表日期`,\n    p.A_STOCKSNAME AS `股票名称`,\n    p.A_STOCKCODE AS `股票代码`,\n    p.ITEM_NAME AS `产品名称`,\n    ROUND(p.INCOME/10000, 3) AS `聚氨酯系列营业收入(亿元)`,\n    ROUND(p.PRI_RVNU_PCT, 2) AS `该产品占营业收入比重(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT p\nINNER JOIN\n    GET_A_SEC_CODE s ON p.COMCODE = s.COMCODE\nWHERE\n    p.ISVALID = 1\n    AND s.ISVALID = 1\n    AND p.RPT_TYPE = '合并'\n    AND p.PERIODDATE = '2025-12-31'\n    AND s.SEC_SNAME LIKE '%万华化学%'\n    AND p.ITEM_NAME LIKE '%聚氨酯%'\n    AND p.INCOME IS NOT NULL\nORDER BY\n    p.PERIODDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7505822.44"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 万华化学 600309 聚氨酯系列 750.582 36.93",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 47.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_11_89d68257.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 49.92,
+  "llm_seconds_max": 6.97,
+  "selected_tables": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   19334
+  ],
+  "prompt_columns_raw_len": 10691
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1511,
+   "prompt_tokens": 31454,
+   "total_tokens": 32965,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 5,
+   "prompt_tokens": 620,
+   "total_tokens": 625,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 5,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 620,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 32074,
+  "completion": 1516,
+  "total": 33590
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1511,
+   "prompt_tokens": 31454,
+   "total_tokens": 32965,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 5,
+   "prompt_tokens": 620,
+   "total_tokens": 625,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 5,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 620,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

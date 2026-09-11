@@ -1,0 +1,194 @@
+{
+ "round_id": 2,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安、兴业银行、长江电力这三家公司里，2025年归母净利润最高的是谁？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归母净利润（Net Profit Attributable to Parent Company）\n\n[2] 可能的计算公式：  \n归母净利润 = 净利润 - 少数股东损益  \n或者  \n归母净利润 = 公司总收入 - 公司总成本和费用 - 所有税费 - 少数股东损益\n['中国平安', '兴业银行', '长江电力', '归母净利润', 'Net Profit Attributable to Parent Company', '净利润', '少数股东损益', '公司总收入', '公司总成本和费用', '成本和费用', '所有税费', '税费']\n该问题可能涉及A股-'中国平安'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-非银金融。该问题可能涉及A股-'兴业银行'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-银行。该问题可能涉及A股-'长江电力'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-公用事业。\n该问题可能涉及的题材包含：['电力', '股份制银行', '银行']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME IN ('电力', '股份制银行', '银行')。\n个股相关\n['主板基本信息', '主板财务']\n['VIEW_STK_STI_LIST_PLAN', 'ANA_STK_DIV_RATE_IDX', 'STK_STOCK', 'STK_ATCP_LBLT', 'STK_LIST_RESULT', 'VIEW_STK_BALA_GEN', 'STK_LNG_LOAN', 'VIEW_STK_FIN_IDX_PLUS', 'STK_NON_EXTR_ITEM', 'VIEW_STK_FIN_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.F110101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_FIN_IDX A\nWHERE \n    A.ISVALID = 1\n    AND A.ENDDATE = '2025-12-31 00:00:00'\n    AND (\n        A.A_STOCKSNAME LIKE '%中国平安%' \n        OR A.A_STOCKSNAME LIKE '%兴业银行%' \n        OR A.A_STOCKSNAME LIKE '%长江电力%'\n    )\n    AND A.F110101 IS NOT NULL\nORDER BY \n    A.F110101 DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报表截止日期', '归母净利润(万)'], ['中国平安', '601318', '2025-12-31', '13,477,800.00']]}\n该查询的目的是在中国平安、兴业银行、长江电力这三家公司中，筛选出2025年归属于母公司净利润最高的公司。\n\n归属于母公司净利润（万）是通过用归属于母公司净利润（元）除以10000，并将结果保留一位小数得到的。归属于母公司净利润（万）=归属于母公司净利润（元）/10000。查询结果符合要求。\n\n查询使用了上市公司财务指标的数据表，该表用来存储上市公司每个会计期间对应的主要财务数据。查询只考虑了有效数据、报告截止日在2025年12月31日的数据、归属于母公司净利润不为空的数据，并且通过公司简称筛选出指定的三家公司。最终结果按照归母净利润从高到低排序，只返回净利润最高的一家公司。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.F110101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_FIN_IDX A\nWHERE \n    A.ISVALID = 1\n    AND A.ENDDATE = '2025-12-31 00:00:00'\n    AND (\n        A.A_STOCKSNAME LIKE '%中国平安%' \n        OR A.A_STOCKSNAME LIKE '%兴业银行%' \n        OR A.A_STOCKSNAME LIKE '%长江电力%'\n    )\n    AND A.F110101 IS NOT NULL\nORDER BY \n    A.F110101 DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    A.A_STOCKSNAME AS `股票名称`,\n    A.A_STOCKCODE AS `股票代码`,\n    A.ENDDATE AS `报表截止日期`,\n    ROUND(A.F110101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_FIN_IDX A\nWHERE \n    A.ISVALID = 1\n    AND A.ENDDATE = '2025-12-31 00:00:00'\n    AND (\n        A.A_STOCKSNAME LIKE '%中国平安%' \n        OR A.A_STOCKSNAME LIKE '%兴业银行%' \n        OR A.A_STOCKSNAME LIKE '%长江电力%'\n    )\n    AND A.F110101 IS NOT NULL\nORDER BY \n    A.F110101 DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "77469000000.0000\n134778000000.0000\n34502809176.3900"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国平安 601318 2025-12-31 00:00:00 13477800.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 53.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_2_0e76367a.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 72.54,
+  "llm_seconds_max": 11.3,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   85040
+  ],
+  "prompt_columns_raw_len": 22795
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2297,
+   "prompt_tokens": 88907,
+   "total_tokens": 91204,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9472,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 88907,
+  "completion": 2297,
+  "total": 91204
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2297,
+   "prompt_tokens": 88907,
+   "total_tokens": 91204,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9472,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

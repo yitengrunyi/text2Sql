@@ -1,0 +1,186 @@
+{
+ "round_id": 2,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安2025年年报的营业收入是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "单表",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n营业收入（Operating Revenue）\n\n[2] 可能的计算公式  \n营业收入 = 一定时期内公司主营业务收入 + 其他业务收入  \n（对于中国平安这类金融保险公司，营业收入一般包括保险业务收入、利息收入、投资收益等。）\n\n简化公式：  \n营业收入 = 保险业务收入 + 利息收入 + 投资收益 + 其他收入\n['中国平安', '营业收入', 'Operating Revenue', '主营业务收入', '其他业务收入', '保险业务收入', '利息收入', '投资收益', '其他收入', '金融保险公司']\n该问题可能涉及A股-'中国平安'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-非银金融。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日`,\n    ROUND(f.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(f.PS_OTR / 100000000, 3) AS `每股营业总收入(亿)`,\n    ROUND(g.P110101 / 100000000, 3) AS `营业收入(亿)`,\n    ROUND(g.P110100 / 100000000, 3) AS `营业总收入(亿)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN VIEW_STK_FIN_IDX_PLUS f\n    ON a.COMCODE = f.COMCODE\n    AND f.RPT_TYPE = '2'\n    AND f.RPT_TAG = 7\n    AND f.RPT_YEAR = 2025\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.INNER_CODE = a.INNER_CODE\n    AND f.PS_OR IS NOT NULL\n    AND f.PS_OTR IS NOT NULL\n    AND f.ISVALID = 1\nINNER JOIN VIEW_STK_INCOME_GEN g\n    ON a.COMCODE = g.COMCODE\n    AND g.A_STOCKSNAME LIKE '%中国平安%'\n    AND g.ENDDATE = '2025-12-31 00:00:00'\n    AND g.RPT_TYPE = '合并'\n    AND g.P110101 IS NOT NULL\n    AND g.P110100 IS NOT NULL\n    AND g.ISVALID = 1\nWHERE\n    a.SEC_SNAME LIKE '%中国平安%'\n    AND a.ISVALID = 1\nORDER BY\n    f.ENDDATE DESC\nLIMIT 1\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n查询的主要目的是获取中国平安在2025年年报的营业收入和营业总收入数据，并同时提供每股营业收入及每股营业总收入。\n\n营业收入（亿）和营业总收入（亿）是将公司财务表中的原始金额数据除以一亿后保留三位小数，得出的单位为“亿元”的结果。计算公式为：营业收入（亿）=营业收入（元）/100000000，营业总收入（亿）=营业总收入（元）/100000000。\n\n每股营业收入（亿）和每股营业总收入（亿）也是将每股收入原始数据除以一亿，保留三位小数，结果以“亿元/股”为单位。计算公式为：每股营业收入（亿）=每股营业收入（元/股）/100000000，每股营业总收入（亿）=每股营业总收入（元/股）/100000000。\n\n查询结果符合要求。\n\n该查询汇总A股基础信息表的数据，结合主板财务衍生指标累计值表和利润表数据。通过公司代码字段实现关联。只筛选证券简称为“中国平安”的有效记录，并限定报表类型为“合并”、报告期间为全年、报告年度为2025年、报表截止日为2025年12月31日，且相关收入与每股收入数据不为null。结果按截止日期降序排列，仅返回一条最新的年报数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日`,\n    ROUND(f.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(f.PS_OTR / 100000000, 3) AS `每股营业总收入(亿)`,\n    ROUND(g.P110101 / 100000000, 3) AS `营业收入(亿)`,\n    ROUND(g.P110100 / 100000000, 3) AS `营业总收入(亿)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN VIEW_STK_FIN_IDX_PLUS f\n    ON a.COMCODE = f.COMCODE\n    AND f.RPT_TYPE = '2'\n    AND f.RPT_TAG = 7\n    AND f.RPT_YEAR = 2025\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.INNER_CODE = a.INNER_CODE\n    AND f.PS_OR IS NOT NULL\n    AND f.PS_OTR IS NOT NULL\n    AND f.ISVALID = 1\nINNER JOIN VIEW_STK_INCOME_GEN g\n    ON a.COMCODE = g.COMCODE\n    AND g.A_STOCKSNAME LIKE '%中国平安%'\n    AND g.ENDDATE = '2025-12-31 00:00:00'\n    AND g.RPT_TYPE = '合并'\n    AND g.P110101 IS NOT NULL\n    AND g.P110100 IS NOT NULL\n    AND g.ISVALID = 1\nWHERE\n    a.SEC_SNAME LIKE '%中国平安%'\n    AND a.ISVALID = 1\nORDER BY\n    f.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    f.ENDDATE AS `报表截止日`,\n    ROUND(f.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(f.PS_OTR / 100000000, 3) AS `每股营业总收入(亿)`,\n    ROUND(g.P110101 / 100000000, 3) AS `营业收入(亿)`,\n    ROUND(g.P110100 / 100000000, 3) AS `营业总收入(亿)`\nFROM\n    GET_A_SEC_CODE a\nINNER JOIN VIEW_STK_FIN_IDX_PLUS f\n    ON a.COMCODE = f.COMCODE\n    AND f.RPT_TYPE = '2'\n    AND f.RPT_TAG = 7\n    AND f.RPT_YEAR = 2025\n    AND f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.INNER_CODE = a.INNER_CODE\n    AND f.PS_OR IS NOT NULL\n    AND f.PS_OTR IS NOT NULL\n    AND f.ISVALID = 1\nINNER JOIN VIEW_STK_INCOME_GEN g\n    ON a.COMCODE = g.COMCODE\n    AND g.A_STOCKSNAME LIKE '%中国平安%'\n    AND g.ENDDATE = '2025-12-31 00:00:00'\n    AND g.RPT_TYPE = '合并'\n    AND g.P110101 IS NOT NULL\n    AND g.P110100 IS NOT NULL\n    AND g.ISVALID = 1\nWHERE\n    a.SEC_SNAME LIKE '%中国平安%'\n    AND a.ISVALID = 1\nORDER BY\n    f.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1050506000000.00"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 61.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_2_aae0ee9b.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 83.74,
+  "llm_seconds_max": 9.22,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   35287
+  ],
+  "prompt_columns_raw_len": 4127
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2550,
+   "prompt_tokens": 57518,
+   "total_tokens": 60068,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5632,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 57518,
+  "completion": 2550,
+  "total": 60068
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2550,
+   "prompt_tokens": 57518,
+   "total_tokens": 60068,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5632,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

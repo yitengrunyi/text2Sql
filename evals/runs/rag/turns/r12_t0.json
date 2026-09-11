@@ -1,0 +1,204 @@
+{
+ "round_id": 12,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "恒瑞医药2026年中报披露的前十大股东都是哪些？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 前十大股东（Top 10 Shareholders）\n\n[2] 可能的计算与识别方法：  \n- 前十大股东是指截止2026年中报披露时，持有恒瑞医药股份数量最多的前10名股东。  \n- 计算公式（识别方式）：  \n  股东持股数量排序 = 持股数量（股东A）、持股数量（股东B）、…  \n  前十大股东 = 持股数量排名前10的股东名单\n\n> 说明：该指标不涉及复杂的计算，主要依据各股东持股数量从高到低排序，选取前10名。\n['恒瑞医药', '2026年中报', '前十大股东', '股东', '股东A', '股东B', '持股数量', '持股数量排序', '持股数量排名', '股东名单', 'Top 10 Shareholders']\n该问题可能涉及A股-'恒瑞医药'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-医药生物。\n个股相关\n['主板股本股东', '主板基本信息']\n['GET_STK_SHR_CLS_DTL', 'STK_PRE_DISCLOSURE', 'STK_COM_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n  b.SEC_CODE AS `股票代码`,\n  b.SEC_SNAME AS `股票简称`,\n  a.ENDDATE AS `报告期`,\n  a.`RANK` AS `股东排名`,\n  a.NAME AS `股东名称`,\n  ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量(亿股)`,\n  ROUND(a.HOLD_PCT, 2) AS `持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE\n  a.ENDDATE = (\n    SELECT MAX(ENDDATE)\n    FROM GET_STK_SHR_CLS_DTL\n    WHERE COMCODE = a.COMCODE\n      AND ENDDATE <= '2026-06-30'\n  )\n  AND a.ISVALID = 1\n  AND b.ISVALID = 1\n  AND b.SEC_SNAME LIKE '%恒瑞医药%'\n  AND a.`RANK` BETWEEN 1 AND 10\nORDER BY a.`RANK` ASC\n200\n{table:[['股票简称', '报告期', '股东排名', '股东名称', '持股数量(亿股)', '持股比例(%)'], ['恒瑞医药', '2026-06-30', '1', '江苏恒瑞医药集团有限公司', '15.38', '23.18'], ['恒瑞医药', '2026-06-30', '2', '上海启创达远企业管理有限公司', '9.53', '14.35'], ['恒瑞医药', '2026-06-30', '3', '香港中央结算有限公司', '3.64', '5.48'], ['恒瑞医药', '2026-06-30', '4', 'HKSCC NOMINEES LIMITED', '2.58', '3.89'], ['恒瑞医药', '2026-06-30', '5', '中国医药投资有限公司', '1.67', '2.52'], ['恒瑞医药', '2026-06-30', '6', '上海汇智联成科技有限公司', '1.60', '2.40'], ['恒瑞医药', '2026-06-30', '7', '连云港市金融控股集团有限公司', '1.13', '1.71'], ['恒瑞医药', '2026-06-30', '8', '中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金', '0.73', '1.09'], ['恒瑞医药', '2026-06-30', '9', '中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金', '0.47', '0.71'], ['恒瑞医药', '2026-06-30', '10', '太白投资有限公司-自有资金(R)', '0.35', '0.52']]}\n该查询对持股数量进行了单位转换，采用公式“持股数量（亿股）等于原始持股总数除以一亿”进行计算，并保留两位小数。持股比例以百分比形式保留两位小数。其他信息直接取值。在此查询中，我们对结果字段进行了计算。\n\n查询从两张表联合提取数据，一张是记录十大股东持股详细情况的表，另一张是汇总A股证券基本",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n  b.SEC_CODE AS `股票代码`,\n  b.SEC_SNAME AS `股票简称`,\n  a.ENDDATE AS `报告期`,\n  a.`RANK` AS `股东排名`,\n  a.NAME AS `股东名称`,\n  ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量(亿股)`,\n  ROUND(a.HOLD_PCT, 2) AS `持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE\n  a.ENDDATE = (\n    SELECT MAX(ENDDATE)\n    FROM GET_STK_SHR_CLS_DTL\n    WHERE COMCODE = a.COMCODE\n      AND ENDDATE <= '2026-06-30'\n  )\n  AND a.ISVALID = 1\n  AND b.ISVALID = 1\n  AND b.SEC_SNAME LIKE '%恒瑞医药%'\n  AND a.`RANK` BETWEEN 1 AND 10\nORDER BY a.`RANK` ASC",
+ "final_sql": "SELECT \n  b.SEC_CODE AS `股票代码`,\n  b.SEC_SNAME AS `股票简称`,\n  a.ENDDATE AS `报告期`,\n  a.`RANK` AS `股东排名`,\n  a.NAME AS `股东名称`,\n  ROUND(a.HOLD_NUM/100000000, 2) AS `持股数量(亿股)`,\n  ROUND(a.HOLD_PCT, 2) AS `持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE\n  a.ENDDATE = (\n    SELECT MAX(ENDDATE)\n    FROM GET_STK_SHR_CLS_DTL\n    WHERE COMCODE = a.COMCODE\n      AND ENDDATE <= '2026-06-30'\n  )\n  AND a.ISVALID = 1\n  AND b.ISVALID = 1\n  AND b.SEC_SNAME LIKE '%恒瑞医药%'\n  AND a.`RANK` BETWEEN 1 AND 10\nORDER BY a.`RANK` ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 10,
+  "preview": "江苏恒瑞医药集团有限公司\n上海启创达远企业管理有限公司\n香港中央结算有限公司\nHKSCC NOMINEES LIMITED\n中国医药投资有限公司\n上海汇智联成科技有限公司\n连云港市金融控股集团有限公司\n中国建设银行股份有限公司-易方达沪深300医药卫生交易型开放式指数证券投资基金\n中国工商银行股份有限公司-中欧医疗健康混合型证券投资基金\n太白投资有限公司-自有资金(R)"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 10
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 163.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_12_68e74210.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 11.33,
+  "llm_seconds_max": 4.71,
+  "selected_tables": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_PRE_DISCLOSURE",
+   "STK_COM_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   35337
+  ],
+  "prompt_columns_raw_len": 20052
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1589,
+   "prompt_tokens": 42292,
+   "total_tokens": 43881,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9344,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 593,
+   "total_tokens": 594,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 593,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 42885,
+  "completion": 1590,
+  "total": 44475
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1589,
+   "prompt_tokens": 42292,
+   "total_tokens": 43881,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9344,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 593,
+   "total_tokens": 594,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 593,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_PRE_DISCLOSURE",
+   "STK_COM_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

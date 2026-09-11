@@ -1,0 +1,172 @@
+{
+ "round_id": 23,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "排第一的这只重仓股，占了基金净值多大比例？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`, ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`, ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`, SHARES_HOLDING_CHANGE AS `持股数量变化(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-03-31' AND FUND_HOLDING_SOURCE_ID = 1 AND HISVALID = 1 AND MARKET_VALUE IS NOT NULL ORDER BY MARKET_VALUE DESC LIMIT 1;\n200\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿)', '持股占基金净值比例(%)', '持股数量(股)', '持股市值变动(亿)', '持股数量变化(股)'], ['2026-03-31', '美的集团', '000333.SZ', '16.00', '10.54', '20,912,029.00', '0.00', '472,300.00']]}\n该查询获取了大成高新技术产业股票A在2026年第二季度末的市值排名第一的重仓股票相关信息。数据来源于基金持股明细信息，展示了该股票在当季的市值、所占基金净值比例、持股数量及变化等情况。筛选条件为指定基金名称、2026年二季度报告期数据、数据来源为基金官方季报且为有效数据，通过将持股市值从元换算为亿元（保留1位小数）、占基金净值比例由小数乘以100换算为百分比（保留2位小数）直接展现持仓结构，最终结果按持股市值从高到低排序，仅返回排名第一的记录。持股占基金净值比例直接取自原始数据，仅做格式化处理。查询结果能准确回答该重仓股占基金净值的实际比例，符合用户需求。\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿)', '持股占基金净值比例(%)', '持股数量(股)', '持股市值变动(亿)', '持股数量变化(股)'], ['2026-03-31', '美的集团', '000333.SZ', '16.00', '10.54', '20,912,029.00', '0.00', '472,300.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`, ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`, ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`, SHARES_HOLDING_CHANGE AS `持股数量变化(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-03-31' AND FUND_HOLDING_SOURCE_ID = 1 AND HISVALID = 1 AND MARKET_VALUE IS NOT NULL ORDER BY MARKET_VALUE DESC LIMIT 1",
+ "final_sql": "SELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`, ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`, ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`, SHARES_HOLDING_CHANGE AS `持股数量变化(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-03-31' AND FUND_HOLDING_SOURCE_ID = 1 AND HISVALID = 1 AND MARKET_VALUE IS NOT NULL ORDER BY MARKET_VALUE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "福耀玻璃 9.71"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-03-31 美的集团 000333.SZ 16.0 10.54 20912029 0.0 472300",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 29.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_23_d8f68205.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 25.94,
+  "llm_seconds_max": 20.82,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2180,
+   "prompt_tokens": 8942,
+   "total_tokens": 11122,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1679,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8942,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 206,
+   "prompt_tokens": 2839,
+   "total_tokens": 3045,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 11781,
+  "completion": 2386,
+  "total": 14167
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2180,
+   "prompt_tokens": 8942,
+   "total_tokens": 11122,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1679,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8942,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 206,
+   "prompt_tokens": 2839,
+   "total_tokens": 3045,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

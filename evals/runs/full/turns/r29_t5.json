@@ -1,0 +1,196 @@
+{
+ "round_id": 29,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 营业总收入（Total Revenue）\n\n[2] 可能的计算公式：  \n- 营业总收入 = 产品销售收入 + 服务收入 + 其他营业收入  \n  或  \n- 营业总收入 = ∑（公司所有主营业务的收入）\n\n在财务报告中，波音会按季度和全年披露其营业总收入。2025财年全年的营业总收入即为该年度内所有主营业务所获得的全部收入之和。\n['波音', 'Boeing', '营业总收入', 'Total Revenue', '产品销售收入', '服务收入', '其他营业收入', '主营业务收入']\n该问题可能涉及美股-'波音', 它的美股股票代码为：BA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-国防军工。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM', 'COM3103', 'VIEW_COM3103_Q']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `报告期结束日期`,\n    c.F004N AS `财政期间长度(天)`,\n    c.F005V AS `币种`,\n    ROUND(c.F048N/100.0, 3) AS `营业总收入(亿美元)`,\n    c.F048N AS `营业总收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报告期结束日期', '财政期间长度(天)', '币种', '营业总收入(亿美元)', '营业总收入(百万美元)'], ['波音', 'BA.US', '2025-12-31', '365', 'USD', '1,565.34', '156,534.00']]}\n本次查询的目的是获得波音公司在2025财年全年报告的营业总收入数据。\n\n营业总收入（亿美元）通过公式“营业总收入（亿美元） = 营业总收入（百万美元） / 100”计算得出，并保留三位小数。营业总收入（百万美元）直接取值。查询结果符合要求。\n\n查询从两个表中提取数据：一个表记录美股上市公司基本信息，另一个表存储美股上市企业各财年累计综合收益数据。两个表通过内部代码进行关联。查询选择了股票名称、股票代码、报告期结束日期、财政期间长度、币种、营业总收入（亿美元）和营业总收入（百万美元）等信息。筛选条件包括股票展示代码为“BA.US”、报告财年为2025年度、报表类型为全年报、营业总收入数据不为空。结果按报告期结束日期降序排列，仅显示最新一条记录。\n查询波音(Boeing)在2025财年全年的营业总收入是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `报告期结束日期`,\n    c.F004N AS `财政期间长度(天)`,\n    c.F005V AS `币种`,\n    ROUND(c.F048N/100.0, 3) AS `营业总收入(亿美元)`,\n    c.F048N AS `营业总收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `报告期结束日期`,\n    c.F004N AS `财政期间长度(天)`,\n    c.F005V AS `币种`,\n    ROUND(c.F048N/100.0, 3) AS `营业总收入(亿美元)`,\n    c.F048N AS `营业总收入(百万美元)`\nFROM \n    AMERICAN_STOCK_MAIN a\nJOIN \n    VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.COMB_SYMBOL = 'BA.US'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F048N IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "156534.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "波音 BA.US 2025-12-31 365 USD 1565.338 156534.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 95.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_29_36ccbde1.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 93.47,
+  "llm_seconds_max": 47.12,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   23246
+  ],
+  "prompt_columns_raw_len": 15027
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5059,
+   "prompt_tokens": 8979,
+   "total_tokens": 14038,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4785,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8979,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 901,
+   "prompt_tokens": 28818,
+   "total_tokens": 29719,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 37797,
+  "completion": 5960,
+  "total": 43757
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5059,
+   "prompt_tokens": 8979,
+   "total_tokens": 14038,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4785,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8979,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 901,
+   "prompt_tokens": 28818,
+   "total_tokens": 29719,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "COM3103",
+   "VIEW_COM3103_Q"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

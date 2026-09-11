@@ -1,0 +1,209 @@
+{
+ "round_id": 30,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "刚才市盈率最低的那三只中概股，今年以来整体走得怎么样？平均涨跌幅有多少？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 市盈率（PE，Price to Earnings Ratio）\n- 股票涨跌幅（Year-to-date Return, 即YTD涨跌幅）\n\n[2] 可能的计算公式：\n\n- 市盈率 = 当前股票价格 ÷ 每股收益（EPS）\n- 今年以来涨跌幅（YTD）=（当前股价 − 年初股价）÷ 年初股价 × 100%\n- 平均涨跌幅 =（三只市盈率最低的中概股的YTD涨跌幅相加）÷ 3\n\n**注：主体为“中概股”，筛选条件为“市盈率最低”，统计指标为“今年以来的平均涨跌幅”。**\n['中概股', '市盈率', 'PE', 'Price to Earnings Ratio', '股票涨跌幅', 'YTD涨跌幅', 'Year-to-date Return', '每股收益', 'EPS', '当前股票价格', '当前股价', '年初股价', '平均涨跌幅']\n此问题不涉及到个股、行业或者题材\n美股相关\n['美股基本信息', '美股财务', '美股行情']\n['AMERICAN_STOCK_MAIN', 'COM3101', 'STK2401', 'AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM', 'VIEW_US_EXPR_IDX', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT\n    b.F022D AS `市盈率更新时间`,\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    FORMAT(b.F021N, 2) AS `市盈率`,\n    FORMAT(c.CHG_PCT_YTD, 2) AS `今年以来涨跌幅(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\n    INNER JOIN (\n        SELECT\n            FIU_ID,\n            CHG_PCT_YTD\n        FROM\n            fiu.VIEW_US_EXPR_IDX\n        WHERE\n            TRADE_DATE = (\n                SELECT MAX(TRADE_DATE)\n                FROM fiu.VIEW_US_EXPR_IDX\n            )\n    ) c ON a.FIU_ID = c.FIU_ID\nWHERE\n    a.IS_CHINESE_STOCK = '中概股'\n    AND b.F021N IS NOT NULL\n    AND c.CHG_PCT_YTD IS NOT NULL\nORDER BY\n    b.F021N ASC\nLIMIT 3\n200\n{table:[['市盈率更新时间', '股票名称', '股票代码', '市盈率', '今年以来涨跌幅(%)'], ['-', '京东-W', 'JD.US', '9.35', '22.12'], ['-', '百度-W', 'BIDU.US', '10.44', '4.11'], ['-', '理想汽车-W', 'LI.US', '14.40', '14.00']]}\n今年以来涨跌幅是通过公式 “今年以来涨跌幅(%) = 本年首个交易日至当前交易日的复利累计收益率” 得出，在本查询中直接提取了已有的年度累计涨跌幅财务指标数据。市盈率通过股票最新收盘价与月度每股收益直接取值，不做计算。\n\n查询结果符合要求。\n\n本查询提取了美股上市公司名单表，用于筛选属于中概股的股票，并关联市盈率、更新时间和年度涨跌幅信息。市盈率指标表用于获取最新市盈率及其更新时间；美股日行情累计收益率表用于获取今年以来的年度涨跌幅数据。查询过程中，筛选只包含市盈率和年度涨跌幅均有效的记录，将市盈率按升序排列后选取排名最低的前三名股票。最终返回股票名称、展示代码、市盈率、更新时间，以及今年以来的涨跌幅数据。\n查询市盈率最低的前三名中概股今年以来的平均涨跌幅",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    b.F022D AS `市盈率更新时间`,\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    FORMAT(b.F021N, 2) AS `市盈率`,\n    FORMAT(c.CHG_PCT_YTD, 2) AS `今年以来涨跌幅(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\n    INNER JOIN (\n        SELECT\n            FIU_ID,\n            CHG_PCT_YTD\n        FROM\n            fiu.VIEW_US_EXPR_IDX\n        WHERE\n            TRADE_DATE = (\n                SELECT MAX(TRADE_DATE)\n                FROM fiu.VIEW_US_EXPR_IDX\n            )\n    ) c ON a.FIU_ID = c.FIU_ID\nWHERE\n    a.IS_CHINESE_STOCK = '中概股'\n    AND b.F021N IS NOT NULL\n    AND c.CHG_PCT_YTD IS NOT NULL\nORDER BY\n    b.F021N ASC\nLIMIT 3",
+ "final_sql": "SELECT\n    b.F022D AS `市盈率更新时间`,\n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    FORMAT(b.F021N, 2) AS `市盈率`,\n    FORMAT(c.CHG_PCT_YTD, 2) AS `今年以来涨跌幅(%)`\nFROM\n    fiu.AMERICAN_STOCK_MAIN a\n    INNER JOIN fiu.COM3101 b ON a.FIU_ID = b.FIU_ID\n    INNER JOIN (\n        SELECT\n            FIU_ID,\n            CHG_PCT_YTD\n        FROM\n            fiu.VIEW_US_EXPR_IDX\n        WHERE\n            TRADE_DATE = (\n                SELECT MAX(TRADE_DATE)\n                FROM fiu.VIEW_US_EXPR_IDX\n            )\n    ) c ON a.FIU_ID = c.FIU_ID\nWHERE\n    a.IS_CHINESE_STOCK = '中概股'\n    AND b.F021N IS NOT NULL\n    AND c.CHG_PCT_YTD IS NOT NULL\nORDER BY\n    b.F021N ASC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "13.41"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "nan 京东-W JD.US 9.35 22.12\nnan 百度-W BIDU.US 10.44 4.11\nnan 理想汽车-W LI.US 14.40 14.00",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 64.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_30_68f3a460.2",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 68.23,
+  "llm_seconds_max": 13.67,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "STK2401",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_US_EXPR_IDX",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   22105
+  ],
+  "prompt_columns_raw_len": 13228
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1212,
+   "prompt_tokens": 9547,
+   "total_tokens": 10759,
+   "completion_tokens_details": {
+    "reasoning_tokens": 960,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9547,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1433,
+   "prompt_tokens": 28260,
+   "total_tokens": 29693,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 37807,
+  "completion": 2645,
+  "total": 40452
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1212,
+   "prompt_tokens": 9547,
+   "total_tokens": 10759,
+   "completion_tokens_details": {
+    "reasoning_tokens": 960,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9547,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1433,
+   "prompt_tokens": 28260,
+   "total_tokens": 29693,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EXPR_IDX",
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "STK2401",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM",
+   "VIEW_US_EXPR_IDX",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

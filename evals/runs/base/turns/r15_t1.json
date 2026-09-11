@@ -1,0 +1,167 @@
+{
+ "round_id": 15,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 收盘价（Close Price）\n\n[2] 可能的计算公式：  \n收盘价 = 某一交易日股票的最后一笔成交价格\n\n说明：收盘价是当日股票市场收盘时的价格，不需要复杂计算，取交易所公布的该股当日最后成交价即可。\n['收盘价', 'Close Price', '最后一笔成交价格', '最后成交价', '股价']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'STK_HUMAN_RESOURCE', 'STK_COMSUB_PROFILE', 'STK_COM_PROFILE', 'STK_LIST_RESULT']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`,\n    ROUND(a.TOPEN, 2) AS `开盘价（元）`,\n    ROUND(a.THIGH, 2) AS `最高价（元）`,\n    ROUND(a.TLOW, 2) AS `最低价（元）`,\n    ROUND(a.LCLOSE, 2) AS `昨收（元）`,\n    ROUND(a.CHNG, 2) AS `涨跌（元）`,\n    ROUND(a.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额（亿元）`,\n    a.INNER_CODE AS `内部参考代码`\nFROM STK_MKT a\nWHERE a.TRADEDATE = '2026-09-02'\n  AND a.ISVALID = 1\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.TVALUE DESC\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）', '昨收（元）', '涨跌（元）', '涨跌幅(%)', '成交额（亿元）'], ['2026-09-02', '中际旭创', '300308', '822.40', '840.01', '848.00', '814.06', '859.30', '-36.90', '-4.29', '220.60'], ['2026-09-02', '新易盛', '300502', '386.70', '393.00', '395.00', '378.56', '402.81', '-16.11', '-4.00', '137.37'], ['2026-09-02', '中国巨石', '600176', '44.13', '41.97', '44.81', '41.70', '43.02', '1.11', '2.58', '116.18'], ['2026-09-02', '天孚通信', '300394', '250.00', '247.86', '255.69', '237.80', '251.77', '-1.77', '-0.70', '102.14'], ['2026-09-02', '亨通光电', '600487', '66.90', '65.39', '68.77', '64.19', '67.34', '-0.44', '-0.65', '100.35'], ['2026-09-02', '宁德时代', '300750', '348.29', '355.98', '356.50', '347.55', '358.10', '-9.81', '-2.74', '97.20'], ['2026-09-02', '生益科技', '600183', '144.98', '139.00', '149.23', '138.99', '144.42', '0.56', '0.39', '95.53'], ['2026-09-02', '东山精密', '002384', '183.43', '185.06', '186.78', '181.20', '188.69', '-5.26', '-2.79', '82.09'], ['2026-09-02', '兆易创新', '603986', '388.86', '388.00', '395.95', '387.45', '393.00', '-4.14', '-1.05', '81.92'], ['2026-09-02', '紫金矿业', '601899', '32.",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`,\n    ROUND(a.TOPEN, 2) AS `开盘价（元）`,\n    ROUND(a.THIGH, 2) AS `最高价（元）`,\n    ROUND(a.TLOW, 2) AS `最低价（元）`,\n    ROUND(a.LCLOSE, 2) AS `昨收（元）`,\n    ROUND(a.CHNG, 2) AS `涨跌（元）`,\n    ROUND(a.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额（亿元）`,\n    a.INNER_CODE AS `内部参考代码`\nFROM STK_MKT a\nWHERE a.TRADEDATE = '2026-09-02'\n  AND a.ISVALID = 1\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.TVALUE DESC",
+ "final_sql": "SELECT \n    a.TRADEDATE AS `交易日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.SECCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`,\n    ROUND(a.TOPEN, 2) AS `开盘价（元）`,\n    ROUND(a.THIGH, 2) AS `最高价（元）`,\n    ROUND(a.TLOW, 2) AS `最低价（元）`,\n    ROUND(a.LCLOSE, 2) AS `昨收（元）`,\n    ROUND(a.CHNG, 2) AS `涨跌（元）`,\n    ROUND(a.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(a.TVALUE/100000000, 2) AS `成交额（亿元）`,\n    a.INNER_CODE AS `内部参考代码`\nFROM STK_MKT a\nWHERE a.TRADEDATE = '2026-09-02'\n  AND a.ISVALID = 1\n  AND a.TCLOSE IS NOT NULL\nORDER BY a.TVALUE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "438.2000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中际旭创 300308 822.40 840.01 848.00 814.06 859.30 -36.90 -4.29 220.60 101003208\n2026-09-02 00:00:00 新易盛 300502 386.70 393.00 395.00 378.56 402.81 -16.11 -4.00 137.37 101004739\n2026-09",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 56.1,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_15_4814797f.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.22,
+  "llm_seconds_max": 6.74,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   45136
+  ],
+  "prompt_columns_raw_len": 20137
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1477,
+   "prompt_tokens": 49257,
+   "total_tokens": 50734,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 49257,
+  "completion": 1477,
+  "total": 50734
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1477,
+   "prompt_tokens": 49257,
+   "total_tokens": 50734,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_STKDMK",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 9,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "特斯拉2025财年的净利润是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`,\n    c.F005V AS `货币`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN \n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.CSNAME LIKE '%特斯拉%'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F032N IS NOT NULL\n    AND c.F001D IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1;\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '财政年度', '净利润(亿美元)', '货币'], ['特斯拉', 'TSLA.US', '2025-12-31', '2,025', '264.45', 'USD']]}\n该查询获取了特斯拉公司在2025财年的净利润、最新披露的财年终止日期、股票名称及展示代码，并注明财务数据的货币单位。查询的数据来源包括股票基本信息表和公司财务年度累计数据表，两者通过内部标识关联。筛选条件限定公司名称为特斯拉、财年为2025年、报表类型为年度、且确保相关数据完整。结果按财年结束日期降序排列，优先显示最新数据。净利润采用原始的年度累计财务指标，原始为百万美元，查询中通过除以100将其转换为亿美元，并保留三位小数。查询结果能够准确反映特斯拉2025财年净利润，满足用户需求。\n{table:[['股票名称', '股票代码', '财政周期结束日期', '财政年度', '净利润(亿美元)', '货币'], ['特斯拉', 'TSLA.US', '2025-12-31', '2,025', '264.45', 'USD']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`,\n    c.F005V AS `货币`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN \n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.CSNAME LIKE '%特斯拉%'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F032N IS NOT NULL\n    AND c.F001D IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    c.F001D AS `财政周期结束日期`,\n    c.F056N AS `财政年度`,\n    ROUND(c.F032N / 100, 3) AS `净利润(亿美元)`,\n    c.F005V AS `货币`\nFROM \n    AMERICAN_STOCK_MAIN m\nINNER JOIN \n    VIEW_COM3103_CUM c\n    ON m.FIU_ID = c.FIU_ID\nWHERE \n    m.CSNAME LIKE '%特斯拉%'\n    AND c.F056N = 2025\n    AND c.F003V = 'FY'\n    AND c.F032N IS NOT NULL\n    AND c.F001D IS NOT NULL\nORDER BY \n    c.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "26445.1"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "特斯拉 TSLA.US 2025-12-31 2025 264.451 USD",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 31.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_9_b146dcc3.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 30.83,
+  "llm_seconds_max": 25.39,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2732,
+   "prompt_tokens": 13512,
+   "total_tokens": 16244,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2150,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13512,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 169,
+   "prompt_tokens": 7728,
+   "total_tokens": 7897,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21240,
+  "completion": 2901,
+  "total": 24141
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2732,
+   "prompt_tokens": 13512,
+   "total_tokens": 16244,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2150,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13512,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 169,
+   "prompt_tokens": 7728,
+   "total_tokens": 7897,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,174 @@
+{
+ "round_id": 3,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "2026年8月31日那天，宁德时代和招商银行谁的收盘价更高？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    (a.SEC_SNAME LIKE '%宁德时代%' OR a.SEC_SNAME LIKE '%招商银行%')\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.TCLOSE DESC\nLIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-31', '宁德时代', '300750', '363.55', '366.60', '367.33', '357.30', '26.24', '94.78', '15,487.50', '16,820.20']]}\n该查询对比了宁德时代和招商银行在2026年8月31日当天的收盘价，目的是找出哪家公司的收盘价更高。数据来源包括股票基本信息和单日市场表现信息。首先，筛选出证券简称包含“宁德时代”或“招商银行”的两家公司，并确保记录有效且交易日期为指定当天。系统提取了它们的收盘价、开盘价、最高价、最低价、成交量、成交额、流通市值和总市值等关键市场数据。所有金额数据均已按元、百万元、亿元等单位进行了换算并统一保留了两位小数或一位小数。最终结果按收盘价从高到低排序，仅返回收盘价更高的那家公司。收盘价这一指标为交易当日市场的实际定价，查询未涉及复杂计算，直接采用了公司日度市场表现信息。查询结果完全满足了用户关于两家公司当日收盘价高低对比的需求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-31', '宁德时代', '300750', '363.55', '366.60', '367.33', '357.30', '26.24', '94.78', '15,487.50', '16,820.20']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    (a.SEC_SNAME LIKE '%宁德时代%' OR a.SEC_SNAME LIKE '%招商银行%')\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.TCLOSE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    (a.SEC_SNAME LIKE '%宁德时代%' OR a.SEC_SNAME LIKE '%招商银行%')\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.TCLOSE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "600036 40.1200\n300750 363.5500"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 宁德时代 300750 363.55 366.60 367.33 357.30 26.24 94.78 15487.5 16820.2",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 41.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_3_30a6c0b6.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 41.08,
+  "llm_seconds_max": 34.78,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3895,
+   "prompt_tokens": 16846,
+   "total_tokens": 20741,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3201,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16846,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 229,
+   "prompt_tokens": 10010,
+   "total_tokens": 10239,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 26856,
+  "completion": 4124,
+  "total": 30980
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3895,
+   "prompt_tokens": 16846,
+   "total_tokens": 20741,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3201,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16846,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 229,
+   "prompt_tokens": 10010,
+   "total_tokens": 10239,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

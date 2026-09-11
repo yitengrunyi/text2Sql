@@ -1,0 +1,149 @@
+{
+ "round_id": 8,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "特斯拉最新一个交易日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：收盘价（Closing Price）\n\n[2] 计算公式：  \n收盘价 = 某只股票在某一交易日股票市场收盘时的最后成交价格\n\n（注：收盘价为交易所当天交易结束时的最后成交价，无需额外计算，直接由市场成交价格决定。）\n['收盘价', 'Closing Price', '成交价格', '成交价', '最后成交价格', '市场成交价格']\n该问题可能涉及美股-'特斯拉', 它的美股股票代码为：TSLA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-汽车。\n美股相关\n['美股基本信息', '美股行情']\n['STK2401', 'VIEW_US_EOD_EXPR', 'VIEW_ADS_STOCK_US_EOD_DI', 'AMERICAN_STOCK_MAIN']\n是否命中召回表：False\n生成查询代码\nSELECT\n    e.TRADE_DATE AS `交易日期`,\n    e.NAME AS `股票名称`,\n    e.COMB_SYMBOL AS `股票代码`,\n    ROUND(e.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(e.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(e.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(e.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(e.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(e.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`,\n    ROUND(e.TURN_RATIO_PCT, 2) AS `换手率(%)`,\n    ROUND(e.CHG_PCT_DAY, 2) AS `日涨跌幅(%)`\nFROM\n    VIEW_US_EOD_EXPR e\nINNER JOIN AMERICAN_STOCK_MAIN m\n    ON e.FIU_ID = m.FIU_ID AND m.COMB_SYMBOL = 'TSLA.US'\nWHERE\n    e.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'TSLA'\n          AND TRADE_DATE IS NOT NULL\n    )\n    AND e.CLOSE_PRICE IS NOT NULL\n    AND e.SYMBOL = 'TSLA'\nORDER BY\n    e.TRADE_DATE DESC\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '成交额(亿美元)', '总股本(亿股)', '换手率(%)', '日涨跌幅(%)'], ['2026-08-25', '特斯拉', 'TSLA.US', '328.98', '341.23', '327.05', '340.00', '50.23', '32.97', '0.46', '3.20']]}\n查询主要目的是获取特斯拉在最新一个交易日的相关行情，包括收盘价。对于收盘价，在此查询中直接使用已有的数据，没有进一步计算。其他数据在结果中进行了单位换算或保留小数位，例如，成交额通过公式“成交额(亿美元) = 成交额(美元) / 100000000”进行单位转换，总股本通过公式“总股本(亿股) = 总股本(股) / 100000000”进行单位转换，开盘价、最高价、最低价、收盘价及换手率、日涨跌幅均保留两位小数。\n\n该查询从美股上市股票基本信息表和美股日行情增强视图表获取数据，通过内部代码进行连接，并筛选展示代码为“TSLA.US”的特斯拉股票。查询筛选交易日期为该股票最新的有效交易记录，确保收盘价等数据有效，按交易日期降序排列，只取最新一条记录。查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    e.TRADE_DATE AS `交易日期`,\n    e.NAME AS `股票名称`,\n    e.COMB_SYMBOL AS `股票代码`,\n    ROUND(e.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(e.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(e.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(e.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(e.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(e.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`,\n    ROUND(e.TURN_RATIO_PCT, 2) AS `换手率(%)`,\n    ROUND(e.CHG_PCT_DAY, 2) AS `日涨跌幅(%)`\nFROM\n    VIEW_US_EOD_EXPR e\nINNER JOIN AMERICAN_STOCK_MAIN m\n    ON e.FIU_ID = m.FIU_ID AND m.COMB_SYMBOL = 'TSLA.US'\nWHERE\n    e.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'TSLA'\n          AND TRADE_DATE IS NOT NULL\n    )\n    AND e.CLOSE_PRICE IS NOT NULL\n    AND e.SYMBOL = 'TSLA'\nORDER BY\n    e.TRADE_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    e.TRADE_DATE AS `交易日期`,\n    e.NAME AS `股票名称`,\n    e.COMB_SYMBOL AS `股票代码`,\n    ROUND(e.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(e.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(e.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(e.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(e.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`,\n    ROUND(e.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)`,\n    ROUND(e.TURN_RATIO_PCT, 2) AS `换手率(%)`,\n    ROUND(e.CHG_PCT_DAY, 2) AS `日涨跌幅(%)`\nFROM\n    VIEW_US_EOD_EXPR e\nINNER JOIN AMERICAN_STOCK_MAIN m\n    ON e.FIU_ID = m.FIU_ID AND m.COMB_SYMBOL = 'TSLA.US'\nWHERE\n    e.TRADE_DATE = (\n        SELECT MAX(TRADE_DATE)\n        FROM VIEW_US_EOD_EXPR\n        WHERE SYMBOL = 'TSLA'\n          AND TRADE_DATE IS NOT NULL\n    )\n    AND e.CLOSE_PRICE IS NOT NULL\n    AND e.SYMBOL = 'TSLA'\nORDER BY\n    e.TRADE_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "340.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 特斯拉 TSLA.US 328.98 341.23 327.05 340.0 50.23 32.97 0.46 3.2",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 46.2,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_8_ac2aba71.1",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 44.94,
+  "llm_seconds_max": 6.42,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   13454
+  ],
+  "prompt_columns_raw_len": 4634
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1251,
+   "prompt_tokens": 19182,
+   "total_tokens": 20433,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19182,
+  "completion": 1251,
+  "total": 20433
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1251,
+   "prompt_tokens": 19182,
+   "total_tokens": 20433,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

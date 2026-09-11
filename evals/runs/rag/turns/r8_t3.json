@@ -1,0 +1,151 @@
+{
+ "round_id": 8,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "苹果、特斯拉、英伟达这三只股票，最新收盘价最高的是谁？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：最新收盘价（Latest Closing Price）\n\n[2] 可能的计算公式：  \n假设A表示苹果（Apple），T表示特斯拉（Tesla），N表示英伟达（Nvidia），则：\n\n最高收盘价 = MAX（收盘价_A, 收盘价_T, 收盘价_N）\n\n其中，收盘价_X 表示股票X的最新收盘价。\n['苹果', 'Apple', '特斯拉', 'Tesla', '英伟达', 'Nvidia', '最新收盘价', 'Latest Closing Price', '收盘价', '收盘价_A', '收盘价_T', '收盘价_N', '最高收盘价', 'MAX']\n该问题可能涉及美股-'苹果', 它的美股股票代码为：AAPL.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。该问题可能涉及美股-'特斯拉', 它的美股股票代码为：TSLA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-汽车。该问题可能涉及美股-'英伟达', 它的美股股票代码为：NVDA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-电子。\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'STK2401', 'VIEW_ADS_STOCK_US_EOD_DI', 'VIEW_US_EOD_EXPR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.TRADE_DATE AS `交易日期`,\n    ROUND(b.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(b.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(b.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(b.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(b.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(b.TOTAL_SHARES/100000000, 2) AS `总股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        TRADE_DATE,\n        CLOSE_PRICE,\n        OPEN_PRICE,\n        HIGH_PRICE,\n        LOW_PRICE,\n        TRADE_AMOUNT,\n        TOTAL_SHARES\n    FROM VIEW_US_EOD_EXPR\n    WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR)\n        AND SYMBOL IN ('AAPL', 'TSLA', 'NVDA')\n        AND CLOSE_PRICE IS NOT NULL\n) b ON a.FIU_ID = b.FIU_ID\nWHERE a.COMB_SYMBOL IN ('AAPL.US', 'TSLA.US', 'NVDA.US')\nORDER BY b.CLOSE_PRICE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '交易日期', '收盘价(美元)', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '成交额(亿美元)', '总股本(亿股)'], ['特斯拉', 'TSLA.US', '2026-08-25', '340.00', '328.98', '341.23', '327.05', '50.23', '32.97']]}\n该查询的主要目的是获取苹果、特斯拉、英伟达三只股票中，在最新交易日时收盘价最高的那只股票。\n\n收盘价、开盘价、最高价、最低价均以美元为单位，直接取值但保留两位小数。成交额通过成交金额除以一亿，并保留两位小数，公式为：成交额（亿美元）= 成交额（美元） ÷ 100000000；总股本通过总股本数除以一亿，并保留两位小数，公式为：总股本（亿股）= 总股本（股） ÷ 100000000。查询结果符合要求。\n\n该查询从一个用于记录美股股票基本信息的表和一个用于提供美股每日行情数据的视图中提取数据，通过内部代码进行关联。选择了股票名称、美股展示代码、交易日期、收盘价、开盘价、最高价、最低价、成交额和",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.TRADE_DATE AS `交易日期`,\n    ROUND(b.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(b.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(b.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(b.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(b.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(b.TOTAL_SHARES/100000000, 2) AS `总股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        TRADE_DATE,\n        CLOSE_PRICE,\n        OPEN_PRICE,\n        HIGH_PRICE,\n        LOW_PRICE,\n        TRADE_AMOUNT,\n        TOTAL_SHARES\n    FROM VIEW_US_EOD_EXPR\n    WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR)\n        AND SYMBOL IN ('AAPL', 'TSLA', 'NVDA')\n        AND CLOSE_PRICE IS NOT NULL\n) b ON a.FIU_ID = b.FIU_ID\nWHERE a.COMB_SYMBOL IN ('AAPL.US', 'TSLA.US', 'NVDA.US')\nORDER BY b.CLOSE_PRICE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    b.TRADE_DATE AS `交易日期`,\n    ROUND(b.CLOSE_PRICE, 2) AS `收盘价(美元)`,\n    ROUND(b.OPEN_PRICE, 2) AS `开盘价(美元)`,\n    ROUND(b.HIGH_PRICE, 2) AS `最高价(美元)`,\n    ROUND(b.LOW_PRICE, 2) AS `最低价(美元)`,\n    ROUND(b.TRADE_AMOUNT/100000000, 2) AS `成交额(亿美元)`,\n    ROUND(b.TOTAL_SHARES/100000000, 2) AS `总股本(亿股)`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN (\n    SELECT \n        FIU_ID,\n        TRADE_DATE,\n        CLOSE_PRICE,\n        OPEN_PRICE,\n        HIGH_PRICE,\n        LOW_PRICE,\n        TRADE_AMOUNT,\n        TOTAL_SHARES\n    FROM VIEW_US_EOD_EXPR\n    WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR)\n        AND SYMBOL IN ('AAPL', 'TSLA', 'NVDA')\n        AND CLOSE_PRICE IS NOT NULL\n) b ON a.FIU_ID = b.FIU_ID\nWHERE a.COMB_SYMBOL IN ('AAPL.US', 'TSLA.US', 'NVDA.US')\nORDER BY b.CLOSE_PRICE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "TSLA 340.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "特斯拉 TSLA.US 2026-08-25 340.0 328.98 341.23 327.05 50.23 32.97",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 49.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_8_eea4361f.3",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 47.56,
+  "llm_seconds_max": 7.13,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   13463
+  ],
+  "prompt_columns_raw_len": 4634
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1273,
+   "prompt_tokens": 19809,
+   "total_tokens": 21082,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 19809,
+  "completion": 1273,
+  "total": 21082
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1273,
+   "prompt_tokens": 19809,
+   "total_tokens": 21082,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_US_EOD_EXPR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

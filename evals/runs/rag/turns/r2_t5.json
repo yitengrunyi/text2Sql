@@ -1,0 +1,182 @@
+{
+ "round_id": 2,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安2025年的基本每股收益是多少？",
+ "labels": {
+  "followup_type": "普通追问",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：基本每股收益（EPS, Earnings Per Share）\n\n[2] 计算公式：  \n基本每股收益（EPS） = 归属于上市公司普通股股东的净利润 ÷ 期末普通股股份总数\n\n其中，涉及的关键主体为中国平安（公司）、归属于普通股股东的净利润、普通股股份总数。\n['中国平安', '基本每股收益', 'EPS', 'Earnings Per Share', '归属于上市公司普通股股东的净利润', '净利润', '普通股股东', '期末普通股股份总数', '普通股股份总数']\n该问题可能涉及A股-'中国平安'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-非银金融。\n个股相关\n['主板财务']\n['VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_BALA_GEN', 'STK_NON_EXTR_ITEM', 'STK_FIN_CHARGE', 'STK_ASSET_DEPR', 'STK_NONOPT_EXPENSE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ENDDATE AS `报告期截止日`,\n    ROUND(F111001, 3) AS `基本每股收益(元/股)`\nFROM \n    VIEW_STK_FIN_IDX\nWHERE \n    A_STOCKSNAME LIKE '%中国平安%'\n    AND YEAR(ENDDATE) = 2025\n    AND DATE_FORMAT(ENDDATE, '%m-%d') = '12-31'\n    AND ISVALID = 1\nORDER BY \n    ENDDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '报告期截止日', '基本每股收益(元/股)'], ['中国平安', '601318', '2025-12-31', '7.68']]}\n本查询的目的是获取中国平安在2025年报告期末的基本每股收益数据。基本每股收益的计算方法为：用归属于母公司股东的净利润除以期内的平均在外流通普通股股数。具体表达为：基本每股收益 = 本期归属于母公司普通股股东的净利润 / 本期平均在外流通普通股股数。查询结果中还对数据显示进行了精度调整，将基本每股收益数字保留三位小数。在本次查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n该查询从上市公司主要财务指标统计表中获取数据。筛选了公司中文简称包含“中国平安”的记录，报告期截止日期为2025年12月31日，并确保数据为有效状态。查询展示了股票名称、股票代码、报告期截止日以及基本每股收益（元/股）。结果按报告期截止日倒序排列，并仅返回最新一条数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ENDDATE AS `报告期截止日`,\n    ROUND(F111001, 3) AS `基本每股收益(元/股)`\nFROM \n    VIEW_STK_FIN_IDX\nWHERE \n    A_STOCKSNAME LIKE '%中国平安%'\n    AND YEAR(ENDDATE) = 2025\n    AND DATE_FORMAT(ENDDATE, '%m-%d') = '12-31'\n    AND ISVALID = 1\nORDER BY \n    ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    ENDDATE AS `报告期截止日`,\n    ROUND(F111001, 3) AS `基本每股收益(元/股)`\nFROM \n    VIEW_STK_FIN_IDX\nWHERE \n    A_STOCKSNAME LIKE '%中国平安%'\n    AND YEAR(ENDDATE) = 2025\n    AND DATE_FORMAT(ENDDATE, '%m-%d') = '12-31'\n    AND ISVALID = 1\nORDER BY \n    ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7.680000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国平安 601318 2025-12-31 00:00:00 7.680",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_2_79ddc34d.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 57.79,
+  "llm_seconds_max": 6.55,
+  "selected_tables": [
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_BALA_GEN",
+   "STK_NON_EXTR_ITEM",
+   "STK_FIN_CHARGE",
+   "STK_ASSET_DEPR",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST"
+  ],
+  "sql_prompt_chars": [
+   46179
+  ],
+  "prompt_columns_raw_len": 15565
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2057,
+   "prompt_tokens": 58666,
+   "total_tokens": 60723,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 58666,
+  "completion": 2057,
+  "total": 60723
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2057,
+   "prompt_tokens": 58666,
+   "total_tokens": 60723,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_BALA_GEN",
+   "STK_NON_EXTR_ITEM",
+   "STK_FIN_CHARGE",
+   "STK_ASSET_DEPR",
+   "STK_NONOPT_EXPENSE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

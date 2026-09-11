@@ -1,0 +1,151 @@
+{
+ "round_id": 28,
+ "index": 0,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE Ratio，Price-to-Earnings Ratio）\n\n[2] 可能的计算公式：  \n- 市盈率 = 公司市值（股价 × 总股本） ÷ 净利润  \n- 或：市盈率 = 每股股价 ÷ 每股收益（EPS）\n\n**对比思路：**  \n分别计算迪士尼与奈飞的市盈率，比较其数值，得出哪家更高，并计算二者的差值或倍数。例如：  \n- 差值 = 奈飞市盈率 - 迪士尼市盈率  \n- 倍数 = 奈飞市盈率 ÷ 迪士尼市盈率\n['迪士尼', '奈飞', '市盈率', 'PE Ratio', 'Price-to-Earnings Ratio', '公司市值', '股价', '总股本', '净利润', '每股股价', '每股收益', 'EPS', '差值', '倍数']\n该问题可能涉及美股-'迪士尼', 它的美股股票代码为：DIS.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。该问题可能涉及美股-'奈飞', 它的美股股票代码为：NFLX.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。\n美股相关\n['美股基本信息', '美股财务']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    e.F001D AS `报告期截止日`,\n    e.F004N AS `报告期天数`,\n    (CASE WHEN p_tclose.TCLOSE IS NOT NULL AND e.F034N IS NOT NULL AND e.F034N <> 0\n          THEN ROUND(p_tclose.TCLOSE/(e.F034N*10000), 2)\n          ELSE NULL END) AS `市盈率（PE，倍）`,\n    (e.F034N*10000) AS `归属于普通股东净利润（美元，单位：万）`,\n    p_tclose.TCLOSE AS `最新收盘价（美元）`\nFROM\n    (\n        SELECT\n            m1.FIU_ID, m1.CSNAME, m1.COMB_SYMBOL\n        FROM\n            AMERICAN_STOCK_MAIN m1\n        WHERE\n            m1.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n    ) m\nLEFT JOIN\n    (\n        SELECT\n            e1.FIU_ID,\n            e1.F001D,\n            e1.F004N,\n            e1.F034N,\n            ROW_NUMBER() OVER(PARTITION BY e1.FIU_ID ORDER BY e1.F001D DESC, e1.F004N DESC) AS rk\n        FROM\n            VIEW_COM3103_CUM e1\n        WHERE\n            e1.F003V = 'FY' AND\n            e1.F001D IS NOT NULL AND\n            e1.F004N IS NOT NULL AND\n            e1.F034N IS NOT NULL\n    ) e\n    ON m.FIU_ID = e.FIU_ID AND e.rk = 1\nLEFT JOIN\n    (\n        SELECT\n            v.FIU_ID,\n            v.TCLOSE\n        FROM\n            (\n                SELECT\n                    FIU_ID, MAX(TRADE_DATE) AS MAX_TDATE\n                FROM\n                    VIEW_US_EOD_EXPR\n                WHERE\n                    TRADE_DATE <= '2026-09-02'\n                GROUP BY\n                    FIU_ID\n            ) t\n       ",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    e.F001D AS `报告期截止日`,\n    e.F004N AS `报告期天数`,\n    (CASE WHEN p_tclose.TCLOSE IS NOT NULL AND e.F034N IS NOT NULL AND e.F034N <> 0\n          THEN ROUND(p_tclose.TCLOSE/(e.F034N*10000), 2)\n          ELSE NULL END) AS `市盈率（PE，倍）`,\n    (e.F034N*10000) AS `归属于普通股东净利润（美元，单位：万）`,\n    p_tclose.TCLOSE AS `最新收盘价（美元）`\nFROM\n    (\n        SELECT\n            m1.FIU_ID, m1.CSNAME, m1.COMB_SYMBOL\n        FROM\n            AMERICAN_STOCK_MAIN m1\n        WHERE\n            m1.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n    ) m\nLEFT JOIN\n    (\n        SELECT\n            e1.FIU_ID,\n            e1.F001D,\n            e1.F004N,\n            e1.F034N,\n            ROW_NUMBER() OVER(PARTITION BY e1.FIU_ID ORDER BY e1.F001D DESC, e1.F004N DESC) AS rk\n        FROM\n            VIEW_COM3103_CUM e1\n        WHERE\n            e1.F003V = 'FY' AND\n            e1.F001D IS NOT NULL AND\n            e1.F004N IS NOT NULL AND\n            e1.F034N IS NOT NULL\n    ) e\n    ON m.FIU_ID = e.FIU_ID AND e.rk = 1\nLEFT JOIN\n    (\n        SELECT\n            v.FIU_ID,\n            v.TCLOSE\n        FROM\n            (\n                SELECT\n                    FIU_ID, MAX(TRADE_DATE) AS MAX_TDATE\n                FROM\n                    VIEW_US_EOD_EXPR\n                WHERE\n                    TRADE_DATE <= '2026-09-02'\n                GROUP BY\n                    FIU_ID\n            ) t\n            INNER JOIN VIEW_US_EOD_EXPR v\n                ON t.FIU_ID = v.FIU_ID AND t.MAX_TDATE = v.TRADE_DATE\n    ) p_tclose\n    ON m.FIU_ID = p_tclose.FIU_ID\nORDER BY\n    `市盈率（PE，倍）` DESC",
+ "final_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    e.F001D AS `报告期截止日`,\n    e.F004N AS `报告期天数`,\n    ROUND(h.TCLOSE/(e.F034N*10000), 2) AS `市盈率（PE，倍）`,\n    ROUND(e.F034N*10000, 1) AS `归属于普通股东净利润（美元，万）`,\n    ROUND(h.TCLOSE, 2) AS `最新收盘价（美元）`\nFROM\n    AMERICAN_STOCK_MAIN m\nLEFT JOIN (\n    SELECT\n        e1.FIU_ID,\n        e1.F001D,\n        e1.F004N,\n        e1.F034N,\n        ROW_NUMBER() OVER(PARTITION BY e1.FIU_ID ORDER BY e1.F001D DESC, e1.F004N DESC) AS rk\n    FROM\n        VIEW_COM3103_CUM e1\n    WHERE\n        e1.F003V = 'FY'\n        AND e1.F001D IS NOT NULL\n        AND e1.F004N IS NOT NULL\n        AND e1.F034N IS NOT NULL\n) e ON m.FIU_ID = e.FIU_ID AND e.rk = 1\nLEFT JOIN (\n    SELECT\n        v.FIU_ID,\n        v.TCLOSE\n    FROM\n        VIEW_US_EOD_EXPR v\n    INNER JOIN (\n        SELECT\n            FIU_ID,\n            MAX(TRADE_DATE) AS MAX_TRADE_DATE\n        FROM\n            VIEW_US_EOD_EXPR\n        WHERE\n            TRADE_DATE <= '2026-09-02'\n        GROUP BY\n            FIU_ID\n    ) t ON v.FIU_ID = t.FIU_ID AND v.TRADE_DATE = t.MAX_TRADE_DATE\n) h ON m.FIU_ID = h.FIU_ID\nWHERE\n    m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n    AND h.TCLOSE IS NOT NULL\n    AND e.F034N IS NOT NULL\nORDER BY\n    `市盈率（PE，倍）` DESC",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "奈飞 56.19\n迪士尼 35.5"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'v.TCLOSE' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 67.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_28_ca93b425.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 66.16,
+  "llm_seconds_max": 9.69,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   14526,
+   11466
+  ],
+  "prompt_columns_raw_len": 1018
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2392,
+   "prompt_tokens": 29859,
+   "total_tokens": 32251,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29859,
+  "completion": 2392,
+  "total": 32251
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2392,
+   "prompt_tokens": 29859,
+   "total_tokens": 32251,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5504,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

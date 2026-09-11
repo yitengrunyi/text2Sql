@@ -1,0 +1,174 @@
+{
+ "round_id": 20,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "再看个短线问题，9月2日上证50、中证白酒、中证医疗这三个指数谁的日涨幅最大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT idx_info.INDX_SNAME AS `指数名称`, idx_info.INDX_CODE AS `指数代码`, DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)` FROM GET_INDX_GEN_INFO idx_info INNER JOIN INDX_MKT mkt ON idx_info.INNER_CODE = mkt.INNER_CODE WHERE (idx_info.INDX_CODE = '000016' OR idx_info.INDX_SNAME LIKE '%中证白酒%' OR idx_info.INDX_SNAME LIKE '%中证医疗%') AND mkt.TRADEDATE = '2026-09-02' AND idx_info.USE_STATUS = '使用' AND idx_info.ISVALID = 1 AND mkt.ISVALID = 1 AND mkt.CHNG_PCT IS NOT NULL ORDER BY mkt.CHNG_PCT DESC LIMIT 1;\n200\n{table:[['指数名称', '指数代码', '交易日期', '日涨跌幅(%)'], ['中证医疗全收益', 'H20451', '2026-09-02', '-0.80']]}\n该查询获取了上证50指数、中证白酒指数和中证医疗指数在2026年9月2日当天的日涨跌幅表现，并筛选出涨幅最大的一个指数。数据来自指数基本信息表和指数行情数据表，通过指数代码或指数名称筛选这三类指数，仅提取有效且正常使用的记录，并确保涨跌幅数据不为空。涨跌幅为已有的市场指标，显示为百分比并保留两位小数。排序规则为按涨跌幅从高到低排列，只返回涨幅最大的指数。查询结果可直接满足用户比较三大指数短期涨幅的需求。\n{table:[['指数名称', '指数代码', '交易日期', '日涨跌幅(%)'], ['中证医疗全收益', 'H20451', '2026-09-02', '-0.80']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT idx_info.INDX_SNAME AS `指数名称`, idx_info.INDX_CODE AS `指数代码`, DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)` FROM GET_INDX_GEN_INFO idx_info INNER JOIN INDX_MKT mkt ON idx_info.INNER_CODE = mkt.INNER_CODE WHERE (idx_info.INDX_CODE = '000016' OR idx_info.INDX_SNAME LIKE '%中证白酒%' OR idx_info.INDX_SNAME LIKE '%中证医疗%') AND mkt.TRADEDATE = '2026-09-02' AND idx_info.USE_STATUS = '使用' AND idx_info.ISVALID = 1 AND mkt.ISVALID = 1 AND mkt.CHNG_PCT IS NOT NULL ORDER BY mkt.CHNG_PCT DESC LIMIT 1",
+ "final_sql": "SELECT idx_info.INDX_SNAME AS `指数名称`, idx_info.INDX_CODE AS `指数代码`, DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)` FROM GET_INDX_GEN_INFO idx_info INNER JOIN INDX_MKT mkt ON idx_info.INNER_CODE = mkt.INNER_CODE WHERE (idx_info.INDX_CODE = '000016' OR idx_info.INDX_SNAME LIKE '%中证白酒%' OR idx_info.INDX_SNAME LIKE '%中证医疗%') AND mkt.TRADEDATE = '2026-09-02' AND idx_info.USE_STATUS = '使用' AND idx_info.ISVALID = 1 AND mkt.ISVALID = 1 AND mkt.CHNG_PCT IS NOT NULL ORDER BY mkt.CHNG_PCT DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "106006473 中证医疗 -0.8133\n106000255 上证50 -0.9306\n106006657 中证白酒 -1.3427"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中证医疗全收益 H20451 2026-09-02 -0.80",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "elapsed_seconds": 50.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_20_48c8c2ff.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 50.02,
+  "llm_seconds_max": 46.28,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5227,
+   "prompt_tokens": 12608,
+   "total_tokens": 17835,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4663,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12608,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 4876,
+   "total_tokens": 5019,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17484,
+  "completion": 5370,
+  "total": 22854
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5227,
+   "prompt_tokens": 12608,
+   "total_tokens": 17835,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4663,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12608,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 4876,
+   "total_tokens": 5019,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,174 @@
+{
+ "round_id": 20,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "那中证军工2025年全年涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    DATE_FORMAT(start_data.TRADEDATE, '%Y-%m-%d') AS `起始交易日`,\n    DATE_FORMAT(end_data.TRADEDATE, '%Y-%m-%d') AS `截至交易日`,\n    idx_info.INDX_SNAME AS `指数名称`,\n    idx_info.INDX_CODE AS `指数代码`,\n    ROUND(start_data.TCLOSE,2) AS `起始收盘价`,\n    ROUND(end_data.TCLOSE,2) AS `截止收盘价`,\n    ROUND((end_data.TCLOSE - start_data.TCLOSE) / start_data.TCLOSE * 100,2) AS `2025年全年涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO idx_info\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MIN(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) start_date ON idx_info.INNER_CODE = start_date.INNER_CODE\nINNER JOIN INDX_MKT start_data \n    ON start_date.INNER_CODE = start_data.INNER_CODE \n    AND start_date.TRADEDATE = start_data.TRADEDATE\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MAX(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) end_date ON idx_info.INNER_CODE = end_date.INNER_CODE\nINNER JOIN INDX_MKT end_data \n    ON end_date.INNER_CODE = end_data.INNER_CODE \n    AND end_date.TRADEDATE = end_data.TRADEDATE\nWHERE \n    idx_info.INDX_SNAME LIKE '%中证军工%'\n    AND idx_info.USE_STATUS = '使用'\n    AND idx_info.ISVALID = 1;\n200\n{table:[['起始交易日', '截至交易日', '指数名称', '指数代码', '起始收盘价', '截止收盘价', '2025年全年涨跌幅(%)'], ['2025-01-02', '2025-12-31', '中证军工', '399967', '10,176.93', '14,011.14', '37.68'], ['2025-01-02', '2025-12-31', '中证军工全收益', 'H20229', '11,132.07', '15,409.43', '38.42']]}\n该查询获取了中证军工指数在2025年全年期间的涨跌幅情况。数据来自指数基本信息表和指数行情数据，通过指数名称筛选出“中证军工”，并只选取当前处于正常使用且有效的记录。在2025年全年内，分别取第一天和最后一天的收盘价，计算全年涨跌幅，公式为（2025年最后交易日收盘价减去2025年首个交易日收盘价）再除以首个交易日收盘价，结果乘以100%，并保留2位小数。该查询直接使用指数行情的收盘价数据，结果单位为百分比。查询结果完全符合用户关于中证军工指数2025年全年涨跌幅的需求。\n{table:[['起始交易日', '截至交易日', '指数名称', '指数代码', '起始收盘价', '截止收盘价', '2025年全年涨跌幅(%)'], ['2025-01-02', '2025-12-31', '中证军工', '399967', '10,176",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    DATE_FORMAT(start_data.TRADEDATE, '%Y-%m-%d') AS `起始交易日`,\n    DATE_FORMAT(end_data.TRADEDATE, '%Y-%m-%d') AS `截至交易日`,\n    idx_info.INDX_SNAME AS `指数名称`,\n    idx_info.INDX_CODE AS `指数代码`,\n    ROUND(start_data.TCLOSE,2) AS `起始收盘价`,\n    ROUND(end_data.TCLOSE,2) AS `截止收盘价`,\n    ROUND((end_data.TCLOSE - start_data.TCLOSE) / start_data.TCLOSE * 100,2) AS `2025年全年涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO idx_info\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MIN(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) start_date ON idx_info.INNER_CODE = start_date.INNER_CODE\nINNER JOIN INDX_MKT start_data \n    ON start_date.INNER_CODE = start_data.INNER_CODE \n    AND start_date.TRADEDATE = start_data.TRADEDATE\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MAX(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) end_date ON idx_info.INNER_CODE = end_date.INNER_CODE\nINNER JOIN INDX_MKT end_data \n    ON end_date.INNER_CODE = end_data.INNER_CODE \n    AND end_date.TRADEDATE = end_data.TRADEDATE\nWHERE \n    idx_info.INDX_SNAME LIKE '%中证军工%'\n    AND idx_info.USE_STATUS = '使用'\n    AND idx_info.ISVALID = 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(start_data.TRADEDATE, '%Y-%m-%d') AS `起始交易日`,\n    DATE_FORMAT(end_data.TRADEDATE, '%Y-%m-%d') AS `截至交易日`,\n    idx_info.INDX_SNAME AS `指数名称`,\n    idx_info.INDX_CODE AS `指数代码`,\n    ROUND(start_data.TCLOSE,2) AS `起始收盘价`,\n    ROUND(end_data.TCLOSE,2) AS `截止收盘价`,\n    ROUND((end_data.TCLOSE - start_data.TCLOSE) / start_data.TCLOSE * 100,2) AS `2025年全年涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO idx_info\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MIN(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) start_date ON idx_info.INNER_CODE = start_date.INNER_CODE\nINNER JOIN INDX_MKT start_data \n    ON start_date.INNER_CODE = start_data.INNER_CODE \n    AND start_date.TRADEDATE = start_data.TRADEDATE\nINNER JOIN (\n    SELECT \n        INNER_CODE,\n        MAX(TRADEDATE) AS TRADEDATE\n    FROM INDX_MKT\n    WHERE \n        TRADEDATE >= '2025-01-01'\n        AND TRADEDATE <= '2025-12-31'\n        AND ISVALID = 1\n    GROUP BY INNER_CODE\n) end_date ON idx_info.INNER_CODE = end_date.INNER_CODE\nINNER JOIN INDX_MKT end_data \n    ON end_date.INNER_CODE = end_data.INNER_CODE \n    AND end_date.TRADEDATE = end_data.TRADEDATE\nWHERE \n    idx_info.INDX_SNAME LIKE '%中证军工%'\n    AND idx_info.USE_STATUS = '使用'\n    AND idx_info.ISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "31.55"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2025-01-02 2025-12-31 中证军工 399967 10176.93 14011.14 37.68\n2025-01-02 2025-12-31 中证军工全收益 H20229 11132.07 15409.43 38.42",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 55.1,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_20_48c8c2ff.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 44.7,
+  "llm_seconds_max": 40.86,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4930,
+   "prompt_tokens": 12852,
+   "total_tokens": 17782,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4058,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12852,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 170,
+   "prompt_tokens": 5014,
+   "total_tokens": 5184,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17866,
+  "completion": 5100,
+  "total": 22966
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4930,
+   "prompt_tokens": 12852,
+   "total_tokens": 17782,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4058,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12852,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 170,
+   "prompt_tokens": 5014,
+   "total_tokens": 5184,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_INDX_GEN_INFO",
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

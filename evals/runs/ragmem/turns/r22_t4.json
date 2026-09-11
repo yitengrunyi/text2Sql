@@ -1,0 +1,175 @@
+{
+ "round_id": 22,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "把范围放大点，中欧基金旗下2025年收益率最高的基金是哪只？当年涨了多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, YEAR AS `年度`, ROUND(YIELD, 2) AS `年度收益率(%)`, ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, MAX_DRAWBACK AS `最大回撤`, SHARPE AS `夏普比率` FROM FUND_STATISTICS_YEAR WHERE FUND_NAME LIKE '%中欧%' AND YEAR = 2025 AND HISVALID = 1 AND YIELD IS NOT NULL ORDER BY YIELD DESC LIMIT 1;\n200\n{table:[['基金名称', '基金代码', '年度', '年度收益率(%)', '年化收益率(%)', '最大回撤', '夏普比率'], ['中欧数字经济混合发起A', '018993.OF', '2,025', '1.43', '1.35', '-0.22', '3.71']]}\n该查询获取了中欧基金旗下所有基金在2025年当年收益率排名第一的基金及其相关年度表现信息，包括基金名称、代码、年份、年度收益率、年化收益率、最大回撤和夏普比率。数据来源于年度业绩统计信息表，仅筛选中欧基金相关产品，统计年度为2025年，且只包含有效且有年度收益数据的基金。所有筛选后结果按年度收益率由高到低排序，只取涨幅最高的一只基金。年度收益率和年化收益率均通过百分比格式（保留两位小数）进行展示，最大回撤和夏普比率同步列示。此查询直接引用了各基金年度汇总后的财务与风险指标数据，查询结果能够准确满足用户关于“2025年度中欧基金旗下哪个基金收益最高、涨幅多少”的需求。\n{table:[['基金名称', '基金代码', '年度', '年度收益率(%)', '年化收益率(%)', '最大回撤', '夏普比率'], ['中欧数字经济混合发起A', '018993.OF', '2,025', '1.43', '1.35', '-0.22', '3.71']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, YEAR AS `年度`, ROUND(YIELD, 2) AS `年度收益率(%)`, ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, MAX_DRAWBACK AS `最大回撤`, SHARPE AS `夏普比率` FROM FUND_STATISTICS_YEAR WHERE FUND_NAME LIKE '%中欧%' AND YEAR = 2025 AND HISVALID = 1 AND YIELD IS NOT NULL ORDER BY YIELD DESC LIMIT 1",
+ "final_sql": "SELECT FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, YEAR AS `年度`, ROUND(YIELD, 2) AS `年度收益率(%)`, ROUND(ANNUAL_YIELD, 2) AS `年化收益率(%)`, MAX_DRAWBACK AS `最大回撤`, SHARPE AS `夏普比率` FROM FUND_STATISTICS_YEAR WHERE FUND_NAME LIKE '%中欧%' AND YEAR = 2025 AND HISVALID = 1 AND YIELD IS NOT NULL ORDER BY YIELD DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "018993.OF 中欧数字经济混合发起A 143.07"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中欧数字经济混合发起A 018993.OF 2025 1.43 1.35 -0.21826267 3.714059",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 28.0,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_22_9fa0bd22.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 27.16,
+  "llm_seconds_max": 22.32,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2129,
+   "prompt_tokens": 10237,
+   "total_tokens": 12366,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1733,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10237,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 195,
+   "prompt_tokens": 3704,
+   "total_tokens": 3899,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13941,
+  "completion": 2324,
+  "total": 16265
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2129,
+   "prompt_tokens": 10237,
+   "total_tokens": 12366,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1733,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10237,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 195,
+   "prompt_tokens": 3704,
+   "total_tokens": 3899,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_STATISTICS_YEAR",
+  "FUND_AND_COMPANY_MAPPING"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

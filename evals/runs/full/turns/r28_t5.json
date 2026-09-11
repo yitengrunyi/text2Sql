@@ -1,0 +1,172 @@
+{
+ "round_id": 28,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "条件修改",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT ROUND(AVG((eod.CLOSE * eod.SHARES_OUTSTANDING) / (cum.F034N * 1000000)), 2) AS `算术平均市盈率PE`, ROUND(SUM(eod.CLOSE * eod.SHARES_OUTSTANDING) / SUM(cum.F034N * 1000000), 2) AS `加权平均市盈率PE` FROM AMERICAN_STOCK_MAIN m JOIN (SELECT FIU_ID, MAX(F001D) AS F001D FROM VIEW_COM3103_CUM WHERE F001D <= '2026-03-31' AND F034N IS NOT NULL AND F005V = 'USD' GROUP BY FIU_ID) max_cum ON m.FIU_ID = max_cum.FIU_ID JOIN VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD' JOIN (SELECT FIU_ID, MAX(TRADE_DATE) AS MAX_TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE <= '2026-09-02' GROUP BY FIU_ID) max_eod ON m.FIU_ID = max_eod.FIU_ID JOIN VIEW_US_EOD_EXPR eod ON m.FIU_ID = eod.FIU_ID AND eod.TRADE_DATE = max_eod.MAX_TRADE_DATE WHERE eod.CLOSE IS NOT NULL AND eod.SHARES_OUTSTANDING IS NOT NULL AND cum.F034N IS NOT NULL AND cum.F034N > 0;\n500\n诊断 根据你提供的**模型生成SQL**和**问题描述**，以下是该SQL“没有取到结果”或“取数错误”的最主要可能性分析。我们梳理如下所有潜在原因，并给出最**可能的两个原因**：\n\n---\n\n## 1. 表格是否可能缺失导致模型没有正确取得\n\n- **表名/视图缺失**：  \n  SQL涉及表/视图：`AMERICAN_STOCK_MAIN`, `VIEW_COM3103_CUM`, `VIEW_US_EOD_EXPR`。如果其中有任何一个视图或表不存在（未创建、被误删除/重命名），会导致SQL直接报错（一般会提示“表不存在”）。\n\n- **字段缺失**：  \n  涉及字段较多，如`F034N`、`CLOSE`、`SHARES_OUTSTANDING`等。如果字段在表或者视图定义中实际不存在，则可能出错（模型“捏造”字段）。\n\n---\n\n## 2. 数据本身可能缺失\n\n- **关键字段为NULL或无有效数据**：  \n  SQL通过 `WHERE eod.CLOSE IS NOT NULL AND eod.SHARES_OUTSTANDING IS NOT NULL AND cum.F034N IS NOT NULL AND cum.F034N > 0` 限制。如果表/视图中的实际数据大量为NULL、或`cum.F034N <=0`，那么结果为空是大概率事件。\n  \n- **日期范围数据不存在**：  \n  例如：  \n   - `cum.F001D <= '2026-03-31'`  \n   - `eod.TRADE_DATE <= '2026-09-02'`  \n  当数据实际最晚日期小于这些日期，或未来数据实际尚未入库，也会导致联接不上数据。\n  \n- **外联数据丢失**：  \n  多表联合，如果任意一环join匹配不上（比如有的代码美股主表有，明细表/行情表无），则最终也无结果。\n\n---\n\n## 3. 语法句法可能错误\n\n- **语法本身不报错**：  \n  你的SQL没有明显的语法错误（考虑MySQL 8.0.28下标准功能），模型生成SQL从语法角度应该能通过。\n\n---\n\n## 4. 没有对应字段/模型捏造字段\n\n- **如F034N等字段**：  \n  假如实际表结构无此字段，则执行时报错（而不是无结果），且你没反馈报错提示。\n\n---\n\n## 5. 其他可能性\n\n- **权限问题**：  \n  某些用户权限问题（但一般会直接报“无权限”错误）。\n\n- **字段类型问题**：  \n  类型不匹配时，可能会影响结果计算（如F034N为文本等，但一般报错或转NULL",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT ROUND(AVG((eod.CLOSE * eod.SHARES_OUTSTANDING) / (cum.F034N * 1000000)), 2) AS `算术平均市盈率PE`, ROUND(SUM(eod.CLOSE * eod.SHARES_OUTSTANDING) / SUM(cum.F034N * 1000000), 2) AS `加权平均市盈率PE` FROM AMERICAN_STOCK_MAIN m JOIN (SELECT FIU_ID, MAX(F001D) AS F001D FROM VIEW_COM3103_CUM WHERE F001D <= '2026-03-31' AND F034N IS NOT NULL AND F005V = 'USD' GROUP BY FIU_ID) max_cum ON m.FIU_ID = max_cum.FIU_ID JOIN VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD' JOIN (SELECT FIU_ID, MAX(TRADE_DATE) AS MAX_TRADE_DATE FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE <= '2026-09-02' GROUP BY FIU_ID) max_eod ON m.FIU_ID = max_eod.FIU_ID JOIN VIEW_US_EOD_EXPR eod ON m.FIU_ID = eod.FIU_ID AND eod.TRADE_DATE = max_eod.MAX_TRADE_DATE WHERE eod.CLOSE IS NOT NULL AND eod.SHARES_OUTSTANDING IS NOT NULL AND cum.F034N IS NOT NULL AND cum.F034N > 0",
+ "final_sql": "SELECT ROUND(AVG(cum.F034N), 2) AS `覆盖美股平均累计净利润(百万美元)` FROM AMERICAN_STOCK_MAIN m JOIN (SELECT FIU_ID, MAX(F001D) AS F001D FROM VIEW_COM3103_CUM WHERE F034N IS NOT NULL AND F005V = 'USD' GROUP BY FIU_ID) max_cum ON m.FIU_ID = max_cum.FIU_ID JOIN VIEW_COM3103_CUM cum ON m.FIU_ID = cum.FIU_ID AND cum.F001D = max_cum.F001D AND cum.F005V = 'USD'",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "36.89"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'eod.CLOSE' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 69.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_28_ca93b425.5",
+  "llm_call_count": 4,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 68.17,
+  "llm_seconds_max": 42.34,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5140,
+   "prompt_tokens": 8722,
+   "total_tokens": 13862,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4378,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8722,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1664,
+   "prompt_tokens": 5131,
+   "total_tokens": 6795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13853,
+  "completion": 6804,
+  "total": 20657
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5140,
+   "prompt_tokens": 8722,
+   "total_tokens": 13862,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4378,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8722,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1664,
+   "prompt_tokens": 5131,
+   "total_tokens": 6795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

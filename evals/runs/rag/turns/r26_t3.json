@@ -1,0 +1,130 @@
+{
+ "round_id": 26,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "EDB\n[1] 关键金融指标  \n- 资金净流量（Capital Net Flow）  \n- 资金流入总额（Total Inflow）  \n- 资金流出总额（Total Outflow）\n\n[2] 可能的计算公式  \n资金净流量 = 资金流入总额 - 资金流出总额  \n（Capital Net Flow = Total Inflow - Total Outflow）\n['资金净流量', 'Capital Net Flow', '资金流入总额', 'Total Inflow', '资金流出总额', 'Total Outflow']\n['ECO_DATA_CHINA']\nSELECT \n    DATE_FORMAT(PERIOD_DATE, '%Y-%m-%d') AS `周期日期`,\n    -- DATA_VALUE原单位为“亿美元”，用户问净流入/净流出，即看差额正负，数值保留1位小数\n    ROUND(SUM(DATA_VALUE), 1) AS `当季经常账户差额(亿美元)`,\n    CASE \n        WHEN SUM(DATA_VALUE) > 0 THEN '净流入'\n        WHEN SUM(DATA_VALUE) < 0 THEN '净流出'\n        ELSE '基本持平'\n    END AS `资金流向结论`\nFROM ECO_DATA_CHINA\nWHERE \n    ind_der_code IN ('1018yp7gv4neo909ikxhutdtxium','10163xwsgoqu1gkqrd2ipc3fu6ha')\n    AND PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) -- 查最近两个季度，最大覆盖上个季度\n    AND PERIOD_DATE IS NOT NULL\nGROUP BY PERIOD_DATE\nHAVING PERIOD_DATE = (\n    SELECT MAX(PERIOD_DATE)\n    FROM ECO_DATA_CHINA\n    WHERE \n        ind_der_code IN ('1018yp7gv4neo909ikxhutdtxium','10163xwsgoqu1gkqrd2ipc3fu6ha')\n        AND PERIOD_DATE < DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 0 QUARTER), '%Y-%m-%d') -- 确保仅取上个季度最后一日\n        AND PERIOD_DATE IS NOT NULL\n)\nORDER BY PERIOD_DATE DESC\nLIMIT 1\n500\nDoris 查询错误: (pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'selectdb-cn-rp64b4e2w01.selectdbfe.rds.aliyuncs.com' (timed out)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)\n诊断结果： 错误原因解释：\n- SQL存在如下问题：\n    1. Doris查询语句不允许SELECT语句结尾有分号，需去除。\n    2. HAVING中直接通过“PERIOD_DATE = (子查询)”筛选，本质是只取“最新日期一行”，“用户要求需按时间范围拉取所有数据，不要总是只取‘最新日期’”。\n    3. HAVING用法错误：HAVING语句建议用于聚合结果筛选，不应将“PERIOD_DATE = (MAX(PERIOD_DATE))”作为范围限制，建议把时间范围条件统一放在WHERE语句中。\n    4. DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 0 QUARTER), '%Y-%m-%d')写法错误，Doris不支持INTERVAL 0 QUARTER这种用法，应该用INTERVAL n MONTH。\n    5. WHERE中“PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)”已经能筛选近6个月数据，建议不用HAVING只选最新日期，应该拉取全部时间范围数据。\n    6. ind_der_code字段的使用无误。\n    7. 末尾有LIMIT 1配合HAVING只取一行，不符合用户要求。\n    8. 需确保所有SELECT未聚合字段都出现在GROUP ",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    DATE_FORMAT(PERIOD_DATE, '%Y-%m-%d') AS `周期日期`,\n    -- DATA_VALUE原单位为“亿美元”，用户问净流入/净流出，即看差额正负，数值保留1位小数\n    ROUND(SUM(DATA_VALUE), 1) AS `当季经常账户差额(亿美元)`,\n    CASE \n        WHEN SUM(DATA_VALUE) > 0 THEN '净流入'\n        WHEN SUM(DATA_VALUE) < 0 THEN '净流出'\n        ELSE '基本持平'\n    END AS `资金流向结论`\nFROM ECO_DATA_CHINA\nWHERE \n    ind_der_code IN ('1018yp7gv4neo909ikxhutdtxium','10163xwsgoqu1gkqrd2ipc3fu6ha')\n    AND PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) -- 查最近两个季度，最大覆盖上个季度\n    AND PERIOD_DATE IS NOT NULL\nGROUP BY PERIOD_DATE\nHAVING PERIOD_DATE = (\n    SELECT MAX(PERIOD_DATE)\n    FROM ECO_DATA_CHINA\n    WHERE \n        ind_der_code IN ('1018yp7gv4neo909ikxhutdtxium','10163xwsgoqu1gkqrd2ipc3fu6ha')\n        AND PERIOD_DATE < DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 0 QUARTER), '%Y-%m-%d') -- 确保仅取上个季度最后一日\n        AND PERIOD_DATE IS NOT NULL\n)\nORDER BY PERIOD_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(PERIOD_DATE, '%Y-%m-%d') AS `周期日期`,\n    ROUND(SUM(DATA_VALUE), 1) AS `当季经常账户差额(亿美元)`,\n    CASE \n        WHEN SUM(DATA_VALUE) > 0 THEN '净流入'\n        WHEN SUM(DATA_VALUE) < 0 THEN '净流出'\n        ELSE '基本持平'\n    END AS `资金流向结论`\nFROM ECO_DATA_CHINA\nWHERE \n    ind_der_code IN ('1018yp7gv4neo909ikxhutdtxium','10163xwsgoqu1gkqrd2ipc3fu6ha')\n    AND PERIOD_DATE >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) \n    AND PERIOD_DATE IS NOT NULL\nGROUP BY PERIOD_DATE\nORDER BY PERIOD_DATE DESC\nLIMIT 6",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-12698692650.0000"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'FUND_INFO.ECO_DATA_CHINA' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 60.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_26_6a6c7aa8.3",
+  "llm_call_count": 9,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 38.97,
+  "llm_seconds_max": 6.82,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1734,
+   "prompt_tokens": 16781,
+   "total_tokens": 18515,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16781,
+  "completion": 1734,
+  "total": 18515
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1734,
+   "prompt_tokens": 16781,
+   "total_tokens": 18515,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3200,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_SHARES_CHANGE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

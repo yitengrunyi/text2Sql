@@ -1,0 +1,132 @@
+{
+  "round_id": 24,
+  "source": "MYSQL-1",
+  "domain": "基金",
+  "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+  "initial": {
+    "question": "我关注景顺长城的刘彦春挺久了，他目前在管的总规模有多大？",
+    "judge": "numeric",
+    "gold_value": "24048631916.35",
+    "gold_display": "约240.49亿元（FUND_MANAGER_INFO.NET_VALUE，名下全部在管基金各自最新披露资产净值加总，单位元）",
+    "gold_entities": [
+      "刘彦春"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='刘彦春' AND HISVALID=1",
+    "gold_tables": [
+      "FUND_MANAGER_INFO"
+    ],
+    "labels": {
+      "difficulty": "单表",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "relative"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+      "judge": "entity",
+      "gold_value": "4164",
+      "gold_display": "景顺长城新兴成长混合A（260108.OF），自2015-04-09起任职至今4164天（约11.4年）",
+      "gold_entities": [
+        "刘彦春",
+        "景顺长城新兴成长混合A"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT FUND_NAME, DAYS_IN_OFFICE FROM FUND_AND_MANAGER_MAPPING WHERE PSN_NAME='刘彦春' AND END_DATE IS NULL AND HISVALID=1 ORDER BY DAYS_IN_OFFICE DESC LIMIT 1",
+      "gold_tables": [
+        "FUND_AND_MANAGER_MAPPING"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "那这批在管基金里面，最新一期披露规模最大的是哪只？规模有多大？",
+      "judge": "entity",
+      "gold_value": "10762688560.87",
+      "gold_display": "景顺长城新兴成长混合A（260108.OF），2026-06-30报告期规模约107.63亿元",
+      "gold_entities": [
+        "刘彦春",
+        "景顺长城新兴成长混合A"
+      ],
+      "gold_date": "2026-06-30",
+      "gold_sql": "SELECT a.FUND_NAME, b.NET_VALUE FROM FUND_AND_MANAGER_MAPPING a JOIN FUND_ASSET_ALLOCATION b ON a.FUND_HCODE=b.FUND_HCODE WHERE a.PSN_NAME='刘彦春' AND a.END_DATE IS NULL AND a.HISVALID=1 AND b.HISVALID=1 AND b.REPORT_DATE='2026-06-30' ORDER BY b.NET_VALUE DESC LIMIT 1",
+      "gold_tables": [
+        "FUND_AND_MANAGER_MAPPING",
+        "FUND_ASSET_ALLOCATION"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "条件追加",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+      "judge": "numeric",
+      "gold_value": "42726346909.03",
+      "gold_display": "约427.26亿元（2024-12-31报告期，FUND_MANAGER_ASSET_ALLOCATION口径，较当前约240.49亿元明显缩量）",
+      "gold_entities": [
+        "刘彦春"
+      ],
+      "gold_date": "2024-12-31",
+      "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_ASSET_ALLOCATION WHERE PSN_NAME='刘彦春' AND HISVALID=1 AND REPORT_DATE='2024-12-31'",
+      "gold_tables": [
+        "FUND_MANAGER_ASSET_ALLOCATION"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "换个经理帮我看看，兴证全球的谢治宇，他最新的在管总规模有多大？",
+      "judge": "numeric",
+      "gold_value": "39275132159.32",
+      "gold_display": "约392.75亿元（FUND_MANAGER_INFO.NET_VALUE，在管基金最新披露资产净值加总）",
+      "gold_entities": [
+        "谢治宇"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='谢治宇' AND HISVALID=1",
+      "gold_tables": [
+        "FUND_MANAGER_INFO"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "那在兴证全球内部，目前在管规模比他大的基金经理有几位？",
+      "judge": "numeric",
+      "gold_value": "6",
+      "gold_display": "6位（兴证全球旗下在管规模高于谢治宇约392.75亿元的基金经理人数，规模最大为翟秀华约2307.05亿元）",
+      "gold_entities": [
+        "谢治宇",
+        "兴证全球"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT COUNT(*) FROM FUND_MANAGER_INFO WHERE INST_NAME='兴证全球' AND HISVALID=1 AND NET_VALUE > (SELECT NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='谢治宇' AND HISVALID=1)",
+      "gold_tables": [
+        "FUND_MANAGER_INFO"
+      ],
+      "labels": {
+        "difficulty": "子查询",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    }
+  ]
+}

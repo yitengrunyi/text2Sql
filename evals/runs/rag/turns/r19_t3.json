@@ -1,0 +1,209 @@
+{
+ "round_id": 19,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "往回看，2025年末的时候它的市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 市盈率（PE, Price to Earnings Ratio）\n- 股价（Price）\n- 净利润（Earnings, 或每股收益EPS）\n\n[2] 计算公式：\n\n市盈率 = 股价 / 每股收益  \n或  \n市盈率 = 总市值 / 净利润\n\n其中，每股收益（EPS）= 净利润 / 总股本\n\n查询对象中的“它”需要替换为具体公司才能计算。\n['市盈率', 'PE', 'Price to Earnings Ratio', '股价', 'Price', '净利润', 'Earnings', '每股收益', 'EPS', '总市值', '总股本']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务', '主板行情', '主板基本信息']\n['ANA_STK_VAL_IDX', 'STK_MKT', 'ANA_STK_QTR_IDX', 'STK_COM_PROFILE', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'VIEW_STK_INCOME_GEN', 'GET_A_INDICS_LATEST', 'STK_COMSUB_PROFILE', 'STK_NON_EXTR_ITEM', 'STK_LIST_RESULT', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    '2025-12-31' AS `时间节点`,\n    ROUND(b.PEA_RPD, 2) AS `市盈率(倍)`,\n    ROUND(b.EPSP, 3) AS `每股收益(元)`,\n    ROUND(b.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(b.PS_UP, 3) AS `每股未分配利润(元)`,\n    b.ENDDATE AS `报表截止日`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_FIN_IDX_PLUS b\n    ON a.COMCODE = b.COMCODE\nWHERE\n    b.RPT_TYPE = 2\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.PEA_RPD IS NOT NULL\n    AND a.ISVALID = 1\n    AND b.PEA_RPD IS NOT NULL\nORDER BY\n    a.SEC_CODE ASC\n200\n{table:[['股票名称', '时间节点', '市盈率(倍)', '每股收益(元)', '每股营业收入(亿)', '每股未分配利润(元)', '报表截止日'], ['平安银行', '2025-12-31', '5.19', '2.07', '-', '13.95', '2025-12-31'], ['全新好', '2025-12-31', '2,056.52', '0.01', '0.00', '-0.95', '2025-12-31'], ['中国宝安', '2025-12-31', '125.12', '0.08', '0.00', '2.19', '2025-12-31'], ['深物业A', '2025-12-31', '158.47', '0.06', '0.00', '4.07', '2025-12-31'], ['南玻A', '2025-12-31', '108.25', '0.04', '0.00', '2.63', '2025-12-31'], ['深中华A', '2025-12-31', '131.87', '0.06', '0.00', '-1.65', '2025-12-31'], ['深粮控股', '2025-12-31', '32.93', '0.21', '0.00', '1.67', '2025-12-31'], ['深华发A', '2025-12-31', '110.82', '0.12', '0.00', '-0.24', '2025-12-31'], ['深科技', '2025-12-31', '35.03', '0.72', '0.00', '4.63', '2025-12-31'], ['特力A', '2025-12-31', '52.68', '0.33', '0.00', '2.04', '2025-12-31'], ['飞亚达', '2025-12-31',",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    '2025-12-31' AS `时间节点`,\n    ROUND(b.PEA_RPD, 2) AS `市盈率(倍)`,\n    ROUND(b.EPSP, 3) AS `每股收益(元)`,\n    ROUND(b.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(b.PS_UP, 3) AS `每股未分配利润(元)`,\n    b.ENDDATE AS `报表截止日`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_FIN_IDX_PLUS b\n    ON a.COMCODE = b.COMCODE\nWHERE\n    b.RPT_TYPE = 2\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.PEA_RPD IS NOT NULL\n    AND a.ISVALID = 1\n    AND b.PEA_RPD IS NOT NULL\nORDER BY\n    a.SEC_CODE ASC",
+ "final_sql": "SELECT\n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    '2025-12-31' AS `时间节点`,\n    ROUND(b.PEA_RPD, 2) AS `市盈率(倍)`,\n    ROUND(b.EPSP, 3) AS `每股收益(元)`,\n    ROUND(b.PS_OR / 100000000, 3) AS `每股营业收入(亿)`,\n    ROUND(b.PS_UP, 3) AS `每股未分配利润(元)`,\n    b.ENDDATE AS `报表截止日`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_FIN_IDX_PLUS b\n    ON a.COMCODE = b.COMCODE\nWHERE\n    b.RPT_TYPE = 2\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.PEA_RPD IS NOT NULL\n    AND a.ISVALID = 1\n    AND b.PEA_RPD IS NOT NULL\nORDER BY\n    a.SEC_CODE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "45.9128"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "平安银行 000001 2025-12-31 5.19 2.070  13.954 2025-12-31 00:00:00\n全新好 000007 2025-12-31 2056.52 0.006 0.000 -0.951 2025-12-31 00:00:00\n中国宝安 000009 2025-12-31 125.12 0.079 0.000 2.186 2025-12-31 00:00:00\n深",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 113.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_19_d2979cb7.3",
+  "llm_call_count": 17,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 132.21,
+  "llm_seconds_max": 49.66,
+  "selected_tables": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "GET_A_INDICS_LATEST",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "STK_LIST_RESULT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   74833
+  ],
+  "prompt_columns_raw_len": 22811
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2967,
+   "prompt_tokens": 84681,
+   "total_tokens": 87648,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10112,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 84681,
+  "completion": 2967,
+  "total": 87648
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2967,
+   "prompt_tokens": 84681,
+   "total_tokens": 87648,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10112,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "GET_A_INDICS_LATEST",
+   "STK_COMSUB_PROFILE",
+   "STK_NON_EXTR_ITEM",
+   "STK_LIST_RESULT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,153 @@
+{
+ "round_id": 14,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "紫金矿业最近一次业绩预告是什么类型？针对哪个报告期？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 业绩预告类型（如：预增、预减、续盈、续亏、首亏、扭亏等）  \n- 报告期（如：2024年半年度、2023年年度等）  \n- 归属于上市公司股东的净利润  \n- 同比增减幅度（%）\n\n[2] 可能的计算公式：  \n- 同比增减幅度（%） = （本期预告净利润 - 上年同期净利润）÷ 上年同期净利润 × 100%\n['紫金矿业', '业绩预告', '业绩预告类型', '预增', '预减', '续盈', '续亏', '首亏', '扭亏', '报告期', '半年度报告期', '年度报告期', '2024年半年度', '2023年年度', '归属于上市公司股东的净利润', '净利润', '上市公司股东净利润', '同比增减幅度', '同比增减幅度（%）', '增减幅度', '本期预告净利润', '上年同期净利润']\n该问题可能涉及A股-'紫金矿业'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-有色金属。\n个股相关\n['主板业绩预告', '主板基本信息']\n['STK_ACHIEVE_FORECAST', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    f.A_STOCKCODE AS `A股代码`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.FORE_CLS AS `业绩预告类型`,\n    DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`,\n    DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`,\n    ROUND(f.MIN_VAL, 1) AS `净利润预测下限(万元)`,\n    ROUND(f.MAX_VAL, 1) AS `净利润预测上限(万元)`,\n    ROUND(f.NTINC_GR_FLOR, 2) AS `净利润同比增长下限(%)`,\n    ROUND(f.NTINC_GR_CEIL, 2) AS `净利润同比增长上限(%)`,\n    f.SUMMARY AS `业绩预告摘要`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.A_STOCKSNAME LIKE '%紫金矿业%'\n    AND f.DECLAREDATE IS NOT NULL\n    AND f.ENDDATE IS NOT NULL\nORDER BY\n    f.DECLAREDATE DESC\nLIMIT 1\n200\n{table:[['A股代码', 'A股简称', '业绩预告类型', '预告发布日期', '报告期截止日', '净利润预测下限(万元)', '净利润预测上限(万元)', '净利润同比增长下限(%)', '净利润同比增长上限(%)', '业绩预告摘要'], ['601899', '紫金矿业', '业绩大幅上升', '2026-07-10', '2026-06-30', '3,910,000.00', '3,910,000.00', '68.00', '68.00', '预计2026年1-6月归属于上市公司股东的净利润同比增幅约68%']]}\n查询通过筛选有效记录，并按业绩预告发布日期倒序排列，获取了紫金矿业最近一次业绩预告的相关信息。净利润预测下限和上限通过保留一位小数进行了单位处理，净利润同比增长下限和上限通过保留两位小数进行了结果处理，预测类型直接取值，报告期截止日直接取值。在此查询中，净利润金额和净利润同比增长采用了处理后的数据。查询结果符合要求。\n\n本次查询从上市公司业绩预告表中提取数据，包含A股代码、A股简称、业绩预告类型、预告发布日期、报告期截止日、净利润预测区间、净利润同比增长区间及业绩预告摘要。通过筛选公司简称包含“紫金矿业”的记录，并确保业绩预告的发布日期和报告期截止日信息有效，然后按预告发布日期倒序排序，选取最靠后的记录。这样能够明确获取紫金矿业最近一次业绩预告的类型及对应的报告期。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    f.A_STOCKCODE AS `A股代码`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.FORE_CLS AS `业绩预告类型`,\n    DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`,\n    DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`,\n    ROUND(f.MIN_VAL, 1) AS `净利润预测下限(万元)`,\n    ROUND(f.MAX_VAL, 1) AS `净利润预测上限(万元)`,\n    ROUND(f.NTINC_GR_FLOR, 2) AS `净利润同比增长下限(%)`,\n    ROUND(f.NTINC_GR_CEIL, 2) AS `净利润同比增长上限(%)`,\n    f.SUMMARY AS `业绩预告摘要`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.A_STOCKSNAME LIKE '%紫金矿业%'\n    AND f.DECLAREDATE IS NOT NULL\n    AND f.ENDDATE IS NOT NULL\nORDER BY\n    f.DECLAREDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    f.A_STOCKCODE AS `A股代码`,\n    f.A_STOCKSNAME AS `A股简称`,\n    f.FORE_CLS AS `业绩预告类型`,\n    DATE_FORMAT(f.DECLAREDATE, '%Y-%m-%d') AS `预告发布日期`,\n    DATE_FORMAT(f.ENDDATE, '%Y-%m-%d') AS `报告期截止日`,\n    ROUND(f.MIN_VAL, 1) AS `净利润预测下限(万元)`,\n    ROUND(f.MAX_VAL, 1) AS `净利润预测上限(万元)`,\n    ROUND(f.NTINC_GR_FLOR, 2) AS `净利润同比增长下限(%)`,\n    ROUND(f.NTINC_GR_CEIL, 2) AS `净利润同比增长上限(%)`,\n    f.SUMMARY AS `业绩预告摘要`\nFROM\n    STK_ACHIEVE_FORECAST f\nWHERE \n    f.ISVALID = 1\n    AND f.A_STOCKSNAME LIKE '%紫金矿业%'\n    AND f.DECLAREDATE IS NOT NULL\n    AND f.ENDDATE IS NOT NULL\nORDER BY\n    f.DECLAREDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "紫金矿业 业绩大幅上升 2026-06-30 00:00:00 2026-07-10 00:00:00 临时公告"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "601899 紫金矿业 业绩大幅上升 2026-07-10 2026-06-30 3910000.0 3910000.0 68.00 68.00 预计2026年1-6月归属于上市公司股东的净利润同比增幅约68%",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'日期': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'日期': True})"
+ ],
+ "elapsed_seconds": 58.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_14_b74ac4f3.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 58.45,
+  "llm_seconds_max": 6.42,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   15487
+  ],
+  "prompt_columns_raw_len": 2052
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1415,
+   "prompt_tokens": 27965,
+   "total_tokens": 29380,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27965,
+  "completion": 1415,
+  "total": 29380
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1415,
+   "prompt_tokens": 27965,
+   "total_tokens": 29380,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

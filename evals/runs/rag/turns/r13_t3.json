@@ -1,0 +1,161 @@
+{
+ "round_id": 13,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "那2023年度呢，当时每10股派了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：每股派息（Dividend Per Share, DPS）\n\n[2] 计算公式：  \n每10股派息金额 = 每股派息 × 10\n\n若已知每10股派发总金额，则：  \n每股派息 = 每10股派息金额 ÷ 10\n['每股派息', 'Dividend Per Share', 'DPS', '每10股派息金额', '每10股派发总金额']\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n个股相关\n['主板分红', '主板基本信息']\n['STK_DIV_INFO', 'STK_DIV_STAT', 'STK_COM_PROFILE', 'STK_DIVPAY', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    s.A_STOCKSNAME AS `股票简称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.ACCUM_UNIT_DIV,2) AS `每10股派现（元）`,\n    ROUND(s.TOT_ACCUM_DIV/100000000,1) AS `年度累计分红总额（亿）`,\n    ROUND(s.NET_PROFIT/10000,1) AS `归母净利润（万）`,\n    ROUND(s.CASH_NP_PROP,2) AS `现金分红与净利润比率（%）`\nFROM\n    STK_DIV_STAT s\nWHERE\n    s.DIV_YEAR = 2023\n    AND s.ISVALID = 1\n    AND s.ACCUM_UNIT_DIV IS NOT NULL\nORDER BY\n    s.ACCUM_UNIT_DIV DESC\n200\n{table:[['股票简称', '股票代码', '分红年度', '每10股派现（元）', '年度累计分红总额（亿）', '归母净利润（万）', '现金分红与净利润比率（%）'], ['贵州茅台', '600519', '2,023', '30.88', '387.90', '7,473,407.20', '51.90'], ['诺瓦星云', '301589', '2,023', '9.70', '5.00', '60,712.20', '82.06'], ['石英股份', '603688', '2,023', '7.00', '25.30', '503,913.30', '50.13'], ['吉比特', '603444', '2,023', '7.00', '5.00', '112,511.90', '44.82'], ['迈瑞医疗', '300760', '2,023', '5.80', '70.30', '1,158,222.60', '60.72'], ['泸州老窖', '000568', '2,023', '5.40', '79.50', '1,324,639.50', '60.01'], ['五粮液', '000858', '2,023', '4.67', '181.30', '3,021,058.50', '60.00'], ['洋河股份', '002304', '2,023', '4.66', '70.20', '1,001,593.00', '70.09'], ['古井贡酒', '000596', '2,023', '4.50', '23.80', '458,916.40', '51.83'], ['长春高新', '000661', '2,023', '4.50', '18.10', '453,248.40', '39.93'], ['中国移动', '600941', '2,023', '4.41', '943.4",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    s.A_STOCKSNAME AS `股票简称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.ACCUM_UNIT_DIV,2) AS `每10股派现（元）`,\n    ROUND(s.TOT_ACCUM_DIV/100000000,1) AS `年度累计分红总额（亿）`,\n    ROUND(s.NET_PROFIT/10000,1) AS `归母净利润（万）`,\n    ROUND(s.CASH_NP_PROP,2) AS `现金分红与净利润比率（%）`\nFROM\n    STK_DIV_STAT s\nWHERE\n    s.DIV_YEAR = 2023\n    AND s.ISVALID = 1\n    AND s.ACCUM_UNIT_DIV IS NOT NULL\nORDER BY\n    s.ACCUM_UNIT_DIV DESC",
+ "final_sql": "SELECT\n    s.A_STOCKSNAME AS `股票简称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.ACCUM_UNIT_DIV,2) AS `每10股派现（元）`,\n    ROUND(s.TOT_ACCUM_DIV/100000000,1) AS `年度累计分红总额（亿）`,\n    ROUND(s.NET_PROFIT/10000,1) AS `归母净利润（万）`,\n    ROUND(s.CASH_NP_PROP,2) AS `现金分红与净利润比率（%）`\nFROM\n    STK_DIV_STAT s\nWHERE\n    s.DIV_YEAR = 2023\n    AND s.ISVALID = 1\n    AND s.ACCUM_UNIT_DIV IS NOT NULL\nORDER BY\n    s.ACCUM_UNIT_DIV DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "22.600000 2.260000 2024-07-08 00:00:00"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "贵州茅台 600519 2023 30.88 387.9 7473407.2 51.90\n诺瓦星云 301589 2023 9.70 5.0 60712.2 82.06\n石英股份 603688 2023 7.00 25.3 503913.3 50.13\n吉比特 603444 2023 7.00 5.0 112511.9 44.82\n迈瑞医疗 300760 2023 5.80 70.3 115822",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(1000行, Gold为1行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 47.7,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_13_d3c0b90c.3",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 49.61,
+  "llm_seconds_max": 8.31,
+  "selected_tables": [
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_COM_PROFILE",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_LIST_ORG",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DIVPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   32892
+  ],
+  "prompt_columns_raw_len": 18322
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1283,
+   "prompt_tokens": 38852,
+   "total_tokens": 40135,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38852,
+  "completion": 1283,
+  "total": 40135
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1283,
+   "prompt_tokens": 38852,
+   "total_tokens": 40135,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_COM_PROFILE",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

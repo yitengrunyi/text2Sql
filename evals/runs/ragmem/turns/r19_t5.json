@@ -1,0 +1,174 @@
+{
+ "round_id": 19,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "和中证1000同期相比，两者的净资产收益率谁更高？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, a.ENDDATE AS `截止日期`, ROUND(a.ROE, 2) AS `净资产收益率(%)` FROM ANA_INDX_FIN_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE = '000852' OR b.INDX_CNAME LIKE '%深证100%') AND a.ENDDATE = '2026-06-30 00:00:00.000' AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.ROE IS NOT NULL ORDER BY a.ROE DESC;\n200\n{table:[['指数名称', '指数代码', '截止日期', '净资产收益率(%)'], ['深证1000成长指数', '399630', '2026-06-30', '8.30'], ['深证100全收益指数', '399004', '2026-06-30', '7.40'], ['深证100指数', '399330', '2026-06-30', '7.40'], ['深证100等权重指数', '399632', '2026-06-30', '7.40'], ['深证100绩效加权指数', '399656', '2026-06-30', '7.40'], ['深证100低波动率指数', '399645', '2026-06-30', '6.47'], ['深证1000价值指数', '399631', '2026-06-30', '6.06'], ['深证1000指数', '399011', '2026-06-30', '5.78'], ['中证1000指数', '000852', '2026-06-30', '3.75']]}\n该查询获取了深证100指数和中证1000指数在2026年半年报同期的净资产收益率。查询数据来源于指数基本信息表和指数财务指标数据表，通过指数代码和名称筛选出目标指数。筛选条件要求数据状态为有效且正常使用，报告时间为2026年6月30日，并排除缺失净资产收益率的记录。结果按照净资产收益率从高到低排列，便于比较两者谁更高。净资产收益率本身是指成份股当期净利润与净资产之比，单位为百分比，此处保留两位小数，未涉及单位换算。该查询直接使用了已有的指标数据，查询结果完全满足“同期净资产收益率谁更高”的对比需求。\n{table:[['指数名称', '指数代码', '截止日期', '净资产收益率(%)'], ['深证1000成长指数', '399630', '2026-06-30', '8.30'], ['深证100全收益指数', '399004', '2026-06-30', '7.40'], ['深证100指数', '399330', '2026-06-30', '7.40'], ['深证100等权重指数', '399632', '2026-06-30', '7.40'], ['深证100绩效加权指数', '399656', '2026-06-30', '7.40'], ['深证100低波动率指数', '399645', '2026-06-30', '6.47'], ['深证1000价值指数', '399631', '2026-06-30', '6.06'], ['深证1000指数', '399011', '2026-06-30', '5.78'], ['中证1000指数', '000852', '2026-06-30', '3.75']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, a.ENDDATE AS `截止日期`, ROUND(a.ROE, 2) AS `净资产收益率(%)` FROM ANA_INDX_FIN_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE = '000852' OR b.INDX_CNAME LIKE '%深证100%') AND a.ENDDATE = '2026-06-30 00:00:00.000' AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.ROE IS NOT NULL ORDER BY a.ROE DESC",
+ "final_sql": "SELECT b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, a.ENDDATE AS `截止日期`, ROUND(a.ROE, 2) AS `净资产收益率(%)` FROM ANA_INDX_FIN_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE = '000852' OR b.INDX_CNAME LIKE '%深证100%') AND a.ENDDATE = '2026-06-30 00:00:00.000' AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.ROE IS NOT NULL ORDER BY a.ROE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "深证100指数 7.3965\n中证1000指数 3.7513"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 9
+ },
+ "first_result_preview": "深证1000成长指数 399630 2026-06-30 00:00:00 8.30\n深证100全收益指数 399004 2026-06-30 00:00:00 7.40\n深证100指数 399330 2026-06-30 00:00:00 7.40\n深证100等权重指数 399632 2026-06-30 00:00:00 7.40\n深证100绩效加权指数 399656 2026-06-30 0",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(9行, Gold为2行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 9
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '实体数值同行': True})"
+ ],
+ "elapsed_seconds": 39.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_19_7b3860d2.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 38.46,
+  "llm_seconds_max": 33.43,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3475,
+   "prompt_tokens": 19382,
+   "total_tokens": 22857,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2924,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 19382,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 178,
+   "prompt_tokens": 11984,
+   "total_tokens": 12162,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31366,
+  "completion": 3653,
+  "total": 35019
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3475,
+   "prompt_tokens": 19382,
+   "total_tokens": 22857,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2924,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 19382,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 178,
+   "prompt_tokens": 11984,
+   "total_tokens": 12162,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_FIN_IDX",
+  "GET_INDX_GEN_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

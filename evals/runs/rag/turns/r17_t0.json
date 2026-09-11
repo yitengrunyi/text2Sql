@@ -1,0 +1,186 @@
+{
+ "round_id": 17,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "万华化学2025年年报的营业总收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n营业总收入（Operating Revenue / Total Revenue）\n\n[2] 可能的计算公式：  \n营业总收入 = 主营业务收入 + 其他业务收入\n\n其中，  \n主营业务收入 = 产品或服务的销售收入  \n其他业务收入 = 与企业主营业务无关的经营活动所取得的收入（如处置资产收益等）\n\n因此，  \n营业总收入 = 产品/服务销售收入 + 其他业务相关收入\n['万华化学', '年报', '营业总收入', 'Operating Revenue', 'Total Revenue', '主营业务收入', '产品或服务的销售收入', '产品销售收入', '服务销售收入', '其他业务收入', '其他业务相关收入', '与企业主营业务无关的经营活动所取得的收入', '处置资产收益']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    b.ENDDATE AS `报表截止日`,\n    ROUND(b.P110100/100000000, 3) AS `营业总收入(亿元)`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_INCOME_GEN b\n    ON a.COMCODE = b.COMCODE\nWHERE \n    a.SEC_SNAME LIKE '%万华化学%'\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.RPT_TYPE = '合并'\n    AND a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.P110100 IS NOT NULL\nLIMIT 1\n200\n{table:[['股票名称', '报表截止日', '营业总收入(亿元)'], ['万华化学', '2025-12-31', '2,032.35']]}\n该查询的目的在于获取万华化学在2025年年报的营业总收入。营业总收入（亿元）通过将营业总收入（元）除以一亿，并保留三位小数实现单位转换。具体计算公式为：营业总收入（亿元）等于营业总收入（元）除以100000000。查询结果符合要求。\n\n查询利用了A股公司基础信息的表和公司利润表（通用）。通过公司代码将两个表进行关联。筛选条件包括：证券简称包含“万华化学”，报表截止日为2025年12月31日，报表类型为合并，确保两表中记录均为有效，并且营业总收入数据不为空。查询返回万华化学在指定时间点的营业总收入，结果仅限一条数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    b.ENDDATE AS `报表截止日`,\n    ROUND(b.P110100/100000000, 3) AS `营业总收入(亿元)`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_INCOME_GEN b\n    ON a.COMCODE = b.COMCODE\nWHERE \n    a.SEC_SNAME LIKE '%万华化学%'\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.RPT_TYPE = '合并'\n    AND a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.P110100 IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    b.ENDDATE AS `报表截止日`,\n    ROUND(b.P110100/100000000, 3) AS `营业总收入(亿元)`\nFROM \n    GET_A_SEC_CODE a\nJOIN \n    VIEW_STK_INCOME_GEN b\n    ON a.COMCODE = b.COMCODE\nWHERE \n    a.SEC_SNAME LIKE '%万华化学%'\n    AND b.ENDDATE = '2025-12-31 00:00:00'\n    AND b.RPT_TYPE = '合并'\n    AND a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.P110100 IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "203234573814.42"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "万华化学 600309 2025-12-31 00:00:00 2032.346",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 52.5,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_17_d1ad8b50.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 69.44,
+  "llm_seconds_max": 12.09,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   35245
+  ],
+  "prompt_columns_raw_len": 4127
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2169,
+   "prompt_tokens": 55233,
+   "total_tokens": 57402,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55233,
+  "completion": 2169,
+  "total": 57402
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2169,
+   "prompt_tokens": 55233,
+   "total_tokens": 57402,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,193 @@
+{
+ "round_id": 27,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 净利润（Net Profit）  \n- 期末总资产（Total Assets at Year-End）  \n- 资产回报率（ROA, Return on Assets）\n\n[2] 可能的计算公式：  \n资产回报率（ROA）= 净利润 ÷ 期末总资产 × 100%\n['净利润', 'Net Profit', '期末总资产', 'Total Assets at Year-End', '资产回报率', 'ROA', 'Return on Assets']\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'STK_COM_PROFILE', 'STK_EQT_CHNG', 'VIEW_STK_BALA_GEN', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    fa.ENDDATE AS `报告截止日`,\n    sc.SEC_SNAME AS `股票简称`,\n    sc.SEC_CODE AS `股票代码`,\n    fa.ROA_NP AS `净利润对应期末总资产回报率(ROA) (%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS fa\n    LEFT JOIN GET_A_SEC_CODE sc ON fa.COMCODE = sc.COMCODE\nWHERE\n    fa.RPT_TYPE = '2'\n    AND fa.RPT_TAG = 7\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.ISVALID = 1\n    AND fa.ROA_NP IS NOT NULL\n    AND sc.ISVALID = 1\nORDER BY\n    fa.ROA_NP DESC\n200\n{table:[['报告截止日', '股票简称', '净利润对应期末总资产回报率(ROA) (%)'], ['2025-12-31', '新易盛', '50.09'], ['2025-12-31', '天孚通信', '36.07'], ['2025-12-31', '三瑞智能', '36.01'], ['2025-12-31', '森合高科', '33.83'], ['2025-12-31', '中际旭创', '31.23'], ['2025-12-31', '兴齐眼药', '29.82'], ['2025-12-31', '贵州茅台', '28.31'], ['2025-12-31', '万辰集团', '28.02'], ['2025-12-31', '锦波生物', '27.83'], ['2025-12-31', '吉比特', '27.61'], ['2025-12-31', '金科股份', '25.80'], ['2025-12-31', '亿联网络', '25.41'], ['2025-12-31', '中科仪', '25.28'], ['2025-12-31', '千岸科技', '25.05'], ['2025-12-31', '海菲曼', '24.94'], ['2025-12-31', '三美股份', '24.10'], ['2025-12-31', '动力新科', '23.95'], ['2025-12-31', '同花顺', '23.91'], ['2025-12-31', '彩客科技', '23.71'], ['20",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    sc.SEC_SNAME AS `股票简称`,\n    sc.SEC_CODE AS `股票代码`,\n    fa.ROA_NP AS `净利润对应期末总资产回报率(ROA) (%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS fa\n    LEFT JOIN GET_A_SEC_CODE sc ON fa.COMCODE = sc.COMCODE\nWHERE\n    fa.RPT_TYPE = '2'\n    AND fa.RPT_TAG = 7\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.ISVALID = 1\n    AND fa.ROA_NP IS NOT NULL\n    AND sc.ISVALID = 1\nORDER BY\n    fa.ROA_NP DESC",
+ "final_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    sc.SEC_SNAME AS `股票简称`,\n    sc.SEC_CODE AS `股票代码`,\n    fa.ROA_NP AS `净利润对应期末总资产回报率(ROA) (%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS fa\n    LEFT JOIN GET_A_SEC_CODE sc ON fa.COMCODE = sc.COMCODE\nWHERE\n    fa.RPT_TYPE = '2'\n    AND fa.RPT_TAG = 7\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.ISVALID = 1\n    AND fa.ROA_NP IS NOT NULL\n    AND sc.ISVALID = 1\nORDER BY\n    fa.ROA_NP DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.07"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.VIEW_STK_FIN_IDX_PLUS' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 232.0,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_27_bbd483d2.2",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 70.09,
+  "llm_seconds_max": 8.14,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   58696
+  ],
+  "prompt_columns_raw_len": 18386
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2129,
+   "prompt_tokens": 72053,
+   "total_tokens": 74182,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10368,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 72053,
+  "completion": 2129,
+  "total": 74182
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2129,
+   "prompt_tokens": 72053,
+   "total_tokens": 74182,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10368,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "COM3102"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

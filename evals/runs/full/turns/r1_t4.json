@@ -1,0 +1,174 @@
+{
+ "round_id": 1,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "和招商银行相比，谁2025年的归母净利润更高？高多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH ndsd AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1), zsyh AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%招商银行%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1) SELECT n.`名称` AS `公司1名称`, ROUND(n.`利润` / 10000, 1) AS `公司1归母净利润(万)`, z.`名称` AS `公司2名称`, ROUND(z.`利润` / 10000, 1) AS `公司2归母净利润(万)`, CASE WHEN n.`利润` > z.`利润` THEN n.`名称` WHEN n.`利润` < z.`利润` THEN z.`名称` ELSE '利润相同' END AS `利润更高者`, ROUND(ABS(n.`利润` - z.`利润`) / 10000, 1) AS `高出金额(万)` FROM ndsd n CROSS JOIN zsyh z;\n200\n{table:[['公司1名称', '公司1归母净利润(万)', '公司2名称', '公司2归母净利润(万)', '利润更高者', '高出金额(万)'], ['宁德时代', '7,220,128.20', '招商银行', '15,018,100.00', '招商银行', '7,797,971.80']]}\n本查询对比了“宁德时代”和“招商银行”在2025年年度报告中归属于母公司股东的净利润。数据来源包括公司基本信息和主要财务指标表，通过筛选股票简称为“宁德时代”和“招商银行”的公司，并限定为2025年12月31日数据，只选择有效记录和净利润数据不为空的条目。获取两家公司各自2025年年报的归母净利润后，进行单位换算，将原始金额从元转换为万元，并保留1位小数。此外，系统自动识别出归母净利润更高的公司，并计算两者之间的差额（同样以万元为单位、保留1位小数显示）。此查询直接采用公司已披露的财务指标和基础信息，结果清晰展示两家公司2025年年报归母净利润对比、哪家更高及高出多少，完全满足用户对结果的需求。\n{table:[['公司1名称', '公司1归母净利润(万)', '公司2名称', '公司2归母净利润(万)', '利润更高者', '高出金额(万)'], ['宁德时代', '7,220,128.20', '招商银行', '15,018,100.00', '招商银行', '7,797,971.80']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH ndsd AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1), zsyh AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%招商银行%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1) SELECT n.`名称` AS `公司1名称`, ROUND(n.`利润` / 10000, 1) AS `公司1归母净利润(万)`, z.`名称` AS `公司2名称`, ROUND(z.`利润` / 10000, 1) AS `公司2归母净利润(万)`, CASE WHEN n.`利润` > z.`利润` THEN n.`名称` WHEN n.`利润` < z.`利润` THEN z.`名称` ELSE '利润相同' END AS `利润更高者`, ROUND(ABS(n.`利润` - z.`利润`) / 10000, 1) AS `高出金额(万)` FROM ndsd n CROSS JOIN zsyh z",
+ "final_sql": "WITH ndsd AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%宁德时代%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1), zsyh AS (SELECT sc.SEC_SNAME AS `名称`, idx.F110101 AS `利润` FROM VIEW_STK_FIN_IDX idx JOIN GET_A_SEC_CODE sc ON idx.COMCODE = sc.COMCODE AND sc.ISVALID = 1 WHERE sc.SEC_SNAME LIKE '%招商银行%' AND idx.ISVALID = 1 AND idx.F110101 IS NOT NULL AND YEAR(idx.ENDDATE) = 2025 AND MONTH(idx.ENDDATE) = 12 AND DAY(idx.ENDDATE) = 31 ORDER BY idx.ENDDATE DESC LIMIT 1) SELECT n.`名称` AS `公司1名称`, ROUND(n.`利润` / 10000, 1) AS `公司1归母净利润(万)`, z.`名称` AS `公司2名称`, ROUND(z.`利润` / 10000, 1) AS `公司2归母净利润(万)`, CASE WHEN n.`利润` > z.`利润` THEN n.`名称` WHEN n.`利润` < z.`利润` THEN z.`名称` ELSE '利润相同' END AS `利润更高者`, ROUND(ABS(n.`利润` - z.`利润`) / 10000, 1) AS `高出金额(万)` FROM ndsd n CROSS JOIN zsyh z",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "150181000000.0000\n72201282000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "宁德时代 7220128.2 招商银行 15018100.0 招商银行 7797971.8",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 59.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_1_4b84a6c0.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 58.12,
+  "llm_seconds_max": 50.92,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6336,
+   "prompt_tokens": 25052,
+   "total_tokens": 31388,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5521,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 25052,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 212,
+   "prompt_tokens": 18194,
+   "total_tokens": 18406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 43246,
+  "completion": 6548,
+  "total": 49794
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6336,
+   "prompt_tokens": 25052,
+   "total_tokens": 31388,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5521,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 25052,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 212,
+   "prompt_tokens": 18194,
+   "total_tokens": 18406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

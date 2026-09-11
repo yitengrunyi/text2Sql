@@ -1,0 +1,156 @@
+{
+ "round_id": 6,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "聚合",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 重仓股市值占基金净值比（Top Holdings as % of Net Asset Value, NAV）\n\n[2] 可能的计算公式：  \n- 重仓股市值占比 = （单只重仓股票的持仓市值 ÷ 基金净资产）× 100%\n- 前三大重仓股是按照各股票持仓市值从高到低排序，取前3名。\n['易方达蓝筹精选混合', '2026年二季报', '前三大重仓股', '重仓股市值', '基金净值', '重仓股市值占基金净值比', 'Top Holdings as % of Net Asset Value', 'NAV', '持仓市值', '基金净资产', '重仓股市值占比']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓']\n['FUND_PORTFOLIO_DETAIL', 'FUND_ASSET_ALLOCATION', 'FUND_TOP10_STOCK_CHANGE_HY', 'STOCK_HOLD_STATISTICS_HY', 'FUND_INDUSTRY_ASSET_RATIO_ALL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    `REPORT_DATE` AS `报告期`,\n    `SEC_NAME` AS `股票名称`,\n    `COMB_SYMBOL` AS `股票代码`,\n    ROUND(`MARKET_VALUE` / 100000000, 1) AS `持股市值(亿)`,\n    ROUND(`RATIO_IN_NV` * 100, 2) AS `持仓占基金净资产比例(%)`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    `FUND_NAME` LIKE '%蓝筹精选%'\n    AND `FUND_NAME` LIKE '%易方达%'\n    AND `REPORT_DATE` = '2026-06-30'\n    AND `FUND_HOLDING_SOURCE_ID` = 1\n    AND `HISVALID` = 1\n    AND `MARKET_VALUE` IS NOT NULL\n    AND `RATIO_IN_NV` IS NOT NULL\nORDER BY\n    `MARKET_VALUE` DESC\nLIMIT 3\n200\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿)', '持仓占基金净资产比例(%)'], ['2026-06-30', '腾讯控股', '00700.HK', '11.70', '5.72'], ['2026-06-30', '贵州茅台', '600519.SH', '11.50', '5.62'], ['2026-06-30', '百胜中国', '09987.HK', '11.20', '5.49']]}\n该查询的主要目的是获取“易方达蓝筹精选混合”基金在2026年二季报中持有的前三大重仓股票名称、股票代码、持股市值（单位为亿元）以及持仓占基金净资产的比例。持股市值通过公式：持股市值（亿）等于持股市值（元）除以1亿，并保留一位小数；持仓占基金净资产比例等于占净资产比例的小数乘以100，结果保留两位小数。查询结果符合要求。\n\n查询从基金产品持股明细表中提取数据。筛选条件包括基金简称中包含“易方达”和“蓝筹精选”、报告期为2026年6月30日，数据来源为基金二季报，有效记录、持股市值和占净资产比例不能为空。结果按持股市值从高到低排序，返回排名前3的股票信息。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    `REPORT_DATE` AS `报告期`,\n    `SEC_NAME` AS `股票名称`,\n    `COMB_SYMBOL` AS `股票代码`,\n    ROUND(`MARKET_VALUE` / 100000000, 1) AS `持股市值(亿)`,\n    ROUND(`RATIO_IN_NV` * 100, 2) AS `持仓占基金净资产比例(%)`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    `FUND_NAME` LIKE '%蓝筹精选%'\n    AND `FUND_NAME` LIKE '%易方达%'\n    AND `REPORT_DATE` = '2026-06-30'\n    AND `FUND_HOLDING_SOURCE_ID` = 1\n    AND `HISVALID` = 1\n    AND `MARKET_VALUE` IS NOT NULL\n    AND `RATIO_IN_NV` IS NOT NULL\nORDER BY\n    `MARKET_VALUE` DESC\nLIMIT 3",
+ "final_sql": "SELECT\n    `REPORT_DATE` AS `报告期`,\n    `SEC_NAME` AS `股票名称`,\n    `COMB_SYMBOL` AS `股票代码`,\n    ROUND(`MARKET_VALUE` / 100000000, 1) AS `持股市值(亿)`,\n    ROUND(`RATIO_IN_NV` * 100, 2) AS `持仓占基金净资产比例(%)`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    `FUND_NAME` LIKE '%蓝筹精选%'\n    AND `FUND_NAME` LIKE '%易方达%'\n    AND `REPORT_DATE` = '2026-06-30'\n    AND `FUND_HOLDING_SOURCE_ID` = 1\n    AND `HISVALID` = 1\n    AND `MARKET_VALUE` IS NOT NULL\n    AND `RATIO_IN_NV` IS NOT NULL\nORDER BY\n    `MARKET_VALUE` DESC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "腾讯控股 0.057200\n贵州茅台 0.056200\n百胜中国 0.054900"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "2026-06-30 腾讯控股 00700.HK 11.7 5.72\n2026-06-30 贵州茅台 600519.SH 11.5 5.62\n2026-06-30 百胜中国 09987.HK 11.2 5.49",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 68.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_6_94a9bcec.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.22,
+  "llm_seconds_max": 7.2,
+  "selected_tables": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "STOCK_HOLD_STATISTICS_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "STOCK_HOLD_STATISTICS_HY",
+   "STOCK_FACTOR_VALUE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   20463
+  ],
+  "prompt_columns_raw_len": 11201
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1494,
+   "prompt_tokens": 29703,
+   "total_tokens": 31197,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29703,
+  "completion": 1494,
+  "total": 31197
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1494,
+   "prompt_tokens": 29703,
+   "total_tokens": 31197,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "STOCK_HOLD_STATISTICS_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

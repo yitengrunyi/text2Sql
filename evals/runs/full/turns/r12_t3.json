@@ -1,0 +1,172 @@
+{
+ "round_id": 12,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "那2025年年报的时候呢，前十大合计持股是多少？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期截止日`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `合计持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE AND ENDDATE >= '2025-12-31' AND ENDDATE < '2026-03-31'\n    )\n    AND a.`RANK` <= 10\nGROUP BY \n    b.SEC_SNAME,\n    b.COMB_SYMBOL,\n    a.ENDDATE;\n200\n{table:[['股票名称', '股票代码', '报告期截止日', '合计持股比例(%)'], ['恒瑞医药', '600276.SH', '2025-12-31', '58.96']]}\n该查询获取了恒瑞医药在2025年年报时前十大股东的合计持股比例信息。数据来源包括股票基本信息表和前十大股东持股明细表，二者通过公司标识进行关联，仅筛选当前有效、名称中包含“恒瑞医药”的公司记录。报告期设置为2025年年报对应的最新披露日，并限定仅统计排名前10的股东。合计持股比例通过直接将前十大股东各自的持股比例相加得到，结果保留两位小数，单位为百分比。该查询直接采用了已披露股东持股比例数据，能够准确反映指定报告期前十大股东的合计持股情况，查询结果符合用户需求。\n{table:[['股票名称', '股票代码', '报告期截止日', '合计持股比例(%)'], ['恒瑞医药', '600276.SH', '2025-12-31', '58.96']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期截止日`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `合计持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE AND ENDDATE >= '2025-12-31' AND ENDDATE < '2026-03-31'\n    )\n    AND a.`RANK` <= 10\nGROUP BY \n    b.SEC_SNAME,\n    b.COMB_SYMBOL,\n    a.ENDDATE",
+ "final_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.ENDDATE AS `报告期截止日`,\n    ROUND(SUM(a.HOLD_PCT), 2) AS `合计持股比例(%)`\nFROM GET_STK_SHR_CLS_DTL a\nJOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    a.ISVALID = 1\n    AND b.ISVALID = 1\n    AND b.SEC_SNAME LIKE '%恒瑞医药%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE) \n        FROM GET_STK_SHR_CLS_DTL \n        WHERE COMCODE = a.COMCODE AND ENDDATE >= '2025-12-31' AND ENDDATE < '2026-03-31'\n    )\n    AND a.`RANK` <= 10\nGROUP BY \n    b.SEC_SNAME,\n    b.COMB_SYMBOL,\n    a.ENDDATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "58.96"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "恒瑞医药 600276.SH 2025-12-31 00:00:00 58.96",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 115.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_12_50d4de07.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.13,
+  "llm_seconds_max": 28.98,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3066,
+   "prompt_tokens": 23467,
+   "total_tokens": 26533,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2507,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 15041,
+   "total_tokens": 15213,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38508,
+  "completion": 3238,
+  "total": 41746
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3066,
+   "prompt_tokens": 23467,
+   "total_tokens": 26533,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2507,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 172,
+   "prompt_tokens": 15041,
+   "total_tokens": 15213,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

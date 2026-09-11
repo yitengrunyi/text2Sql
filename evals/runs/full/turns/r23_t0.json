@@ -1,0 +1,157 @@
+{
+ "round_id": 23,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "帮我拆一下大成高新技术产业股票A 2026年二季报的前十大重仓股，按持股市值从高到低排一下。",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 前十大重仓股（即持仓市值排名前十的股票）  \n- 持股市值（即每只股票在基金中的市值）\n\n[2] 可能的计算公式  \n持股市值 = 持有数量 × 股票二季度末价格  \n前十大重仓股 = 从所有持仓股票中，按持股市值降序排列，取前十名\n['大成高新技术产业股票A', '2026年二季报', '前十大重仓股', '重仓股', '持股市值', '市值', '持有数量', '股票二季度末价格', '二季度末价格', '降序排列', '持仓股票', '基金']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓']\n['FUND_PORTFOLIO_DETAIL', 'FUND_STOCK_CHANGE_HY', 'FUND_TOP10_STOCK_CHANGE_HY', 'FUND_INDUSTRY_ASSET_RATIO_ALL', 'STOCK_FACTOR_VALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`,\n    ROUND(MARKET_VALUE_CHANGE_RATIO*100, 2) AS `持股市值变动比例(%)`,\n    ROUND(SHARES_HOLDING_CHANGE, 0) AS `持股数量变化(股)`,\n    ROUND(SHARES_HOLDING_CHANGE_RATIO*100, 2) AS `持股数量变化比例(%)`,\n    CHANGE_LABEL AS `持仓变化`,\n    CHANGE_LABEL_DETAIL AS `持仓变化详情`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%大成高新技术产业股票A%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 10\n500\nMySQL Database error: (1054, \"Unknown column 'MARKET_VALUE_CHANGE_RATIO' in 'field list'\")\n诊断 根据你提供的信息，针对SQL执行错误及没有取到结果的原因分析如下：\n\n---\n\n**你遇到的主要报错：**\n\n> MySQL Database error: (1054, \"Unknown column 'MARKET_VALUE_CHANGE_RATIO' in 'field list'\")\n\n---\n\n### 可能性分析\n\n#### 1. 是否数据库表格缺失？\n“不太可能”，因为SQL中写明了表名为`FUND_PORTFOLIO_DETAIL`，而报的是列不存在而不是表不存在。  \n如果表不存在，报错会是 `Table 'XXX' doesn't exist`。\n\n#### 2. 数据本身缺失？\n由于SQL执行直接报了“字段不存在”，不是“未查到数据”，因此这个问题当前不是优先原因。\n\n#### 3. SQL语法句法错误？\nSQL本身结构是合法的，报错是由于“列不存在”而非语法错。\n\n#### 4. 字段是否存在？\n主要问题：**不存在名为`MARKET_VALUE_CHANGE_RATIO`这个字段。**\n报错信息明确提示在`field list`中找不到该列，这大概率是模型依据惯性“猜”出来的字段。\n\n此外，类似的字段如`SHARES_HOLDING_CHANGE_RATIO`，`CHANGE_LABEL_DETAIL`等也都有存在被“捏造”的风险（即实际表结构里并没有这些）。\n\n#### 5. 其他问题（比如过滤条件导致没数据）\n比如`REPORT_DATE = '2026-06-30'`，考虑到执行时间是2026年9月，理论上数据应该是有可能的，但实际很多数据库未必第一时间补",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`,\n    ROUND(MARKET_VALUE_CHANGE_RATIO*100, 2) AS `持股市值变动比例(%)`,\n    ROUND(SHARES_HOLDING_CHANGE, 0) AS `持股数量变化(股)`,\n    ROUND(SHARES_HOLDING_CHANGE_RATIO*100, 2) AS `持股数量变化比例(%)`,\n    CHANGE_LABEL AS `持仓变化`,\n    CHANGE_LABEL_DETAIL AS `持仓变化详情`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%大成高新技术产业股票A%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 10",
+ "final_sql": "SELECT\n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净值比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    ROUND(MARKET_VALUE_CHANGE/100000000, 1) AS `持股市值变动(亿)`,\n    SHARES_HOLDING_CHANGE AS `持股数量变化(股)`\nFROM\n    FUND_PORTFOLIO_DETAIL\nWHERE\n    FUND_NAME LIKE '%大成高新技术产业股票A%'\n    AND REPORT_DATE = '2026-03-31'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND MARKET_VALUE IS NOT NULL\nORDER BY\n    MARKET_VALUE DESC\nLIMIT 10",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 10,
+  "preview": "福耀玻璃 9.71\n美的集团 9.50\n豪迈科技 8.37\n中国移动 6.59\n宏发股份 6.55\n宁德时代 4.79\n海尔智家 4.60\n浙江龙盛 3.73\n中国海洋石油 2.83\n安琪酵母 2.62"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'MARKET_VALUE_CHANGE_RATIO' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 10
+ },
+ "ex_final": true,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 85.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_23_d8f68205.0",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 75.47,
+  "llm_seconds_max": 11.76,
+  "selected_tables": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "STOCK_HOLD_STATISTICS_HY",
+   "STOCK_FACTOR_VALUE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   18943,
+   12581
+  ],
+  "prompt_columns_raw_len": 2156
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2865,
+   "prompt_tokens": 36431,
+   "total_tokens": 39296,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 36431,
+  "completion": 2865,
+  "total": 39296
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2865,
+   "prompt_tokens": 36431,
+   "total_tokens": 39296,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

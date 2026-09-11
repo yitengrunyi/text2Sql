@@ -1,0 +1,167 @@
+{
+ "round_id": 30,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "再看个别的，迪士尼现在的股息率大概什么水平？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：股息率（Dividend Yield）\n\n[2] 可能的计算公式：  \n股息率 = 每股年度分红 / 当前股价 × 100%  \n公式：  \nDividend Yield = (Annual Dividend per Share / Current Share Price) × 100%\n['股息率', 'Dividend Yield', '每股年度分红', 'Annual Dividend per Share', '当前股价', 'Current Share Price']\n该问题可能涉及美股-'迪士尼', 它的美股股票代码为：DIS.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。\n美股相关\n['美股基本信息', '美股行情', '美股财务']\n['VIEW_COM3102_CUM', 'VIEW_US_EOD_EXPR', 'VIEW_COM3102_Q', 'COM3101', 'VIEW_STOCK_US_TURNOUT_SHARES', 'VIEW_COM3104_CUM', 'COM3102', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    com.F008D AS `股息率数据日期`,\n    ROUND(com.F007N * 100, 2) AS `股息率(%)`\nFROM AMERICAN_STOCK_MAIN am\nLEFT JOIN COM3101 com\n    ON am.FIU_ID = com.FIU_ID\nWHERE am.COMB_SYMBOL = 'DIS.US'\n    AND com.F007N IS NOT NULL\nORDER BY com.F008D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '股息率数据日期', '股息率(%)'], ['迪士尼', 'DIS.US', '-', '59.20']]}\n查询对股息率进行了计算，将原始股息率乘以100，并保留两位小数，得到百分比结果。股息率百分比的公式为：股息率百分比 = 股息率（原始值）×100。查询结果符合要求。\n\n该查询从两个表拉取数据，一个表提供美股公司基础信息，另一个表包含美股最新技术及估值指标。通过内部代码将两个表连接，筛选指定展示代码为“DIS.US”的记录，并只选取股息率数据不为空的记录。结果按股息率数据日期倒序排序，只取最新一条数据。最终返回迪士尼当前的股息率水平。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    com.F008D AS `股息率数据日期`,\n    ROUND(com.F007N * 100, 2) AS `股息率(%)`\nFROM AMERICAN_STOCK_MAIN am\nLEFT JOIN COM3101 com\n    ON am.FIU_ID = com.FIU_ID\nWHERE am.COMB_SYMBOL = 'DIS.US'\n    AND com.F007N IS NOT NULL\nORDER BY com.F008D DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    am.CSNAME AS `股票名称`,\n    am.COMB_SYMBOL AS `股票代码`,\n    com.F008D AS `股息率数据日期`,\n    ROUND(com.F007N * 100, 2) AS `股息率(%)`\nFROM AMERICAN_STOCK_MAIN am\nLEFT JOIN COM3101 com\n    ON am.FIU_ID = com.FIU_ID\nWHERE am.COMB_SYMBOL = 'DIS.US'\n    AND com.F007N IS NOT NULL\nORDER BY com.F008D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.592"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "迪士尼 DIS.US  59.2",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 49.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_30_a01f3abf.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 52.27,
+  "llm_seconds_max": 7.34,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "COM3104",
+   "STK2401",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   37996
+  ],
+  "prompt_columns_raw_len": 20190
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1004,
+   "prompt_tokens": 38448,
+   "total_tokens": 39452,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38448,
+  "completion": 1004,
+  "total": 39452
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1004,
+   "prompt_tokens": 38448,
+   "total_tokens": 39452,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "COM3104",
+   "STK2401",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

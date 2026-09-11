@@ -1,0 +1,172 @@
+{
+ "round_id": 16,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "它8月整月下来总共成交了多少股？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, SUM(a.TVOLUME) AS `总成交量(股)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE a.STOCKSNAME LIKE '%海康威视%' AND a.ENDDATE >= '2026-08-01' AND a.ENDDATE <= '2026-08-31' AND b.ISVALID = 1 AND a.TVOLUME IS NOT NULL GROUP BY a.STOCKSNAME, a.STOCKCODE;\n200\n{table:[['股票名称', '股票代码', '总成交量(股)'], ['海康威视', '002415', '1,660,107,902.00']]}\n该查询获取的是海康威视在2026年8月整个月的总成交量（单位为股），即这段时间内所有交易日累计成交的股票总数。数据来源于个股市场表现指标数据及股票综合代码信息，通过股票简称筛选出海康威视，并限定了2026年8月的时间区间和有效数据，最终统计该期间内每日成交量的总和。成交量直接采用统计口径为“股”的数据，结果即为8月整月总共成交的股票数量。查询结果符合用户关于整月成交量的需求。\n{table:[['股票名称', '股票代码', '总成交量(股)'], ['海康威视', '002415', '1,660,107,902.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, SUM(a.TVOLUME) AS `总成交量(股)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE a.STOCKSNAME LIKE '%海康威视%' AND a.ENDDATE >= '2026-08-01' AND a.ENDDATE <= '2026-08-31' AND b.ISVALID = 1 AND a.TVOLUME IS NOT NULL GROUP BY a.STOCKSNAME, a.STOCKCODE",
+ "final_sql": "SELECT a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, SUM(a.TVOLUME) AS `总成交量(股)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE a.STOCKSNAME LIKE '%海康威视%' AND a.ENDDATE >= '2026-08-01' AND a.ENDDATE <= '2026-08-31' AND b.ISVALID = 1 AND a.TVOLUME IS NOT NULL GROUP BY a.STOCKSNAME, a.STOCKCODE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1660107902"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 204.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_16_1fe43b35.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 34.84,
+  "llm_seconds_max": 30.01,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3417,
+   "prompt_tokens": 16955,
+   "total_tokens": 20372,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2948,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16955,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 132,
+   "prompt_tokens": 10098,
+   "total_tokens": 10230,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27053,
+  "completion": 3549,
+  "total": 30602
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3417,
+   "prompt_tokens": 16955,
+   "total_tokens": 20372,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2948,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16955,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 132,
+   "prompt_tokens": 10098,
+   "total_tokens": 10230,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

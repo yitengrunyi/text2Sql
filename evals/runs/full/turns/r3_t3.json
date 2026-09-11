@@ -1,0 +1,172 @@
+{
+ "round_id": 3,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "美的集团2026年8月收盘价最高的是哪一天？最高收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE < '2026-09-01' AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-08-31', '美的集团', '000333', '87.73']]}\n该查询获取了美的集团在2026年8月期间每日的收盘价信息，并找出该月收盘价最高的交易日以及对应的收盘价金额。查询数据来自股票交易行情数据表，筛选条件包括股票简称为美的集团，数据有效，交易日期限定在2026年8月1日至8月31日，且收盘价不为空。结果按照收盘价从高到低进行排序，并只取最高收盘价的那一天。收盘价结果以元为单位，保留两位小数，展示股票名称、股票代码、最高收盘价和对应交易日期。查询结果完全满足用户关于美的集团2026年8月收盘价最高及日期的需求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-08-31', '美的集团', '000333', '87.73']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE < '2026-09-01' AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1",
+ "final_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TCLOSE, 2) AS `收盘价(元)` FROM STK_MKT m WHERE m.ISVALID = 1 AND m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE < '2026-09-01' AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-31 00:00:00 87.7300"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 美的集团 000333 87.73",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 39.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_3_af250c53.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 37.87,
+  "llm_seconds_max": 33.36,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2908,
+   "prompt_tokens": 17973,
+   "total_tokens": 20881,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2448,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17973,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 164,
+   "prompt_tokens": 11040,
+   "total_tokens": 11204,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29013,
+  "completion": 3072,
+  "total": 32085
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2908,
+   "prompt_tokens": 17973,
+   "total_tokens": 20881,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2448,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17973,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 164,
+   "prompt_tokens": 11040,
+   "total_tokens": 11204,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

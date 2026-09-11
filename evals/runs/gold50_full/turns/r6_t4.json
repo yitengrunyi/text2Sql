@@ -1,0 +1,211 @@
+{
+ "round_id": 6,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：资产净值（Net Asset Value, NAV）\n\n[2] 可能的计算公式：  \n资产净值 =（基金总资产 - 基金总负债）/ 基金份额总数\n\n其中，\n- 基金总资产：包括持有股票、债券、存款等市场价值之和\n- 基金总负债：指各种应付费用、应付账款等\n- 基金份额总数：投资者持有的基金份额总数\n['易方达蓝筹精选混合', '资产净值', 'Net Asset Value', 'NAV', '基金总资产', '总资产', '基金总负债', '总负债', '基金份额总数', '份额总数', '股票', '债券', '存款', '市场价值', '应付费用', '应付账款', '投资者', '基金份额']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金产品基本信息']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'FUND_STATISTICS_YEAR']\n是否命中召回表：False\n生成查询代码\nSELECT\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.REPORT_DATE AS `报告期`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `资产净值（亿元）`\nFROM\n    FUND_ASSET_ALLOCATION t\nWHERE\n    t.FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_ASSET_ALLOCATION\n        WHERE FUND_NAME LIKE '%易方达蓝筹精选混合%'\n              AND HISVALID = 1\n    )\nORDER BY\n    t.REPORT_DATE DESC\nLIMIT 1\n200\n{table:[['基金名称', '基金代码', '报告期', '资产净值（亿元）'], ['易方达蓝筹精选混合', '005827.OF', '2026-06-30', '204.16']]}\n该查询的主要目的是获取“易方达蓝筹精选混合”基金在最新报告期的资产净值。资产净值（亿元）通过公式：资产净值（亿元） = 资产净值 / 100000000，将原始资产净值从单位元转换为亿元，并保留两位小数。在此查询中，对资产净值进行了单位换算的计算。查询结果符合要求。\n\n查询从记录基金产品资产配置及规模信息的表格中筛选数据。查询选择了基金名称、基金代码、报告期和资产净值（亿元）。筛选条件为基金简称包含“易方达蓝筹精选混合”，只选取有效数据，并限定为最新的报告期。数据结果按照报告期降序排列，只返回最符合条件的一条记录。最终结果展示“易方达蓝筹精选混合”基金最新披露的资产净值情况。\n易方达蓝筹精选混合最新的资产净值是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.REPORT_DATE AS `报告期`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `资产净值（亿元）`\nFROM\n    FUND_ASSET_ALLOCATION t\nWHERE\n    t.FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_ASSET_ALLOCATION\n        WHERE FUND_NAME LIKE '%易方达蓝筹精选混合%'\n              AND HISVALID = 1\n    )\nORDER BY\n    t.REPORT_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    t.REPORT_DATE AS `报告期`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `资产净值（亿元）`\nFROM\n    FUND_ASSET_ALLOCATION t\nWHERE\n    t.FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND t.HISVALID = 1\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_ASSET_ALLOCATION\n        WHERE FUND_NAME LIKE '%易方达蓝筹精选混合%'\n              AND HISVALID = 1\n    )\nORDER BY\n    t.REPORT_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "20415804144.7600"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "易方达蓝筹精选混合 005827.OF 2026-06-30 204.16",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 66.3,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_6_4b7f407d.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 68.24,
+  "llm_seconds_max": 17.26,
+  "selected_tables": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   16333
+  ],
+  "prompt_columns_raw_len": 5080
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1236,
+   "prompt_tokens": 10670,
+   "total_tokens": 11906,
+   "completion_tokens_details": {
+    "reasoning_tokens": 986,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10670,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1226,
+   "prompt_tokens": 25872,
+   "total_tokens": 27098,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 36542,
+  "completion": 2462,
+  "total": 39004
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1236,
+   "prompt_tokens": 10670,
+   "total_tokens": 11906,
+   "completion_tokens_details": {
+    "reasoning_tokens": 986,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10670,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1226,
+   "prompt_tokens": 25872,
+   "total_tokens": 27098,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

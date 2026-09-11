@@ -1,0 +1,174 @@
+{
+ "round_id": 23,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "换个角度，2026年二季报全市场公募基金持有市值最大的个股是哪只？一共被多少只基金持有？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT SEC_NAME AS `证券简称`, COMB_SYMBOL AS `证券代码`, ROUND(SUM(MARKET_VALUE) / 100000000, 1) AS `总持股市值(亿)`, COUNT(DISTINCT FUND_HCODE) AS `持有基金数量` FROM FUND_PORTFOLIO_DETAIL WHERE REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 GROUP BY SEC_NAME, COMB_SYMBOL ORDER BY `总持股市值(亿)` DESC LIMIT 1;\n200\n{table:[['证券简称', '证券代码', '总持股市值(亿)', '持有基金数量'], ['中际旭创', '300308.SZ', '4,437.30', '4,954']]}\n该查询获取了2026年二季度全市场公募基金合计持仓市值最高的个股信息，并统计有多少只基金持有该股票。查询基于基金持仓明细数据，选取报告期为2026年6月30日、信息来源为基金季报且为有效数据的记录。通过将所有基金在该报告期内持有同一只股票的持仓市值相加，计算出总持仓市值，单位由元转换为亿元并保留1位小数。同时，查询统计持有该股票的基金数量，避免重复统计同一基金，只计不同基金的数量。最终，结果按总持仓市值从高到低排序，仅显示市值最大的那只个股。持仓市值采用了数据表中直接披露的持股市值进行加总。结果可以满足找出全市场公募基金最集中的个股及持有基金总数的需求，查询结果符合要求。\n{table:[['证券简称', '证券代码', '总持股市值(亿)', '持有基金数量'], ['中际旭创', '300308.SZ', '4,437.30', '4,954']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT SEC_NAME AS `证券简称`, COMB_SYMBOL AS `证券代码`, ROUND(SUM(MARKET_VALUE) / 100000000, 1) AS `总持股市值(亿)`, COUNT(DISTINCT FUND_HCODE) AS `持有基金数量` FROM FUND_PORTFOLIO_DETAIL WHERE REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 GROUP BY SEC_NAME, COMB_SYMBOL ORDER BY `总持股市值(亿)` DESC LIMIT 1",
+ "final_sql": "SELECT SEC_NAME AS `证券简称`, COMB_SYMBOL AS `证券代码`, ROUND(SUM(MARKET_VALUE) / 100000000, 1) AS `总持股市值(亿)`, COUNT(DISTINCT FUND_HCODE) AS `持有基金数量` FROM FUND_PORTFOLIO_DETAIL WHERE REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 GROUP BY SEC_NAME, COMB_SYMBOL ORDER BY `总持股市值(亿)` DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "中际旭创 258826608330.0000 2636"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中际旭创 300308.SZ 4437.3 4954",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "elapsed_seconds": 36.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_23_ef408a74.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 32.12,
+  "llm_seconds_max": 27.1,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2326,
+   "prompt_tokens": 10559,
+   "total_tokens": 12885,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1841,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10559,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 216,
+   "prompt_tokens": 4162,
+   "total_tokens": 4378,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14721,
+  "completion": 2542,
+  "total": 17263
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2326,
+   "prompt_tokens": 10559,
+   "total_tokens": 12885,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1841,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10559,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 216,
+   "prompt_tokens": 4162,
+   "total_tokens": 4378,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STOCK_HOLD_STATISTICS_Q"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

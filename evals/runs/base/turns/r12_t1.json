@@ -1,0 +1,165 @@
+{
+ "round_id": 12,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "名单里排第一的是谁？持有多少股、占比多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 股东名称（关键主体）  \n- 持股数量（股份数）  \n- 持股比例（占比）  \n\n[2] 可能的计算公式：  \n- 持股比例 = 持股数量 ÷ 公司总股本 × 100%\n['股东名称', '关键主体', '持股数量', '股份数', '持股比例', '占比', '公司总股本']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板股本股东', '主板基本信息']\n['STK_IMPAWN_NEW', 'STK_SHR_STRU', 'STK_SEC_IVST', 'VIEW_STK_STI_LIST_PLAN', 'STK_PRE_DISCLOSURE', 'STK_ACCUM_IMPAWN']\n是否命中召回表：False\n生成查询代码\nSELECT \n    s.PERIODDATE AS `报告期`,\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.SEC_NAME AS `投资对象名称`,\n    s.SEC_CODE AS `投资对象股票代码`,\n    FORMAT(s.SEC_NUM / 100000000, 2) AS `持有数量(亿股)`,\n    FORMAT(s.SEC_PCT, 2) AS `持股比例(%)`\nFROM \n    STK_SEC_IVST s\nWHERE \n    s.ISVALID = 1\n    AND s.PERIODDATE = (\n        SELECT MAX(PERIODDATE)\n        FROM STK_SEC_IVST\n        WHERE ISVALID = 1\n    )\n    AND s.SEC_NUM IS NOT NULL\n    AND s.SEC_PCT IS NOT NULL\nORDER BY \n    s.SEC_NUM DESC\nLIMIT 1\n200\n{table:[['报告期', '股票名称', '股票代码', '投资对象名称', '持有数量(亿股)', '持股比例(%)'], ['2025-12-31', '两面针', '600249', '广西北部湾银行股份有限公司', '1.54', '1.54']]}\n持有数量（亿股）是通过将原始的持有数量（股）除以1亿并保留两位小数得出，计算公式为：持有数量（亿股）等于持有数量（股）除以100000000，并四舍五入保留两位小数。持股比例（%）是对原数据进行四舍五入保留两位小数处理。查询结果符合要求。\n\n查询提取了上市公司证券投资信息表中的数据。筛选最近的一个报告期内，持有数量和持股比例均有数据且信息有效的记录。选择了报告期、A股简称、A股代码、投资对象名称、投资对象股票代码、持有数量（亿股）、持股比例（%）等信息。将所有记录按持有数量降序排列，只返回持有数量最大的第一条数据。结果即名单中排第一的公司及其相关持有数量和持股比例信息。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    s.PERIODDATE AS `报告期`,\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.SEC_NAME AS `投资对象名称`,\n    s.SEC_CODE AS `投资对象股票代码`,\n    FORMAT(s.SEC_NUM / 100000000, 2) AS `持有数量(亿股)`,\n    FORMAT(s.SEC_PCT, 2) AS `持股比例(%)`\nFROM \n    STK_SEC_IVST s\nWHERE \n    s.ISVALID = 1\n    AND s.PERIODDATE = (\n        SELECT MAX(PERIODDATE)\n        FROM STK_SEC_IVST\n        WHERE ISVALID = 1\n    )\n    AND s.SEC_NUM IS NOT NULL\n    AND s.SEC_PCT IS NOT NULL\nORDER BY \n    s.SEC_NUM DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    s.PERIODDATE AS `报告期`,\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.SEC_NAME AS `投资对象名称`,\n    s.SEC_CODE AS `投资对象股票代码`,\n    FORMAT(s.SEC_NUM / 100000000, 2) AS `持有数量(亿股)`,\n    FORMAT(s.SEC_PCT, 2) AS `持股比例(%)`\nFROM \n    STK_SEC_IVST s\nWHERE \n    s.ISVALID = 1\n    AND s.PERIODDATE = (\n        SELECT MAX(PERIODDATE)\n        FROM STK_SEC_IVST\n        WHERE ISVALID = 1\n    )\n    AND s.SEC_NUM IS NOT NULL\n    AND s.SEC_PCT IS NOT NULL\nORDER BY \n    s.SEC_NUM DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "江苏恒瑞医药集团有限公司 1538184187 23.18"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 两面针 600249 广西北部湾银行股份有限公司  1.54 1.54",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 52.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_12_c9270ea8.1",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 55.01,
+  "llm_seconds_max": 7.88,
+  "selected_tables": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   29778
+  ],
+  "prompt_columns_raw_len": 15390
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1369,
+   "prompt_tokens": 40047,
+   "total_tokens": 41416,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 40047,
+  "completion": 1369,
+  "total": 41416
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1369,
+   "prompt_tokens": 40047,
+   "total_tokens": 41416,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_STK_SHR_CLS_DTL"
+ ],
+ "table_recall": {
+  "selected": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

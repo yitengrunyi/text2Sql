@@ -1,0 +1,38 @@
+{
+  "mode": "audit",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 3307,
+    "database": "schema_metadata"
+  },
+  "audit": {
+    "checked_at": "2026-09-01T22:56:20+08:00",
+    "physical": {
+      "tables": 748,
+      "columns": 25036
+    },
+    "metadata": {
+      "table_records": 764,
+      "column_records": 26888,
+      "active_tables": 221,
+      "active_columns": 7969,
+      "active_domain_mappings": 129,
+      "active_table_rules": 3
+    },
+    "semantic_coverage": {
+      "reviewed_tables": 246,
+      "reviewed_tables_denominator": 748,
+      "reviewed_columns": 8301,
+      "reviewed_columns_denominator": 25036
+    },
+    "drift": {
+      "physical_tables_without_metadata": [],
+      "active_metadata_tables_missing_in_physical": [],
+      "physical_columns_without_metadata": [],
+      "active_metadata_columns_missing_in_physical": [],
+      "column_type_mismatches": [],
+      "column_nullable_mismatches": []
+    },
+    "consistent": true
+  }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 26,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT ROUND(SUM(a.NET_INFLOW) / 100000000, 2) AS `上季度整体资金净流入(亿元)` FROM FUND_SHARES_CHANGE a JOIN ETF_LABEL_INFO_CHINA b ON a.FUND_SYMBOL = b.ETF_CODE WHERE b.ASSET_TYPE LIKE '%商品%' AND a.END_DATE = '2026-03-31' AND a.STAT_PERIOD = '3' AND a.HISVALID = 1 AND a.NET_INFLOW IS NOT NULL;\n200\n{table:[['上季度整体资金净流入(亿元)'], ['-']]}\n该查询统计了上一季度国内商品型基金整体的资金流动情况。数据来源于基金份额变动及标签分类信息，从中筛选出所有资产类别为商品的基金，并只选取报告期为2026年3月31日、统计周期为季度、且记录有效的数据。资金净流入这一金额直接采用了季度统计值，先将原始数据（元）汇总后，再转换为亿元，最终结果保留两位小数用于展示。本查询能够判断商品型基金整体在上季度是净流入还是净流出，查询结果符合要求。\n{table:[['上季度整体资金净流入(亿元)'], ['-']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT ROUND(SUM(a.NET_INFLOW) / 100000000, 2) AS `上季度整体资金净流入(亿元)` FROM FUND_SHARES_CHANGE a JOIN ETF_LABEL_INFO_CHINA b ON a.FUND_SYMBOL = b.ETF_CODE WHERE b.ASSET_TYPE LIKE '%商品%' AND a.END_DATE = '2026-03-31' AND a.STAT_PERIOD = '3' AND a.HISVALID = 1 AND a.NET_INFLOW IS NOT NULL",
+ "final_sql": "SELECT ROUND(SUM(a.NET_INFLOW) / 100000000, 2) AS `上季度整体资金净流入(亿元)` FROM FUND_SHARES_CHANGE a JOIN ETF_LABEL_INFO_CHINA b ON a.FUND_SYMBOL = b.ETF_CODE WHERE b.ASSET_TYPE LIKE '%商品%' AND a.END_DATE = '2026-03-31' AND a.STAT_PERIOD = '3' AND a.HISVALID = 1 AND a.NET_INFLOW IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-12698692650.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "",
+ "ex_first": false,
+ "ex_reasons": [
+  "答案为空"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 83.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_26_d8328bdd.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 82.46,
+  "llm_seconds_max": 77.46,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8373,
+   "prompt_tokens": 11380,
+   "total_tokens": 19753,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7889,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11380,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 131,
+   "prompt_tokens": 5016,
+   "total_tokens": 5147,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16396,
+  "completion": 8504,
+  "total": 24900
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8373,
+   "prompt_tokens": 11380,
+   "total_tokens": 19753,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7889,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11380,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 131,
+   "prompt_tokens": 5016,
+   "total_tokens": 5147,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_SHARES_CHANGE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

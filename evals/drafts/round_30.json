@@ -1,0 +1,74 @@
+{
+ "round_id": 30,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "initial": {
+  "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+  "judge": "list",
+  "gold_value": null,
+  "gold_display": "阿里巴巴-W(BABA)1663200、拼多多-W(PDD)1209600、网易-W(NTES)506880、京东-W(JD)323136、百度-W(BIDU)214200（百万美元）",
+  "gold_entities": ["阿里巴巴-W", "拼多多-W", "网易-W", "京东-W", "百度-W"],
+  "gold_date": null,
+  "gold_sql": "SELECT m.CSNAME, m.SYMBOL, t.F013N FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' ORDER BY t.F013N DESC LIMIT 5",
+  "gold_tables": ["AMERICAN_STOCK_MAIN", "COM3101"],
+  "labels": {"difficulty": "多表join", "followup_type": null, "route_gold": null, "time_sensitivity": "relative"}
+ },
+ "feedbacks": [
+  {
+   "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+   "judge": "list",
+   "gold_value": null,
+   "gold_display": "京东-W(9.35倍)、百度-W(10.44倍)、理想汽车-W(14.4倍)",
+   "gold_entities": ["京东-W", "百度-W", "理想汽车-W"],
+   "gold_date": null,
+   "gold_sql": "SELECT m.CSNAME, m.SYMBOL, t.F021N FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3",
+   "gold_tables": ["AMERICAN_STOCK_MAIN", "COM3101"],
+   "labels": {"difficulty": "多表join", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+  },
+  {
+   "question": "刚才市盈率最低的那三只中概股，今年以来整体走得怎么样？平均涨跌幅有多少？",
+   "judge": "numeric",
+   "gold_value": "13.41",
+   "gold_display": "今年以来平均上涨13.41%（市盈率最低的3只：京东-W、百度-W、理想汽车-W的算术平均，截至2026-08-25）",
+   "gold_entities": ["京东-W", "百度-W", "理想汽车-W"],
+   "gold_date": "2026-08-25",
+   "gold_sql": "SELECT ROUND(AVG(e.CHG_PCT_YTD),2) AS avg_ytd FROM VIEW_US_EXPR_IDX e JOIN (SELECT m.FIU_ID FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3) s ON e.FIU_ID=s.FIU_ID WHERE e.TRADE_DATE=(SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+   "gold_tables": ["VIEW_US_EXPR_IDX", "AMERICAN_STOCK_MAIN", "COM3101"],
+   "labels": {"difficulty": "聚合", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+  },
+  {
+   "question": "那把窗口拉长到最近一年呢，平均下来大概什么收益水平？",
+   "judge": "numeric",
+   "gold_value": "33.96",
+   "gold_display": "近一年平均上涨33.96%（仍是这3只：京东-W、百度-W、理想汽车-W的算术平均，截至2026-08-25）",
+   "gold_entities": ["京东-W", "百度-W", "理想汽车-W"],
+   "gold_date": "2026-08-25",
+   "gold_sql": "SELECT ROUND(AVG(e.CHG_PCT_YEAR),2) AS avg_year FROM VIEW_US_EXPR_IDX e JOIN (SELECT m.FIU_ID FROM AMERICAN_STOCK_MAIN m JOIN COM3101 t ON m.FIU_ID=t.FIU_ID WHERE m.IS_CHINESE_STOCK='中概股' AND t.F021N IS NOT NULL ORDER BY t.F021N ASC LIMIT 3) s ON e.FIU_ID=s.FIU_ID WHERE e.TRADE_DATE=(SELECT MAX(TRADE_DATE) FROM VIEW_US_EXPR_IDX)",
+   "gold_tables": ["VIEW_US_EXPR_IDX", "AMERICAN_STOCK_MAIN", "COM3101"],
+   "labels": {"difficulty": "聚合", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+  },
+  {
+   "question": "行，清楚了。顺便确认下，这些涨跌幅都是按分红拆股调整后的复权口径算的吧？",
+   "judge": "nonquery",
+   "gold_value": null,
+   "gold_display": null,
+   "gold_entities": [],
+   "gold_date": null,
+   "gold_sql": null,
+   "gold_tables": [],
+   "labels": {"difficulty": null, "followup_type": "非查询", "route_gold": "NON_QUERY", "time_sensitivity": "absolute"}
+  },
+  {
+   "question": "再看个别的，迪士尼现在的股息率大概什么水平？",
+   "judge": "numeric",
+   "gold_value": "0.592",
+   "gold_display": "股息率0.592%",
+   "gold_entities": ["迪士尼"],
+   "gold_date": null,
+   "gold_sql": "SELECT F007N FROM COM3101 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='迪士尼')",
+   "gold_tables": ["COM3101", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "子查询", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "relative"}
+  }
+ ]
+}

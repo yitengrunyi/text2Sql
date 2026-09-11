@@ -1,0 +1,129 @@
+{
+ "round_id": 14,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "对应的一致预期EPS和市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 一致预期EPS（Earnings Per Share，预期每股收益）\n- 市盈率（PE，Price to Earnings Ratio）\n\n[2] 可能的计算公式：\n\n- 一致预期EPS = 分析师对公司未来一段时间（通常为今年全年的）每股净利润的平均预测\n- 市盈率（PE）= 当前股价 / 一致预期EPS\n['一致预期EPS', '预期每股收益', 'Earnings Per Share', '每股净利润', '市盈率', 'PE', 'Price to Earnings Ratio', '当前股价']\n此问题不涉及到个股、行业或者题材\n个股相关\n['个股一致预期']\n[]\n是否命中召回表：False\n生成查询代码\n执行错误: Traceback (most recent call last):\n  File \"/Users/mdb/project/text2sql_renew/handler/text2sql_handler.py\", line 363, in handle_query_demo_for_mq\n    generated_sql, final_define, general_text, domain_text, table_text, combine_prompt, top30_candidates_dict, filtered_table_define = await fetch_and_generate_sql_o1(\n                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/mdb/project/text2sql_renew/service/sql_generator/text_to_sql_generator.py\", line 94, in fetch_and_generate_sql_o1\n    table_text = await fetch_table_knowledge(top30_candidates_dict, table_res)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/mdb/project/text2sql_renew/service/sql_generator/fetch_knowledge.py\", line 211, in fetch_table_knowledge\n    final_table_list = tuple(final_table_list) if len(final_table_list) > 1 else f\"('{final_table_list[0]}')\"\n                                                                                      ~~~~~~~~~~~~~~~~^^^\nIndexError: list index out of range\n",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": null,
+ "final_sql": null,
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1.202514 15.857603 2025-06-13"
+ },
+ "exec_first": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_first": false,
+ "ex_reasons": [
+  "未生成SQL"
+ ],
+ "exec_final": {
+  "status": null,
+  "kind": "no_sql"
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 47.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_14_41dbebcb.4",
+  "llm_call_count": 10,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 38.33,
+  "llm_seconds_max": 6.92,
+  "selected_tables": [],
+  "candidate_tables": [
+   "STK_CONS_FORECAST_DERIVED",
+   "STK_CONS_FORECAST"
+  ],
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": 50
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 449,
+   "prompt_tokens": 10782,
+   "total_tokens": 11231,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 10782,
+  "completion": 449,
+  "total": 11231
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 449,
+   "prompt_tokens": 10782,
+   "total_tokens": 11231,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CONSENSUS_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": false
+ }
+}

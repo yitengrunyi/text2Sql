@@ -1,0 +1,172 @@
+{
+ "round_id": 11,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "那2024年呢？这块业务收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": true,
+ "answer": "生成查询代码\nSELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票简称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / NULLIF(\n            IFNULL(\n                (\n                    IFNULL(a.REVENUE_ASIA_CNY,0) +\n                    IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                    IFNULL(a.REVENUE_EU_CNY,0) +\n                    IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                    IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                    IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                    IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                    IFNULL(a.REVENUE_KOREA_CNY,0) +\n                    IFNULL(a.REVENUE_TW_CNY,0) +\n                    IFNULL(a.REVENUE_RUSSIA_CNY,0)\n                ) + IFNULL(b.INCOME,0)\n            ,0)\n        ,0) * 100, 2\n    ) AS `2024年海外营业收入占总营收比重(%)`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票简称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / NULLIF(\n            IFNULL(\n                (\n                    IFNULL(a.REVENUE_ASIA_CNY,0) +\n                    IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                    IFNULL(a.REVENUE_EU_CNY,0) +\n                    IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                    IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                    IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                    IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                    IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                    IFNULL(a.REVENUE_KOREA_CNY,0) +\n                    IFNULL(a.REVENUE_TW_CNY,0) +\n                    IFNULL(a.REVENUE_RUSSIA_CNY,0)\n                ) + IFNULL(b.INCOME,0)\n            ,0)\n        ,0) * 100, 2\n    ) AS `2024年海外营业收入占总营收比重(%)`,\n    ROUND(\n        (\n            IFNULL(a.REVENUE_ASIA_CNY,0) +\n            IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n            IFNULL(a.REVENUE_EU_CNY,0) +\n            IFNULL(a.REVENUE_NON_EU_CNY,0) +\n            IFNULL(a.REVENUE_AFRICA_CNY,0) +\n            IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n            IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_AMERICA_CNY,0) +\n            IFNULL(a.REVENUE_JAPAN_CNY,0) +\n            IFNULL(a.REVENUE_KOREA_CNY,0) +\n            IFNULL(a.REVENUE_TW_CNY,0) +\n            IFNULL(a.REVENUE_RUSSIA_CNY,0)\n        ) / 10000, 3\n    ) AS `2024年海外营业收入(亿元)`,\n    ROUND(\n        IFNULL(\n            (\n                IFNULL(a.REVENUE_ASIA_CNY,0) +\n                IFNULL(a.REVENUE_OCEANIA_CNY,0) +\n                IFNULL(a.REVENUE_EU_CNY,0) +\n                IFNULL(a.REVENUE_NON_EU_CNY,0) +\n                IFNULL(a.REVENUE_AFRICA_CNY,0) +\n                IFNULL(a.REVENUE_MID_EAST_CNY,0) +\n                IFNULL(a.REVENUE_LATIN_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_NORTH_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_AMERICA_CNY,0) +\n                IFNULL(a.REVENUE_JAPAN_CNY,0) +\n                IFNULL(a.REVENUE_KOREA_CNY,0) +\n                IFNULL(a.REVENUE_TW_CNY,0) +\n                IFNULL(a.REVENUE_RUSSIA_CNY,0)\n            ) + IFNULL(b.INCOME,0)\n        ,0) / 10000, 3\n    ) AS `2024年总营业收入(亿元)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nLEFT JOIN\n    STK_PRI_INCOME_DISTRICT b\n    ON a.COMCODE = b.COMCODE AND b.ITEM_NAME LIKE '%合计%' AND b.PERIODDATE = '2024-12-31' AND b.RPT_TYPE = '合并' AND b.ISVALID=1\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2024-12-31'\n    AND (a.REVENUE_ASIA_CNY IS NOT NULL OR\n         a.REVENUE_OCEANIA_CNY IS NOT NULL OR\n         a.REVENUE_EU_CNY IS NOT NULL OR\n         a.REVENUE_NON_EU_CNY IS NOT NULL OR\n         a.REVENUE_AFRICA_CNY IS NOT NULL OR\n         a.REVENUE_MID_EAST_CNY IS NOT NULL OR\n         a.REVENUE_LATIN_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_NORTH_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_AMERICA_CNY IS NOT NULL OR\n         a.REVENUE_JAPAN_CNY IS NOT NULL OR\n         a.REVENUE_KOREA_CNY IS NOT NULL OR\n         a.REVENUE_TW_CNY IS NOT NULL OR\n         a.REVENUE_RUSSIA_CNY IS NOT NULL)\n    AND a.COMB_SYMBOL IS NOT NULL",
+ "final_sql": "SELECT A_STOCKSNAME AS `股票简称`, ITEM_NAME AS `地区名称`, INCOME AS `主营业务收入(万元)`, PRI_RVNU_PCT AS `占营业收入比重(%)` FROM STK_PRI_INCOME_DISTRICT WHERE PERIODDATE = '2024-12-31' AND RPT_TYPE = '合并' AND ISVALID = 1 AND A_STOCKSNAME LIKE '%万华化学%' AND (ITEM_NAME LIKE '%国外%' OR ITEM_NAME LIKE '%海外%' OR ITEM_NAME LIKE '%出口%')",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7584415.01"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "执行异常/无结果"
+ ],
+ "elapsed_seconds": 60.6,
+ "error": "SQL执行错误: 修正SQL执行错误: SQL执行错误: No rows fetched. 查找结果为空，请检查SQL语句. 修正后SQL: SELECT A_STOCKSNAME AS `股票简称`, ITEM_NAME AS `地区名称`, INCOME AS `主营业务收入(万元)`, PRI_RVNU_PCT AS `占营业收入比重(%)` FROM STK_PRI_INCOME_DISTRICT WHERE PERIODDATE = '2024-12-31' AND RPT_TYPE = '合并' AND ISVALID = 1 AND A_STOCKSNAME LIKE '%万华化学%' AND (ITEM_NAME LIKE '%国外%' OR ITEM_NAME LIKE '%海外%' OR ITEM_NAME LIKE '%出口%')",
+ "telemetry": {
+  "key": "full:ev_full_11_a515b79f.4",
+  "llm_call_count": 3,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 56.74,
+  "llm_seconds_max": 34.05,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4450,
+   "prompt_tokens": 14451,
+   "total_tokens": 18901,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2471,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14451,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1775,
+   "prompt_tokens": 9072,
+   "total_tokens": 10847,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 23523,
+  "completion": 6225,
+  "total": 29748
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4450,
+   "prompt_tokens": 14451,
+   "total_tokens": 18901,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2471,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14451,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1775,
+   "prompt_tokens": 9072,
+   "total_tokens": 10847,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

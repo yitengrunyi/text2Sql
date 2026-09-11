@@ -1,0 +1,172 @@
+{
+ "round_id": 21,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "它最近一个月整体走势怎么样，累计涨跌幅大概多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, info.INDX_SNAME AS `指数简称`, info.INDX_CODE AS `指数代码`, ROUND(mkt.TCLOSE, 2) AS `收盘点位`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((mkt.TCLOSE / FIRST_VALUE(mkt.LCLOSE) OVER (PARTITION BY mkt.SECCODE ORDER BY mkt.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)` FROM GET_INDX_GEN_INFO info JOIN INDX_MKT mkt ON info.INNER_CODE = mkt.INNER_CODE WHERE info.INDX_CODE = '000852' AND info.USE_STATUS = '使用' AND info.ISVALID = 1 AND mkt.SECCODE = '000852' AND mkt.TRADEDATE >= '2026-08-02' AND mkt.TRADEDATE <= '2026-09-02' AND mkt.ISVALID = 1 ORDER BY mkt.TRADEDATE DESC;\n200\n{table:[['交易日期', '指数简称', '指数代码', '收盘点位', '日涨跌幅(%)', '累计涨跌幅(%)'], ['2026-09-02', '中证1000', '000852', '7,583.76', '-1.40', '7.18'], ['2026-09-01', '中证1000', '000852', '7,691.37', '-1.02', '8.70'], ['2026-08-31', '中证1000', '000852', '7,770.42', '0.85', '9.82'], ['2026-08-28', '中证1000', '000852', '7,705.03', '-0.36', '8.90'], ['2026-08-27', '中证1000', '000852', '7,732.95', '2.50', '9.29'], ['2026-08-26', '中证1000', '000852', '7,544.67', '0.23', '6.63'], ['2026-08-25', '中证1000', '000852', '7,527.50', '0.48', '6.39'], ['2026-08-24', '中证1000', '000852', '7,491.49', '-1.45', '5.88'], ['2026-08-21', '中证1000', '000852', '7,601.80', '0.16', '7.44'], ['2026-08-20', '中证1000', '000852', '7,589.78', '0.96', '7.27'], ['2026-08-19', '中证1000', '000852', '7,517.77', '-5.39', '6.25'], ['2026-08-18', '中证1000', '000852', '7,945.96', '-0.28', '12.30'], ['2026-08-17', '中证1000', '000852', '7,968.38', '2.56', '12.62'], ['2026-08-14', '中证1000', '000852', '7,769.82', '0.70', '9.81'], ['2026-08-13', '中证1000', '000852', '7,715.89', '-1.00', '9.05'], ['2026-08-12', '中证1000', '000852', '7,793.72', '1.24', '10.15'], ['2026-08-11', '中证1000', '000852', '7,698.05', '-0.46', '8.80'], ['2026-08-10', '中证1000', '000852', '7,733.90', '0.71', '9.31'], ['2026-08-07', '中证1000', '000852', '7,679.53', '1.98', '8.54'], ['2026-08-06', '中证1000', '000852', '7,530.43', '0.50', '6.43'], ['2026-08-05', '",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, info.INDX_SNAME AS `指数简称`, info.INDX_CODE AS `指数代码`, ROUND(mkt.TCLOSE, 2) AS `收盘点位`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((mkt.TCLOSE / FIRST_VALUE(mkt.LCLOSE) OVER (PARTITION BY mkt.SECCODE ORDER BY mkt.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)` FROM GET_INDX_GEN_INFO info JOIN INDX_MKT mkt ON info.INNER_CODE = mkt.INNER_CODE WHERE info.INDX_CODE = '000852' AND info.USE_STATUS = '使用' AND info.ISVALID = 1 AND mkt.SECCODE = '000852' AND mkt.TRADEDATE >= '2026-08-02' AND mkt.TRADEDATE <= '2026-09-02' AND mkt.ISVALID = 1 ORDER BY mkt.TRADEDATE DESC",
+ "final_sql": "SELECT DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`, info.INDX_SNAME AS `指数简称`, info.INDX_CODE AS `指数代码`, ROUND(mkt.TCLOSE, 2) AS `收盘点位`, ROUND(mkt.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((mkt.TCLOSE / FIRST_VALUE(mkt.LCLOSE) OVER (PARTITION BY mkt.SECCODE ORDER BY mkt.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)` FROM GET_INDX_GEN_INFO info JOIN INDX_MKT mkt ON info.INNER_CODE = mkt.INNER_CODE WHERE info.INDX_CODE = '000852' AND info.USE_STATUS = '使用' AND info.ISVALID = 1 AND mkt.SECCODE = '000852' AND mkt.TRADEDATE >= '2026-08-02' AND mkt.TRADEDATE <= '2026-09-02' AND mkt.ISVALID = 1 ORDER BY mkt.TRADEDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7.18"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 23
+ },
+ "first_result_preview": "2026-09-02 中证1000 000852 7583.76 -1.40 7.18\n2026-09-01 中证1000 000852 7691.37 -1.02 8.70\n2026-08-31 中证1000 000852 7770.42 0.85 9.82\n2026-08-28 中证1000 000852 7705.03 -0.36 8.90\n2026-08-27 中证1000 000852 ",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 23
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 44.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_21_46239809.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 43.82,
+  "llm_seconds_max": 39.21,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4184,
+   "prompt_tokens": 12405,
+   "total_tokens": 16589,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3509,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12405,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 184,
+   "prompt_tokens": 4894,
+   "total_tokens": 5078,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17299,
+  "completion": 4368,
+  "total": 21667
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4184,
+   "prompt_tokens": 12405,
+   "total_tokens": 16589,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3509,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12405,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 184,
+   "prompt_tokens": 4894,
+   "total_tokens": 5078,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

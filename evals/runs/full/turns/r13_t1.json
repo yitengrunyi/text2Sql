@@ -1,0 +1,174 @@
+{
+ "round_id": 13,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "这次分红的股权登记日和除权除息日分别是哪天？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT s.A_STOCKSNAME AS `股票名称`, s.A_STOCKCODE AS `股票代码`, s.PERIODDATE AS `报告期`, s.REG_DATE AS `股权登记日`, s.EX_DIVI_DATE AS `除权除息日` FROM STK_DIV_INFO s JOIN GET_A_SEC_CODE g ON s.COMCODE = g.COMCODE AND g.ISVALID = 1 WHERE s.ISVALID = 1 AND s.A_STOCKSNAME LIKE '%中国神华%' AND s.PERIODDATE >= '2025-01-01' AND s.PERIODDATE < '2026-01-01' ORDER BY s.PRG_CODE DESC, s.DIR_DCL_DATE DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报告期', '股权登记日', '除权除息日'], ['中国神华', '601088', '2025-12-31', '2026-07-10', '2026-07-13']]}\n该查询获取了中国神华在2025年年度分红方案中的股票简称、股票代码、分红报告期、股权登记日和除权除息日信息。数据来源包括上市公司分红信息表和股票综合信息表，通过公司编码进行关联，只提取当前有效记录。筛选条件限定公司名称为中国神华，报告期为2025年年度，确保数据的时效性和准确性。结果按照分红方案进度和公告日期倒序排列，仅展示最新有效的一条记录。查询中涉及的日期均为公司披露的业务实际日期，直接使用原有分红方案的关键时间节点，无需单位换算或复杂计算。查询结果完整、准确地满足了用户对股权登记日及除权除息日的查询需求。\n{table:[['股票名称', '股票代码', '报告期', '股权登记日', '除权除息日'], ['中国神华', '601088', '2025-12-31', '2026-07-10', '2026-07-13']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT s.A_STOCKSNAME AS `股票名称`, s.A_STOCKCODE AS `股票代码`, s.PERIODDATE AS `报告期`, s.REG_DATE AS `股权登记日`, s.EX_DIVI_DATE AS `除权除息日` FROM STK_DIV_INFO s JOIN GET_A_SEC_CODE g ON s.COMCODE = g.COMCODE AND g.ISVALID = 1 WHERE s.ISVALID = 1 AND s.A_STOCKSNAME LIKE '%中国神华%' AND s.PERIODDATE >= '2025-01-01' AND s.PERIODDATE < '2026-01-01' ORDER BY s.PRG_CODE DESC, s.DIR_DCL_DATE DESC LIMIT 1",
+ "final_sql": "SELECT s.A_STOCKSNAME AS `股票名称`, s.A_STOCKCODE AS `股票代码`, s.PERIODDATE AS `报告期`, s.REG_DATE AS `股权登记日`, s.EX_DIVI_DATE AS `除权除息日` FROM STK_DIV_INFO s JOIN GET_A_SEC_CODE g ON s.COMCODE = g.COMCODE AND g.ISVALID = 1 WHERE s.ISVALID = 1 AND s.A_STOCKSNAME LIKE '%中国神华%' AND s.PERIODDATE >= '2025-01-01' AND s.PERIODDATE < '2026-01-01' ORDER BY s.PRG_CODE DESC, s.DIR_DCL_DATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-07-10 00:00:00 2026-07-13 00:00:00"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国神华 601088 2025-12-31 00:00:00 2026-07-10 00:00:00 2026-07-13 00:00:00",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'日期': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'日期': True})"
+ ],
+ "elapsed_seconds": 31.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_13_2cb43c12.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.89,
+  "llm_seconds_max": 24.85,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2432,
+   "prompt_tokens": 12442,
+   "total_tokens": 14874,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1955,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12442,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 175,
+   "prompt_tokens": 6355,
+   "total_tokens": 6530,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18797,
+  "completion": 2607,
+  "total": 21404
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2432,
+   "prompt_tokens": 12442,
+   "total_tokens": 14874,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1955,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12442,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 175,
+   "prompt_tokens": 6355,
+   "total_tokens": 6530,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

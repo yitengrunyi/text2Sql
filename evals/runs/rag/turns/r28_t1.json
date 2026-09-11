@@ -1,0 +1,172 @@
+{
+ "round_id": 28,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "那它们俩的市净率呢？差距也这么明显吗？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n市净率（PB Ratio，Price-to-Book Ratio）\n\n[2] 计算公式：  \n市净率 = 每股市价 ÷ 每股净资产  \n或  \n市净率 = 公司总市值 ÷ 股东权益总额\n['市净率', 'PB Ratio', 'Price-to-Book Ratio', '每股市价', '每股净资产', '公司总市值', '股东权益总额']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_VAL_IDX', 'STK_MKT', 'STK_COM_PROFILE', 'VW_CONCEPT_STK', 'GET_A_INDICS_LATEST', 'STK_LIST_RESULT', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    a.MAX_TRADATE AS `日期`,\n    ROUND(b.PB, 2) AS `市净率(倍)`\nFROM \n    GET_A_INDICS_LATEST a\nJOIN (\n    SELECT\n        INNER_CODE,\n        PB\n    FROM\n        ANA_STK_VAL_IDX\n    WHERE\n        TRD_DATE = '2026-09-02'\n        AND ISVALID = 1\n        AND PB IS NOT NULL\n) b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.MAX_TRADATE = '2026-09-02'\n    AND a.HISVALID = 1\n    AND a.INNER_CODE IS NOT NULL\nORDER BY \n    `市净率(倍)` DESC\nLIMIT 2\n200\n{table:[['股票名称', '日期', '市净率(倍)'], ['法尔胜', '2026-09-02', '2,502.80'], ['佳创视讯', '2026-09-02', '2,168.08']]}\n该查询的目的是获取两只股票在指定交易日的市净率，并按市净率降序排列。市净率通过公式“市净率＝总市值／最新净资产”计算，并保留两位小数。查询结果符合要求。\n\n整个查询从一个表获取股票名称、代码及最近交易日，通过内部代码字段与估值指标表连接。估值指标表提供了市净率等估值信息。只选择了有效数据、交易日期为指定日的记录，并排除内部代码为空的数据。最终返回市净率最高的两只股票，按市净率从高到低排序。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    a.MAX_TRADATE AS `日期`,\n    ROUND(b.PB, 2) AS `市净率(倍)`\nFROM \n    GET_A_INDICS_LATEST a\nJOIN (\n    SELECT\n        INNER_CODE,\n        PB\n    FROM\n        ANA_STK_VAL_IDX\n    WHERE\n        TRD_DATE = '2026-09-02'\n        AND ISVALID = 1\n        AND PB IS NOT NULL\n) b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.MAX_TRADATE = '2026-09-02'\n    AND a.HISVALID = 1\n    AND a.INNER_CODE IS NOT NULL\nORDER BY \n    `市净率(倍)` DESC\nLIMIT 2",
+ "final_sql": "SELECT \n    a.SEC_SNAME AS `股票名称`,\n    a.SEC_CODE AS `股票代码`,\n    a.MAX_TRADATE AS `日期`,\n    ROUND(b.PB, 2) AS `市净率(倍)`\nFROM \n    GET_A_INDICS_LATEST a\nJOIN (\n    SELECT\n        INNER_CODE,\n        PB\n    FROM\n        ANA_STK_VAL_IDX\n    WHERE\n        TRD_DATE = '2026-09-02'\n        AND ISVALID = 1\n        AND PB IS NOT NULL\n) b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.MAX_TRADATE = '2026-09-02'\n    AND a.HISVALID = 1\n    AND a.INNER_CODE IS NOT NULL\nORDER BY \n    `市净率(倍)` DESC\nLIMIT 2",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "7.024\n4.437"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.GET_A_INDICS_LATEST' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 56.7,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_28_27dbea4c.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 60.58,
+  "llm_seconds_max": 9.16,
+  "selected_tables": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "STK_COM_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "STK_LIST_RESULT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   49784
+  ],
+  "prompt_columns_raw_len": 22686
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1437,
+   "prompt_tokens": 52228,
+   "total_tokens": 53665,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 52228,
+  "completion": 1437,
+  "total": 53665
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1437,
+   "prompt_tokens": 52228,
+   "total_tokens": 53665,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8448,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "STK_COM_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "STK_LIST_RESULT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

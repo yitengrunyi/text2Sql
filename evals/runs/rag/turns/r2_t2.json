@@ -1,0 +1,190 @@
+{
+ "round_id": 2,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "兴业银行2025年的归母净利润是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润（简称“归母净利润”）\n\n[2] 计算公式：  \n归母净利润 = 净利润 - 少数股东损益  \n其中，净利润 = 营业收入 - 营业成本 - 营业税金及附加 - 营业费用 - 管理费用 - 财务费用 + 投资收益 + 公允价值变动收益 + 其他收益 - 所得税费用\n\n归母净利润是指公司在扣除少数股东损益后，归属于母公司股东的净利润。\n['兴业银行', '归属于母公司股东的净利润', '归母净利润', '净利润', '少数股东损益', '营业收入', '营业成本', '营业税金及附加', '营业费用', '管理费用', '财务费用', '投资收益', '公允价值变动收益', '其他收益', '所得税费用']\n该问题可能涉及A股-'兴业银行'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-银行。\n个股相关\n['主板基本信息', '主板财务']\n['ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_INCOME_GEN_QTR', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    f.ENDDATE AS `报告截止日期`,\n    c.SEC_SNAME AS `股票名称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(f.F110101/10000, 1) AS `归母净利润(万)`,\n    f.F110201 AS `扣非净利润(元)`,\n    f.F110301 AS `归母净资产(元)`,\n    ROUND(f.F111001, 3) AS `每股收益(元)`,\n    ROUND(f.F111401, 3) AS `每股净资产(元)`,\n    ROUND(f.F111601, 2) AS `净资产收益率(%)`\nFROM \n    VIEW_STK_FIN_IDX f\nINNER JOIN\n    GET_A_SEC_CODE c\n    ON f.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE \n    f.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%兴业银行%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    f.ENDDATE DESC\n200\n{table:[['报告截止日期', '股票名称', '归母净利润(万)', '扣非净利润(元)', '归母净资产(元)', '每股收益(元)', '每股净资产(元)', '净资产收益率(%)'], ['2025-12-31', '兴业银行', '7,746,900.00', '77,064,000,000.00', '901,716,000,000.00', '3.46', '38.70', '8.59']]}\n归母净利润（万）的计算方式是将归属于母公司的净利润（元）除以一万，并保留一位小数；每股收益和每股净资产分别保留三位小数，净资产收益率保留两位小数，其余几个指标直接取值。查询结果符合要求。\n\n本次查询选取了主板公司财务指标表作为数据来源，结合A股公司基础信息表，通过公司代码进行匹配。查询内容包括报告截止日期、股票名称、股票代码、归母净利润、扣非净利润、归母净资产、每股收益、每股净资产和净资产收益率。筛选条件为数据有效且股票简称含“兴业银行”，并限定报告截止日期为2025年12月31日。结果按照报告截止日期倒序排列。该查询返回了兴业银行2025年度相关财务指标数据，其中归母净利润即为所需结果。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    f.ENDDATE AS `报告截止日期`,\n    c.SEC_SNAME AS `股票名称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(f.F110101/10000, 1) AS `归母净利润(万)`,\n    f.F110201 AS `扣非净利润(元)`,\n    f.F110301 AS `归母净资产(元)`,\n    ROUND(f.F111001, 3) AS `每股收益(元)`,\n    ROUND(f.F111401, 3) AS `每股净资产(元)`,\n    ROUND(f.F111601, 2) AS `净资产收益率(%)`\nFROM \n    VIEW_STK_FIN_IDX f\nINNER JOIN\n    GET_A_SEC_CODE c\n    ON f.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE \n    f.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%兴业银行%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    f.ENDDATE DESC",
+ "final_sql": "SELECT \n    f.ENDDATE AS `报告截止日期`,\n    c.SEC_SNAME AS `股票名称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(f.F110101/10000, 1) AS `归母净利润(万)`,\n    f.F110201 AS `扣非净利润(元)`,\n    f.F110301 AS `归母净资产(元)`,\n    ROUND(f.F111001, 3) AS `每股收益(元)`,\n    ROUND(f.F111401, 3) AS `每股净资产(元)`,\n    ROUND(f.F111601, 2) AS `净资产收益率(%)`\nFROM \n    VIEW_STK_FIN_IDX f\nINNER JOIN\n    GET_A_SEC_CODE c\n    ON f.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE \n    f.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%兴业银行%'\n    AND f.ENDDATE = '2025-12-31 00:00:00'\nORDER BY \n    f.ENDDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "77469000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 兴业银行 601166 7746900.0 77064000000.0000 901716000000.0000 3.460 38.705 8.59",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 58.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_2_79ddc34d.2",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 72.33,
+  "llm_seconds_max": 8.33,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   44169
+  ],
+  "prompt_columns_raw_len": 4170
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2267,
+   "prompt_tokens": 61480,
+   "total_tokens": 63747,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 61480,
+  "completion": 2267,
+  "total": 63747
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2267,
+   "prompt_tokens": 61480,
+   "total_tokens": 63747,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

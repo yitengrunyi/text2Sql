@@ -1,0 +1,172 @@
+{
+ "round_id": 16,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "8月它平均每天的成交额有多少？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT DATE_FORMAT(a.ENDDATE, '%Y-%m') AS `月份`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(AVG(a.TVALUE) / 100000000, 2) AS `日均成交额(亿)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.TVALUE IS NOT NULL GROUP BY DATE_FORMAT(a.ENDDATE, '%Y-%m'), a.STOCKSNAME, a.STOCKCODE LIMIT 1;\n200\n{table:[['月份', '股票名称', '股票代码', '日均成交额(亿)'], ['2026-08', '格力电器', '000651', '18.91']]}\n该查询获取了格力电器在2026年8月期间的日均成交金额，展示股票名称和股票代码。数据来源于股票市场表现指标数据与股票基础信息，通过筛选证券简称匹配“格力电器”，并限定日期范围在2026年8月1日至8月31日，仅统计成交金额有数据的有效交易日。结果将8月所有有效交易日的成交金额进行平均，并将原始单位由元转换为亿元（即结果除以1亿），最终保留2位小数。查询直接计算了当月每日成交额的平均值，能够准确反映8月份格力电器的日均成交水平，查询结果符合用户需求。\n{table:[['月份', '股票名称', '股票代码', '日均成交额(亿)'], ['2026-08', '格力电器', '000651', '18.91']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT DATE_FORMAT(a.ENDDATE, '%Y-%m') AS `月份`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(AVG(a.TVALUE) / 100000000, 2) AS `日均成交额(亿)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.TVALUE IS NOT NULL GROUP BY DATE_FORMAT(a.ENDDATE, '%Y-%m'), a.STOCKSNAME, a.STOCKCODE LIMIT 1",
+ "final_sql": "SELECT DATE_FORMAT(a.ENDDATE, '%Y-%m') AS `月份`, a.STOCKSNAME AS `股票名称`, a.STOCKCODE AS `股票代码`, ROUND(AVG(a.TVALUE) / 100000000, 2) AS `日均成交额(亿)` FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE WHERE b.SEC_SNAME LIKE '%格力电器%' AND a.ENDDATE >= '2026-08-01 00:00:00' AND a.ENDDATE <= '2026-08-31 23:59:59' AND a.TVALUE IS NOT NULL GROUP BY DATE_FORMAT(a.ENDDATE, '%Y-%m'), a.STOCKSNAME, a.STOCKCODE LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1891138748.95238095"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08 格力电器 000651 18.91",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 59.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_16_d6f8214f.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 58.42,
+  "llm_seconds_max": 54.17,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6710,
+   "prompt_tokens": 13956,
+   "total_tokens": 20666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6156,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13956,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 155,
+   "prompt_tokens": 7214,
+   "total_tokens": 7369,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21170,
+  "completion": 6865,
+  "total": 28035
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6710,
+   "prompt_tokens": 13956,
+   "total_tokens": 20666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6156,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13956,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 155,
+   "prompt_tokens": 7214,
+   "total_tokens": 7369,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

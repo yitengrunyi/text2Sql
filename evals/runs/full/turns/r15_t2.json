@@ -1,0 +1,173 @@
+{
+ "round_id": 15,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "那当天成交额有多大？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    hs.STKABB AS `股票简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hc.COMCNNAME AS `公司中文名称`,\n    v.EDATE AS `最新交易日`,\n    ROUND(v.CLNGPR, 2) AS `最新收盘价（元）`,\n    ROUND(mk.TRTO / 100000000, 2) AS `成交额（亿）`,\n    ROUND(v.PE1, 2) AS `静态市盈率`,\n    ROUND(v.PE2, 2) AS `滚动市盈率`,\n    ROUND(v.PB, 2) AS `市净率`\nFROM\n    HK_COMBINFO hc\n    JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND hc.ISVALID = 1\n    JOIN HK_IDC_STKVIDC v ON hs.STKUNICODE = v.STKUNICODE AND v.ISVALID = 1\n    JOIN HK_STKDMK mk ON hs.STKUNICODE = mk.STKUNICODE AND mk.TRDATE = v.EDATE AND mk.ISVALID = 1\nWHERE\n    hs.LSSTUREFC = 1\n    AND hs.TRMKREFC = 7\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hc.COMCNABB LIKE '%腾讯控股%'\n    AND v.EDATE = '2026-09-02'\n    AND LEFT(hs.STKCODE, 1) != '8'\nLIMIT 1;\n200\n{table:[['股票简称', '股票代码', '公司中文名称', '最新交易日', '最新收盘价（元）', '成交额（亿）', '静态市盈率', '滚动市盈率', '市净率'], ['腾讯控股', '00700.HK', '腾讯控股有限公司', '2026-09-02', '438.20', '93.37', '30.21', '14.62', '2.93']]}\n该查询获取了腾讯控股在指定交易日的股票简称、股票代码、公司中文名称、最新交易日、最新收盘价、当日成交额以及静态市盈率、滚动市盈率和市净率等信息。查询涉及了公司基本信息、股票代码、交易日行情和估值指标等多维度数据表。筛选条件包括公司状态为正常上市、交易所在香港主板、股票类型为普通股或特定类型，且公司简称含有“腾讯控股”，并要求数据为最新有效，当天的交易日期为指定日期，且股票代码不以特定数字开头，最终仅展示第一条记录。当日成交额是将原始成交金额（单位为元）除以100000000，换算为“亿元”，并保留2位小数，收盘价与估值指标也是取现成数据并做四舍五入处理。此次查询直接提取了已有的成交额与估值指标信息，能够准确满足用户对腾讯控股当天成交额的查询需求，查询结果符合要求。\n{table:[['股票简称', '股票代码', '公司中文名称', '最新交易日', '最新收盘价（元）', '成交额（亿）', '静态市盈率', '滚动市盈率', '市净率'], ['腾讯控股', '00700.HK', '腾讯控股有限公司', '2026-09-02', '438.20', '93.37', '30.21', '14.62', '2.93']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    hs.STKABB AS `股票简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hc.COMCNNAME AS `公司中文名称`,\n    v.EDATE AS `最新交易日`,\n    ROUND(v.CLNGPR, 2) AS `最新收盘价（元）`,\n    ROUND(mk.TRTO / 100000000, 2) AS `成交额（亿）`,\n    ROUND(v.PE1, 2) AS `静态市盈率`,\n    ROUND(v.PE2, 2) AS `滚动市盈率`,\n    ROUND(v.PB, 2) AS `市净率`\nFROM\n    HK_COMBINFO hc\n    JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND hc.ISVALID = 1\n    JOIN HK_IDC_STKVIDC v ON hs.STKUNICODE = v.STKUNICODE AND v.ISVALID = 1\n    JOIN HK_STKDMK mk ON hs.STKUNICODE = mk.STKUNICODE AND mk.TRDATE = v.EDATE AND mk.ISVALID = 1\nWHERE\n    hs.LSSTUREFC = 1\n    AND hs.TRMKREFC = 7\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hc.COMCNABB LIKE '%腾讯控股%'\n    AND v.EDATE = '2026-09-02'\n    AND LEFT(hs.STKCODE, 1) != '8'\nLIMIT 1",
+ "final_sql": "SELECT \n    hs.STKABB AS `股票简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hc.COMCNNAME AS `公司中文名称`,\n    v.EDATE AS `最新交易日`,\n    ROUND(v.CLNGPR, 2) AS `最新收盘价（元）`,\n    ROUND(mk.TRTO / 100000000, 2) AS `成交额（亿）`,\n    ROUND(v.PE1, 2) AS `静态市盈率`,\n    ROUND(v.PE2, 2) AS `滚动市盈率`,\n    ROUND(v.PB, 2) AS `市净率`\nFROM\n    HK_COMBINFO hc\n    JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND hc.ISVALID = 1\n    JOIN HK_IDC_STKVIDC v ON hs.STKUNICODE = v.STKUNICODE AND v.ISVALID = 1\n    JOIN HK_STKDMK mk ON hs.STKUNICODE = mk.STKUNICODE AND mk.TRDATE = v.EDATE AND mk.ISVALID = 1\nWHERE\n    hs.LSSTUREFC = 1\n    AND hs.TRMKREFC = 7\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hc.COMCNABB LIKE '%腾讯控股%'\n    AND v.EDATE = '2026-09-02'\n    AND LEFT(hs.STKCODE, 1) != '8'\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "9336637626.7000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "腾讯控股 00700.HK 腾讯控股有限公司 2026-09-02 00:00:00 438.20 93.37 30.21 14.62 2.93",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 41.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_15_36887193.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 40.39,
+  "llm_seconds_max": 33.52,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3976,
+   "prompt_tokens": 16873,
+   "total_tokens": 20849,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3272,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16873,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 238,
+   "prompt_tokens": 10413,
+   "total_tokens": 10651,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27286,
+  "completion": 4214,
+  "total": 31500
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3976,
+   "prompt_tokens": 16873,
+   "total_tokens": 20849,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3272,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16873,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 238,
+   "prompt_tokens": 10413,
+   "total_tokens": 10651,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_STKDMK",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

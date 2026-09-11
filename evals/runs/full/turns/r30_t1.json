@@ -1,0 +1,173 @@
+{
+ "round_id": 30,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F022D AS `市盈率更新日期`,\n    ROUND(c.F021N, 2) AS `市盈率`,\n    a.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F021N IS NOT NULL\n    AND c.F022D IS NOT NULL\nORDER BY \n    c.F021N ASC\nLIMIT 3;\n500\n诊断 根据你提供的【问题】、【模型生成的SQL】、以及“没有取到结果”的情况，以下是诊断“最可能的2个原因”：\n\n---\n\n### 1. 数据本身缺失\n\n**最可能原因之一。**\n- 你的`WHERE`条件筛选出了多条：\n  ```sql\n  a.IS_CHINESE_STOCK = '中概股'\n  AND c.F021N IS NOT NULL\n  AND c.F022D IS NOT NULL\n  ```\n- 很可能**实际数据里**，AMERICAN_STOCK_MAIN表或COM3101表中不存在`IS_CHINESE_STOCK = '中概股'`的记录，或者虽然存在，但联表的`FIU_ID`匹配不上，或者`c.F021N`（市盈率字段）、`c.F022D`（市盈率日期）为`NULL`的太多，最终导致**查无数据**。\n- 这是实际项目经验里非常常见的原因。\n\n---\n\n### 2. 字段（或表）名或条件设定错误\n\n**第二大可能原因。**\n- 例如`IS_CHINESE_STOCK`字段可能本身不是`'中概股'`/`'非中概股'`，而是整数型0/1或者英文字符串等，导致条件恒不成立。\n- 字段`c.F021N`、`c.F022D`如果被模型“捏造”（即实际数据表里没有），则会出错，或者查询根本执行不下去。\n- `COM3101`、`AMERICAN_STOCK_MAIN`表名有无出错也值得警惕，尤其是跨系统或字段同步不及时时。\n\n---\n\n#### 其他次要可能性包括：\n\n- 联结（JOIN）条件有误，比如`a.FIU_ID = c.FIU_ID`不对或者其中一侧为NULL。\n- 表权限、分区表未加载、时间分区过滤未生效或者期望的数据月份/年度分表未包含。\n- SQL语法本身有错但MYSQL没报错，在实际业务更迭、表结构版本不一致时偶尔也会出现‘查无数据’假象。\n- 字段映射或模型字段自动拼凑错误（如模型用到不存在的别名、临时字段，但MYSQL未及时提示报错）。\n- 其它极端情况包括查询时数据正好全被删光、延迟写入等。\n\n---\n\n## 结论\n**最可能的两个原因是：**\n1. `WHERE`条件下数据本身匹配不到，数据本身总数为0或为NULL太多；\n2. 字段命名（如`IS_CHINESE_STOCK`的枚举值）或者字段本身有误、模型捏造、表结构不同步。\n\n建议：  \n- 先单独`SELECT`看看`AMERICAN_STOCK_MAIN`表里的`IS_CHINESE_STOCK`到底有什么值，以及与`COM3101`的`FIU_ID`联结有多少匹配项。\n- 分步排查每一个条件，能极大帮助定位数据还是结构/字段问题。\nSELECT a.CSNAME AS `美股名称`, a.COMB_SYMBOL AS `美股代码`, ROUND(c.F021N, 2) AS `市盈率`, a.IS_CHINESE_STOCK AS `是否中概股` FROM AMERICAN_STOCK_MAIN a INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID WHERE a.IS_CHINESE_STOCK = '中概股' AND c.F021N IS NOT NULL AND c.F021N > 0 ORDER BY c.F021N ASC LIMIT 3;\n200\n{table:[['美股名称', '美股代码', '市盈率', '是否中概股'], ['京东-W', 'JD.US', '9.35', '中概股'], ['百度-W', 'BIDU.US', '10.44', '中概股'], ['理想汽车-W', 'LI.US', '14.40', '中概股']]}\n该查询提取了当前属于中概股类别的美股，选择市盈率值在正常范围（大于零且有数据）的公司。数据来源于美股基本",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    a.CSNAME AS `美股名称`,\n    a.COMB_SYMBOL AS `美股代码`,\n    c.F022D AS `市盈率更新日期`,\n    ROUND(c.F021N, 2) AS `市盈率`,\n    a.IS_CHINESE_STOCK AS `是否中概股`\nFROM \n    AMERICAN_STOCK_MAIN a\nINNER JOIN \n    COM3101 c ON a.FIU_ID = c.FIU_ID\nWHERE \n    a.IS_CHINESE_STOCK = '中概股'\n    AND c.F021N IS NOT NULL\n    AND c.F022D IS NOT NULL\nORDER BY \n    c.F021N ASC\nLIMIT 3",
+ "final_sql": "SELECT a.CSNAME AS `美股名称`, a.COMB_SYMBOL AS `美股代码`, ROUND(c.F021N, 2) AS `市盈率`, a.IS_CHINESE_STOCK AS `是否中概股` FROM AMERICAN_STOCK_MAIN a INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID WHERE a.IS_CHINESE_STOCK = '中概股' AND c.F021N IS NOT NULL AND c.F021N > 0 ORDER BY c.F021N ASC LIMIT 3",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "京东-W JD 9.35\n百度-W BIDU 10.44\n理想汽车-W LI 14.4"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 51.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_30_8fe857ee.1",
+  "llm_call_count": 4,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 51.04,
+  "llm_seconds_max": 25.69,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2372,
+   "prompt_tokens": 9423,
+   "total_tokens": 11795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1886,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9423,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1204,
+   "prompt_tokens": 6943,
+   "total_tokens": 8147,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16366,
+  "completion": 3576,
+  "total": 19942
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2372,
+   "prompt_tokens": 9423,
+   "total_tokens": 11795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1886,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9423,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1204,
+   "prompt_tokens": 6943,
+   "total_tokens": 8147,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,160 @@
+{
+ "round_id": 23,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "跟2026年一季报相比，二季报前十大有什么换仓动作？新进了谁、又剔出了谁？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 前十大股东名单（Top 10 Shareholders List）\n- 持股数量（Shareholding Amount）\n- 持股比例（Shareholding Ratio）\n\n[2] 可能的计算公式  \n- 新进股东 = 二季报前十大股东名单 - 一季报前十大股东名单  \n- 剔出股东 = 一季报前十大股东名单 - 二季报前十大股东名单  \n- 换仓动作 = 新进股东名单 + 剔出股东名单  \n- 各股东持股变动 = 二季报持股数量 - 一季报持股数量\n['前十大股东名单', 'Top 10 Shareholders List', '持股数量', 'Shareholding Amount', '持股比例', 'Shareholding Ratio', '新进股东', '剔出股东', '换仓动作', '新进股东名单', '剔出股东名单', '各股东持股变动']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板股本股东', '主板基本信息']\n['STK_SHR_STRU', 'VIEW_STK_STI_LIST_PLAN', 'STK_SEC_IVST', 'STK_SHR_STRU_CHNG']\n是否命中召回表：False\n生成查询代码\n-- 查询2026年一季报与二季报前十大证券投资的换仓动作（新进/剔除）\nSELECT \n    a.COMCODE AS `内部公司代码`,\n    a.A_STOCKSNAME AS `公司简称`,\n    a.A_STOCKCODE AS `A股代码`,\n    a.SEC_NAME AS `投资对象名称`,\n    a.SEC_CODE AS `投资对象证券代码`,\n    a.SEC_CLS AS `证券品种`,\n    a.SEC_NUM AS `持有数量(股)`,\n    a.BOOK_VALUE/100000000 AS `期末账面值(亿元)`,\n    a.END_PCT AS `占期末证券总投资比例(%)`,\n    a.PERIODDATE AS `一季报日期（2026-03-31）`,\n    b.PERIODDATE AS `二季报日期（2026-06-30）`,\n    b.SEC_NAME AS `二季报投资对象名称`,\n    b.SEC_CODE AS `二季报投资对象证券代码`,\n    b.SEC_CLS AS `二季报证券品种`,\n    b.SEC_NUM AS `二季报持有数量(股)`,\n    b.BOOK_VALUE/100000000 AS `二季报期末账面值(亿元)`,\n    b.END_PCT AS `二季报占期末证券总投资比例(%)`,\n    CASE\n        WHEN b.SEC_CODE IS NULL THEN '剔除' -- 一季报有，二季报无，剔除\n        WHEN a.SEC_CODE IS NULL THEN '新进' -- 二季报有，一季报无，新进\n        ELSE '持有调整'\n    END AS `持仓变动类型`\nFROM\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1 \n       AND PERIODDATE = '2026-03-31'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) a\nLEFT JOIN\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1\n       AND PERIODDATE = '2026-06-30'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) b\nON a.COMCODE = b.COMCODE AND a.SEC_CODE = b.SEC_CODE\nWHERE b.SEC_CODE IS NULL -- 一季报有，二季报无，剔除\nUNION ALL\nSELECT \n    b.COMCODE AS `内部公司代码`,\n    b.A_STOCKSNAME AS `公司简称`,\n    b.A_STOCKCODE AS `A股代码`,\n    b.SEC_NAME AS `投资对象名称`,\n    b.SEC_CODE AS `投资对象证券代码`,\n    b.SEC_CLS AS `证券品种`,\n    b.SEC_NUM AS `持",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.COMCODE AS `内部公司代码`,\n    a.A_STOCKSNAME AS `公司简称`,\n    a.A_STOCKCODE AS `A股代码`,\n    a.SEC_NAME AS `投资对象名称`,\n    a.SEC_CODE AS `投资对象证券代码`,\n    a.SEC_CLS AS `证券品种`,\n    a.SEC_NUM AS `持有数量(股)`,\n    a.BOOK_VALUE/100000000 AS `期末账面值(亿元)`,\n    a.END_PCT AS `占期末证券总投资比例(%)`,\n    a.PERIODDATE AS `一季报日期（2026-03-31）`,\n    b.PERIODDATE AS `二季报日期（2026-06-30）`,\n    b.SEC_NAME AS `二季报投资对象名称`,\n    b.SEC_CODE AS `二季报投资对象证券代码`,\n    b.SEC_CLS AS `二季报证券品种`,\n    b.SEC_NUM AS `二季报持有数量(股)`,\n    b.BOOK_VALUE/100000000 AS `二季报期末账面值(亿元)`,\n    b.END_PCT AS `二季报占期末证券总投资比例(%)`,\n    CASE\n        WHEN b.SEC_CODE IS NULL THEN '剔除' -- 一季报有，二季报无，剔除\n        WHEN a.SEC_CODE IS NULL THEN '新进' -- 二季报有，一季报无，新进\n        ELSE '持有调整'\n    END AS `持仓变动类型`\nFROM\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1 \n       AND PERIODDATE = '2026-03-31'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) a\nLEFT JOIN\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1\n       AND PERIODDATE = '2026-06-30'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) b\nON a.COMCODE = b.COMCODE AND a.SEC_CODE = b.SEC_CODE\nWHERE b.SEC_CODE IS NULL -- 一季报有，二季报无，剔除\nUNION ALL\nSELECT \n    b.COMCODE AS `内部公司代码`,\n    b.A_STOCKSNAME AS `公司简称`,\n    b.A_STOCKCODE AS `A股代码`,\n    b.SEC_NAME AS `投资对象名称`,\n    b.SEC_CODE AS `投资对象证券代码`,\n    b.SEC_CLS AS `证券品种`,\n    b.SEC_NUM AS `持有数量(股)`,\n    b.BOOK_VALUE/100000000 AS `期末账面值(亿元)`,\n    b.END_PCT AS `占期末证券总投资比例(%)`,\n    a.PERIODDATE AS `一季报日期（2026-03-31）`,\n    b.PERIODDATE AS `二季报日期（2026-06-30）`,\n    a.SEC_NAME AS `一季报投资对象名称`,\n    a.SEC_CODE AS `一季报投资对象证券代码`,\n    a.SEC_CLS AS `一季报证券品种`,\n    a.SEC_NUM AS `一季报持有数量(股)`,\n    a.BOOK_VALUE/100000000 AS `一季报期末账面值(亿元)`,\n    a.END_PCT AS `一季报占期末证券总投资比例(%)`,\n    CASE\n        WHEN a.SEC_CODE IS NULL THEN '新进' -- 二季报有，一季报无，新进\n        WHEN b.SEC_CODE IS NULL THEN '剔除' -- 一季报有，二季报无，剔除\n        ELSE '持有调整'\n    END AS `持仓变动类型`\nFROM\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1 \n       AND PERIODDATE = '2026-03-31'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) a\nRIGHT JOIN\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1\n       AND PERIODDATE = '2026-06-30'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) b\nON a.COMCODE = b.COMCODE AND a.SEC_CODE = b.SEC_CODE\nWHERE a.SEC_CODE IS NULL -- 二季报有，一季报无，新进\nORDER BY `公司简称`, `持仓变动类型`, `投资对象名称`",
+ "final_sql": "SELECT \n    a.COMCODE AS `内部公司代码`,\n    a.A_STOCKSNAME AS `公司简称`,\n    a.A_STOCKCODE AS `A股代码`,\n    a.SEC_NAME AS `投资对象名称`,\n    a.SEC_CODE AS `投资对象证券代码`,\n    a.SEC_CLS AS `证券品种`,\n    a.SEC_NUM AS `持有数量(股)`,\n    a.BOOK_VALUE/100000000 AS `期末账面值(亿元)`,\n    a.END_PCT AS `占期末证券总投资比例(%)`,\n    a.PERIODDATE AS `一季报日期（2026-03-31）`,\n    b.PERIODDATE AS `二季报日期（2026-06-30）`,\n    b.SEC_NAME AS `二季报投资对象名称`,\n    b.SEC_CODE AS `二季报投资对象证券代码`,\n    b.SEC_CLS AS `二季报证券品种`,\n    b.SEC_NUM AS `二季报持有数量(股)`,\n    b.BOOK_VALUE/100000000 AS `二季报期末账面值(亿元)`,\n    b.END_PCT AS `二季报占期末证券总投资比例(%)`,\n    CASE\n        WHEN b.SEC_CODE IS NULL THEN '剔除' -- 一季报有，二季报无，剔除\n        WHEN a.SEC_CODE IS NULL THEN '新进' -- 二季报有，一季报无，新进\n        ELSE '持有调整'\n    END AS `持仓变动类型`\nFROM\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1 \n       AND PERIODDATE = '2026-03-31'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) a\nLEFT JOIN\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1\n       AND PERIODDATE = '2026-06-30'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) b\nON a.COMCODE = b.COMCODE AND a.SEC_CODE = b.SEC_CODE\nWHERE b.SEC_CODE IS NULL -- 一季报有，二季报无，剔除\nUNION ALL\nSELECT \n    b.COMCODE AS `内部公司代码`,\n    b.A_STOCKSNAME AS `公司简称`,\n    b.A_STOCKCODE AS `A股代码`,\n    b.SEC_NAME AS `投资对象名称`,\n    b.SEC_CODE AS `投资对象证券代码`,\n    b.SEC_CLS AS `证券品种`,\n    b.SEC_NUM AS `持有数量(股)`,\n    b.BOOK_VALUE/100000000 AS `期末账面值(亿元)`,\n    b.END_PCT AS `占期末证券总投资比例(%)`,\n    a.PERIODDATE AS `一季报日期（2026-03-31）`,\n    b.PERIODDATE AS `二季报日期（2026-06-30）`,\n    a.SEC_NAME AS `一季报投资对象名称`,\n    a.SEC_CODE AS `一季报投资对象证券代码`,\n    a.SEC_CLS AS `一季报证券品种`,\n    a.SEC_NUM AS `一季报持有数量(股)`,\n    a.BOOK_VALUE/100000000 AS `一季报期末账面值(亿元)`,\n    a.END_PCT AS `一季报占期末证券总投资比例(%)`,\n    CASE\n        WHEN a.SEC_CODE IS NULL THEN '新进' -- 二季报有，一季报无，新进\n        WHEN b.SEC_CODE IS NULL THEN '剔除' -- 一季报有，二季报无，剔除\n        ELSE '持有调整'\n    END AS `持仓变动类型`\nFROM\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1 \n       AND PERIODDATE = '2026-03-31'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) a\nRIGHT JOIN\n    (SELECT *\n     FROM STK_SEC_IVST\n     WHERE ISVALID = 1\n       AND PERIODDATE = '2026-06-30'\n     AND SEC_CODE IS NOT NULL\n     ORDER BY COMCODE, PERIODDATE, END_PCT DESC\n    ) b\nON a.COMCODE = b.COMCODE AND a.SEC_CODE = b.SEC_CODE\nWHERE a.SEC_CODE IS NULL -- 二季报有，一季报无，新进\nORDER BY `公司简称`, `持仓变动类型`, `投资对象名称`",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "安琪酵母 新进入前10大\n华域汽车 新剔出前10大"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'FUND_INFO.STK_SEC_IVST' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 65.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_23_edf44159.3",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 68.19,
+  "llm_seconds_max": 10.45,
+  "selected_tables": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   26261
+  ],
+  "prompt_columns_raw_len": 13175
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2617,
+   "prompt_tokens": 39566,
+   "total_tokens": 42183,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39566,
+  "completion": 2617,
+  "total": 42183
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2617,
+   "prompt_tokens": 39566,
+   "total_tokens": 42183,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_TOP10_STOCK_CHANGE_Q"
+ ],
+ "table_recall": {
+  "selected": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_ACCUM_IMPAWN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

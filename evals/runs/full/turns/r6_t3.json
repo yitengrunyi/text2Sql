@@ -1,0 +1,174 @@
+{
+ "round_id": 6,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "全市场在管基金数量最多的基金经理是谁？管了几只？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.PSN_NAME AS `基金经理名称`, m.FUND_NUM_ACTUAL AS `在管基金数量` FROM FUND_MANAGER_INFO m WHERE m.HISVALID = 1 AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447 AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5 ORDER BY m.FUND_NUM_ACTUAL DESC LIMIT 1;\n200\n{table:[['基金经理名称', '在管基金数量'], ['杨梦', '13']]}\n该查询用于获取全市场在管基金数量最多的基金经理及其对应的在管基金数量。数据来源于基金经理基本信息数据，筛选仅保留目前在岗有效的基金经理，并进一步限定只统计主动管理型权益类基金经理，其主动管理的股票资产市值需占总净值一定比例，同时主动管理的股票投资占全部股票投资的比例不少于一半，通过这些条件确保筛选出的基金经理业务重心在主动权益投资领域。查询结果按照实际在管基金数量由高到低排序，仅显示数量最多的一位基金经理的姓名及对应数量。基金数量为同一只基金不同类别合并后统计，保证统计口径一致。查询结果直接使用了已有的在管基金数量数据，最终答案能够满足“全市场在管基金数量最多的基金经理是谁，以及他/她管了几只基金”的需求。\n{table:[['基金经理名称', '在管基金数量'], ['杨梦', '13']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.PSN_NAME AS `基金经理名称`, m.FUND_NUM_ACTUAL AS `在管基金数量` FROM FUND_MANAGER_INFO m WHERE m.HISVALID = 1 AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447 AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5 ORDER BY m.FUND_NUM_ACTUAL DESC LIMIT 1",
+ "final_sql": "SELECT m.PSN_NAME AS `基金经理名称`, m.FUND_NUM_ACTUAL AS `在管基金数量` FROM FUND_MANAGER_INFO m WHERE m.HISVALID = 1 AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447 AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5 ORDER BY m.FUND_NUM_ACTUAL DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "董瑾 汇添富 21"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "杨梦 13",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 18.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_6_49a4726f.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 17.91,
+  "llm_seconds_max": 13.74,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1300,
+   "prompt_tokens": 10705,
+   "total_tokens": 12005,
+   "completion_tokens_details": {
+    "reasoning_tokens": 850,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10705,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 4135,
+   "total_tokens": 4329,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14840,
+  "completion": 1494,
+  "total": 16334
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1300,
+   "prompt_tokens": 10705,
+   "total_tokens": 12005,
+   "completion_tokens_details": {
+    "reasoning_tokens": 850,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10705,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 4135,
+   "total_tokens": 4329,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

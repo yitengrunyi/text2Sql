@@ -1,0 +1,172 @@
+{
+ "round_id": 6,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT PSN_NAME AS `基金经理名称`, FUND_NUM_ACTUAL AS `在管基金数量`, ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)` FROM FUND_MANAGER_INFO WHERE PSN_NAME = '张坤' AND HISVALID = 1 AND (CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END) >= 0.447 AND (CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END) >= 0.5;\n200\n{table:[['基金经理名称', '在管基金数量', '管理总规模(亿)'], ['张坤', '4', '322.85']]}\n该查询获取了基金经理张坤当前实际管理的基金只数及其管理总规模。数据来源于基金经理基本信息数据，通过限定基金经理名称及有效记录，确保只统计当前在任且有效的管理情况。筛选条件中进一步限定：股票投资规模占总管理资产比例大于44.7%，且其中主动管理部分占比超过50%，即主要关注张坤实际管理的主动权益类基金，排除混合或被动类等情况。基金数量直接使用现有统计数据，同一基金不同分类方式只算一个；管理总规模将原始金额（元）除以一亿，转换为“亿元”单位，并保留2位小数。所有数据均为最新有效状态，查询结果满足用户对张坤在管基金数量和管理规模的需求。\n{table:[['基金经理名称', '在管基金数量', '管理总规模(亿)'], ['张坤', '4', '322.85']]}",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": false,
+ "first_sql": "SELECT PSN_NAME AS `基金经理名称`, FUND_NUM_ACTUAL AS `在管基金数量`, ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)` FROM FUND_MANAGER_INFO WHERE PSN_NAME = '张坤' AND HISVALID = 1 AND (CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END) >= 0.447 AND (CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END) >= 0.5",
+ "final_sql": "SELECT PSN_NAME AS `基金经理名称`, FUND_NUM_ACTUAL AS `在管基金数量`, ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)` FROM FUND_MANAGER_INFO WHERE PSN_NAME = '张坤' AND HISVALID = 1 AND (CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END) >= 0.447 AND (CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END) >= 0.5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "4 32284557164.1000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "张坤 4 322.85",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 30.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_6_0734904b.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 30.29,
+  "llm_seconds_max": 25.35,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2636,
+   "prompt_tokens": 10898,
+   "total_tokens": 13534,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2171,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10898,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 181,
+   "prompt_tokens": 4101,
+   "total_tokens": 4282,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14999,
+  "completion": 2817,
+  "total": 17816
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2636,
+   "prompt_tokens": 10898,
+   "total_tokens": 13534,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2171,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10898,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 181,
+   "prompt_tokens": 4101,
+   "total_tokens": 4282,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

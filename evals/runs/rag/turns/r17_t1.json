@@ -1,0 +1,186 @@
+{
+ "round_id": 17,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "那它2025年末的资产负债率大概有多高？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n资产负债率（Debt to Asset Ratio）\n\n[2] 可能的计算公式：  \n资产负债率 = 总负债 / 总资产 × 100%\n['资产负债率', 'Debt to Asset Ratio', '总负债', '总资产']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板基本信息', '主板财务']\n['ANA_STK_QTR_IDX', 'VIEW_STK_BALA_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vsp.ENDDATE AS `截止日期`,\n    ROUND(vsp.TA_TLIA, 2) AS `资产负债率(%)`\nFROM \n    VIEW_STK_FIN_IDX_PLUS vsp\nINNER JOIN \n    GET_A_SEC_CODE ga\n    ON vsp.COMCODE = ga.COMCODE\nWHERE \n    vsp.RPT_TYPE = '2'\n    AND vsp.RPT_TAG = 7\n    AND vsp.ENDDATE = '2025-12-31 00:00:00'\n    AND vsp.TA_TLIA IS NOT NULL\n    AND ga.ISVALID = 1\nORDER BY \n    vsp.TA_TLIA DESC\n200\n{table:[['股票名称', '截止日期', '资产负债率(%)'], ['*ST皇庭', '2025-12-31', '228.11'], ['*ST赛为', '2025-12-31', '219.44'], ['*ST湘邮', '2025-12-31', '201.05'], ['*ST泉为', '2025-12-31', '151.11'], ['*ST棒杰', '2025-12-31', '143.45'], ['*ST开元', '2025-12-31', '127.70'], ['*ST康佳A', '2025-12-31', '126.22'], ['ST合纵', '2025-12-31', '120.95'], ['*ST金灵', '2025-12-31', '119.65'], ['*ST中迪', '2025-12-31', '115.50'], ['*ST易录', '2025-12-31', '113.16'], ['*ST华鹏', '2025-12-31', '112.27'], ['*ST发展', '2025-12-31', '112.23'], ['*ST岭南', '2025-12-31', '111.67'], ['ST华扬', '2025-12-31', '110.59'], ['*ST英飞', '2025-12-31', '108.19'], ['*ST春兴', '2025-12-31', '108.17'], ['*ST纳川', '2025-12-31', '107.07'], ['*ST八钢', '2025-12-31', '106.18'], ['*ST仕净', '2025-12-31', '105.49'], ['*ST顾地', '2025-12-31', '105.37'], ['*ST西旅', '2025-12-31', '104.62'], ['石药景峰', '2025-12-31', '103.45'], ['*ST中岩', '2025-12-31', '102.73'], ['*ST宝馨', '2025-12-31', '102.58'], ['*ST康乐', '2025-12-31', '102.18'], ['*ST亿晶', '2025-12-31', '102.02'], ['*ST华幸', '2025-12-31', '101.89'], ['*ST亚士', '2025-12-31', '101.62'], ['*ST美芝', '2025-12-31', '100.65'], ['中创环保', '2025-12-31', '100.61'], ['*ST广糖', '2025-12-31', '99.76'], ['*ST启环', '2025-12-31', '99.46'], ['科恒股份', '2025-12-31', '99.40'], ['*ST香雪', '2025-12-31', ",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vsp.ENDDATE AS `截止日期`,\n    ROUND(vsp.TA_TLIA, 2) AS `资产负债率(%)`\nFROM \n    VIEW_STK_FIN_IDX_PLUS vsp\nINNER JOIN \n    GET_A_SEC_CODE ga\n    ON vsp.COMCODE = ga.COMCODE\nWHERE \n    vsp.RPT_TYPE = '2'\n    AND vsp.RPT_TAG = 7\n    AND vsp.ENDDATE = '2025-12-31 00:00:00'\n    AND vsp.TA_TLIA IS NOT NULL\n    AND ga.ISVALID = 1\nORDER BY \n    vsp.TA_TLIA DESC",
+ "final_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vsp.ENDDATE AS `截止日期`,\n    ROUND(vsp.TA_TLIA, 2) AS `资产负债率(%)`\nFROM \n    VIEW_STK_FIN_IDX_PLUS vsp\nINNER JOIN \n    GET_A_SEC_CODE ga\n    ON vsp.COMCODE = ga.COMCODE\nWHERE \n    vsp.RPT_TYPE = '2'\n    AND vsp.RPT_TAG = 7\n    AND vsp.ENDDATE = '2025-12-31 00:00:00'\n    AND vsp.TA_TLIA IS NOT NULL\n    AND ga.ISVALID = 1\nORDER BY \n    vsp.TA_TLIA DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "62.81"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 198.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_17_d1ad8b50.1",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.61,
+  "llm_seconds_max": 7.32,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   34675
+  ],
+  "prompt_columns_raw_len": 4125
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2088,
+   "prompt_tokens": 55445,
+   "total_tokens": 57533,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3072,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55445,
+  "completion": 2088,
+  "total": 57533
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2088,
+   "prompt_tokens": 55445,
+   "total_tokens": 57533,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 3072,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_BALA_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

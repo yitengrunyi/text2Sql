@@ -1,0 +1,167 @@
+{
+ "round_id": 3,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "中国平安2026年8月收盘价最低的是哪一天？最低收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 中国平安2026年8月每日收盘价（Closing Price）\n- 最低收盘价（Lowest Closing Price）\n\n[2] 可能的计算公式  \n- 最低收盘价 = MIN（中国平安2026年8月所有交易日的收盘价）\n- 最低收盘价那一天 = 日期（收盘价 = 最低收盘价）\n['中国平安', '2026年8月', '收盘价', '每日收盘价', 'Closing Price', '最低收盘价', 'Lowest Closing Price', '所有交易日', '交易日', 'MIN', '日期']\n该问题可能涉及A股-'中国平安'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-非银金融。\n个股相关\n['主板行情', '主板基本信息']\n['STK_PRE_DISCLOSURE', 'ANA_STK_EXPR_IDX', 'STK_COMSUB_PROFILE', 'STK_MKT', 'VIEW_STK_STI_LIST_PLAN', 'DERI_STK_AH_PRC']\n是否命中召回表：False\n生成查询代码\nSELECT \n    DATE_FORMAT(TRADEDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    SECCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM STK_MKT\nWHERE STOCKSNAME LIKE '%中国平安%'\n    AND TRADEDATE >= '2026-08-01'\n    AND TRADEDATE < '2026-09-01'\n    AND TCLOSE IS NOT NULL\n    AND ISVALID = 1\nORDER BY TCLOSE ASC\nLIMIT 1\n200\n{table:[['日期', '股票名称', '股票代码', '收盘价(元)'], ['2026-08-18', '中国平安', '601318', '51.32']]}\n查询的目的是找出中国平安在2026年8月期间收盘价最低的一天及其最低收盘价。收盘价通过保留两位小数的方式进行展示，公式为：收盘价(元) = 收盘价的实际值保留两位小数。在此查询中，只对收盘价结果进行了格式处理，查询结果符合要求。\n\n查询从股票行情表中提取数据。该表记录了各交易日的股票价格和相关信息。查询选取了交易日期、股票简称、股票代码和收盘价，并将日期格式调整为年月日。通过筛选股票简称包含“中国平安”的记录，限定交易日期在2026年8月，并且确保收盘价不为空以及记录有效。最后按照收盘价从低到高排序，仅返回收盘价最低的一天的数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    DATE_FORMAT(TRADEDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    SECCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM STK_MKT\nWHERE STOCKSNAME LIKE '%中国平安%'\n    AND TRADEDATE >= '2026-08-01'\n    AND TRADEDATE < '2026-09-01'\n    AND TCLOSE IS NOT NULL\n    AND ISVALID = 1\nORDER BY TCLOSE ASC\nLIMIT 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(TRADEDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    SECCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`\nFROM STK_MKT\nWHERE STOCKSNAME LIKE '%中国平安%'\n    AND TRADEDATE >= '2026-08-01'\n    AND TRADEDATE < '2026-09-01'\n    AND TCLOSE IS NOT NULL\n    AND ISVALID = 1\nORDER BY TCLOSE ASC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-18 00:00:00 51.3200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-18 中国平安 601318 51.32",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 42.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_3_839935ee.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 50.47,
+  "llm_seconds_max": 6.78,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   39001
+  ],
+  "prompt_columns_raw_len": 13589
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1408,
+   "prompt_tokens": 46483,
+   "total_tokens": 47891,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 46483,
+  "completion": 1408,
+  "total": 47891
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1408,
+   "prompt_tokens": 46483,
+   "total_tokens": 47891,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

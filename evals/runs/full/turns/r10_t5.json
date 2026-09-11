@@ -1,0 +1,174 @@
+{
+ "round_id": 10,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "美股按申万一级行业划分，股票数量最多的是哪个行业？有多少只？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT SW_INDU_CODE_2021_1 AS `申万一级行业`, COUNT(FIU_ID) AS `股票数量` FROM AMERICAN_STOCK_MAIN WHERE SW_INDU_CODE_2021_1 IS NOT NULL AND SW_INDU_CODE_2021_1 != '' GROUP BY SW_INDU_CODE_2021_1 ORDER BY `股票数量` DESC LIMIT 1;\n200\n{table:[['申万一级行业', '股票数量'], ['电子', '7']]}\n该查询统计了所有美股按申万一级行业分类后，各行业下股票的数量，并找出了其中股票数量最多的行业及其具体数量。查询所用的信息来源于美股基本信息数据，通过筛选出有申万一级行业分类的股票记录，将它们按行业名称分组，然后统计每个行业拥有的股票数目。结果按照股票数量从高到低排序，最终只显示数量最多的那个行业及其股票数。该统计以现有的股票基础数据为准，直接使用已标注的行业分类信息，统计出的股票数为实际记录数量。查询结果符合用户对于“股票数量最多的行业及其数量”的需求。\n{table:[['申万一级行业', '股票数量'], ['电子', '7']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT SW_INDU_CODE_2021_1 AS `申万一级行业`, COUNT(FIU_ID) AS `股票数量` FROM AMERICAN_STOCK_MAIN WHERE SW_INDU_CODE_2021_1 IS NOT NULL AND SW_INDU_CODE_2021_1 != '' GROUP BY SW_INDU_CODE_2021_1 ORDER BY `股票数量` DESC LIMIT 1",
+ "final_sql": "SELECT SW_INDU_CODE_2021_1 AS `申万一级行业`, COUNT(FIU_ID) AS `股票数量` FROM AMERICAN_STOCK_MAIN WHERE SW_INDU_CODE_2021_1 IS NOT NULL AND SW_INDU_CODE_2021_1 != '' GROUP BY SW_INDU_CODE_2021_1 ORDER BY `股票数量` DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "电子 7"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "电子 7",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 25.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_10_349cd127.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 24.56,
+  "llm_seconds_max": 19.56,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1699,
+   "prompt_tokens": 17567,
+   "total_tokens": 19266,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1360,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17567,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 149,
+   "prompt_tokens": 11499,
+   "total_tokens": 11648,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29066,
+  "completion": 1848,
+  "total": 30914
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1699,
+   "prompt_tokens": 17567,
+   "total_tokens": 19266,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1360,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 17567,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 149,
+   "prompt_tokens": 11499,
+   "total_tokens": 11648,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

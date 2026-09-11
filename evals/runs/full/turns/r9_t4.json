@@ -1,0 +1,173 @@
+{
+ "round_id": 9,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年营业收入比2024财年增长了百分之多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, ROUND(MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) - MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END)) / NULLIF(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END), 0) * 100, 2) AS `营业收入同比增长率(%)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID WHERE a.CSNAME LIKE '%苹果%' AND c.F056N IN (2024, 2025) AND c.F003V = 'FY' AND c.F048N IS NOT NULL GROUP BY a.CSNAME, a.COMB_SYMBOL HAVING MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) IS NOT NULL AND MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) IS NOT NULL ORDER BY a.COMB_SYMBOL LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '2025财年营业收入(亿美元)', '2024财年营业收入(亿美元)', '营业收入同比增长率(%)'], ['苹果', 'AAPL.US', '5,393.14', '5,251.04', '2.71']]}\n该查询获取了苹果公司2025财年与2024财年营业收入及其年度增长率。查询通过公司基本信息数据表与年度财务数据表关联，只筛选名称包含“苹果”的公司，报告类型为年度报表，且2024和2025两年数据均有效。结果按照公司代码排序并只返回一条数据。具体计算时，将原始营业收入数据的单位从百万美元换算成亿美元，保留3位小数。营业收入增长率的公式为“增长率 = (2025年度收入 - 2024年度收入) / 2024年度收入 × 100%”，计算后保留2位小数。此查询直接使用了已有的财务指标数据，能够准确反映苹果公司相关年度间营业收入的增减情况，查询结果符合用户需求。\n{table:[['股票名称', '股票代码', '2025财年营业收入(亿美元)', '2024财年营业收入(亿美元)', '营业收入同比增长率(%)'], ['苹果', 'AAPL.US', '5,393.14', '5,251.04', '2.71']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, ROUND(MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) - MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END)) / NULLIF(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END), 0) * 100, 2) AS `营业收入同比增长率(%)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID WHERE a.CSNAME LIKE '%苹果%' AND c.F056N IN (2024, 2025) AND c.F003V = 'FY' AND c.F048N IS NOT NULL GROUP BY a.CSNAME, a.COMB_SYMBOL HAVING MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) IS NOT NULL AND MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) IS NOT NULL ORDER BY a.COMB_SYMBOL LIMIT 1",
+ "final_sql": "SELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, ROUND(MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) / 100, 3) AS `2025财年营业收入(亿美元)`, ROUND(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) / 100, 3) AS `2024财年营业收入(亿美元)`, ROUND((MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) - MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END)) / NULLIF(MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END), 0) * 100, 2) AS `营业收入同比增长率(%)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID WHERE a.CSNAME LIKE '%苹果%' AND c.F056N IN (2024, 2025) AND c.F003V = 'FY' AND c.F048N IS NOT NULL GROUP BY a.CSNAME, a.COMB_SYMBOL HAVING MAX(CASE WHEN c.F056N = 2024 THEN c.F048N END) IS NOT NULL AND MAX(CASE WHEN c.F056N = 2025 THEN c.F048N END) IS NOT NULL ORDER BY a.COMB_SYMBOL LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.71"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 5393.142 5251.038 2.71",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 59.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_9_4358d465.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 58.76,
+  "llm_seconds_max": 55.27,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6818,
+   "prompt_tokens": 14853,
+   "total_tokens": 21671,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6087,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14853,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 182,
+   "prompt_tokens": 9164,
+   "total_tokens": 9346,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24017,
+  "completion": 7000,
+  "total": 31017
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6818,
+   "prompt_tokens": 14853,
+   "total_tokens": 21671,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6087,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14853,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 182,
+   "prompt_tokens": 9164,
+   "total_tokens": 9346,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

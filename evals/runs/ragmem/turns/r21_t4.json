@@ -1,0 +1,107 @@
+{
+ "round_id": 21,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "明白了，谢谢。顺便确认下，这些点位和涨跌幅都是交易所收盘后公布的官方行情口径吧？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "您的反馈与数据查询任务无关，此类反馈超出了我们当前的支持范围，本次流程中断请重启新页面。\n反馈与数据查询无关",
+ "route_gold": "NON_QUERY",
+ "route_pred": "NON_QUERY",
+ "route_ok": true,
+ "first_sql": null,
+ "final_sql": null,
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": true,
+ "answer_ok": null,
+ "elapsed_seconds": 12.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_21_46239809.4",
+  "llm_call_count": 1,
+  "llm_models": [
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 11.57,
+  "llm_seconds_max": 11.57,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 679,
+   "prompt_tokens": 16132,
+   "total_tokens": 16811,
+   "completion_tokens_details": {
+    "reasoning_tokens": 607,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16132,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 16132,
+  "completion": 679,
+  "total": 16811
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 679,
+   "prompt_tokens": 16132,
+   "total_tokens": 16811,
+   "completion_tokens_details": {
+    "reasoning_tokens": 607,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16132,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NON_QUERY",
+  "has_sql": true
+ }
+}

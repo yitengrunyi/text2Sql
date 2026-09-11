@@ -1,0 +1,23 @@
+{
+ "set": "evals/gold_set_10r_50.json",
+ "passed": true,
+ "checked": {
+  "unique_tables": 16,
+  "unique_columns": 70,
+  "questions": 50
+ },
+ "blockers": {
+  "missing_tables": [],
+  "inactive_tables": [],
+  "missing_columns": [],
+  "inactive_columns": [],
+  "missing_domain_mappings": [],
+  "weak_table_descriptions": [],
+  "weak_column_descriptions": [],
+  "forbidden_question_terms": []
+ },
+ "known_non_blocking_limitations": [
+  "远程元数据表 MKT_MAX_TRADEDATE 已变化，但本集合的 MYSQL-2 行情题均使用固定日期，不依赖该快照。",
+  "MYSQL-4 是 43 只美股的本地合成样本；集合不询问生产库覆盖股票总数，数值按本地库判分。"
+ ]
+}

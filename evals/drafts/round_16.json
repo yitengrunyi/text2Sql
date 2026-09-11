@@ -1,0 +1,129 @@
+{
+  "round_id": 16,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+  "initial": {
+    "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+    "judge": "numeric",
+    "gold_value": "-7.9196",
+    "gold_display": "-7.92%（8月末收盘38.95元 vs 7月末42.30元）",
+    "gold_entities": [
+      "格力电器"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND((cur.TCLOSE/prev.TCLOSE-1)*100,4) AS chg_pct FROM (SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31' ORDER BY TRADEDATE DESC LIMIT 1) cur,(SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-07-01' AND '2026-07-31' ORDER BY TRADEDATE DESC LIMIT 1) prev",
+    "gold_tables": [
+      "STK_MKT"
+    ],
+    "labels": {
+      "difficulty": "时间窗口",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "absolute"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "那7月呢？是涨还是跌，幅度多少？",
+      "judge": "numeric",
+      "gold_value": "12.8",
+      "gold_display": "+12.80%（7月末收盘42.30元 vs 6月末37.50元）",
+      "gold_entities": [
+        "格力电器"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND((cur.TCLOSE/prev.TCLOSE-1)*100,4) AS chg_pct FROM (SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-07-01' AND '2026-07-31' ORDER BY TRADEDATE DESC LIMIT 1) cur,(SELECT TCLOSE FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-06-01' AND '2026-06-30' ORDER BY TRADEDATE DESC LIMIT 1) prev",
+      "gold_tables": [
+        "STK_MKT"
+      ],
+      "labels": {
+        "difficulty": "时间窗口",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "8月它平均每天的成交额有多少？",
+      "judge": "numeric",
+      "gold_value": "1891138748.95",
+      "gold_display": "约18.91亿元/日（8月共21个交易日，全月成交397.14亿元）",
+      "gold_entities": [
+        "格力电器"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT AVG(TVALUE) FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31'",
+      "gold_tables": [
+        "STK_MKT"
+      ],
+      "labels": {
+        "difficulty": "聚合",
+        "followup_type": "条件追加",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+      "judge": "entity",
+      "gold_value": "3.1453",
+      "gold_display": "2026-08-19，单日上涨3.15%",
+      "gold_entities": [
+        "格力电器"
+      ],
+      "gold_date": "2026-08-19",
+      "gold_sql": "SELECT TRADEDATE,CHNG_PCT FROM STK_MKT WHERE SECCODE='000651' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31' ORDER BY CHNG_PCT DESC LIMIT 1",
+      "gold_tables": [
+        "STK_MKT"
+      ],
+      "labels": {
+        "difficulty": "单表",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "换个票，海康威视今年以来累计涨了多少？",
+      "judge": "numeric",
+      "gold_value": "22.5206",
+      "gold_display": "约+22.52%（截至2026-09-02）",
+      "gold_entities": [
+        "海康威视"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT a.CHNG_PCT_YEAR_SOFAR FROM ANA_STK_EXPR_IDX a JOIN GET_A_SEC_CODE g ON a.INNER_CODE=g.INNER_CODE WHERE g.SEC_CODE='002415' ORDER BY a.ENDDATE DESC LIMIT 1",
+      "gold_tables": [
+        "ANA_STK_EXPR_IDX",
+        "GET_A_SEC_CODE"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "它8月整月下来总共成交了多少股？",
+      "judge": "numeric",
+      "gold_value": "1660107902",
+      "gold_display": "约16.60亿股（8月全月成交量）",
+      "gold_entities": [
+        "海康威视"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT SUM(TVOLUME) FROM STK_MKT WHERE SECCODE='002415' AND TRADEDATE BETWEEN '2026-08-01' AND '2026-08-31'",
+      "gold_tables": [
+        "STK_MKT"
+      ],
+      "labels": {
+        "difficulty": "聚合",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    }
+  ]
+}

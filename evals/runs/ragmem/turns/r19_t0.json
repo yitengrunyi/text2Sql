@@ -1,0 +1,152 @@
+{
+ "round_id": 19,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "中证1000指数最新的市盈率是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n中证1000指数市盈率（Price-to-Earnings ratio，简称PE或P/E）\n\n[2] 可能的计算公式：  \n中证1000指数市盈率 = 指数成分股总市值 ÷ 指数成分股总净利润  \n或  \n中证1000指数市盈率 = ∑（成分股总市值） ÷ ∑（成分股归母净利润）  \n\n（注：一般使用归属于母公司股东的净利润，成分股为中证1000指数所包含的全部股票）\n['中证1000指数', '市盈率', 'Price-to-Earnings ratio', 'PE', 'P/E', '指数成分股总市值', '指数成分股总净利润', '总市值', '总净利润', '成分股归母净利润', '归属于母公司股东的净利润', '成分股', '股票']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_SAMP_INFO', 'VIEW_STK_FIN_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.TRD_DATE AS `交易日期`,\n    b.INDX_CNAME AS `指数名称`,\n    b.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`,\n    ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX a\nJOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.INDX_CODE = '000852'\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\n    AND a.ISVALID = 1\n    AND a.TRD_DATE = (\n        SELECT MAX(TRD_DATE) \n        FROM ANA_INDX_VAL_IDX \n        WHERE INNER_CODE = b.INNER_CODE\n              AND TRD_DATE <= '2026-09-02'\n    )\n\n200\n{table:[['交易日期', '指数名称', '市盈率(倍)', '市净率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2026-09-02', '中证1000指数', '43.09', '2.32', '0.31', '145,904.00', '130,275.70']]}\n市盈率采用以下公式进行计算：市盈率 = 总市值除以连续四个季度的净利润之和。市净率的计算公式为：市净率 = 总市值除以最新净资产。每股收益是用所有成份股的连续四个季度净利润之和除以所有成份股的最新总股本。总市值和流通市值在结果中进行了单位转换，将元除以一亿，得到以“亿”为单位的数据。查询结果符合要求。\n\n查询主要获取了中证1000指数在最新交易日的主要估值数据，包括交易日期、指数名称、指数代码、市盈率、市净率、每股收益、总市值和流通市值。通过指数内部代码将估值信息表和指数基本信息表关联，筛选指数代码为中证1000的有效且处于使用状态的指数记录，并限制交易日期为截至指定日期的最新一笔。返回了准确的最新市盈率等相关数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.TRD_DATE AS `交易日期`,\n    b.INDX_CNAME AS `指数名称`,\n    b.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`,\n    ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX a\nJOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.INDX_CODE = '000852'\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\n    AND a.ISVALID = 1\n    AND a.TRD_DATE = (\n        SELECT MAX(TRD_DATE) \n        FROM ANA_INDX_VAL_IDX \n        WHERE INNER_CODE = b.INNER_CODE\n              AND TRD_DATE <= '2026-09-02'\n    )",
+ "final_sql": "SELECT \n    a.TRD_DATE AS `交易日期`,\n    b.INDX_CNAME AS `指数名称`,\n    b.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`,\n    ROUND(a.PB, 2) AS `市净率(倍)`,\n    ROUND(a.EPS, 3) AS `每股收益(元)`,\n    ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX a\nJOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    b.INDX_CODE = '000852'\n    AND b.USE_STATUS = '使用'\n    AND b.ISVALID = 1\n    AND a.ISVALID = 1\n    AND a.TRD_DATE = (\n        SELECT MAX(TRD_DATE) \n        FROM ANA_INDX_VAL_IDX \n        WHERE INNER_CODE = b.INNER_CODE\n              AND TRD_DATE <= '2026-09-02'\n    )",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43.0869"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中证1000指数 000852 43.09 2.32 0.310 145904.0 130275.7",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 62.0,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_19_7b3860d2.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 59.68,
+  "llm_seconds_max": 10.05,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   30668
+  ],
+  "prompt_columns_raw_len": 10977
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1134,
+   "prompt_tokens": 32568,
+   "total_tokens": 33702,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 32568,
+  "completion": 1134,
+  "total": 33702
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1134,
+   "prompt_tokens": 32568,
+   "total_tokens": 33702,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

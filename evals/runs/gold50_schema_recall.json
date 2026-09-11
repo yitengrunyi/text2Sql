@@ -1,0 +1,995 @@
+{
+ "summary": {
+  "run_dir": "evals/runs/gold50_full/turns",
+  "set": "evals/gold_set_10r_50.json",
+  "dynamic_top_k": [
+   10,
+   20,
+   50
+  ],
+  "selection_turns": 18,
+  "evaluated_turns": 18,
+  "column_recall_at_k": {
+   "10": {
+    "hit": 72,
+    "total": 74,
+    "recall": 97.3,
+    "turn_all_columns_recalled": 88.9
+   },
+   "20": {
+    "hit": 72,
+    "total": 74,
+    "recall": 97.3,
+    "turn_all_columns_recalled": 88.9
+   },
+   "50": {
+    "hit": 72,
+    "total": 74,
+    "recall": 97.3,
+    "turn_all_columns_recalled": 88.9
+   }
+  },
+  "schema_columns_with_rag": 2302,
+  "schema_columns_without_column_rag": 3499,
+  "schema_column_count_reduction": 34.2,
+  "schema_column_count_reduction_at_k": 50
+ },
+ "details": [
+  {
+   "round_id": 10,
+   "index": 1,
+   "question": "微软的呢？",
+   "gold_tables": [
+    "COM3101",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101",
+    "STK2401",
+    "VIEW_STOCK_US_TURNOUT_SHARES"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F013N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "CSNAME",
+      "F013N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "CSNAME",
+      "F013N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "CSNAME",
+      "F013N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 1,
+   "index": 0,
+   "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+   "gold_tables": [
+    "VIEW_STK_FIN_IDX"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "STK_EQT_CHNG",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "F110101",
+    "ISVALID",
+    "RPT_SRC"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [
+      "F110101"
+     ],
+     "recall": 80.0
+    },
+    "20": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [
+      "F110101"
+     ],
+     "recall": 80.0
+    },
+    "50": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [
+      "F110101"
+     ],
+     "recall": 80.0
+    }
+   }
+  },
+  {
+   "round_id": 1,
+   "index": 1,
+   "question": "那它2025年的营业收入是多少？",
+   "gold_tables": [
+    "VIEW_STK_INCOME_GEN"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "STK_COM_PROFILE",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_INCOME_GEN_QTR",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 1,
+   "index": 2,
+   "question": "它2025年的基本每股收益是多少？",
+   "gold_tables": [
+    "VIEW_STK_FIN_IDX"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "STK_EQT_CHNG",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_INCOME_GEN_QTR",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "F111001",
+    "ISVALID",
+    "RPT_SRC"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "F111001",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "F111001",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "F111001",
+      "ISVALID",
+      "RPT_SRC"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 2,
+   "index": 0,
+   "question": "中国平安2025年年报的营业收入是多少？",
+   "gold_tables": [
+    "VIEW_STK_INCOME_GEN"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "A_STOCKCODE",
+      "ENDDATE",
+      "ISVALID",
+      "P110101",
+      "RPT_DATE",
+      "RPT_SRC",
+      "RPT_TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 3,
+   "index": 0,
+   "question": "宁德时代2026年8月31日的收盘价是多少？",
+   "gold_tables": [
+    "STK_MKT"
+   ],
+   "selected_tables": [
+    "STK_MKT",
+    "ANA_STK_EXPR_IDX",
+    "GET_A_INDICS_LATEST",
+    "DERI_STK_AH_PRC",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 4,
+   "index": 0,
+   "question": "中证500指数2026年8月31日的收盘点位是多少？",
+   "gold_tables": [
+    "INDX_MKT"
+   ],
+   "selected_tables": [
+    "INDX_MKT",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 4,
+   "index": 4,
+   "question": "招商银行2026年9月1日的收盘价是多少？",
+   "gold_tables": [
+    "STK_MKT"
+   ],
+   "selected_tables": [
+    "STK_MKT",
+    "ANA_STK_EXPR_IDX",
+    "GET_A_INDICS_LATEST",
+    "DERI_STK_AH_PRC",
+    "VIEW_CONCEPT_DAILY_QUOTE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "ISVALID",
+      "SECCODE",
+      "TCLOSE",
+      "TRADEDATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 5,
+   "index": 0,
+   "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "UNIT_NAV"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "UNIT_NAV"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "UNIT_NAV"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 5,
+   "index": 3,
+   "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+   "gold_tables": [
+    "FUND_STATISTICS_YEAR"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE",
+    "FUND_NETVALUE_SIMULATE",
+    "FUND_STATISTICS_YEAR"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "YEAR",
+    "YIELD"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "YEAR",
+      "YIELD"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "YEAR",
+      "YIELD"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "YEAR",
+      "YIELD"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 6,
+   "index": 0,
+   "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+   "gold_tables": [
+    "FUND_PORTFOLIO_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_PORTFOLIO_DETAIL",
+    "FUND_ASSET_ALLOCATION",
+    "FUND_INDUSTRY_ASSET_RATIO_ALL"
+   ],
+   "gold_columns": [
+    "FUND_HOLDING_SOURCE_ID",
+    "FUND_SYMBOL",
+    "MARKET_VALUE",
+    "RATIO_IN_NV",
+    "REPORT_DATE",
+    "SEC_NAME"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "FUND_HOLDING_SOURCE_ID",
+      "FUND_SYMBOL",
+      "MARKET_VALUE",
+      "RATIO_IN_NV",
+      "REPORT_DATE",
+      "SEC_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "FUND_HOLDING_SOURCE_ID",
+      "FUND_SYMBOL",
+      "MARKET_VALUE",
+      "RATIO_IN_NV",
+      "REPORT_DATE",
+      "SEC_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "FUND_HOLDING_SOURCE_ID",
+      "FUND_SYMBOL",
+      "MARKET_VALUE",
+      "RATIO_IN_NV",
+      "REPORT_DATE",
+      "SEC_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 6,
+   "index": 1,
+   "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+   "gold_tables": [
+    "FUND_AND_MANAGER_MAPPING"
+   ],
+   "selected_tables": [
+    "FUND_AND_MANAGER_MAPPING",
+    "FUND_MANAGER_INFO",
+    "VW_FUND_LABEL_SERIES"
+   ],
+   "gold_columns": [
+    "END_DATE",
+    "FUND_SYMBOL",
+    "PSN_NAME"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "END_DATE",
+      "FUND_SYMBOL",
+      "PSN_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "END_DATE",
+      "FUND_SYMBOL",
+      "PSN_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "END_DATE",
+      "FUND_SYMBOL",
+      "PSN_NAME"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 6,
+   "index": 4,
+   "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+   "gold_tables": [
+    "FUND_ASSET_ALLOCATION"
+   ],
+   "selected_tables": [
+    "FUND_ASSET_ALLOCATION",
+    "FUND_FRONT_CONTROL",
+    "FUND_STATISTICS_YEAR"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "NET_VALUE",
+    "REPORT_DATE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "NET_VALUE",
+      "REPORT_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "NET_VALUE",
+      "REPORT_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "FUND_SYMBOL",
+      "NET_VALUE",
+      "REPORT_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 7,
+   "index": 0,
+   "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "selected_tables": [
+    "ETF_DAILY_QUOTE"
+   ],
+   "gold_columns": [
+    "CLOSE_PRICE",
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "FUND_SYMBOL",
+      "TRADING_DAY"
+     ],
+     "missed_columns": [
+      "TYPE"
+     ],
+     "recall": 75.0
+    },
+    "20": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "FUND_SYMBOL",
+      "TRADING_DAY"
+     ],
+     "missed_columns": [
+      "TYPE"
+     ],
+     "recall": 75.0
+    },
+    "50": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "FUND_SYMBOL",
+      "TRADING_DAY"
+     ],
+     "missed_columns": [
+      "TYPE"
+     ],
+     "recall": 75.0
+    }
+   }
+  },
+  {
+   "round_id": 7,
+   "index": 2,
+   "question": "它2026年9月2日的基金规模是多少？",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_ASSET_ALLOCATION",
+    "ETF_SHARES_CHANGE_ROLL",
+    "FUND_SHARES_CHANGE",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "FUND_SIZE",
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "FUND_SIZE",
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "FUND_SIZE",
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "FUND_SIZE",
+      "FUND_SYMBOL",
+      "TRADING_DAY",
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 7,
+   "index": 3,
+   "question": "目前境内的ETF一共有多少只？",
+   "gold_tables": [
+    "ETF_INFO_DETAIL"
+   ],
+   "selected_tables": [
+    "ETF_LABEL_INFO_CHINA",
+    "FUND_AND_COMPANY_MAPPING",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "TYPE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "TYPE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 8,
+   "index": 0,
+   "question": "苹果公司2026年8月25日的收盘价是多少？",
+   "gold_tables": [
+    "VIEW_US_EOD_EXPR"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "STK2401",
+    "VIEW_ADS_STOCK_US_EOD_DI",
+    "VIEW_US_EOD_EXPR"
+   ],
+   "gold_columns": [
+    "CLOSE_PRICE",
+    "SYMBOL",
+    "TRADE_DATE"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "SYMBOL",
+      "TRADE_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "SYMBOL",
+      "TRADE_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "CLOSE_PRICE",
+      "SYMBOL",
+      "TRADE_DATE"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  },
+  {
+   "round_id": 9,
+   "index": 0,
+   "question": "苹果公司2025财年的营业收入是多少？",
+   "gold_tables": [
+    "COM3103",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3103_CUM",
+    "COM3103"
+   ],
+   "gold_columns": [
+    "F003V",
+    "F048N",
+    "F056N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "recall_at_k": {
+    "10": {
+     "hit_columns": [
+      "F003V",
+      "F048N",
+      "F056N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "20": {
+     "hit_columns": [
+      "F003V",
+      "F048N",
+      "F056N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    },
+    "50": {
+     "hit_columns": [
+      "F003V",
+      "F048N",
+      "F056N",
+      "FIU_ID",
+      "SYMBOL"
+     ],
+     "missed_columns": [],
+     "recall": 100.0
+    }
+   }
+  }
+ ]
+}

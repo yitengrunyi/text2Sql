@@ -1,0 +1,154 @@
+{
+ "round_id": 24,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 基金经理任职天数（Tenure Days）\n\n[2] 可能的计算公式  \n基金经理任职天数 = 查询日期（如今天日期） − 基金经理在该基金的任职起始日期\n['基金经理', '基金', '基金经理任职天数', 'Tenure Days', '查询日期', '今天日期', '任职起始日期']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金经理基本信息', '基金产品基本信息']\n['FUND_AND_MANAGER_MAPPING', 'FUND_MANAGER_INFO', 'VW_FUND_LABEL_SERIES']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.FUND_HCODE AS `基金内部代码`,\n    m.FUND_SYMBOL AS `基金代码`,\n    m.FUND_NAME AS `基金名称`,\n    m.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(m.END_DATE, '2099-01-01') AS `任职结束日期`,\n    m.DAYS_IN_OFFICE AS `当前任职天数`\nFROM (\n    SELECT \n        t1.FUND_HCODE,\n        t1.FUND_SYMBOL,\n        t1.FUND_NAME,\n        t1.BEGIN_DATE,\n        t1.END_DATE,\n        t1.DAYS_IN_OFFICE\n    FROM FUND_AND_MANAGER_MAPPING t1\n    INNER JOIN (\n        SELECT \n            PSN_HCODE\n        FROM FUND_MANAGER_INFO\n        WHERE HISVALID = 1\n          AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n          AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\n    ) fmi ON t1.PSN_HCODE = fmi.PSN_HCODE\n    WHERE t1.HISVALID = 1\n      AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2026-09-03')\n      AND t1.DAYS_IN_OFFICE IS NOT NULL\n) m\nORDER BY m.DAYS_IN_OFFICE DESC, m.BEGIN_DATE ASC\nLIMIT 1\n200\n{table:[['基金代码', '基金名称', '任职开始日期', '任职结束日期', '当前任职天数'], ['200002.OF', '长城久泰沪深300指数A', '2004-05-21', '2099-01-01', '8,139']]}\n该查询的主要目的是找出某位基金经理当前管理的所有基金产品中，管理时间最长的那一只基金，并给出相应的管理天数。\n\n任职天数作为判断标准，用于筛选所管理时间最长的基金。在此查询中，直接使用了已有的任职天数这一指标数据。\n\n查询首先从一个专门存储基金经理与基金对应关系的表获取数据，仅选择当前仍在管理（未结束或者预计结束时间在未来）、且相关数据为有效状态的基金管理记录。过滤条件还要求任职天数信息必须存在。  \n随后，通过与基金经理基本信息的表进行连接，只保留有效的、且满足以下两个计算条件的基金经理：\n  - 股票投资资产市值与资产净值的比值大于等于0.447。这个比值通过 股票投资资产市值 除以 资产净值 得到。如果资产净值为零，则比值视为零。\n  - 主动股票投资市值在总股票投资市值中占比大于等于0.5。这个比值通过（股票投资资产市值 - 被动股票投资资产市值）除以 总股票投资资产市值 得到。如果总股票投资资产市值为零，则比值视为零。\n\n最终返回可选字段包括基金内部代码、基金代码、基金名称、任职开始日期、任职结束日期（如无则默认为2099-01-01）、当前任职天数，按照任职天数从高到低排序，并优先展示管理时间最长的一只基金。查询结果符合要求。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    m.FUND_HCODE AS `基金内部代码`,\n    m.FUND_SYMBOL AS `基金代码`,\n    m.FUND_NAME AS `基金名称`,\n    m.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(m.END_DATE, '2099-01-01') AS `任职结束日期`,\n    m.DAYS_IN_OFFICE AS `当前任职天数`\nFROM (\n    SELECT \n        t1.FUND_HCODE,\n        t1.FUND_SYMBOL,\n        t1.FUND_NAME,\n        t1.BEGIN_DATE,\n        t1.END_DATE,\n        t1.DAYS_IN_OFFICE\n    FROM FUND_AND_MANAGER_MAPPING t1\n    INNER JOIN (\n        SELECT \n            PSN_HCODE\n        FROM FUND_MANAGER_INFO\n        WHERE HISVALID = 1\n          AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n          AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\n    ) fmi ON t1.PSN_HCODE = fmi.PSN_HCODE\n    WHERE t1.HISVALID = 1\n      AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2026-09-03')\n      AND t1.DAYS_IN_OFFICE IS NOT NULL\n) m\nORDER BY m.DAYS_IN_OFFICE DESC, m.BEGIN_DATE ASC\nLIMIT 1",
+ "final_sql": "SELECT \n    m.FUND_HCODE AS `基金内部代码`,\n    m.FUND_SYMBOL AS `基金代码`,\n    m.FUND_NAME AS `基金名称`,\n    m.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(m.END_DATE, '2099-01-01') AS `任职结束日期`,\n    m.DAYS_IN_OFFICE AS `当前任职天数`\nFROM (\n    SELECT \n        t1.FUND_HCODE,\n        t1.FUND_SYMBOL,\n        t1.FUND_NAME,\n        t1.BEGIN_DATE,\n        t1.END_DATE,\n        t1.DAYS_IN_OFFICE\n    FROM FUND_AND_MANAGER_MAPPING t1\n    INNER JOIN (\n        SELECT \n            PSN_HCODE\n        FROM FUND_MANAGER_INFO\n        WHERE HISVALID = 1\n          AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n          AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\n    ) fmi ON t1.PSN_HCODE = fmi.PSN_HCODE\n    WHERE t1.HISVALID = 1\n      AND (t1.END_DATE IS NULL OR t1.END_DATE >= '2026-09-03')\n      AND t1.DAYS_IN_OFFICE IS NOT NULL\n) m\nORDER BY m.DAYS_IN_OFFICE DESC, m.BEGIN_DATE ASC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "景顺长城新兴成长混合A 4164"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "SEC000343599 200002.OF 长城久泰沪深300指数A 2004-05-21 2099-01-01 8139",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 53.8,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_24_f42bce95.1",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 54.96,
+  "llm_seconds_max": 7.48,
+  "selected_tables": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "FUND_TURNOVER_RATE",
+   "VW_FUND_LABEL_SERIES",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   16812
+  ],
+  "prompt_columns_raw_len": 6252
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1689,
+   "prompt_tokens": 26914,
+   "total_tokens": 28603,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 26914,
+  "completion": 1689,
+  "total": 28603
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1689,
+   "prompt_tokens": 26914,
+   "total_tokens": 28603,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_AND_MANAGER_MAPPING"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

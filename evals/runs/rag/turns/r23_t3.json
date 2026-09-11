@@ -1,0 +1,203 @@
+{
+ "round_id": 23,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "跟2026年一季报相比，二季报前十大有什么换仓动作？新进了谁、又剔出了谁？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 前十大股东名单\n- 股东持股数量/比例\n- 新进股东名单\n- 剔除股东名单\n\n[2] 可能的计算公式  \n- 新进股东 = 二季报前十大股东名单 - 一季报前十大股东名单  \n- 剔除股东 = 一季报前十大股东名单 - 二季报前十大股东名单  \n- 换仓动作 = 新进股东 + 剔除股东  \n- 变化持股数量 = 二季报持股数量 - 一季报持股数量（对比相同股东）\n['2026年一季报', '二季报', '前十大股东名单', '一季报前十大股东名单', '二季报前十大股东名单', '股东', '股东持股数量', '持股数量', '持股比例', '新进股东', '新进股东名单', '剔除股东', '剔除股东名单', '换仓动作', '关键金融指标', '变化持股数量']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板股本股东', '主板基本信息']\n['GET_STK_SHR_CLS_DTL', 'STK_PRE_DISCLOSURE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n    t1.A_STOCKSNAME AS `股票简称`,\n    t1.A_STOCKCODE AS `股票代码`,\n    t1.ENDDATE AS `2026年一季报发布日期`,\n    t1.`RANK` AS `2026年一季报股东名次`,\n    t1.NAME AS `2026年一季报股东名称`,\n    ROUND(t1.HOLD_PCT, 2) AS `2026年一季报持股比例(%)`,\n    t2.ENDDATE AS `2026年二季报发布日期`,\n    t2.`RANK` AS `2026年二季报股东名次`,\n    t2.NAME AS `2026年二季报股东名称`,\n    ROUND(t2.HOLD_PCT, 2) AS `2026年二季报持股比例(%)`,\n    CASE\n        WHEN t1.NAME IS NULL AND t2.NAME IS NOT NULL THEN '新进'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NULL THEN '剔出'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NOT NULL AND t1.HOLD_PCT <> t2.HOLD_PCT THEN '持仓变动'\n        ELSE '无变化'\n    END AS `变动类型`\nFROM\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-03-31'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t1\nFULL JOIN\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-06-30'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t2\nON t1.A_STOCKCODE = t2.A_STOCKCODE AND t1.NAME = t2.NAME\nWHERE \n    (t1.NAME IS NULL OR t2.NAME IS NULL OR t1.HOLD_PCT <> t2.HOLD_PCT)\nORDER BY \n    t2.A_STOCKCODE, `变动类型` DESC\n200\nMySQL Database error: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FULL JOIN\\n    (SELECT \\n    ",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t1.A_STOCKSNAME AS `股票简称`,\n    t1.A_STOCKCODE AS `股票代码`,\n    t1.ENDDATE AS `2026年一季报发布日期`,\n    t1.`RANK` AS `2026年一季报股东名次`,\n    t1.NAME AS `2026年一季报股东名称`,\n    ROUND(t1.HOLD_PCT, 2) AS `2026年一季报持股比例(%)`,\n    t2.ENDDATE AS `2026年二季报发布日期`,\n    t2.`RANK` AS `2026年二季报股东名次`,\n    t2.NAME AS `2026年二季报股东名称`,\n    ROUND(t2.HOLD_PCT, 2) AS `2026年二季报持股比例(%)`,\n    CASE\n        WHEN t1.NAME IS NULL AND t2.NAME IS NOT NULL THEN '新进'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NULL THEN '剔出'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NOT NULL AND t1.HOLD_PCT <> t2.HOLD_PCT THEN '持仓变动'\n        ELSE '无变化'\n    END AS `变动类型`\nFROM\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-03-31'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t1\nFULL JOIN\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-06-30'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t2\nON t1.A_STOCKCODE = t2.A_STOCKCODE AND t1.NAME = t2.NAME\nWHERE \n    (t1.NAME IS NULL OR t2.NAME IS NULL OR t1.HOLD_PCT <> t2.HOLD_PCT)\nORDER BY \n    t2.A_STOCKCODE, `变动类型` DESC",
+ "final_sql": "SELECT \n    t1.A_STOCKSNAME AS `股票简称`,\n    t1.A_STOCKCODE AS `股票代码`,\n    t1.ENDDATE AS `2026年一季报发布日期`,\n    t1.`RANK` AS `2026年一季报股东名次`,\n    t1.NAME AS `2026年一季报股东名称`,\n    ROUND(t1.HOLD_PCT, 2) AS `2026年一季报持股比例(%)`,\n    t2.ENDDATE AS `2026年二季报发布日期`,\n    t2.`RANK` AS `2026年二季报股东名次`,\n    t2.NAME AS `2026年二季报股东名称`,\n    ROUND(t2.HOLD_PCT, 2) AS `2026年二季报持股比例(%)`,\n    CASE\n        WHEN t1.NAME IS NULL AND t2.NAME IS NOT NULL THEN '新进'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NULL THEN '剔出'\n        WHEN t1.NAME IS NOT NULL AND t2.NAME IS NOT NULL AND t1.HOLD_PCT <> t2.HOLD_PCT THEN '持仓变动'\n        ELSE '无变化'\n    END AS `变动类型`\nFROM\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-03-31'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t1\nFULL JOIN\n    (SELECT \n        A_STOCKCODE, A_STOCKSNAME, ENDDATE, `RANK`, NAME, HOLD_PCT\n     FROM GET_STK_SHR_CLS_DTL\n     WHERE ENDDATE = '2026-06-30'\n       AND ISVALID = 1\n       AND NAME IS NOT NULL\n       AND `RANK` <= 10\n    ) t2\nON t1.A_STOCKCODE = t2.A_STOCKCODE AND t1.NAME = t2.NAME\nWHERE \n    (t1.NAME IS NULL OR t2.NAME IS NULL OR t1.HOLD_PCT <> t2.HOLD_PCT)\nORDER BY \n    t2.A_STOCKCODE, `变动类型` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "安琪酵母 新进入前10大\n华域汽车 新剔出前10大"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FULL JOIN\\n    (SELECT \\n        A_",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 60.8,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_23_fe23b2a7.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 64.86,
+  "llm_seconds_max": 7.19,
+  "selected_tables": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_PRE_DISCLOSURE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "GET_STK_SHR_CLS_DTL",
+   "STK_SHR_STRU",
+   "STK_SHR_STRU_CHNG",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COM_SHARE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_ACCUM_IMPAWN",
+   "STK_IMPAWN_NEW",
+   "STK_SEC_IVST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   20622
+  ],
+  "prompt_columns_raw_len": 5830
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1969,
+   "prompt_tokens": 33614,
+   "total_tokens": 35583,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 606,
+   "total_tokens": 607,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 606,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 34220,
+  "completion": 1970,
+  "total": 36190
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1969,
+   "prompt_tokens": 33614,
+   "total_tokens": 35583,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 606,
+   "total_tokens": 607,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 606,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_TOP10_STOCK_CHANGE_Q"
+ ],
+ "table_recall": {
+  "selected": [
+   "GET_STK_SHR_CLS_DTL",
+   "STK_PRE_DISCLOSURE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

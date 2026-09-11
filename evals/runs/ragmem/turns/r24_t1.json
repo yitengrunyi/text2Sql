@@ -1,0 +1,197 @@
+{
+ "round_id": 24,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金经理刘彦春在管基金列表  \n- 每只基金对应的管理起始日期  \n- 管理时长（任职天数）\n\n[2] 可能的计算公式：  \n- 任职天数 = 当前日期 − 管理起始日期  \n- 管理时长最长的基金：在所有“刘彦春在管的基金”中，选取任职天数最大的基金\n['基金经理', '刘彦春', '在管基金', '基金列表', '管理起始日期', '任职天数', '管理时长', '当前日期', '管理时间最长的基金', '最大任职天数']\n该问题可能涉及到申万三级行业，三级行业名称为\"资产管理\"，即SW_INDU_CODE_2021_3 LIKE \"%资产管理%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%资产管理%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金经理基本信息', '基金产品基本信息']\n['FUND_AND_MANAGER_MAPPING', 'FUND_MANAGER_INFO', 'VW_FUND_LABEL_SERIES']\n是否命中召回表：False\n生成查询代码\nSELECT \n    fm.PSN_NAME AS `基金经理名称`,\n    fmap.FUND_NAME AS `基金名称`,\n    fmap.FUND_SYMBOL AS `基金代码`,\n    fmap.BEGIN_DATE AS `管理开始日期`,\n    CASE \n        WHEN fmap.END_DATE IS NULL THEN '2099-01-01'\n        ELSE fmap.END_DATE \n    END AS `管理结束日期`,\n    fmap.DAYS_IN_OFFICE AS `任职天数`\nFROM FUND_AND_MANAGER_MAPPING fmap\nINNER JOIN FUND_MANAGER_INFO fm\n    ON fmap.PSN_HCODE = fm.PSN_HCODE\nWHERE fmap.PSN_NAME = '刘彦春'\n    AND (fmap.END_DATE IS NULL OR fmap.END_DATE = '2099-01-01')\n    AND fmap.HISVALID = 1\n    AND fmap.BEGIN_DATE IS NOT NULL\nORDER BY fmap.DAYS_IN_OFFICE DESC\nLIMIT 1\n200\n{table:[['基金经理名称', '基金名称', '基金代码', '管理开始日期', '管理结束日期', '任职天数'], ['刘彦春', '景顺长城新兴成长混合A', '260108.OF', '2015-04-09', '2099-01-01', '4,164']]}\n查询的目的是获取基金经理刘彦春当前在管的基金中，管理时间最长的基金名称、代码、管理起始和结束日期，以及对应的任职天数。对于任职天数，直接取用已经记录的数据，没有进行特殊计算。在此查询中，我们直接使用了已有的基金经理管理时间和任职天数数据。查询结果符合要求。\n\n本次查询关联了基金经理信息表和基金与基金经理对应关系表，通过基金经理内部代码进行匹配。确定基金经理名称为“刘彦春”，筛选当前任职中的基金（管理结束日期为空或为“2099-01-01”），同时只选择标记为有效的记录，并要求管理开始日期不为空。结果按照任职天数降序排列，只显示管理时间最长的一只基金。\n查询基金经理刘彦春当前在管的基金中，管理时间最长的是哪只基金，以及他管理该基金的任职天数是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    fm.PSN_NAME AS `基金经理名称`,\n    fmap.FUND_NAME AS `基金名称`,\n    fmap.FUND_SYMBOL AS `基金代码`,\n    fmap.BEGIN_DATE AS `管理开始日期`,\n    CASE \n        WHEN fmap.END_DATE IS NULL THEN '2099-01-01'\n        ELSE fmap.END_DATE \n    END AS `管理结束日期`,\n    fmap.DAYS_IN_OFFICE AS `任职天数`\nFROM FUND_AND_MANAGER_MAPPING fmap\nINNER JOIN FUND_MANAGER_INFO fm\n    ON fmap.PSN_HCODE = fm.PSN_HCODE\nWHERE fmap.PSN_NAME = '刘彦春'\n    AND (fmap.END_DATE IS NULL OR fmap.END_DATE = '2099-01-01')\n    AND fmap.HISVALID = 1\n    AND fmap.BEGIN_DATE IS NOT NULL\nORDER BY fmap.DAYS_IN_OFFICE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    fm.PSN_NAME AS `基金经理名称`,\n    fmap.FUND_NAME AS `基金名称`,\n    fmap.FUND_SYMBOL AS `基金代码`,\n    fmap.BEGIN_DATE AS `管理开始日期`,\n    CASE \n        WHEN fmap.END_DATE IS NULL THEN '2099-01-01'\n        ELSE fmap.END_DATE \n    END AS `管理结束日期`,\n    fmap.DAYS_IN_OFFICE AS `任职天数`\nFROM FUND_AND_MANAGER_MAPPING fmap\nINNER JOIN FUND_MANAGER_INFO fm\n    ON fmap.PSN_HCODE = fm.PSN_HCODE\nWHERE fmap.PSN_NAME = '刘彦春'\n    AND (fmap.END_DATE IS NULL OR fmap.END_DATE = '2099-01-01')\n    AND fmap.HISVALID = 1\n    AND fmap.BEGIN_DATE IS NOT NULL\nORDER BY fmap.DAYS_IN_OFFICE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "景顺长城新兴成长混合A 4164"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "刘彦春 景顺长城新兴成长混合A 260108.OF 2015-04-09 2099-01-01 4164",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 72.1,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_24_e4094f67.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 73.69,
+  "llm_seconds_max": 15.11,
+  "selected_tables": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "FUND_TURNOVER_RATE",
+   "VW_FUND_LABEL_SERIES",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   17573
+  ],
+  "prompt_columns_raw_len": 6252
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1268,
+   "prompt_tokens": 10105,
+   "total_tokens": 11373,
+   "completion_tokens_details": {
+    "reasoning_tokens": 998,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10105,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1319,
+   "prompt_tokens": 27950,
+   "total_tokens": 29269,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38055,
+  "completion": 2587,
+  "total": 40642
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1268,
+   "prompt_tokens": 10105,
+   "total_tokens": 11373,
+   "completion_tokens_details": {
+    "reasoning_tokens": 998,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10105,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1319,
+   "prompt_tokens": 27950,
+   "total_tokens": 29269,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_AND_MANAGER_MAPPING"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

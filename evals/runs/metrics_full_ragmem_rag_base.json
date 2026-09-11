@@ -1,0 +1,821 @@
+[
+ {
+  "run_dir": "/Users/mdb/project/text2sql_renew/evals/runs/full",
+  "turns_total": 180,
+  "sql_turns": 173,
+  "nonquery_turns": 7,
+  "gold_drift_turns": 9,
+  "invalid_eval_turns": 0,
+  "ex": {
+   "ex_first": 73.2,
+   "ex_final": 75.0,
+   "first_correct": 120,
+   "final_correct": 123,
+   "n": 164
+  },
+  "reflection": {
+   "enabled": true,
+   "first_fail_n": 44,
+   "reflected_n": 11,
+   "repaired_n": 3,
+   "repair_rate": 27.3,
+   "first_to_final_lift_pp": 1.8,
+   "regressed_n": 0,
+   "empty_result_n": 6,
+   "empty_recovered": 1,
+   "error_result_n": 9
+  },
+  "by_domain": {
+   "个股": {
+    "n": 58,
+    "correct": 50,
+    "acc": 86.2
+   },
+   "基金": {
+    "n": 42,
+    "correct": 28,
+    "acc": 66.7
+   },
+   "指数": {
+    "n": 24,
+    "correct": 16,
+    "acc": 66.7
+   },
+   "美股": {
+    "n": 40,
+    "correct": 29,
+    "acc": 72.5
+   }
+  },
+  "by_source": {
+   "MYSQL-1": {
+    "n": 42,
+    "correct": 28,
+    "acc": 66.7
+   },
+   "MYSQL-2": {
+    "n": 82,
+    "correct": 66,
+    "acc": 80.5
+   },
+   "MYSQL-4": {
+    "n": 40,
+    "correct": 29,
+    "acc": 72.5
+   }
+  },
+  "by_difficulty": {
+   "单表": {
+    "n": 87,
+    "correct": 74,
+    "acc": 85.1
+   },
+   "多表join": {
+    "n": 22,
+    "correct": 13,
+    "acc": 59.1
+   },
+   "子查询": {
+    "n": 18,
+    "correct": 12,
+    "acc": 66.7
+   },
+   "时间窗口": {
+    "n": 11,
+    "correct": 7,
+    "acc": 63.6
+   },
+   "聚合": {
+    "n": 26,
+    "correct": 17,
+    "acc": 65.4
+   }
+  },
+  "by_followup_type": {
+   "指代继承": {
+    "n": 41,
+    "correct": 30,
+    "acc": 73.2
+   },
+   "时间漂移": {
+    "n": 20,
+    "correct": 13,
+    "acc": 65.0
+   },
+   "普通追问": {
+    "n": 4,
+    "correct": 3,
+    "acc": 75.0
+   },
+   "条件修改": {
+    "n": 18,
+    "correct": 17,
+    "acc": 94.4
+   },
+   "条件追加": {
+    "n": 27,
+    "correct": 19,
+    "acc": 70.4
+   },
+   "话题切换": {
+    "n": 26,
+    "correct": 18,
+    "acc": 69.2
+   }
+  },
+  "by_time": {
+   "absolute": {
+    "n": 103,
+    "correct": 78,
+    "acc": 75.7
+   },
+   "relative": {
+    "n": 61,
+    "correct": 45,
+    "acc": 73.8
+   }
+  },
+  "followup_ex": {
+   "n": 136,
+   "correct": 100,
+   "acc": 73.5
+  },
+  "initial_ex": {
+   "n": 28,
+   "correct": 23,
+   "acc": 82.1
+  },
+  "routing": {
+   "n": 150,
+   "correct": 122,
+   "accuracy": 81.3,
+   "macro_f1": 0.7584,
+   "per_class": {
+    "SQL_GENERATION": {
+     "tp": 104,
+     "fp": 3,
+     "fn": 25,
+     "precision": 0.972,
+     "recall": 0.8062,
+     "f1": 0.8814
+    },
+    "NEW_QUERY": {
+     "tp": 12,
+     "fp": 25,
+     "fn": 2,
+     "precision": 0.3243,
+     "recall": 0.8571,
+     "f1": 0.4706
+    },
+    "NON_QUERY": {
+     "tp": 6,
+     "fp": 0,
+     "fn": 1,
+     "precision": 1.0,
+     "recall": 0.8571,
+     "f1": 0.9231
+    }
+   },
+   "confusion": {
+    "NEW_QUERY→SQL_GENERATION": 2,
+    "NON_QUERY→SQL_GENERATION": 1,
+    "SQL_GENERATION→NEW_QUERY": 25
+   },
+   "no_prediction": 0
+  },
+  "perf": {
+   "latency_n": 180,
+   "latency_p50_s": 51.6,
+   "latency_p90_s": 90.2,
+   "latency_p95_s": 101.2,
+   "latency_mean_s": 57.7,
+   "latency_max_s": 278.5,
+   "llm_calls_mean": 6.54,
+   "llm_calls_n": 180,
+   "llm_calls_max": 18,
+   "tokens_prompt_mean": 28344,
+   "tokens_completion_mean": 3080,
+   "tokens_total_mean": 31424,
+   "tokens_n": 180,
+   "sql_prompt_chars_mean": 21310,
+   "sql_prompt_n": 76
+  },
+  "stability": {
+   "sql_exec_success_rate": 93.3,
+   "sql_exec_success_n": 153,
+   "persist_rate": 100.0,
+   "persisted_n": 180,
+   "persist_total": 180,
+   "handler_error_turns": 1,
+   "timeout_turns": 0
+  },
+  "table_recall": {
+   "n": 64,
+   "selected_hit_all_n": 55,
+   "selected_hit_any_n": 57,
+   "candidate_hit_all_n": 57,
+   "selected_hit_all": 85.9,
+   "selected_hit_any": 89.1,
+   "candidate_hit_all": 89.1
+  },
+  "answer_accuracy": 81.7,
+  "answer_correct": 134,
+  "answer_n": 164
+ },
+ {
+  "run_dir": "/Users/mdb/project/text2sql_renew/evals/runs/ragmem",
+  "turns_total": 180,
+  "sql_turns": 173,
+  "nonquery_turns": 7,
+  "gold_drift_turns": 9,
+  "invalid_eval_turns": 0,
+  "ex": {
+   "ex_first": 62.2,
+   "ex_final": 62.2,
+   "first_correct": 102,
+   "final_correct": 102,
+   "n": 164
+  },
+  "reflection": {
+   "enabled": false,
+   "first_fail_n": 62,
+   "reflected_n": 0,
+   "repaired_n": 0,
+   "repair_rate": null,
+   "first_to_final_lift_pp": 0.0,
+   "regressed_n": 0,
+   "empty_result_n": 16,
+   "empty_recovered": 0,
+   "error_result_n": 10
+  },
+  "by_domain": {
+   "个股": {
+    "n": 58,
+    "correct": 36,
+    "acc": 62.1
+   },
+   "基金": {
+    "n": 42,
+    "correct": 25,
+    "acc": 59.5
+   },
+   "指数": {
+    "n": 24,
+    "correct": 14,
+    "acc": 58.3
+   },
+   "美股": {
+    "n": 40,
+    "correct": 27,
+    "acc": 67.5
+   }
+  },
+  "by_source": {
+   "MYSQL-1": {
+    "n": 42,
+    "correct": 25,
+    "acc": 59.5
+   },
+   "MYSQL-2": {
+    "n": 82,
+    "correct": 50,
+    "acc": 61.0
+   },
+   "MYSQL-4": {
+    "n": 40,
+    "correct": 27,
+    "acc": 67.5
+   }
+  },
+  "by_difficulty": {
+   "单表": {
+    "n": 87,
+    "correct": 67,
+    "acc": 77.0
+   },
+   "多表join": {
+    "n": 22,
+    "correct": 6,
+    "acc": 27.3
+   },
+   "子查询": {
+    "n": 18,
+    "correct": 10,
+    "acc": 55.6
+   },
+   "时间窗口": {
+    "n": 11,
+    "correct": 5,
+    "acc": 45.5
+   },
+   "聚合": {
+    "n": 26,
+    "correct": 14,
+    "acc": 53.8
+   }
+  },
+  "by_followup_type": {
+   "指代继承": {
+    "n": 41,
+    "correct": 21,
+    "acc": 51.2
+   },
+   "时间漂移": {
+    "n": 20,
+    "correct": 7,
+    "acc": 35.0
+   },
+   "普通追问": {
+    "n": 4,
+    "correct": 3,
+    "acc": 75.0
+   },
+   "条件修改": {
+    "n": 18,
+    "correct": 18,
+    "acc": 100.0
+   },
+   "条件追加": {
+    "n": 27,
+    "correct": 16,
+    "acc": 59.3
+   },
+   "话题切换": {
+    "n": 26,
+    "correct": 15,
+    "acc": 57.7
+   }
+  },
+  "by_time": {
+   "absolute": {
+    "n": 103,
+    "correct": 61,
+    "acc": 59.2
+   },
+   "relative": {
+    "n": 61,
+    "correct": 41,
+    "acc": 67.2
+   }
+  },
+  "followup_ex": {
+   "n": 136,
+   "correct": 80,
+   "acc": 58.8
+  },
+  "initial_ex": {
+   "n": 28,
+   "correct": 22,
+   "acc": 78.6
+  },
+  "routing": {
+   "n": 150,
+   "correct": 122,
+   "accuracy": 81.3,
+   "macro_f1": 0.73,
+   "per_class": {
+    "SQL_GENERATION": {
+     "tp": 105,
+     "fp": 3,
+     "fn": 24,
+     "precision": 0.9722,
+     "recall": 0.814,
+     "f1": 0.8861
+    },
+    "NEW_QUERY": {
+     "tp": 12,
+     "fp": 25,
+     "fn": 2,
+     "precision": 0.3243,
+     "recall": 0.8571,
+     "f1": 0.4706
+    },
+    "NON_QUERY": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 2,
+     "precision": 1.0,
+     "recall": 0.7143,
+     "f1": 0.8333
+    }
+   },
+   "confusion": {
+    "NEW_QUERY→SQL_GENERATION": 2,
+    "NON_QUERY→NEW_QUERY": 1,
+    "NON_QUERY→SQL_GENERATION": 1,
+    "SQL_GENERATION→NEW_QUERY": 24
+   },
+   "no_prediction": 0
+  },
+  "perf": {
+   "latency_n": 180,
+   "latency_p50_s": 49.3,
+   "latency_p90_s": 88.6,
+   "latency_p95_s": 110.2,
+   "latency_mean_s": 56.0,
+   "latency_max_s": 224.6,
+   "llm_calls_mean": 6.42,
+   "llm_calls_n": 180,
+   "llm_calls_max": 17,
+   "tokens_prompt_mean": 29625,
+   "tokens_completion_mean": 3176,
+   "tokens_total_mean": 32801,
+   "tokens_n": 180,
+   "sql_prompt_chars_mean": 23804,
+   "sql_prompt_n": 67
+  },
+  "stability": {
+   "sql_exec_success_rate": 84.1,
+   "sql_exec_success_n": 138,
+   "persist_rate": 100.0,
+   "persisted_n": 180,
+   "persist_total": 180,
+   "handler_error_turns": 0,
+   "timeout_turns": 6
+  },
+  "table_recall": {
+   "n": 62,
+   "selected_hit_all_n": 55,
+   "selected_hit_any_n": 56,
+   "candidate_hit_all_n": 58,
+   "selected_hit_all": 88.7,
+   "selected_hit_any": 90.3,
+   "candidate_hit_all": 93.5
+  },
+  "answer_accuracy": 72.6,
+  "answer_correct": 119,
+  "answer_n": 164
+ },
+ {
+  "run_dir": "/Users/mdb/project/text2sql_renew/evals/runs/rag",
+  "turns_total": 180,
+  "sql_turns": 173,
+  "nonquery_turns": 7,
+  "gold_drift_turns": 9,
+  "invalid_eval_turns": 0,
+  "ex": {
+   "ex_first": 39.6,
+   "ex_final": 39.6,
+   "first_correct": 65,
+   "final_correct": 65,
+   "n": 164
+  },
+  "reflection": {
+   "enabled": false,
+   "first_fail_n": 99,
+   "reflected_n": 0,
+   "repaired_n": 0,
+   "repair_rate": null,
+   "first_to_final_lift_pp": 0.0,
+   "regressed_n": 0,
+   "empty_result_n": 9,
+   "empty_recovered": 0,
+   "error_result_n": 40
+  },
+  "by_domain": {
+   "个股": {
+    "n": 58,
+    "correct": 20,
+    "acc": 34.5
+   },
+   "基金": {
+    "n": 42,
+    "correct": 19,
+    "acc": 45.2
+   },
+   "指数": {
+    "n": 24,
+    "correct": 9,
+    "acc": 37.5
+   },
+   "美股": {
+    "n": 40,
+    "correct": 17,
+    "acc": 42.5
+   }
+  },
+  "by_source": {
+   "MYSQL-1": {
+    "n": 42,
+    "correct": 19,
+    "acc": 45.2
+   },
+   "MYSQL-2": {
+    "n": 82,
+    "correct": 29,
+    "acc": 35.4
+   },
+   "MYSQL-4": {
+    "n": 40,
+    "correct": 17,
+    "acc": 42.5
+   }
+  },
+  "by_difficulty": {
+   "单表": {
+    "n": 87,
+    "correct": 41,
+    "acc": 47.1
+   },
+   "多表join": {
+    "n": 22,
+    "correct": 5,
+    "acc": 22.7
+   },
+   "子查询": {
+    "n": 18,
+    "correct": 6,
+    "acc": 33.3
+   },
+   "时间窗口": {
+    "n": 11,
+    "correct": 2,
+    "acc": 18.2
+   },
+   "聚合": {
+    "n": 26,
+    "correct": 11,
+    "acc": 42.3
+   }
+  },
+  "by_followup_type": {
+   "指代继承": {
+    "n": 41,
+    "correct": 2,
+    "acc": 4.9
+   },
+   "时间漂移": {
+    "n": 20,
+    "correct": 1,
+    "acc": 5.0
+   },
+   "普通追问": {
+    "n": 4,
+    "correct": 2,
+    "acc": 50.0
+   },
+   "条件修改": {
+    "n": 18,
+    "correct": 11,
+    "acc": 61.1
+   },
+   "条件追加": {
+    "n": 27,
+    "correct": 10,
+    "acc": 37.0
+   },
+   "话题切换": {
+    "n": 26,
+    "correct": 16,
+    "acc": 61.5
+   }
+  },
+  "by_time": {
+   "absolute": {
+    "n": 103,
+    "correct": 32,
+    "acc": 31.1
+   },
+   "relative": {
+    "n": 61,
+    "correct": 33,
+    "acc": 54.1
+   }
+  },
+  "followup_ex": {
+   "n": 136,
+   "correct": 42,
+   "acc": 30.9
+  },
+  "initial_ex": {
+   "n": 28,
+   "correct": 23,
+   "acc": 82.1
+  },
+  "routing": null,
+  "perf": {
+   "latency_n": 180,
+   "latency_p50_s": 53.6,
+   "latency_p90_s": 144.2,
+   "latency_p95_s": 228.6,
+   "latency_mean_s": 73.2,
+   "latency_max_s": 273.0,
+   "llm_calls_mean": 13.63,
+   "llm_calls_n": 180,
+   "llm_calls_max": 17,
+   "tokens_prompt_mean": 34874,
+   "tokens_completion_mean": 1445,
+   "tokens_total_mean": 36319,
+   "tokens_n": 180,
+   "sql_prompt_chars_mean": 26264,
+   "sql_prompt_n": 176
+  },
+  "stability": {
+   "sql_exec_success_rate": 68.3,
+   "sql_exec_success_n": 112,
+   "persist_rate": 98.9,
+   "persisted_n": 178,
+   "persist_total": 180,
+   "handler_error_turns": 0,
+   "timeout_turns": 13
+  },
+  "table_recall": {
+   "n": 160,
+   "selected_hit_all_n": 117,
+   "selected_hit_any_n": 123,
+   "candidate_hit_all_n": 127,
+   "selected_hit_all": 73.1,
+   "selected_hit_any": 76.9,
+   "candidate_hit_all": 79.4
+  },
+  "answer_accuracy": 47.6,
+  "answer_correct": 78,
+  "answer_n": 164
+ },
+ {
+  "run_dir": "/Users/mdb/project/text2sql_renew/evals/runs/base",
+  "turns_total": 180,
+  "sql_turns": 173,
+  "nonquery_turns": 7,
+  "gold_drift_turns": 9,
+  "invalid_eval_turns": 0,
+  "ex": {
+   "ex_first": 23.2,
+   "ex_final": 23.2,
+   "first_correct": 38,
+   "final_correct": 38,
+   "n": 164
+  },
+  "reflection": {
+   "enabled": false,
+   "first_fail_n": 126,
+   "reflected_n": 0,
+   "repaired_n": 0,
+   "repair_rate": null,
+   "first_to_final_lift_pp": 0.0,
+   "regressed_n": 0,
+   "empty_result_n": 13,
+   "empty_recovered": 0,
+   "error_result_n": 62
+  },
+  "by_domain": {
+   "个股": {
+    "n": 58,
+    "correct": 9,
+    "acc": 15.5
+   },
+   "基金": {
+    "n": 42,
+    "correct": 10,
+    "acc": 23.8
+   },
+   "指数": {
+    "n": 24,
+    "correct": 5,
+    "acc": 20.8
+   },
+   "美股": {
+    "n": 40,
+    "correct": 14,
+    "acc": 35.0
+   }
+  },
+  "by_source": {
+   "MYSQL-1": {
+    "n": 42,
+    "correct": 10,
+    "acc": 23.8
+   },
+   "MYSQL-2": {
+    "n": 82,
+    "correct": 14,
+    "acc": 17.1
+   },
+   "MYSQL-4": {
+    "n": 40,
+    "correct": 14,
+    "acc": 35.0
+   }
+  },
+  "by_difficulty": {
+   "单表": {
+    "n": 87,
+    "correct": 24,
+    "acc": 27.6
+   },
+   "多表join": {
+    "n": 22,
+    "correct": 1,
+    "acc": 4.5
+   },
+   "子查询": {
+    "n": 18,
+    "correct": 5,
+    "acc": 27.8
+   },
+   "时间窗口": {
+    "n": 11,
+    "correct": 1,
+    "acc": 9.1
+   },
+   "聚合": {
+    "n": 26,
+    "correct": 7,
+    "acc": 26.9
+   }
+  },
+  "by_followup_type": {
+   "指代继承": {
+    "n": 41,
+    "correct": 2,
+    "acc": 4.9
+   },
+   "时间漂移": {
+    "n": 20,
+    "correct": 1,
+    "acc": 5.0
+   },
+   "普通追问": {
+    "n": 4,
+    "correct": 0,
+    "acc": 0.0
+   },
+   "条件修改": {
+    "n": 18,
+    "correct": 10,
+    "acc": 55.6
+   },
+   "条件追加": {
+    "n": 27,
+    "correct": 6,
+    "acc": 22.2
+   },
+   "话题切换": {
+    "n": 26,
+    "correct": 8,
+    "acc": 30.8
+   }
+  },
+  "by_time": {
+   "absolute": {
+    "n": 103,
+    "correct": 20,
+    "acc": 19.4
+   },
+   "relative": {
+    "n": 61,
+    "correct": 18,
+    "acc": 29.5
+   }
+  },
+  "followup_ex": {
+   "n": 136,
+   "correct": 27,
+   "acc": 19.9
+  },
+  "initial_ex": {
+   "n": 28,
+   "correct": 11,
+   "acc": 39.3
+  },
+  "routing": null,
+  "perf": {
+   "latency_n": 180,
+   "latency_p50_s": 56.5,
+   "latency_p90_s": 118.2,
+   "latency_p95_s": 203.6,
+   "latency_mean_s": 70.3,
+   "latency_max_s": 254.1,
+   "llm_calls_mean": 13.58,
+   "llm_calls_n": 180,
+   "llm_calls_max": 17,
+   "tokens_prompt_mean": 38281,
+   "tokens_completion_mean": 1489,
+   "tokens_total_mean": 39770,
+   "tokens_n": 180,
+   "sql_prompt_chars_mean": 31788,
+   "sql_prompt_n": 175
+  },
+  "stability": {
+   "sql_exec_success_rate": 51.2,
+   "sql_exec_success_n": 84,
+   "persist_rate": 97.8,
+   "persisted_n": 176,
+   "persist_total": 180,
+   "handler_error_turns": 0,
+   "timeout_turns": 8
+  },
+  "table_recall": {
+   "n": 0,
+   "selected_hit_all_n": 0,
+   "selected_hit_any_n": 0,
+   "candidate_hit_all_n": 0,
+   "selected_hit_all": null,
+   "selected_hit_any": null,
+   "candidate_hit_all": null
+  },
+  "answer_accuracy": 36.0,
+  "answer_correct": 59,
+  "answer_n": 164
+ }
+]

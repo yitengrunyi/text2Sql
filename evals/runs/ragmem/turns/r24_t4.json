@@ -1,0 +1,172 @@
+{
+ "round_id": 24,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "换个经理帮我看看，兴证全球的谢治宇，他最新的在管总规模有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '谢治宇' AND t1.PSN_HCODE IN (SELECT PSN_HCODE FROM FUND_MANAGER_INFO WHERE INST_NAME LIKE '%兴证全球%' OR INST_FULL_NAME LIKE '%兴证全球%') AND t1.BEGIN_DATE <= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND (t1.END_DATE IS NULL OR t1.END_DATE >= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION)) AND t1.HISVALID = 1 AND t2.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE;\n200\n{table:[['基金经理', '报告期', '在管总规模(亿元)'], ['谢治宇', '2026-06-30', '770.35']]}\n该查询获取了基金经理谢治宇目前在“兴证全球”管理的全部基金最新披露期的在管总规模信息。数据来源于基金经理与基金产品对应关系表、基金规模数据表，以及基金经理基本信息，三者结合用于确认所选基金经理、管理基金归属机构以及筛选有效管理期内的基金。筛选条件确保仅统计谢治宇在“兴证全球”公募公司名下且截至最近一次公开披露（即最新报告期内）其仍实际管理的全部基金，并排除无效或数据为空的情况。在具体计算上，将所管理所有基金的最新基金净值相加得到总管理规模，之后再将累计值由元单位除以1亿，换算为亿元，并保留两位小数显示。查询结果直接反映了谢治宇当前在兴证全球公募旗下最新管理期内的在管总规模，能够满足用户需求。\n{table:[['基金经理', '报告期', '在管总规模(亿元)'], ['谢治宇', '2026-06-30', '770.35']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '谢治宇' AND t1.PSN_HCODE IN (SELECT PSN_HCODE FROM FUND_MANAGER_INFO WHERE INST_NAME LIKE '%兴证全球%' OR INST_FULL_NAME LIKE '%兴证全球%') AND t1.BEGIN_DATE <= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND (t1.END_DATE IS NULL OR t1.END_DATE >= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION)) AND t1.HISVALID = 1 AND t2.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE",
+ "final_sql": "SELECT t1.PSN_NAME AS `基金经理`, t2.REPORT_DATE AS `报告期`, ROUND(SUM(t2.NET_VALUE) / 100000000, 2) AS `在管总规模(亿元)` FROM FUND_AND_MANAGER_MAPPING t1 INNER JOIN FUND_ASSET_ALLOCATION t2 ON t1.FUND_HCODE = t2.FUND_HCODE WHERE t1.PSN_NAME = '谢治宇' AND t1.PSN_HCODE IN (SELECT PSN_HCODE FROM FUND_MANAGER_INFO WHERE INST_NAME LIKE '%兴证全球%' OR INST_FULL_NAME LIKE '%兴证全球%') AND t1.BEGIN_DATE <= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND (t1.END_DATE IS NULL OR t1.END_DATE >= (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION)) AND t1.HISVALID = 1 AND t2.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION) AND t2.HISVALID = 1 AND t2.NET_VALUE IS NOT NULL GROUP BY t1.PSN_NAME, t2.REPORT_DATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "39275132159.3200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "谢治宇 2026-06-30 770.35",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 110.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_24_e4094f67.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 109.2,
+  "llm_seconds_max": 101.76,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 12405,
+   "prompt_tokens": 12205,
+   "total_tokens": 24610,
+   "completion_tokens_details": {
+    "reasoning_tokens": 11767,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12205,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 209,
+   "prompt_tokens": 5583,
+   "total_tokens": 5792,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17788,
+  "completion": 12614,
+  "total": 30402
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 12405,
+   "prompt_tokens": 12205,
+   "total_tokens": 24610,
+   "completion_tokens_details": {
+    "reasoning_tokens": 11767,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12205,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 209,
+   "prompt_tokens": 5583,
+   "total_tokens": 5792,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

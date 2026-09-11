@@ -1,0 +1,148 @@
+{
+ "round_id": 28,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "条件修改",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 平均市盈率（Average PE Ratio，或平均市盈率）\n\n[2] 可能的计算公式：  \n平均市盈率 = 覆盖股票市盈率之和 ÷ 覆盖股票数量  \n即：  \n\\[\n\\text{平均市盈率} = \\frac{\\sum_{i=1}^{n} \\text{每只股票市盈率 (PE Ratio)}}{n}\n\\]\n其中，n 表示覆盖的美股数量。\n['平均市盈率', 'Average PE Ratio', '市盈率', 'PE Ratio', '覆盖股票', '覆盖股票数量', '覆盖的美股数量', '每只股票市盈率', '股票数量']\n该问题可能涉及到申万一级行业，一级行业名称为\"农林牧渔\"，即SW_INDU_CODE_2021_1 LIKE \"%农林牧渔%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%农林牧渔%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"基础化工\"，即SW_INDU_CODE_2021_1 LIKE \"%基础化工%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%基础化工%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"钢铁\"，即SW_INDU_CODE_2021_1 LIKE \"%钢铁%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%钢铁%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"有色金属\"，即SW_INDU_CODE_2021_1 LIKE \"%有色金属%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%有色金属%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"电子\"，即SW_INDU_CODE_2021_1 LIKE \"%电子%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%电子%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"汽车\"，即SW_INDU_CODE_2021_1 LIKE \"%汽车%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%汽车%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"家用电器\"，即SW_INDU_CODE_2021_1 LIKE \"%家用电器%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%家用电器%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"食品饮料\"，即SW_INDU_CODE_2021_1 LIKE \"%食品饮料%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%食品饮料%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"纺织服饰\"，即SW_INDU_CODE_2021_1 LIKE \"%纺织服饰%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%纺织服饰%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"轻工制造\"，即SW_INDU_CODE_2021_1 LIKE \"%轻工制造%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%轻工制造%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"公用事业\"，即SW_INDU_CODE_2021_1 LIKE \"%公用事业%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%公用事业%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"交通运输\"，即SW_INDU_CODE_2021_1 LIKE \"%交通运输%\",注意，如果用户询问的是行业相关问",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    b.CNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报告期截止日`,\n    b.INDUSTRY_SW_L1_NAME AS `申万一级行业`,\n    ROUND(a.PE_RATIO, 2) AS `市盈率`,\n    a.F005V AS `货币`\nFROM (\n    SELECT \n        t1.FIU_ID, \n        t1.F001D, \n        t1.F005V, \n        -- 计算TTM市盈率: 总市值/TTM归母净利润\n        CASE \n            WHEN t2.TTM_EARNINGS IS NOT NULL AND t2.TTM_EARNINGS <> 0 THEN \n                ROUND(t3.MARKET_CAP / t2.TTM_EARNINGS, 2)\n            ELSE NULL\n        END AS PE_RATIO\n    FROM (\n        -- 最新报表期的FIU_ID、F001D、F005V\n        SELECT \n            FIU_ID, \n            F001D, \n            F005V\n        FROM COM3102 c1\n        WHERE F001D = (\n            SELECT MAX(F001D) \n            FROM COM3102 c2 \n            WHERE c2.FIU_ID = c1.FIU_ID\n        )\n        GROUP BY FIU_ID, F001D, F005V\n    ) t1\n    LEFT JOIN (\n        -- 获取TTM归母净利润\n        SELECT \n            FIU_ID, \n            SUM(NET_PROFIT) AS TTM_EARNINGS\n        FROM (\n            SELECT \n                FIU_ID, \n                F001D, \n                -- 请用你对应的字段替换 NET_PROFIT为归母净利润字段（示例名，真实字段请用详细字典），以下假设F062N（所有股东权益）非净利润，若有归母净利润字段请替换！\n                0 AS NET_PROFIT\n            FROM COM3102\n            WHERE F001D >= DATE_SUB('2026-03-31', INTERVAL 1 YEAR) AND F001D <= '2026-03-31'\n        ) tnp\n        GROUP BY FIU_ID\n    ) t2 ON t1.FIU_ID = t2.FIU_ID\n    LEFT JOIN (\n        -- 获取最新总市值\n        SELECT \n            FIU_ID, \n            -- 请用你对应的字段替换 MARKET_CAP为最新市值字段（示例名，真实字段请用详细字典），以下假设没有直接市值字段\n            0 AS MARKET_CAP\n        FROM COM3102\n        WHERE F001D = '2026-03-31'\n        GROUP BY FIU_ID\n    ) t3 ON t1.FIU_ID = t3.FIU_ID\n) a\nJOIN AMERICAN_STOCK_MAIN b ON a.FIU_ID = b.FIU_ID\nWHERE a.PE_RATIO IS NOT NULL",
+ "final_sql": "SELECT \n    b.CNAME AS `股票名称`,\n    b.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报告期截止日`,\n    b.INDUSTRY_SW_L1_NAME AS `申万一级行业`,\n    ROUND(a.PE_RATIO, 2) AS `市盈率`,\n    a.F005V AS `货币`\nFROM (\n    SELECT \n        t1.FIU_ID, \n        t1.F001D, \n        t1.F005V, \n        -- 计算TTM市盈率: 总市值/TTM归母净利润\n        CASE \n            WHEN t2.TTM_EARNINGS IS NOT NULL AND t2.TTM_EARNINGS <> 0 THEN \n                ROUND(t3.MARKET_CAP / t2.TTM_EARNINGS, 2)\n            ELSE NULL\n        END AS PE_RATIO\n    FROM (\n        -- 最新报表期的FIU_ID、F001D、F005V\n        SELECT \n            FIU_ID, \n            F001D, \n            F005V\n        FROM COM3102 c1\n        WHERE F001D = (\n            SELECT MAX(F001D) \n            FROM COM3102 c2 \n            WHERE c2.FIU_ID = c1.FIU_ID\n        )\n        GROUP BY FIU_ID, F001D, F005V\n    ) t1\n    LEFT JOIN (\n        -- 获取TTM归母净利润\n        SELECT \n            FIU_ID, \n            SUM(NET_PROFIT) AS TTM_EARNINGS\n        FROM (\n            SELECT \n                FIU_ID, \n                F001D, \n                -- 请用你对应的字段替换 NET_PROFIT为归母净利润字段（示例名，真实字段请用详细字典），以下假设F062N（所有股东权益）非净利润，若有归母净利润字段请替换！\n                0 AS NET_PROFIT\n            FROM COM3102\n            WHERE F001D >= DATE_SUB('2026-03-31', INTERVAL 1 YEAR) AND F001D <= '2026-03-31'\n        ) tnp\n        GROUP BY FIU_ID\n    ) t2 ON t1.FIU_ID = t2.FIU_ID\n    LEFT JOIN (\n        -- 获取最新总市值\n        SELECT \n            FIU_ID, \n            -- 请用你对应的字段替换 MARKET_CAP为最新市值字段（示例名，真实字段请用详细字典），以下假设没有直接市值字段\n            0 AS MARKET_CAP\n        FROM COM3102\n        WHERE F001D = '2026-03-31'\n        GROUP BY FIU_ID\n    ) t3 ON t1.FIU_ID = t3.FIU_ID\n) a\nJOIN AMERICAN_STOCK_MAIN b ON a.FIU_ID = b.FIU_ID\nWHERE a.PE_RATIO IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "36.89"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'b.CNAME' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 67.2,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_28_6e096666.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 64.62,
+  "llm_seconds_max": 18.58,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_Q"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   18053
+  ],
+  "prompt_columns_raw_len": 7755
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1722,
+   "prompt_tokens": 33634,
+   "total_tokens": 35356,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33634,
+  "completion": 1722,
+  "total": 35356
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1722,
+   "prompt_tokens": 33634,
+   "total_tokens": 35356,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_Q"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

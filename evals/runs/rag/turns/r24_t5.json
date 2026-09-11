@@ -1,0 +1,146 @@
+{
+ "round_id": 24,
+ "index": 5,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "那在兴证全球内部，目前在管规模比他大的基金经理有几位？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- \"基金经理在管规模\"（即，某基金经理当前管理的基金资产净值总额，通常用“资产管理规模（AUM, Assets Under Management）”表示）\n\n[2] 可能的计算公式  \n假设某基金经理管理了n只基金，分别为A1，A2,...,An，各自的资产净值（Asset Net Value）分别为V1，V2, ..., Vn，则  \n基金经理在管规模 = V1 + V2 + ... + Vn = ΣVi（i=1到n）\n\n计算步骤：  \n1. 统计所有在兴证全球任职的基金经理的在管规模（AUM）  \n2. 比较目标人员的在管规模  \n3. 统计有多少基金经理的AUM大于该目标人员\n\n指标主体：基金经理；计算方式：资产净值加总；比较方式：数量统计。\n['基金经理', '在管规模', '资产管理规模', 'AUM', '资产净值', '基金资产净值总额', 'Asset Net Value', 'Assets Under Management', '加总', '数量统计']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金经理基本信息', '基金经理净值']\n['FUND_MANAGER_INFO', 'FUND_MANAGER_ASSET_ALLOCATION']\n是否命中召回表：False\n生成查询代码\nSELECT\n    f2.PSN_NAME AS `基金经理简称`,\n    ROUND(f2.NET_VALUE/100000000, 2) AS `基金经理管理规模(亿元)`\nFROM\n    FUND_MANAGER_INFO f1\nINNER JOIN FUND_MANAGER_INFO f2\n    ON f2.INST_NAME = f1.INST_NAME\n    AND f2.HISVALID = 1 \n    AND f1.HISVALID = 1\n    AND f2.PSN_NAME <> f1.PSN_NAME\nWHERE\n    f1.INST_NAME = '兴证全球'\n    AND CASE WHEN f1.NET_VALUE != 0 THEN f1.MV_OF_STOCK / f1.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f1.MV_OF_STOCK != 0 THEN (f1.MV_OF_STOCK - f1.MV_OF_STOCK_PASSIVE) / f1.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND CASE WHEN f2.NET_VALUE != 0 THEN f2.MV_OF_STOCK / f2.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f2.MV_OF_STOCK != 0 THEN (f2.MV_OF_STOCK - f2.MV_OF_STOCK_PASSIVE) / f2.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND f2.NET_VALUE > f1.NET_VALUE\nGROUP BY f1.PSN_NAME, f2.PSN_NAME, f2.NET_VALUE\nORDER BY f1.PSN_NAME, f2.NET_VALUE DESC\n200\n{table:[['基金经理简称', '基金经理管理规模(亿元)'], ['谢治宇', '392.75'], ['谢治宇', '392.75'], ['乔迁', '279.42'], ['杨世进', '251.84'], ['谢长雁', '149.46'], ['薛怡然', '131.28'], ['张传杰', '67.37'], ['谢书英', '62.94'], ['陈宇', '60.40'], ['余明强', '39.78'], ['程剑', '38.20'], ['谢治宇', '392.75'], ['乔迁', '279.42'], ['杨世进', '251.84'], ['谢长雁', '149.46'], ['薛怡然', '131.28'], ['张传杰', '67.37'], ['谢书英', '62.94'], ['陈宇', '60.40'], ['谢治宇', '392.75'], ['乔迁', '279.42'], ['杨世进', '251.84'], ['谢长雁',",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    f2.PSN_NAME AS `基金经理简称`,\n    ROUND(f2.NET_VALUE/100000000, 2) AS `基金经理管理规模(亿元)`\nFROM\n    FUND_MANAGER_INFO f1\nINNER JOIN FUND_MANAGER_INFO f2\n    ON f2.INST_NAME = f1.INST_NAME\n    AND f2.HISVALID = 1 \n    AND f1.HISVALID = 1\n    AND f2.PSN_NAME <> f1.PSN_NAME\nWHERE\n    f1.INST_NAME = '兴证全球'\n    AND CASE WHEN f1.NET_VALUE != 0 THEN f1.MV_OF_STOCK / f1.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f1.MV_OF_STOCK != 0 THEN (f1.MV_OF_STOCK - f1.MV_OF_STOCK_PASSIVE) / f1.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND CASE WHEN f2.NET_VALUE != 0 THEN f2.MV_OF_STOCK / f2.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f2.MV_OF_STOCK != 0 THEN (f2.MV_OF_STOCK - f2.MV_OF_STOCK_PASSIVE) / f2.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND f2.NET_VALUE > f1.NET_VALUE\nGROUP BY f1.PSN_NAME, f2.PSN_NAME, f2.NET_VALUE\nORDER BY f1.PSN_NAME, f2.NET_VALUE DESC",
+ "final_sql": "SELECT\n    f2.PSN_NAME AS `基金经理简称`,\n    ROUND(f2.NET_VALUE/100000000, 2) AS `基金经理管理规模(亿元)`\nFROM\n    FUND_MANAGER_INFO f1\nINNER JOIN FUND_MANAGER_INFO f2\n    ON f2.INST_NAME = f1.INST_NAME\n    AND f2.HISVALID = 1 \n    AND f1.HISVALID = 1\n    AND f2.PSN_NAME <> f1.PSN_NAME\nWHERE\n    f1.INST_NAME = '兴证全球'\n    AND CASE WHEN f1.NET_VALUE != 0 THEN f1.MV_OF_STOCK / f1.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f1.MV_OF_STOCK != 0 THEN (f1.MV_OF_STOCK - f1.MV_OF_STOCK_PASSIVE) / f1.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND CASE WHEN f2.NET_VALUE != 0 THEN f2.MV_OF_STOCK / f2.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN f2.MV_OF_STOCK != 0 THEN (f2.MV_OF_STOCK - f2.MV_OF_STOCK_PASSIVE) / f2.MV_OF_STOCK ELSE 0 END >= 0.5\n    AND f2.NET_VALUE > f1.NET_VALUE\nGROUP BY f1.PSN_NAME, f2.PSN_NAME, f2.NET_VALUE\nORDER BY f1.PSN_NAME, f2.NET_VALUE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "6"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 136
+ },
+ "first_result_preview": "谢治宇 392.75\n谢治宇 392.75\n乔迁 279.42\n杨世进 251.84\n谢长雁 149.46\n薛怡然 131.28\n张传杰 67.37\n谢书英 62.94\n陈宇 60.40\n余明强 39.78\n程剑 38.20\n谢治宇 392.75\n乔迁 279.42\n杨世进 251.84\n谢长雁 149.46\n薛怡然 131.28\n张传杰 67.37\n谢书英 62.94\n陈宇 60.40\n谢治宇 ",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 136
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 59.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_24_f42bce95.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.68,
+  "llm_seconds_max": 10.94,
+  "selected_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_NET_VALUE",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "FUND_MANAGER_STATISTICS_YEAR",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "sql_prompt_chars": [
+   15931
+  ],
+  "prompt_columns_raw_len": 4423
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1345,
+   "prompt_tokens": 24310,
+   "total_tokens": 25655,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24310,
+  "completion": 1345,
+  "total": 25655
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1345,
+   "prompt_tokens": 24310,
+   "total_tokens": 25655,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

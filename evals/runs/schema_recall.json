@@ -1,0 +1,1865 @@
+{
+ "summary": {
+  "run": "full",
+  "dynamic_top_k": 50,
+  "selection_turns": 63,
+  "evaluated_turns": 62,
+  "gold_columns_total": 285,
+  "hit_columns_total": 274,
+  "column_recall": 96.1,
+  "turn_all_columns_recalled": 91.9,
+  "schema_columns_with_rag": 7961,
+  "schema_columns_without_column_rag": 10303,
+  "schema_column_count_reduction": 22.7
+ },
+ "details": [
+  {
+   "round_id": 10,
+   "index": 3,
+   "question": "特斯拉最新的市盈率是多少？",
+   "gold_tables": [
+    "COM3101",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101",
+    "VIEW_COM3103_Q",
+    "STK2401",
+    "VIEW_COM3103_CUM",
+    "VIEW_ADS_STOCK_US_EOD_DI",
+    "VIEW_US_EOD_EXPR"
+   ],
+   "gold_columns": [
+    "F021N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "hit_columns": [
+    "F021N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 11,
+   "index": 0,
+   "question": "万华化学2025年年报里，聚氨酯系列产品实现的营业收入是多少？",
+   "gold_tables": [
+    "STK_PRI_INCOME_PRODUCT"
+   ],
+   "selected_tables": [
+    "STK_PRI_INCOME_PRODUCT",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "INCOME",
+    "ISVALID",
+    "ITEM_NAME",
+    "PERIODDATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "INCOME",
+    "ISVALID",
+    "ITEM_NAME",
+    "PERIODDATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 11,
+   "index": 3,
+   "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+   "gold_tables": [
+    "STK_PRI_INCOME_DISTRICT"
+   ],
+   "selected_tables": [
+    "STK_PRI_INCOME_DISTRICT",
+    "ASTK_REVENUE_OVERSEAS",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ISVALID",
+    "ITEM_NAME",
+    "PERIODDATE",
+    "PRI_RVNU_PCT",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "ISVALID",
+    "ITEM_NAME",
+    "PERIODDATE",
+    "PRI_RVNU_PCT",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 11,
+   "index": 5,
+   "question": "换个标的看看，海康威视2025年年报的研发投入总额是多少？",
+   "gold_tables": [
+    "STK_RD_DTL",
+    "GET_A_SEC_CODE"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_FIX_ASS_DEP",
+    "STK_RD_DTL",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "COMCODE",
+    "ISVALID",
+    "RD_SUM",
+    "RPT_DATE",
+    "SEC_CODE"
+   ],
+   "hit_columns": [
+    "COMCODE",
+    "ISVALID",
+    "RD_SUM",
+    "RPT_DATE",
+    "SEC_CODE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 12,
+   "index": 5,
+   "question": "换家公司看看，中国神华2025年度累计现金分红总额是多少？",
+   "gold_tables": [
+    "STK_DIV_STAT"
+   ],
+   "selected_tables": [
+    "STK_DIV_STAT",
+    "STK_DIV_INFO",
+    "STK_DIVPAY",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "DIV_YEAR",
+    "ISVALID",
+    "TOT_ACCUM_DIV"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "DIV_YEAR",
+    "ISVALID",
+    "TOT_ACCUM_DIV"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 13,
+   "index": 0,
+   "question": "中国神华2025年年报的利润分配方案是怎么安排的？每10股派多少现金红利，有没有送股或者转增？",
+   "gold_tables": [
+    "STK_DIV_INFO"
+   ],
+   "selected_tables": [
+    "STK_DIV_INFO",
+    "STK_DIV_STAT",
+    "STK_DIVPAY",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "BONUS_SHR",
+    "CAP_SHR",
+    "CASH_BT",
+    "DIV_TYPE",
+    "ISVALID",
+    "PERIODDATE",
+    "PRG"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "BONUS_SHR",
+    "CAP_SHR",
+    "CASH_BT",
+    "DIV_TYPE",
+    "ISVALID",
+    "PERIODDATE",
+    "PRG"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 14,
+   "index": 3,
+   "question": "预告之外，再看看机构预测这边：紫金矿业2024年的一致预期净利润是多少？",
+   "gold_tables": [
+    "VIEW_STK_CONSENSUS_FORECAST"
+   ],
+   "selected_tables": [
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "COMB_SYMBOL",
+    "CONSENSUS_PROFIT",
+    "END_DATE",
+    "FORECAST_YEAR",
+    "ISVALID"
+   ],
+   "hit_columns": [
+    "COMB_SYMBOL",
+    "ISVALID"
+   ],
+   "missed_columns": [
+    "CONSENSUS_PROFIT",
+    "END_DATE",
+    "FORECAST_YEAR"
+   ],
+   "recall": 40.0
+  },
+  {
+   "round_id": 14,
+   "index": 4,
+   "question": "对应的一致预期EPS和市盈率是多少？",
+   "gold_tables": [
+    "VIEW_STK_CONSENSUS_FORECAST"
+   ],
+   "selected_tables": [
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "COMB_SYMBOL",
+    "CONSENSUS_EPS",
+    "CONSENSUS_PE",
+    "END_DATE",
+    "FORECAST_YEAR",
+    "ISVALID"
+   ],
+   "hit_columns": [
+    "COMB_SYMBOL",
+    "ISVALID"
+   ],
+   "missed_columns": [
+    "CONSENSUS_EPS",
+    "CONSENSUS_PE",
+    "END_DATE",
+    "FORECAST_YEAR"
+   ],
+   "recall": 33.3
+  },
+  {
+   "round_id": 14,
+   "index": 5,
+   "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+   "gold_tables": [
+    "STK_ACHIEVE_FORECAST"
+   ],
+   "selected_tables": [
+    "STK_ACHIEVE_FORECAST",
+    "STK_COM_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "A_STOCKSNAME",
+    "ENDDATE",
+    "ISVALID",
+    "MAX_VAL"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "A_STOCKSNAME",
+    "ENDDATE",
+    "ISVALID",
+    "MAX_VAL"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 15,
+   "index": 0,
+   "question": "我组合里配了腾讯控股，先看下它2025年年报的营业额有多大？",
+   "gold_tables": [
+    "HK_NFINIS_NSTD",
+    "HK_STKCODE"
+   ],
+   "selected_tables": [
+    "HK_NFINIS_NSTD",
+    "HK_LTTFINIDC_DIDC",
+    "HK_ANA_STK_IDX_NFIN",
+    "HK_PRI_INCOME",
+    "HK_COMBINFO",
+    "HK_STKCODE",
+    "VIEW_HK_INDUSTRY_TRACK"
+   ],
+   "gold_columns": [
+    "COMUNIC",
+    "EDATE",
+    "ISVALID",
+    "RPTSOUREFC",
+    "STKCODE",
+    "TTO"
+   ],
+   "hit_columns": [
+    "COMUNIC",
+    "EDATE",
+    "ISVALID",
+    "RPTSOUREFC",
+    "STKCODE",
+    "TTO"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 15,
+   "index": 1,
+   "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+   "gold_tables": [
+    "HK_STKDMK",
+    "HK_STKCODE"
+   ],
+   "selected_tables": [
+    "HK_STKDMK",
+    "HK_IDC_STKPFMIDC",
+    "HK_IDC_STKVIDC",
+    "HK_COMBINFO",
+    "HK_STKCODE",
+    "VIEW_HK_INDUSTRY_TRACK"
+   ],
+   "gold_columns": [
+    "CLPR",
+    "ISVALID",
+    "STKCODE",
+    "STKUNICODE",
+    "TRDATE"
+   ],
+   "hit_columns": [
+    "CLPR",
+    "ISVALID",
+    "STKCODE",
+    "STKUNICODE",
+    "TRDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 15,
+   "index": 3,
+   "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+   "gold_tables": [
+    "HK_NFINIS_NSTD",
+    "HK_STKCODE"
+   ],
+   "selected_tables": [
+    "HK_NFINIS_NSTD",
+    "HK_ANA_STK_IDX_NFIN",
+    "HK_LTTFINIDC_DIDC",
+    "HK_NFINBS_NSTD",
+    "HK_PRI_INCOME",
+    "HK_COMBINFO",
+    "HK_STKCODE",
+    "VIEW_HK_INDUSTRY_TRACK"
+   ],
+   "gold_columns": [
+    "COMUNIC",
+    "EDATE",
+    "ISVALID",
+    "RPTSOUREFC",
+    "STKCODE",
+    "TTO"
+   ],
+   "hit_columns": [
+    "COMUNIC",
+    "EDATE",
+    "ISVALID",
+    "RPTSOUREFC",
+    "STKCODE",
+    "TTO"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 15,
+   "index": 4,
+   "question": "再帮我看个港股，香港交易所最新的市净率是多少？",
+   "gold_tables": [
+    "HK_IDC_STKVIDC",
+    "HK_STKCODE"
+   ],
+   "selected_tables": [
+    "HK_IDC_STKVIDC",
+    "HK_IDC_STKPFMIDC",
+    "HK_STKDMK",
+    "HK_COMBINFO",
+    "HK_STKCODE",
+    "VIEW_HK_INDUSTRY_TRACK"
+   ],
+   "gold_columns": [
+    "EDATE",
+    "ISVALID",
+    "PB",
+    "STKCODE",
+    "STKUNICODE"
+   ],
+   "hit_columns": [
+    "EDATE",
+    "ISVALID",
+    "PB",
+    "STKCODE",
+    "STKUNICODE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 16,
+   "index": 0,
+   "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+   "gold_tables": [
+    "STK_MKT"
+   ],
+   "selected_tables": [
+    "VW_CONCEPT_STK",
+    "ANA_STK_EXPR_IDX",
+    "STK_MKT",
+    "GET_A_INDICS_LATEST",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 17,
+   "index": 0,
+   "question": "万华化学2025年年报的营业总收入是多少？",
+   "gold_tables": [
+    "VIEW_STK_INCOME_GEN"
+   ],
+   "selected_tables": [
+    "STK_COM_PROFILE",
+    "ANA_STK_QTR_IDX",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "VIEW_STK_INCOME_GEN_QTR",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110100",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110100",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 17,
+   "index": 1,
+   "question": "那它2025年末的资产负债率大概有多高？",
+   "gold_tables": [
+    "VIEW_STK_BALA_GEN"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "STK_EQT_CHNG",
+    "VIEW_STK_BALA_GEN",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_COMSUB_PROFILE",
+    "STK_LNG_LOAN",
+    "STK_COM_RELA_NBALA",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "B100000",
+    "B200000",
+    "ENDDATE",
+    "ISVALID",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "B100000",
+    "B200000",
+    "ENDDATE",
+    "ISVALID",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 17,
+   "index": 2,
+   "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+   "gold_tables": [
+    "VIEW_STK_CASH_GEN",
+    "VIEW_STK_INCOME_GEN"
+   ],
+   "selected_tables": [
+    "VIEW_STK_CASH_GEN",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "C100000",
+    "ENDDATE",
+    "ISVALID",
+    "P150101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "C100000",
+    "ENDDATE",
+    "ISVALID",
+    "P150101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 18,
+   "index": 0,
+   "question": "深证成指最近一个交易日的收盘点位是多少？",
+   "gold_tables": [
+    "INDX_MKT"
+   ],
+   "selected_tables": [
+    "INDX_MKT",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 18,
+   "index": 5,
+   "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+   "gold_tables": [
+    "ANA_INDX_VAL_IDX"
+   ],
+   "selected_tables": [
+    "ANA_INDX_VAL_IDX",
+    "ANA_INDX_FIN_IDX",
+    "INDX_SAMP_INFO",
+    "VIEW_STK_FIN_IDX",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "hit_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 19,
+   "index": 0,
+   "question": "中证1000指数最新的市盈率是多少？",
+   "gold_tables": [
+    "ANA_INDX_VAL_IDX"
+   ],
+   "selected_tables": [
+    "ANA_INDX_VAL_IDX",
+    "ANA_INDX_FIN_IDX",
+    "INDX_TCLOSE_WEIGHT",
+    "INDX_SAMP_INFO",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "hit_columns": [
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 1,
+   "index": 0,
+   "question": "宁德时代2025年年报的归属于母公司股东的净利润是多少？",
+   "gold_tables": [
+    "VIEW_STK_FIN_IDX"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "STK_EQT_CHNG",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "F110101",
+    "ISVALID",
+    "RPT_SRC"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "F110101",
+    "ISVALID",
+    "RPT_SRC"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 20,
+   "index": 0,
+   "question": "中证军工指数今年以来涨跌幅是多少？",
+   "gold_tables": [
+    "GET_INDX_GEN_INFO",
+    "INDX_MKT"
+   ],
+   "selected_tables": [
+    "INDX_MKT",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "INDX_CNAME",
+    "INNER_CODE",
+    "ISVALID",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "INDX_CNAME",
+    "INNER_CODE",
+    "ISVALID",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 21,
+   "index": 0,
+   "question": "帮我看看中证1000指数最新收盘在多少点？",
+   "gold_tables": [
+    "INDX_MKT"
+   ],
+   "selected_tables": [
+    "INDX_MKT",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 21,
+   "index": 3,
+   "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+   "gold_tables": [
+    "ANA_INDX_VAL_IDX"
+   ],
+   "selected_tables": [
+    "ANA_INDX_VAL_IDX",
+    "INDX_SAMP_INFO",
+    "VIEW_STK_FIN_IDX",
+    "ANA_STK_EXPR_IDX",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "INDX_CNAME",
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "hit_columns": [
+    "INDX_CNAME",
+    "INNER_CODE",
+    "ISVALID",
+    "PE",
+    "TRD_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 22,
+   "index": 0,
+   "question": "我组合里拿了中欧医疗健康混合A，先帮我看下它最新一个交易日的单位净值是多少？",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 22,
+   "index": 3,
+   "question": "那2025年一整年下来，它的年度收益率是多少？",
+   "gold_tables": [
+    "FUND_STATISTICS_YEAR"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE",
+    "FUND_STATISTICS_YEAR"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "YEAR",
+    "YIELD"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "YEAR",
+    "YIELD"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 22,
+   "index": 5,
+   "question": "对了，最近想配点黄金，华安黄金易ETF(518880)最近一年涨了多少？",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE",
+    "ETF_LABEL_INFO_CHINA"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "RETURN_1Y",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY"
+   ],
+   "missed_columns": [
+    "RETURN_1Y",
+    "TYPE"
+   ],
+   "recall": 50.0
+  },
+  {
+   "round_id": 23,
+   "index": 0,
+   "question": "帮我拆一下大成高新技术产业股票A 2026年二季报的前十大重仓股，按持股市值从高到低排一下。",
+   "gold_tables": [
+    "FUND_PORTFOLIO_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_PORTFOLIO_DETAIL",
+    "FUND_STOCK_CHANGE_HY",
+    "FUND_TOP10_STOCK_CHANGE_HY",
+    "FUND_INDUSTRY_ASSET_RATIO_ALL",
+    "STOCK_FACTOR_VALUE"
+   ],
+   "gold_columns": [
+    "FUND_HCODE",
+    "FUND_HOLDING_SOURCE_ID",
+    "MARKET_VALUE",
+    "RATIO_IN_NV",
+    "REPORT_DATE",
+    "SEC_NAME"
+   ],
+   "hit_columns": [
+    "FUND_HCODE",
+    "FUND_HOLDING_SOURCE_ID",
+    "MARKET_VALUE",
+    "RATIO_IN_NV",
+    "REPORT_DATE",
+    "SEC_NAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 24,
+   "index": 0,
+   "question": "我关注景顺长城的刘彦春挺久了，他目前在管的总规模有多大？",
+   "gold_tables": [
+    "FUND_MANAGER_INFO"
+   ],
+   "selected_tables": [
+    "FUND_MANAGER_INFO",
+    "FUND_MANAGER_ASSET_ALLOCATION"
+   ],
+   "gold_columns": [
+    "HISVALID",
+    "NET_VALUE",
+    "PSN_NAME"
+   ],
+   "hit_columns": [
+    "HISVALID",
+    "NET_VALUE",
+    "PSN_NAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 24,
+   "index": 1,
+   "question": "他手上在管的这些基金里，管的时间最长的是哪只？到现在任职多少天了？",
+   "gold_tables": [
+    "FUND_AND_MANAGER_MAPPING"
+   ],
+   "selected_tables": [
+    "FUND_AND_MANAGER_MAPPING",
+    "FUND_MANAGER_INFO",
+    "FUND_AND_COMPANY_MAPPING"
+   ],
+   "gold_columns": [
+    "DAYS_IN_OFFICE",
+    "END_DATE",
+    "FUND_NAME",
+    "HISVALID",
+    "PSN_NAME"
+   ],
+   "hit_columns": [
+    "DAYS_IN_OFFICE",
+    "END_DATE",
+    "FUND_NAME",
+    "HISVALID",
+    "PSN_NAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 24,
+   "index": 2,
+   "question": "那这批在管基金里面，最新一期披露规模最大的是哪只？规模有多大？",
+   "gold_tables": [
+    "FUND_AND_MANAGER_MAPPING",
+    "FUND_ASSET_ALLOCATION"
+   ],
+   "selected_tables": [
+    "FUND_AND_MANAGER_MAPPING",
+    "FUND_ASSET_ALLOCATION",
+    "FUND_MANAGER_INFO",
+    "FUND_MANAGER_ASSET_ALLOCATION",
+    "VW_FUND_LABEL_SERIES",
+    "ETF_INFO_DETAIL"
+   ],
+   "gold_columns": [
+    "END_DATE",
+    "FUND_HCODE",
+    "FUND_NAME",
+    "HISVALID",
+    "NET_VALUE",
+    "PSN_NAME",
+    "REPORT_DATE"
+   ],
+   "hit_columns": [
+    "END_DATE",
+    "FUND_HCODE",
+    "FUND_NAME",
+    "HISVALID",
+    "NET_VALUE",
+    "PSN_NAME",
+    "REPORT_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 26,
+   "index": 0,
+   "question": "最近黄金ETF吸金很猛，帮我看看华安黄金ETF（518880）最近一周资金净流入大概有多少？",
+   "gold_tables": [
+    "ETF_SHARES_CHANGE_ROLL"
+   ],
+   "selected_tables": [
+    "FUND_SHARES_CHANGE",
+    "ETF_SHARES_CHANGE_ROLL",
+    "FUND_NETVALUE",
+    "ETF_DAILY_QUOTE",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "HISVALID",
+    "NET_INFLOW",
+    "ROLL_NUM",
+    "TRADING_DAY"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "HISVALID",
+    "NET_INFLOW",
+    "ROLL_NUM",
+    "TRADING_DAY"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 26,
+   "index": 3,
+   "question": "那上个季度整体来看呢，资金到底是净流入还是净流出？",
+   "gold_tables": [
+    "FUND_SHARES_CHANGE"
+   ],
+   "selected_tables": [
+    "FUND_BENCHMARK",
+    "ETF_SHARES_CHANGE_ROLL",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "END_DATE",
+    "FUND_SYMBOL",
+    "HISVALID",
+    "NET_INFLOW"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "HISVALID",
+    "NET_INFLOW"
+   ],
+   "missed_columns": [
+    "END_DATE"
+   ],
+   "recall": 75.0
+  },
+  {
+   "round_id": 26,
+   "index": 5,
+   "question": "再帮我查个别的，中欧医疗健康混合A最新的单位净值是多少？",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "HISVALID",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "HISVALID",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 27,
+   "index": 0,
+   "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+   "gold_tables": [
+    "COM3103"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3103_CUM",
+    "COM3103"
+   ],
+   "gold_columns": [
+    "F001D",
+    "F003V",
+    "F048N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F001D",
+    "F003V",
+    "F048N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 27,
+   "index": 2,
+   "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+   "gold_tables": [
+    "COM3103",
+    "COM3102"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3102",
+    "COM3103",
+    "VIEW_COM3103_CUM"
+   ],
+   "gold_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "F032N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "F032N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 27,
+   "index": 3,
+   "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+   "gold_tables": [
+    "COM3104"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3104_CUM",
+    "COM3104"
+   ],
+   "gold_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "F036N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "F036N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 27,
+   "index": 5,
+   "question": "换家公司看看：可口可乐最新一份年报期末的总资产是多少？",
+   "gold_tables": [
+    "COM3102"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3102",
+    "VIEW_COM3102_Q",
+    "VIEW_COM3102_CUM",
+    "VIEW_COM3103_CUM",
+    "VIEW_COM3104_CUM"
+   ],
+   "gold_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F001D",
+    "F003V",
+    "F008N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 28,
+   "index": 0,
+   "question": "帮我对比下迪士尼和奈飞现在的估值水平，谁的市盈率更高？大概高多少？",
+   "gold_tables": [
+    "COM3101",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3103_CUM"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F021N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F021N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 28,
+   "index": 1,
+   "question": "那它们俩的市净率呢？差距也这么明显吗？",
+   "gold_tables": [
+    "COM3101"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3102_Q",
+    "COM3102",
+    "VIEW_COM3103_CUM"
+   ],
+   "gold_columns": [
+    "F015N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F015N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 28,
+   "index": 2,
+   "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+   "gold_tables": [
+    "COM3101",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101",
+    "VIEW_COM3104_CUM",
+    "VIEW_US_EOD_EXPR",
+    "VIEW_ADS_STOCK_US_EOD_DI"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F007N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F007N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 28,
+   "index": 3,
+   "question": "估值先放一边，那过去一年呢？迪士尼这段时间股价累计涨跌了多少？",
+   "gold_tables": [
+    "VIEW_US_EXPR_IDX"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "STK2401",
+    "VIEW_US_EOD_EXPR",
+    "VIEW_US_EXPR_IDX"
+   ],
+   "gold_columns": [
+    "CHG_PCT_YEAR",
+    "SYMBOL_NASDAQ",
+    "TRADE_DATE"
+   ],
+   "hit_columns": [
+    "CHG_PCT_YEAR",
+    "SYMBOL_NASDAQ",
+    "TRADE_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 28,
+   "index": 4,
+   "question": "换个板块：埃克森美孚和雪佛龙这两家油气巨头，现在谁的市盈率更低？",
+   "gold_tables": [
+    "COM3101"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3103_Q",
+    "COM3103",
+    "VIEW_COM3103_CUM"
+   ],
+   "gold_columns": [
+    "F021N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "F021N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 29,
+   "index": 0,
+   "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+   "gold_tables": [
+    "VIEW_COM3105",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3105"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F001D",
+    "F007N",
+    "FIU_ID",
+    "SECTOR_CNAME"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F001D",
+    "F007N",
+    "FIU_ID",
+    "SECTOR_CNAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 29,
+   "index": 2,
+   "question": "同期它在北美市场实现的销售收入呢？",
+   "gold_tables": [
+    "VIEW_COM3106",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3106",
+    "VIEW_COM3105"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F001D",
+    "F007N",
+    "FIU_ID",
+    "REGION_CNAME"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F001D",
+    "F007N",
+    "FIU_ID",
+    "REGION_CNAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 29,
+   "index": 5,
+   "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+   "gold_tables": [
+    "COM3103",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "VIEW_COM3103_CUM",
+    "COM3103",
+    "VIEW_COM3103_Q"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F001D",
+    "F003V",
+    "F048N",
+    "FIU_ID"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F001D",
+    "F003V",
+    "F048N",
+    "FIU_ID"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 2,
+   "index": 0,
+   "question": "中国平安2025年年报的营业收入是多少？",
+   "gold_tables": [
+    "STK_INCOME_GEN"
+   ],
+   "selected_tables": [
+    "ANA_STK_QTR_IDX",
+    "VIEW_STK_INCOME_GEN",
+    "VIEW_STK_FIN_IDX",
+    "VIEW_STK_FIN_IDX_PLUS",
+    "STK_COMSUB_PROFILE",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "hit_columns": [
+    "A_STOCKCODE",
+    "ENDDATE",
+    "ISVALID",
+    "P110101",
+    "RPT_DATE",
+    "RPT_SRC",
+    "RPT_TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 30,
+   "index": 0,
+   "question": "现在系统里挂着中概股标签的美股，按市值排前五的都有哪几家？",
+   "gold_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101"
+   ],
+   "gold_columns": [
+    "CSNAME",
+    "F013N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK",
+    "SYMBOL"
+   ],
+   "hit_columns": [
+    "CSNAME",
+    "F013N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK",
+    "SYMBOL"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 30,
+   "index": 2,
+   "question": "刚才市盈率最低的那三只中概股，今年以来整体走得怎么样？平均涨跌幅有多少？",
+   "gold_tables": [
+    "VIEW_US_EXPR_IDX",
+    "AMERICAN_STOCK_MAIN",
+    "COM3101"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3101",
+    "STK2401",
+    "VIEW_COM3103_CUM",
+    "VIEW_US_EXPR_IDX",
+    "VIEW_US_EOD_EXPR"
+   ],
+   "gold_columns": [
+    "CHG_PCT_YTD",
+    "F021N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK",
+    "TRADE_DATE"
+   ],
+   "hit_columns": [
+    "CHG_PCT_YTD",
+    "F021N",
+    "FIU_ID",
+    "IS_CHINESE_STOCK",
+    "TRADE_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 3,
+   "index": 0,
+   "question": "宁德时代2026年8月31日的收盘价是多少？",
+   "gold_tables": [
+    "STK_MKT"
+   ],
+   "selected_tables": [
+    "STK_MKT",
+    "ANA_STK_EXPR_IDX",
+    "GET_A_INDICS_LATEST",
+    "DERI_STK_AH_PRC",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 4,
+   "index": 0,
+   "question": "中证500指数2026年8月31日的收盘点位是多少？",
+   "gold_tables": [
+    "INDX_MKT"
+   ],
+   "selected_tables": [
+    "INDX_MKT",
+    "GET_INDX_GEN_INFO"
+   ],
+   "gold_columns": [
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 4,
+   "index": 4,
+   "question": "招商银行2026年9月1日的收盘价是多少？",
+   "gold_tables": [
+    "STK_MKT"
+   ],
+   "selected_tables": [
+    "STK_MKT",
+    "ANA_STK_EXPR_IDX",
+    "GET_A_INDICS_LATEST",
+    "DERI_STK_AH_PRC",
+    "GET_A_INDUSTRY",
+    "GET_A_SEC_CODE"
+   ],
+   "gold_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "hit_columns": [
+    "ISVALID",
+    "SECCODE",
+    "TCLOSE",
+    "TRADEDATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 5,
+   "index": 0,
+   "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+   "gold_tables": [
+    "FUND_NETVALUE"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "UNIT_NAV"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 5,
+   "index": 3,
+   "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+   "gold_tables": [
+    "FUND_STATISTICS_YEAR"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE",
+    "FUND_STATISTICS_YEAR"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "YEAR",
+    "YIELD"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "YEAR",
+    "YIELD"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 5,
+   "index": 5,
+   "question": "天弘余额宝货币基金最新的资产净值是多少？",
+   "gold_tables": [
+    "FUND_ASSET_ALLOCATION"
+   ],
+   "selected_tables": [
+    "FUND_NETVALUE",
+    "FUND_ASSET_ALLOCATION",
+    "FUND_FRONT_CONTROL",
+    "ETF_INFO_DETAIL",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "NET_VALUE",
+    "REPORT_DATE"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "NET_VALUE",
+    "REPORT_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 6,
+   "index": 0,
+   "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+   "gold_tables": [
+    "FUND_PORTFOLIO_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_PORTFOLIO_DETAIL",
+    "FUND_STOCK_CHANGE_HY",
+    "FUND_TOP10_STOCK_CHANGE_HY",
+    "FUND_INDUSTRY_ASSET_RATIO_ALL"
+   ],
+   "gold_columns": [
+    "FUND_HOLDING_SOURCE_ID",
+    "FUND_SYMBOL",
+    "MARKET_VALUE",
+    "RATIO_IN_NV",
+    "REPORT_DATE",
+    "SEC_NAME"
+   ],
+   "hit_columns": [
+    "FUND_HOLDING_SOURCE_ID",
+    "FUND_SYMBOL",
+    "MARKET_VALUE",
+    "RATIO_IN_NV",
+    "REPORT_DATE",
+    "SEC_NAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 6,
+   "index": 1,
+   "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+   "gold_tables": [
+    "FUND_AND_MANAGER_MAPPING"
+   ],
+   "selected_tables": [
+    "FUND_AND_MANAGER_MAPPING",
+    "FUND_MANAGER_INFO",
+    "VW_FUND_LABEL_SERIES"
+   ],
+   "gold_columns": [
+    "END_DATE",
+    "FUND_SYMBOL",
+    "PSN_NAME"
+   ],
+   "hit_columns": [
+    "END_DATE",
+    "FUND_SYMBOL",
+    "PSN_NAME"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 6,
+   "index": 4,
+   "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+   "gold_tables": [
+    "FUND_ASSET_ALLOCATION"
+   ],
+   "selected_tables": [
+    "FUND_ASSET_ALLOCATION",
+    "FUND_FRONT_CONTROL"
+   ],
+   "gold_columns": [
+    "FUND_SYMBOL",
+    "NET_VALUE",
+    "REPORT_DATE"
+   ],
+   "hit_columns": [
+    "FUND_SYMBOL",
+    "NET_VALUE",
+    "REPORT_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 7,
+   "index": 0,
+   "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "selected_tables": [
+    "ETF_DAILY_QUOTE"
+   ],
+   "gold_columns": [
+    "CLOSE_PRICE",
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "hit_columns": [
+    "CLOSE_PRICE",
+    "FUND_SYMBOL",
+    "TRADING_DAY"
+   ],
+   "missed_columns": [
+    "TYPE"
+   ],
+   "recall": 75.0
+  },
+  {
+   "round_id": 7,
+   "index": 2,
+   "question": "它2026年9月2日的基金规模是多少？",
+   "gold_tables": [
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "selected_tables": [
+    "FUND_ASSET_ALLOCATION",
+    "FUND_NETVALUE",
+    "FUND_SHARES_CHANGE",
+    "ETF_SHARES_CHANGE_ROLL",
+    "ETF_INFO_DETAIL",
+    "ETF_PERFORMANCE_DETAIL"
+   ],
+   "gold_columns": [
+    "FUND_SIZE",
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "hit_columns": [
+    "FUND_SIZE",
+    "FUND_SYMBOL",
+    "TRADING_DAY",
+    "TYPE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 8,
+   "index": 0,
+   "question": "苹果公司最新一个交易日的收盘价是多少？",
+   "gold_tables": [
+    "VIEW_US_EOD_EXPR"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "STK2401",
+    "VIEW_ADS_STOCK_US_EOD_DI",
+    "VIEW_US_EOD_EXPR"
+   ],
+   "gold_columns": [
+    "CLOSE_PRICE",
+    "SYMBOL",
+    "TRADE_DATE"
+   ],
+   "hit_columns": [
+    "CLOSE_PRICE",
+    "SYMBOL",
+    "TRADE_DATE"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  },
+  {
+   "round_id": 9,
+   "index": 0,
+   "question": "苹果公司2025财年的营业收入是多少？",
+   "gold_tables": [
+    "COM3103",
+    "AMERICAN_STOCK_MAIN"
+   ],
+   "selected_tables": [
+    "AMERICAN_STOCK_MAIN",
+    "COM3103",
+    "VIEW_COM3105",
+    "VIEW_COM3106",
+    "VIEW_COM3103_CUM"
+   ],
+   "gold_columns": [
+    "F003V",
+    "F048N",
+    "F056N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "hit_columns": [
+    "F003V",
+    "F048N",
+    "F056N",
+    "FIU_ID",
+    "SYMBOL"
+   ],
+   "missed_columns": [],
+   "recall": 100.0
+  }
+ ]
+}

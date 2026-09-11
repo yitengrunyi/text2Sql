@@ -1,0 +1,175 @@
+{
+ "round_id": 10,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "按最新总市值排名，前三名是哪几家公司？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称`, ROUND((v.CLOSE_PRICE * v.TOTAL_SHARES) / 100000000, 1) AS `总市值(亿美元)` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股' AND v.CLOSE_PRICE IS NOT NULL AND v.TOTAL_SHARES IS NOT NULL ORDER BY (v.CLOSE_PRICE * v.TOTAL_SHARES) DESC LIMIT 3;\n200\n{table:[['股票代码', '股票名称', '总市值(亿美元)'], ['BABA.US', '阿里巴巴-W', '2,379.70'], ['PDD.US', '拼多多-W', '1,730.70'], ['NTES.US', '网易-W', '725.20']]}\n该查询获取了美股市场中所有中概股公司，按照最新交易日的总市值从高到低排序，选取排名前三的公司。数据来源包括股票基本信息数据和每日行情数据，通过内部关联方式整合，确保公司和行情信息准确对应。筛选条件限定为“中概股”类别，且公司需在最新交易日有收盘价和总股本数据，排除异常或无效数据。排序规则以总市值从高到低排列，总市值的计算方式为：公司最新收盘价乘以总股本，再将结果除以1亿以转换为“亿美元”单位，结果保留1位小数。这样的计算确保了不同公司市值在统一货币和数量级下的可比性。查询结果能够准确显示最新市值最高的三家中概股公司，完全符合用户需求。\n{table:[['股票代码', '股票名称', '总市值(亿美元)'], ['BABA.US', '阿里巴巴-W', '2,379.70'], ['PDD.US', '拼多多-W', '1,730.70'], ['NTES.US', '网易-W', '725.20']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称`, ROUND((v.CLOSE_PRICE * v.TOTAL_SHARES) / 100000000, 1) AS `总市值(亿美元)` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股' AND v.CLOSE_PRICE IS NOT NULL AND v.TOTAL_SHARES IS NOT NULL ORDER BY (v.CLOSE_PRICE * v.TOTAL_SHARES) DESC LIMIT 3",
+ "final_sql": "SELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称`, ROUND((v.CLOSE_PRICE * v.TOTAL_SHARES) / 100000000, 1) AS `总市值(亿美元)` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股' AND v.CLOSE_PRICE IS NOT NULL AND v.TOTAL_SHARES IS NOT NULL ORDER BY (v.CLOSE_PRICE * v.TOTAL_SHARES) DESC LIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "BRK.B 伯克希尔B 77400000.0\nNVDA 英伟达 30870000.0\nAAPL 苹果 27907200.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "first_result_preview": "BABA.US 阿里巴巴-W 2379.7\nPDD.US 拼多多-W 1730.7\nNTES.US 网易-W 725.2",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 3
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 31.3,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_10_349cd127.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 30.47,
+  "llm_seconds_max": 24.19,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2264,
+   "prompt_tokens": 9581,
+   "total_tokens": 11845,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1749,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9581,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 3941,
+   "total_tokens": 4135,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13522,
+  "completion": 2458,
+  "total": 15980
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2264,
+   "prompt_tokens": 9581,
+   "total_tokens": 11845,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1749,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9581,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 3941,
+   "total_tokens": 4135,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

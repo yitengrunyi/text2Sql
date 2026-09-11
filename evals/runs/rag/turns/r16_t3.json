@@ -1,0 +1,149 @@
+{
+ "round_id": 16,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 单日涨幅（涨幅率/涨跌额）\n\n[2] 可能的计算公式：  \n- 单日涨幅额 = 当日收盘价 - 前一日收盘价  \n- 单日涨幅率 = (当日收盘价 - 前一日收盘价) ÷ 前一日收盘价 × 100%\n['8月', '单日涨幅', '最大涨幅日', '涨幅率', '涨跌额', '单日涨幅额', '当日收盘价', '前一日收盘价', '单日涨幅率']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'ANA_STK_EXPR_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    DATE_FORMAT(ENDDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_DAY, 2) AS `单日涨幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE >= '2026-08-01'\n    AND ENDDATE <= '2026-08-31'\n    AND CHNG_PCT_DAY IS NOT NULL\n    AND STOCKSNAME IS NOT NULL\n    AND STOCKCODE IS NOT NULL\nORDER BY CHNG_PCT_DAY DESC\nLIMIT 1\n200\n{table:[['日期', '股票名称', '股票代码', '单日涨幅(%)'], ['2026-08-11', '超纯应材', '301717', '662.24']]}\n单日涨幅通过公式“单日涨幅 = 当日收盘价减去前一日收盘价，再除以前一日收盘价，结果乘以100%”计算。在这个查询中，对单日涨幅进行了保留两位小数的处理。\n\n查询结果符合要求。\n\n该查询从个股市场表现指标的表中选择数据。通过筛选记录日期在2026年8月1日至8月31日之间，只提取单日涨幅、股票名称、股票代码均不为空的有效数据。对所有符合条件的记录按单日涨幅降序排序，并只保留涨幅最大的那一天一条记录。最终返回2026年8月内涨幅最大的股票及其对应的日期和涨幅数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    DATE_FORMAT(ENDDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_DAY, 2) AS `单日涨幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE >= '2026-08-01'\n    AND ENDDATE <= '2026-08-31'\n    AND CHNG_PCT_DAY IS NOT NULL\n    AND STOCKSNAME IS NOT NULL\n    AND STOCKCODE IS NOT NULL\nORDER BY CHNG_PCT_DAY DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(ENDDATE, '%Y-%m-%d') AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(CHNG_PCT_DAY, 2) AS `单日涨幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE >= '2026-08-01'\n    AND ENDDATE <= '2026-08-31'\n    AND CHNG_PCT_DAY IS NOT NULL\n    AND STOCKSNAME IS NOT NULL\n    AND STOCKCODE IS NOT NULL\nORDER BY CHNG_PCT_DAY DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-19 00:00:00 3.1453"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False, '日期': False})"
+ ],
+ "elapsed_seconds": 223.8,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_16_aa3b5fee.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.77,
+  "llm_seconds_max": 6.07,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   26487
+  ],
+  "prompt_columns_raw_len": 1894
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 884,
+   "prompt_tokens": 29660,
+   "total_tokens": 30544,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29660,
+  "completion": 884,
+  "total": 30544
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 884,
+   "prompt_tokens": 29660,
+   "total_tokens": 30544,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

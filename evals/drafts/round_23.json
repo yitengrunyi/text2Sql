@@ -1,0 +1,132 @@
+{
+ "round_id": 23,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "initial": {
+  "question": "帮我拆一下大成高新技术产业股票A 2026年二季报的前十大重仓股，按持股市值从高到低排一下。",
+  "judge": "list",
+  "gold_value": null,
+  "gold_display": "福耀玻璃(9.71%)、美的集团(9.50%)、豪迈科技(8.37%)、中国移动(6.59%)、宏发股份(6.55%)、宁德时代(4.79%)、海尔智家(4.60%)、浙江龙盛(3.73%)、中国海洋石油(2.83%)、安琪酵母(2.62%)",
+  "gold_entities": [
+   "福耀玻璃",
+   "美的集团",
+   "豪迈科技",
+   "中国移动",
+   "宏发股份",
+   "宁德时代",
+   "海尔智家",
+   "浙江龙盛",
+   "中国海洋石油",
+   "安琪酵母"
+  ],
+  "gold_date": null,
+  "gold_sql": "SELECT SEC_NAME, ROUND(RATIO_IN_NV*100,2) AS ratio_pct FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 10",
+  "gold_tables": [
+   "FUND_PORTFOLIO_DETAIL"
+  ],
+  "labels": {
+   "difficulty": "单表",
+   "followup_type": null,
+   "route_gold": null,
+   "time_sensitivity": "absolute"
+  }
+ },
+ "feedbacks": [
+  {
+   "question": "排第一的这只重仓股，占了基金净值多大比例？",
+   "judge": "numeric",
+   "gold_value": "9.71",
+   "gold_display": "福耀玻璃，占基金净资产9.71%",
+   "gold_entities": [
+    "福耀玻璃"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT SEC_NAME, ROUND(RATIO_IN_NV*100,2) AS ratio_pct FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 1",
+   "gold_tables": [
+    "FUND_PORTFOLIO_DETAIL"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "指代继承",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "这十只重仓股加在一起，合计占到净值的多少？",
+   "judge": "numeric",
+   "gold_value": "59.29",
+   "gold_display": "前十大重仓合计占基金净资产59.29%",
+   "gold_entities": [],
+   "gold_date": null,
+   "gold_sql": "SELECT ROUND(SUM(RATIO_IN_NV)*100,2) AS top10_ratio_pct FROM (SELECT RATIO_IN_NV FROM FUND_PORTFOLIO_DETAIL WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 10) t",
+   "gold_tables": [
+    "FUND_PORTFOLIO_DETAIL"
+   ],
+   "labels": {
+    "difficulty": "子查询",
+    "followup_type": "条件追加",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "跟2026年一季报相比，二季报前十大有什么换仓动作？新进了谁、又剔出了谁？",
+   "judge": "entity",
+   "gold_value": null,
+   "gold_display": "新进入前十大：安琪酵母；新剔出前十大：华域汽车",
+   "gold_entities": [
+    "安琪酵母",
+    "华域汽车"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT SEC_NAME, CHANGE_INFO FROM FUND_TOP10_STOCK_CHANGE_Q WHERE FUND_HCODE='SEC000341714' AND REPORT_DATE='2026-06-30'",
+   "gold_tables": [
+    "FUND_TOP10_STOCK_CHANGE_Q"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "时间漂移",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "换个角度，2026年二季报全市场公募基金持有市值最大的个股是哪只？一共被多少只基金持有？",
+   "judge": "entity",
+   "gold_value": "258826608330",
+   "gold_display": "中际旭创，基金合计持有市值2588.27亿元，被2636只基金持有",
+   "gold_entities": [
+    "中际旭创"
+   ],
+   "gold_date": null,
+   "gold_sql": "SELECT SEC_NAME, MV_BY_FUND, FUND_NUM FROM STOCK_HOLD_STATISTICS_Q WHERE REPORT_DATE='2026-06-30' ORDER BY MV_BY_FUND DESC LIMIT 1",
+   "gold_tables": [
+    "STOCK_HOLD_STATISTICS_Q"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "话题切换",
+    "route_gold": "NEW_QUERY",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "好，明白了，谢谢。这些持仓明细我回头再对着他们家季报原文核一遍。",
+   "judge": "nonquery",
+   "gold_value": null,
+   "gold_display": null,
+   "gold_entities": [],
+   "gold_date": null,
+   "gold_sql": null,
+   "gold_tables": [],
+   "labels": {
+    "difficulty": null,
+    "followup_type": "非查询",
+    "route_gold": "NON_QUERY",
+    "time_sensitivity": "absolute"
+   }
+  }
+ ]
+}

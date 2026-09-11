@@ -1,0 +1,267 @@
+[
+ {
+  "run_dir": "/Users/mdb/project/text2sql_renew/evals/runs/gold50_full",
+  "turns_total": 50,
+  "sql_turns": 50,
+  "nonquery_turns": 0,
+  "gold_drift_turns": 0,
+  "invalid_eval_turns": 0,
+  "ex": {
+   "ex_first": 84.0,
+   "ex_final": 86.0,
+   "first_correct": 42,
+   "final_correct": 43,
+   "n": 50
+  },
+  "reflection": {
+   "enabled": true,
+   "first_fail_n": 8,
+   "reflected_n": 1,
+   "repaired_n": 1,
+   "repair_rate": 100.0,
+   "first_to_final_lift_pp": 2.0,
+   "regressed_n": 0,
+   "empty_result_n": 0,
+   "empty_recovered": 0,
+   "error_result_n": 1
+  },
+  "by_domain": {
+   "个股": {
+    "n": 15,
+    "correct": 14,
+    "acc": 93.3
+   },
+   "基金": {
+    "n": 15,
+    "correct": 10,
+    "acc": 66.7
+   },
+   "指数": {
+    "n": 5,
+    "correct": 5,
+    "acc": 100.0
+   },
+   "美股": {
+    "n": 15,
+    "correct": 14,
+    "acc": 93.3
+   }
+  },
+  "by_source": {
+   "MYSQL-1": {
+    "n": 15,
+    "correct": 10,
+    "acc": 66.7
+   },
+   "MYSQL-2": {
+    "n": 20,
+    "correct": 19,
+    "acc": 95.0
+   },
+   "MYSQL-4": {
+    "n": 15,
+    "correct": 14,
+    "acc": 93.3
+   }
+  },
+  "by_difficulty": {
+   "单表": {
+    "n": 33,
+    "correct": 30,
+    "acc": 90.9
+   },
+   "多表join": {
+    "n": 7,
+    "correct": 6,
+    "acc": 85.7
+   },
+   "子查询": {
+    "n": 2,
+    "correct": 1,
+    "acc": 50.0
+   },
+   "时间窗口": {
+    "n": 1,
+    "correct": 1,
+    "acc": 100.0
+   },
+   "聚合": {
+    "n": 7,
+    "correct": 5,
+    "acc": 71.4
+   }
+  },
+  "by_followup_type": {
+   "指代继承": {
+    "n": 10,
+    "correct": 8,
+    "acc": 80.0
+   },
+   "普通追问": {
+    "n": 3,
+    "correct": 2,
+    "acc": 66.7
+   },
+   "条件修改": {
+    "n": 13,
+    "correct": 13,
+    "acc": 100.0
+   },
+   "条件追加": {
+    "n": 9,
+    "correct": 9,
+    "acc": 100.0
+   },
+   "话题切换": {
+    "n": 5,
+    "correct": 3,
+    "acc": 60.0
+   }
+  },
+  "by_time": {
+   "absolute": {
+    "n": 41,
+    "correct": 36,
+    "acc": 87.8
+   },
+   "relative": {
+    "n": 3,
+    "correct": 2,
+    "acc": 66.7
+   }
+  },
+  "followup_ex": {
+   "n": 40,
+   "correct": 35,
+   "acc": 87.5
+  },
+  "initial_ex": {
+   "n": 10,
+   "correct": 8,
+   "acc": 80.0
+  },
+  "routing": {
+   "n": 40,
+   "correct": 33,
+   "accuracy": 82.5,
+   "macro_f1": 0.6785,
+   "per_class": {
+    "SQL_GENERATION": {
+     "tp": 30,
+     "fp": 1,
+     "fn": 6,
+     "precision": 0.9677,
+     "recall": 0.8333,
+     "f1": 0.8955
+    },
+    "NEW_QUERY": {
+     "tp": 3,
+     "fp": 6,
+     "fn": 1,
+     "precision": 0.3333,
+     "recall": 0.75,
+     "f1": 0.4615
+    },
+    "NON_QUERY": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 0,
+     "precision": null,
+     "recall": null,
+     "f1": null
+    }
+   },
+   "confusion": {
+    "NEW_QUERY→SQL_GENERATION": 1,
+    "SQL_GENERATION→NEW_QUERY": 6
+   },
+   "no_prediction": 0
+  },
+  "perf": {
+   "latency_n": 50,
+   "latency_p50_s": 34.6,
+   "latency_p90_s": 66.7,
+   "latency_p95_s": 77.2,
+   "latency_mean_s": 44.9,
+   "latency_max_s": 142.0,
+   "llm_calls_mean": 6.58,
+   "llm_calls_n": 50,
+   "llm_calls_max": 18,
+   "tokens_prompt_mean": 28367,
+   "tokens_completion_mean": 2698,
+   "tokens_total_mean": 31065,
+   "tokens_n": 50,
+   "sql_prompt_chars_mean": 22402,
+   "sql_prompt_n": 19
+  },
+  "stability": {
+   "sql_exec_success_rate": 98.0,
+   "sql_exec_success_n": 49,
+   "persist_rate": 100.0,
+   "persisted_n": 50,
+   "persist_total": 50,
+   "handler_error_turns": 0,
+   "timeout_turns": 0
+  },
+  "table_recall": {
+   "n": 18,
+   "selected_hit_all_n": 15,
+   "selected_hit_any_n": 15,
+   "candidate_hit_all_n": 18,
+   "selected_hit_all": 83.3,
+   "selected_hit_any": 83.3,
+   "candidate_hit_all": 100.0,
+   "recall_at_k": {
+    "1": {
+     "hit": 9,
+     "total": 20,
+     "recall": 45.0
+    },
+    "3": {
+     "hit": 15,
+     "total": 20,
+     "recall": 75.0
+    },
+    "5": {
+     "hit": 17,
+     "total": 20,
+     "recall": 85.0
+    },
+    "10": {
+     "hit": 17,
+     "total": 20,
+     "recall": 85.0
+    }
+   }
+  },
+  "identifier_hallucination": {
+   "first": {
+    "sql_n": 49,
+    "parse_error_n": 0,
+    "wrong_table_identifiers": 0,
+    "table_identifiers": 83,
+    "wrong_table_rate": 0.0,
+    "wrong_column_identifiers": 2,
+    "column_identifiers": 463,
+    "wrong_column_rate": 0.4,
+    "turns_with_wrong_table": 0,
+    "turns_with_wrong_column": 1
+   },
+   "final": {
+    "sql_n": 49,
+    "parse_error_n": 0,
+    "wrong_table_identifiers": 0,
+    "table_identifiers": 83,
+    "wrong_table_rate": 0.0,
+    "wrong_column_identifiers": 0,
+    "column_identifiers": 462,
+    "wrong_column_rate": 0.0,
+    "turns_with_wrong_table": 0,
+    "turns_with_wrong_column": 0
+   }
+  },
+  "answer_accuracy": 88.0,
+  "answer_correct": 44,
+  "answer_n": 50
+ }
+]

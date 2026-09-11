@@ -1,0 +1,148 @@
+{
+ "round_id": 21,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "那2025年全年呢，累计涨幅有多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：累计涨幅（一般指累计收益率/Cumulative Return）\n\n[2] 可能的计算公式：\n累计涨幅 = （期末价格 - 期初价格）/ 期初价格 × 100% \n或\n累计涨幅 =（期末净值/期初净值 - 1）× 100%\n\n注：如涉及分红、拆分等需相应调整价格或净值。\n['累计涨幅', '累计收益率', 'Cumulative Return', '期末价格', '期初价格', '期末净值', '期初净值', '分红', '拆分', '价格', '净值']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'ANA_STK_EXPR_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT\n    '2025年' AS `时间区间`,\n    STOCKSNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    ENDDATE AS `截止日期`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `2025年累计涨跌幅 (%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2025-12-31'\n    AND CHNG_PCT_YEAR IS NOT NULL\n200\n{table:[['时间区间', '股票简称', '股票代码', '截止日期', '2025年累计涨跌幅 (%)'], ['2025年', '上海莱士', '002252', '2025-12-31', '-11.77'], ['2025年', '*ST智胜', '002253', '2025-12-31', '-18.52'], ['2025年', '平安银行', '000001', '2025-12-31', '2.69'], ['2025年', '万科A', '000002', '2025-12-31', '-35.95'], ['2025年', '*ST国华', '000004', '2025-12-31', '-19.94'], ['2025年', '深振业A', '000006', '2025-12-31', '35.93'], ['2025年', '全新好', '000007', '2025-12-31', '62.73'], ['2025年', '神州高铁', '000008', '2025-12-31', '-1.72'], ['2025年', '中国宝安', '000009', '2025-12-31', '7.99'], ['2025年', '美丽生态', '000010', '2025-12-31', '25.62'], ['2025年', '深物业A', '000011', '2025-12-31', '3.09'], ['2025年', '深物业B', '200011', '2025-12-31', '-13.09'], ['2025年', '南玻B', '200012', '2025-12-31', '-21.93'], ['2025年', '南玻A', '000012', '2025-12-31', '-14.93'], ['2025年', '沙河股份', '000014', '2025-12-31', '22.38'], ['2025年', '深康佳B', '200016', '2025-12-31', '42.86'], ['2025年', '深康佳A', '000016', '2025-12-31', '-9.96'], ['2025年', '深中华A', '000017', '2025-12-31', '35.69'], ['2025年', '深中华B', '200017', '2025-12-31', '10.30'], ['2025年', '深粮B', '200019', '2025-12-31', '8.33'], ['2025年', '深粮控股', '000019', '2025-12-31', '8.15'], ['2025年', '深华发B', '200020', '2025-12-31', '13.95'], ['2025年', '深华发A', '000020', '2025-12-31', '11.67'], ['2025年', '深科技', '000021', '2025-12-31', '34.09'], ['2025年', '招港B', '201872', '2025-12-31', '35.26'], ['2025年', '招商港口', '001872', '2025-12-31', '-2.",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    '2025年' AS `时间区间`,\n    STOCKSNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    ENDDATE AS `截止日期`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `2025年累计涨跌幅 (%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2025-12-31'\n    AND CHNG_PCT_YEAR IS NOT NULL",
+ "final_sql": "SELECT\n    '2025年' AS `时间区间`,\n    STOCKSNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    ENDDATE AS `截止日期`,\n    ROUND(CHNG_PCT_YEAR, 2) AS `2025年累计涨跌幅 (%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2025-12-31'\n    AND CHNG_PCT_YEAR IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "27.49"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 220.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_21_0f8c5d29.2",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 45.94,
+  "llm_seconds_max": 6.28,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   26859
+  ],
+  "prompt_columns_raw_len": 1894
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1175,
+   "prompt_tokens": 29941,
+   "total_tokens": 31116,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29941,
+  "completion": 1175,
+  "total": 31116
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1175,
+   "prompt_tokens": 29941,
+   "total_tokens": 31116,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 17,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "万华化学2025年年报的营业总收入是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n营业总收入（又称营业收入、营业主营业务收入）\n\n[2] 可能的计算公式：  \n营业总收入 = 商品销售收入 + 提供劳务收入 + 其他主营业务收入\n\n详细说明：  \n营业总收入（Total Operating Revenue）是指万华化学在2025年度通过销售商品、提供劳务及其他主营业务活动所获得的全部收入总和，通常不包括营业外收入。计算时一般汇总企业主营业务相关的所有收入项目。\n['万华化学', '2025年年报', '营业总收入', '营业收入', '营业主营业务收入', 'Total Operating Revenue', '商品销售收入', '提供劳务收入', '其他主营业务收入', '主营业务', '营业外收入']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n该问题可能涉及的题材包含：['基础化工']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '基础化工'。\n个股相关\n['主板财务']\n['STK_LNG_LOAN', 'STK_RD_DTL', 'STK_ATCP_LBLT', 'STK_ACCT_RCV', 'STK_TAXPAY']\n是否命中召回表：False\n生成查询代码\nSELECT \n    COMCODE AS `公司代码`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    SUM(RD_SUM)/100000000 AS `研发投入金额(亿)`,\n    SUM(RD_NUM) AS `研发人员数量`,\n    SUM(RD_EXP)/10000 AS `本期费用化研发投入(万)`,\n    SUM(RD_IC_PCT)*100 AS `研发投入占营业收入比例(%)`,\n    SUM(RD_CPTZ)/100000000 AS `研发支出资本化的金额(亿)`,\n    SUM(RD_CPTZ_PCT)*100 AS `资本化研发支出占研发投入的比例(%)`,\n    SUM(RD_REV_PCT)*100 AS `资本化研发支出占当期净利润的比重(%)`\nFROM STK_RD_DTL\nWHERE A_STOCKSNAME LIKE '%万华化学%'\n    AND PERIODDATE = '2025-12-31'\n    AND ISVALID = 1\nGROUP BY COMCODE, A_STOCKSNAME, A_STOCKCODE, PERIODDATE\n200\nMySQL Database error: (1054, \"Unknown column 'A_STOCKSNAME' in 'field list'\")\n- 该查询主要提取了万华化学在2025年年报披露日的研发指标数据，包括研发投入金额、研发人员数量、本期费用化研发投入、研发投入占营业收入比例、研发支出资本化金额、资本化研发支出占研发投入比例以及资本化研发支出占净利润比重。营业总收入并未在本次查询中直接提取或计算，因此查询结果不满足“营业总收入”的要求，只能反映相关研发数据。\n\n- 对结果中涉及到的关键数值，进行了如下计算处理：\n  研发投入金额（亿）通过将相关指标数值之和除以100000000得到。\n  本期费用化研发投入（万）通过相关指标数值之和除以10000得到。\n  研发投入占营业收入比例（百分比）将该比例数值之和乘以100表示为百分比。\n  研发支出资本化金额（亿）通过相关指标数值之和除以100000000得到。\n  资本化研发支出占研发投入比例以及资本化研发支出占净利润的比重，均通过其对应的比例之和乘以100表示为百分比。\n  研发人员数量为多条满足条件的记录中对应数值的合计。\n\n- 查询使用了研发投入信息的表，筛选A股简称中包含“万华化学”的记录，只保留2025年12月31日且为有效的记录。最后按公司代码、股票简称、股票代码和报表日期进行分组统计，便于汇总同一公司同一报告期的研发相关数值。\n- 需要注意，本次查询并未包含营业总收入的数据，也没有通过研发投入占营业收入比例推算出营业收入，因此查询结果尚未满足原始查询目标。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    COMCODE AS `公司代码`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    SUM(RD_SUM)/100000000 AS `研发投入金额(亿)`,\n    SUM(RD_NUM) AS `研发人员数量`,\n    SUM(RD_EXP)/10000 AS `本期费用化研发投入(万)`,\n    SUM(RD_IC_PCT)*100 AS `研发投入占营业收入比例(%)`,\n    SUM(RD_CPTZ)/100000000 AS `研发支出资本化的金额(亿)`,\n    SUM(RD_CPTZ_PCT)*100 AS `资本化研发支出占研发投入的比例(%)`,\n    SUM(RD_REV_PCT)*100 AS `资本化研发支出占当期净利润的比重(%)`\nFROM STK_RD_DTL\nWHERE A_STOCKSNAME LIKE '%万华化学%'\n    AND PERIODDATE = '2025-12-31'\n    AND ISVALID = 1\nGROUP BY COMCODE, A_STOCKSNAME, A_STOCKCODE, PERIODDATE",
+ "final_sql": "SELECT \n    COMCODE AS `公司代码`,\n    A_STOCKSNAME AS `股票名称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    SUM(RD_SUM)/100000000 AS `研发投入金额(亿)`,\n    SUM(RD_NUM) AS `研发人员数量`,\n    SUM(RD_EXP)/10000 AS `本期费用化研发投入(万)`,\n    SUM(RD_IC_PCT)*100 AS `研发投入占营业收入比例(%)`,\n    SUM(RD_CPTZ)/100000000 AS `研发支出资本化的金额(亿)`,\n    SUM(RD_CPTZ_PCT)*100 AS `资本化研发支出占研发投入的比例(%)`,\n    SUM(RD_REV_PCT)*100 AS `资本化研发支出占当期净利润的比重(%)`\nFROM STK_RD_DTL\nWHERE A_STOCKSNAME LIKE '%万华化学%'\n    AND PERIODDATE = '2025-12-31'\n    AND ISVALID = 1\nGROUP BY COMCODE, A_STOCKSNAME, A_STOCKCODE, PERIODDATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "203234573814.42"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'A_STOCKSNAME' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 60.8,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_17_c037c10b.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 75.68,
+  "llm_seconds_max": 10.69,
+  "selected_tables": [
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST"
+  ],
+  "sql_prompt_chars": [
+   21358
+  ],
+  "prompt_columns_raw_len": 9615
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2337,
+   "prompt_tokens": 42541,
+   "total_tokens": 44878,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 42541,
+  "completion": 2337,
+  "total": 44878
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2337,
+   "prompt_tokens": 42541,
+   "total_tokens": 44878,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,144 @@
+{
+ "round_id": 22,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "今年以来这只基金整体是赚是亏？按复权净值给我算个收益率出来。",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金复权单位净值（或累计净值）  \n- 基金收益率（今年以来）\n\n[2] 可能的计算公式：  \n基金今年以来收益率 = （今年最后一个交易日的复权净值 - 年初首个交易日的复权净值）/ 年初首个交易日的复权净值 × 100%\n['基金', '复权净值', '基金复权单位净值', '累计净值', '基金收益率', '今年以来收益率', '复权单位净值', '年初首个交易日的复权净值', '今年最后一个交易日的复权净值']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品净值']\n['FUND_NETVALUE', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    DATE_FORMAT(b.BEGIN_TRADING_DAY, '%Y-%m-%d') AS `区间开始日期`,\n    DATE_FORMAT(b.END_TRADING_DAY, '%Y-%m-%d') AS `区间结束日期`,\n    n.FUND_NAME AS `基金名称`,\n    n.FUND_SYMBOL AS `基金代码`,\n    ROUND(n_start.RESTORED_ACCU_NAV, 4) AS `年初复权累计净值`,\n    ROUND(n_end.RESTORED_ACCU_NAV, 4) AS `最新复权累计净值`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        ELSE \n            ROUND(100 * (n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1), 2)\n    END AS `今年以来收益率（%）`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        WHEN n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1 >= 0\n            THEN '赚钱'\n        ELSE '亏损'\n    END AS `今年以来总体盈利情况`\nFROM\n    (\n        SELECT\n            MIN(CAL_DATE) AS BEGIN_TRADING_DAY,\n            MAX(CAL_DATE) AS END_TRADING_DAY\n        FROM analytics_master_data.REF_EDM_CALENDAR e\n        WHERE e.CAL_HCODE='CAL0001'\n            AND e.HISVALID=1\n            AND e.IS_TRADEDATE=1\n            AND e.CAL_DATE>='2026-01-01'\n            AND e.CAL_DATE<='2026-09-02'\n    ) b\n    LEFT JOIN FUND_NETVALUE n_start\n        ON n_start.TRADING_DAY = b.BEGIN_TRADING_DAY\n        AND n_start.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_start.HISVALID=1\n        AND n_start.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n_end\n        ON n_end.TRADING_DAY = b.END_TRADING_DAY\n        AND n_end.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_end.HISVALID=1\n        AND n_end.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n\n        ON n.",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    DATE_FORMAT(b.BEGIN_TRADING_DAY, '%Y-%m-%d') AS `区间开始日期`,\n    DATE_FORMAT(b.END_TRADING_DAY, '%Y-%m-%d') AS `区间结束日期`,\n    n.FUND_NAME AS `基金名称`,\n    n.FUND_SYMBOL AS `基金代码`,\n    ROUND(n_start.RESTORED_ACCU_NAV, 4) AS `年初复权累计净值`,\n    ROUND(n_end.RESTORED_ACCU_NAV, 4) AS `最新复权累计净值`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        ELSE \n            ROUND(100 * (n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1), 2)\n    END AS `今年以来收益率（%）`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        WHEN n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1 >= 0\n            THEN '赚钱'\n        ELSE '亏损'\n    END AS `今年以来总体盈利情况`\nFROM\n    (\n        SELECT\n            MIN(CAL_DATE) AS BEGIN_TRADING_DAY,\n            MAX(CAL_DATE) AS END_TRADING_DAY\n        FROM analytics_master_data.REF_EDM_CALENDAR e\n        WHERE e.CAL_HCODE='CAL0001'\n            AND e.HISVALID=1\n            AND e.IS_TRADEDATE=1\n            AND e.CAL_DATE>='2026-01-01'\n            AND e.CAL_DATE<='2026-09-02'\n    ) b\n    LEFT JOIN FUND_NETVALUE n_start\n        ON n_start.TRADING_DAY = b.BEGIN_TRADING_DAY\n        AND n_start.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_start.HISVALID=1\n        AND n_start.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n_end\n        ON n_end.TRADING_DAY = b.END_TRADING_DAY\n        AND n_end.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_end.HISVALID=1\n        AND n_end.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n\n        ON n.FUND_SYMBOL = n_end.FUND_SYMBOL\n        -- 保证获取当前基金名称和代码\nWHERE \n    n.FUND_SYMBOL LIKE '%你的基金代码%'\n    AND n.HISVALID=1\nLIMIT 1",
+ "final_sql": "SELECT\n    DATE_FORMAT(b.BEGIN_TRADING_DAY, '%Y-%m-%d') AS `区间开始日期`,\n    DATE_FORMAT(b.END_TRADING_DAY, '%Y-%m-%d') AS `区间结束日期`,\n    n.FUND_NAME AS `基金名称`,\n    n.FUND_SYMBOL AS `基金代码`,\n    ROUND(n_start.RESTORED_ACCU_NAV, 4) AS `年初复权累计净值`,\n    ROUND(n_end.RESTORED_ACCU_NAV, 4) AS `最新复权累计净值`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        ELSE \n            ROUND(100 * (n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1), 2)\n    END AS `今年以来收益率（%）`,\n    CASE \n        WHEN n_start.RESTORED_ACCU_NAV IS NULL OR n_end.RESTORED_ACCU_NAV IS NULL OR n_start.RESTORED_ACCU_NAV=0\n            THEN NULL\n        WHEN n_end.RESTORED_ACCU_NAV / n_start.RESTORED_ACCU_NAV - 1 >= 0\n            THEN '赚钱'\n        ELSE '亏损'\n    END AS `今年以来总体盈利情况`\nFROM\n    (\n        SELECT\n            MIN(CAL_DATE) AS BEGIN_TRADING_DAY,\n            MAX(CAL_DATE) AS END_TRADING_DAY\n        FROM analytics_master_data.REF_EDM_CALENDAR e\n        WHERE e.CAL_HCODE='CAL0001'\n            AND e.HISVALID=1\n            AND e.IS_TRADEDATE=1\n            AND e.CAL_DATE>='2026-01-01'\n            AND e.CAL_DATE<='2026-09-02'\n    ) b\n    LEFT JOIN FUND_NETVALUE n_start\n        ON n_start.TRADING_DAY = b.BEGIN_TRADING_DAY\n        AND n_start.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_start.HISVALID=1\n        AND n_start.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n_end\n        ON n_end.TRADING_DAY = b.END_TRADING_DAY\n        AND n_end.FUND_SYMBOL LIKE '%你的基金代码%'\n        AND n_end.HISVALID=1\n        AND n_end.RESTORED_ACCU_NAV IS NOT NULL\n    LEFT JOIN FUND_NETVALUE n\n        ON n.FUND_SYMBOL = n_end.FUND_SYMBOL\n        -- 保证获取当前基金名称和代码\nWHERE \n    n.FUND_SYMBOL LIKE '%你的基金代码%'\n    AND n.HISVALID=1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "8.69"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 58.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_22_8ec85681.2",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 53.44,
+  "llm_seconds_max": 7.76,
+  "selected_tables": [
+   "FUND_NETVALUE",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   16485
+  ],
+  "prompt_columns_raw_len": 5030
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1401,
+   "prompt_tokens": 22626,
+   "total_tokens": 24027,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 22626,
+  "completion": 1401,
+  "total": 24027
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1401,
+   "prompt_tokens": 22626,
+   "total_tokens": 24027,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_NETVALUE"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_NETVALUE",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

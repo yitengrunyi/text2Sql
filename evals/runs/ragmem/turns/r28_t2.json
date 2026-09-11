@@ -1,0 +1,173 @@
+{
+ "round_id": 28,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F008D, '%Y-%m-%d') AS `股息率更新日期`,\n  ROUND(c.F007N, 2) AS `股息率(%)`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK != '中概股')\n  AND c.F007N > 2.5\n  AND c.F007N IS NOT NULL\nORDER BY \n  c.F007N DESC;\n200\n{table:[['股票名称', '股票代码', '股息率更新日期', '股息率(%)'], ['雪佛龙', 'CVX.US', '-', '3.33'], ['卡特彼勒', 'CAT.US', '-', '3.03'], ['联合健康', 'UNH.US', '-', '2.76'], ['思科', 'CSCO.US', '-', '2.53']]}\n该查询获取了当前美股中股息率超过2.5%的非中概股股票信息。数据来源于美股股票基本信息表和主要财务数据表，通过内部代码进行关联。筛选条件排除了属于中概股的股票，并选择了股息率大于2.5%且股息率数据存在的记录。结果按股息率从高到低排序。股息率直接采用现有的财务指标，并对结果保留两位小数，股息率更新日期采用对应的最新数据。查询输出包括股票名称、股票代码、股息率及最新日期，满足用户要求。\n{table:[['股票名称', '股票代码', '股息率更新日期', '股息率(%)'], ['雪佛龙', 'CVX.US', '-', '3.33'], ['卡特彼勒', 'CAT.US', '-', '3.03'], ['联合健康', 'UNH.US', '-', '2.76'], ['思科', 'CSCO.US', '-', '2.53']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F008D, '%Y-%m-%d') AS `股息率更新日期`,\n  ROUND(c.F007N, 2) AS `股息率(%)`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK != '中概股')\n  AND c.F007N > 2.5\n  AND c.F007N IS NOT NULL\nORDER BY \n  c.F007N DESC",
+ "final_sql": "SELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F008D, '%Y-%m-%d') AS `股息率更新日期`,\n  ROUND(c.F007N, 2) AS `股息率(%)`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  (m.IS_CHINESE_STOCK IS NULL OR m.IS_CHINESE_STOCK != '中概股')\n  AND c.F007N > 2.5\n  AND c.F007N IS NOT NULL\nORDER BY \n  c.F007N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 4,
+  "preview": "雪佛龙 3.334\n卡特彼勒 3.031\n联合健康 2.757\n思科 2.534"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "first_result_preview": "雪佛龙 CVX.US  3.33\n卡特彼勒 CAT.US  3.03\n联合健康 UNH.US  2.76\n思科 CSCO.US  2.53",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_28_278aa98a.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 42.65,
+  "llm_seconds_max": 38.22,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3390,
+   "prompt_tokens": 13539,
+   "total_tokens": 16929,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2815,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13539,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 140,
+   "prompt_tokens": 7689,
+   "total_tokens": 7829,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21228,
+  "completion": 3530,
+  "total": 24758
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3390,
+   "prompt_tokens": 13539,
+   "total_tokens": 16929,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2815,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13539,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 140,
+   "prompt_tokens": 7689,
+   "total_tokens": 7829,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

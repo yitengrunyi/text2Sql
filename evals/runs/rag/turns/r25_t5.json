@@ -1,0 +1,151 @@
+{
+ "round_id": 25,
+ "index": 5,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "再问个跨境的：境内全市场的QDII类ETF，把LOF剔除掉不算，一共有多少只？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标\n\n- 境内全市场QDII类ETF的数量（剔除LOF）\n\n[2] 可能的计算公式\n\nQDII类ETF总数 ＝ 全市场QDII类基金数量（基金类型为ETF）－ QDII类LOF基金数量\n\n简化为：\n\nQDII类ETF数量 = COUNT(基金 WHERE 类型 = ‘QDII’ AND 结构 = ‘ETF’ AND 结构 ≠ ‘LOF’)\n\n注：实际查询中需基于基金的Wind/CSMAR/东方财富等基础数据库进行筛选。\n['QDII', 'QDII类ETF', '境内全市场QDII类ETF', 'LOF', 'QDII类LOF', '基金', '基金数量', 'ETF', '结构', '类型', '全市场QDII类基金数量', 'QDII类ETF总数', '基金类型', '基金结构', 'Wind', 'CSMAR', '东方财富']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['进出口贸易']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '进出口贸易'。\n基金相关\n['基金产品基本信息', 'QDII基金产品持仓', 'ETF相关信息']\n['ETF_LABEL_INFO_CHINA', 'ETF_INFO_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    COUNT(*) AS `QDII类ETF数量`\nFROM\n    ETF_INFO_DETAIL\nWHERE\n    TYPE = 1\n    AND IF_QDII = 1\n    AND IF_LOF = 0\n    AND HISVALID = 1\n200\n{table:[['QDII类ETF数量'], ['78']]}\n本次查询的目的是统计境内市场中QDII类型的ETF总数量，并排除LOF类型的基金。\n\n在筛选过程中，仅统计基金类型为境内A股，且属于QDII类别，同时排除了LOF类型，并保证所选基金均为有效状态。统计结果使用数量的方式，计算公式为QDII类ETF数量 = 满足上述全部条件的基金记录数。在此查询中，直接使用了已有的基金分类及有效状态数据。\n\n查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    COUNT(*) AS `QDII类ETF数量`\nFROM\n    ETF_INFO_DETAIL\nWHERE\n    TYPE = 1\n    AND IF_QDII = 1\n    AND IF_LOF = 0\n    AND HISVALID = 1",
+ "final_sql": "SELECT\n    COUNT(*) AS `QDII类ETF数量`\nFROM\n    ETF_INFO_DETAIL\nWHERE\n    TYPE = 1\n    AND IF_QDII = 1\n    AND IF_LOF = 0\n    AND HISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "78"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "78",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 45.5,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_25_9dcfb6e5.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.76,
+  "llm_seconds_max": 6.36,
+  "selected_tables": [
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_QDII",
+   "FUND_LIST_FREQUENCY",
+   "FUND_PORTFOLIO_DETAIL_QDII",
+   "FUND_TURNOVER_RATE",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   15786
+  ],
+  "prompt_columns_raw_len": 5999
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1167,
+   "prompt_tokens": 25800,
+   "total_tokens": 26967,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25800,
+  "completion": 1167,
+  "total": 26967
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1167,
+   "prompt_tokens": 25800,
+   "total_tokens": 26967,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_INFO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_INFO_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

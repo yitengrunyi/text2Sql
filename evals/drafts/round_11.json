@@ -1,0 +1,74 @@
+{
+  "round_id": 11,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+  "initial": {
+    "question": "万华化学2025年年报里，聚氨酯系列产品实现的营业收入是多少？",
+    "judge": "numeric",
+    "gold_value": "7505822.44",
+    "gold_display": "750.58亿元（表内单位为万元，即7,505,822.44万元）",
+    "gold_entities": ["万华化学", "聚氨酯系列"],
+    "gold_date": null,
+    "gold_sql": "SELECT ROUND(INCOME,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+    "gold_tables": ["STK_PRI_INCOME_PRODUCT"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "absolute"}
+  },
+  "feedbacks": [
+    {
+      "question": "这块业务占了公司总营收多大比重？",
+      "judge": "numeric",
+      "gold_value": "36.93",
+      "gold_display": "36.93%",
+      "gold_entities": ["万华化学", "聚氨酯系列"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(PRI_RVNU_PCT,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+      "gold_tables": ["STK_PRI_INCOME_PRODUCT"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "它的毛利率大概是什么水平？",
+      "judge": "numeric",
+      "gold_value": "26.88",
+      "gold_display": "26.88%",
+      "gold_entities": ["万华化学", "聚氨酯系列"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(GP_RATIO,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+      "gold_tables": ["STK_PRI_INCOME_PRODUCT"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+      "judge": "numeric",
+      "gold_value": "47.39",
+      "gold_display": "47.39%（国外收入963.21亿元，仅次于中国大陆的52.19%）",
+      "gold_entities": ["万华化学"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(PRI_RVNU_PCT,2) FROM STK_PRI_INCOME_DISTRICT WHERE A_STOCKCODE='600309' AND ITEM_NAME='国外' AND PERIODDATE='2025-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+      "gold_tables": ["STK_PRI_INCOME_DISTRICT"],
+      "labels": {"difficulty": "单表", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "那2024年呢？这块业务收入是多少？",
+      "judge": "numeric",
+      "gold_value": "7584415.01",
+      "gold_display": "758.44亿元，较2025年的750.58亿元微降约0.79亿元（-1.04%）",
+      "gold_entities": ["万华化学", "聚氨酯系列"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(INCOME,2) FROM STK_PRI_INCOME_PRODUCT WHERE A_STOCKCODE='600309' AND ITEM_NAME='聚氨酯系列' AND PERIODDATE='2024-12-31' AND RPT_SRC='年报' AND RPT_TYPE='合并' AND ISVALID=1",
+      "gold_tables": ["STK_PRI_INCOME_PRODUCT"],
+      "labels": {"difficulty": "单表", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "换个标的看看，海康威视2025年年报的研发投入总额是多少？",
+      "judge": "numeric",
+      "gold_value": "11752624736.80",
+      "gold_display": "117.53亿元",
+      "gold_entities": ["海康威视"],
+      "gold_date": null,
+      "gold_sql": "SELECT ROUND(RD_SUM,2) FROM STK_RD_DTL WHERE COMCODE=(SELECT COMCODE FROM GET_A_SEC_CODE WHERE SEC_CODE='002415' AND ISVALID=1 LIMIT 1) AND RPT_DATE='2025-12-31' AND ISVALID=1",
+      "gold_tables": ["STK_RD_DTL", "GET_A_SEC_CODE"],
+      "labels": {"difficulty": "子查询", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

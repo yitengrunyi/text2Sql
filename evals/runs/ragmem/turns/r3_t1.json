@@ -1,0 +1,172 @@
+{
+ "round_id": 3,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "招商银行同一天的收盘价是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.SEC_SNAME LIKE '%招商银行%'\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.ENDDATE DESC\nLIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-31', '招商银行', '600036', '40.12', '39.51', '40.28', '39.50', '113.63', '45.45', '8,276.30', '10,118.20']]}\n该查询获取了招商银行在2026年8月31日的股票行情信息，包括交易日期、股票名称、股票代码、收盘价、开盘价、最高价、最低价、成交量、成交额、流通市值和总市值。查询涉及股票综合信息表与市场表现指标表，通过内部关联筛选出股票简称为招商银行、记录有效且在指定日期的数据，并按交易日期降序排列，仅显示最相关的一条记录。成交量以股为单位原数据除以100万，换算为百万股并保留2位小数；成交额原数据除以1亿，换算为亿元并保留2位小数；流通市值和总市值分别除以1亿，换算为亿元并保留1位小数。收盘价、开盘价、最高价、最低价均直接采用现有财务数据并保留2位小数。该查询结果充分覆盖用户要求的招商银行指定交易日行情数据，符合需求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(百万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)'], ['2026-08-31', '招商银行', '600036', '40.12', '39.51', '40.28', '39.50', '113.63', '45.45', '8,276.30', '10,118.20']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.SEC_SNAME LIKE '%招商银行%'\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    b.ENDDATE AS `交易日期`,\n    b.STOCKSNAME AS `股票名称`,\n    b.STOCKCODE AS `股票代码`,\n    ROUND(b.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(b.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(b.THIGH, 2) AS `最高价(元)`,\n    ROUND(b.TLOW, 2) AS `最低价(元)`,\n    ROUND(b.TVOLUME/1000000, 2) AS `成交量(百万股)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交额(亿元)`,\n    ROUND(b.MKTCAP/100000000, 1) AS `流通市值(亿元)`,\n    ROUND(b.TCAP/100000000, 1) AS `总市值(亿元)`\nFROM\n    GET_A_SEC_CODE a\nJOIN\n    ANA_STK_EXPR_IDX b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.SEC_SNAME LIKE '%招商银行%'\n    AND b.ENDDATE = '2026-08-31'\n    AND a.ISVALID = 1\nORDER BY\n    b.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "40.1200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 招商银行 600036 40.12 39.51 40.28 39.50 113.63 45.45 8276.3 10118.2",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 30.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_3_30a6c0b6.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.38,
+  "llm_seconds_max": 23.13,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2371,
+   "prompt_tokens": 16794,
+   "total_tokens": 19165,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1719,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16794,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 224,
+   "prompt_tokens": 9935,
+   "total_tokens": 10159,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 26729,
+  "completion": 2595,
+  "total": 29324
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2371,
+   "prompt_tokens": 16794,
+   "total_tokens": 19165,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1719,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16794,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 224,
+   "prompt_tokens": 9935,
+   "total_tokens": 10159,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

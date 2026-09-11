@@ -1,0 +1,172 @@
+{
+ "round_id": 8,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "微软最新一个交易日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%微软%' AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '微软', 'MSFT.US', '483.64', '495.21', '478.93', '495.00', '11.96', '2.48', '535.73', '109.74', '76.23']]}\n该查询获取了微软公司在最新一个交易日的收盘价及相关的行情数据，包括交易日期、股票名称、股票代码、开盘价、最高价、最低价、收盘价、涨跌额、涨跌幅、成交额、成交量和总股本。信息来源涵盖了美股股票基本信息表和日行情数据表，通过股票名称筛选出包含“微软”的全部记录，仅保留该公司最新交易日的数据。数据结果按收盘价最高的记录优先展示，只输出一条，以确保展示的是最新且有效的行情。开盘价、最高价、最低价、收盘价、涨跌额和涨跌幅的金额单位均为美元，成交额除以一亿转换为“亿美元”并保留2位小数，成交量除以一百万转换为“百万股”并保留2位小数，总股本除以一亿转换为“亿股”并保留2位小数。相关变化比例和金额按标准保留2位小数。查询过程未做复杂计算，所展示的各项指标均直接读取基础数据或作简单单位换算，能够全面反映微软公司最近一个交易日的收盘行情情况。查询结果符合用户需求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '微软', 'MSFT.US', '483.64', '495.21', '478.93', '495.00', '11.96', '2.48', '535.73', '109.74', '76.23']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%微软%' AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1",
+ "final_sql": "WITH LATEST_QUOTE AS (SELECT A.TRADE_DATE, M.CSNAME, M.COMB_SYMBOL, A.OPEN_PRICE, A.HIGH_PRICE, A.LOW_PRICE, A.CLOSE_PRICE, A.CHG, A.CHG_PCT_DAY, A.TRADE_AMOUNT, A.TRADE_VOLUME, A.TOTAL_SHARES, ROW_NUMBER() OVER (PARTITION BY A.FIU_ID ORDER BY A.TRADE_DATE DESC) AS rn FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%微软%' AND A.CLOSE_PRICE IS NOT NULL) SELECT TRADE_DATE AS `交易日期`, CSNAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(LOW_PRICE, 2) AS `最低价(美元)`, ROUND(CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(CHG, 2) AS `涨跌额(美元)`, ROUND(CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM LATEST_QUOTE WHERE rn = 1 ORDER BY CLOSE_PRICE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "495.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 微软 MSFT.US 483.64 495.21 478.93 495.0 11.96 2.48 535.73 109.74 76.23",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_8_3273ec10.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 42.34,
+  "llm_seconds_max": 36.98,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4428,
+   "prompt_tokens": 9930,
+   "total_tokens": 14358,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3707,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9930,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 275,
+   "prompt_tokens": 4182,
+   "total_tokens": 4457,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14112,
+  "completion": 4703,
+  "total": 18815
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4428,
+   "prompt_tokens": 9930,
+   "total_tokens": 14358,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3707,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9930,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 275,
+   "prompt_tokens": 4182,
+   "total_tokens": 4457,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

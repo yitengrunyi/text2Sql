@@ -1,0 +1,167 @@
+{
+ "round_id": 4,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "招商银行2026年9月1日的收盘价是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 收盘价（Closing Price）\n\n[2] 可能的计算公式：  \n收盘价 = 某股票在交易日收盘时的最后一笔成交价格  \n即：收盘价 = 当日最后一笔成交价（2026年9月1日 招商银行 股票）\n\n通常，收盘价由证券交易所根据当日最后的成交数据直接采集，无需计算，但在特殊情况下（如无成交），可能取最接近收盘时间的成交价。\n['招商银行', '收盘价', 'Closing Price', '股票', '交易日', '成交价格', '成交价', '证券交易所', '成交数据']\n该问题可能涉及A股-'招商银行'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-银行。该问题可能涉及美股-'招商银行 (OTC)', 它的美股股票代码为：CIHKY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['主板行情', '主板基本信息']\n['DERI_STK_AH_PRC', 'MARGIN_TRD_DTL', 'ANA_STK_EXPR_IDX', 'STK_PRE_DISCLOSURE', 'STK_LIST_PLAN', 'VIEW_STK_STI_LIST_PLAN']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(TOPEN, 2) AS `开盘价(元)`,\n    ROUND(THIGH, 2) AS `最高价(元)`,\n    ROUND(TLOW, 2) AS `最低价(元)`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-01'\n  AND STOCKSNAME LIKE '%招商银行%'\n  AND ISVALID = 1\n200\n{table:[['日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '流通市值(亿)', '总市值(亿)', '成交额(亿)', '涨跌幅(%)'], ['2026-09-01', '招商银行', '600036', '40.86', '40.04', '40.88', '39.90', '8,429.00', '10,304.80', '46.60', '1.84']]}\n该查询的主要目的是获取招商银行在2026年9月1日当天的收盘价等市场数据。收盘价以元为单位，取值时进行了保留两位小数的处理。查询结果中还包括开盘价、最高价、最低价、流通市值、总市值、成交额和涨跌幅，这些指标数据均经过单位转换和数值格式化处理。\n\n收盘价的结果是通过直接取用当天的收盘价指标，并四舍五入保留两位小数。开盘价、最高价、最低价同样直接取值，并保留两位小数。流通市值和总市值通过以下公式进行单位转换：流通市值(亿) = 流通市值(元) / 100000000，总市值(亿) = 总市值(元) / 100000000，并保留一位小数。成交额(亿) = 成交额(元) / 100000000，并保留两位小数。涨跌幅(%)直接取用，结果保留两位小数。\n\n查询结果符合要求。\n\n查询从个股市场表现指标信息表中提取数据。通过筛选股票简称含有“招商银行”的记录，限制查询日期为2026年9月1日，并筛选出有效记录。最终返回招商银行在该日期的收盘价及相关市场表现数据。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(TOPEN, 2) AS `开盘价(元)`,\n    ROUND(THIGH, 2) AS `最高价(元)`,\n    ROUND(TLOW, 2) AS `最低价(元)`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-01'\n  AND STOCKSNAME LIKE '%招商银行%'\n  AND ISVALID = 1",
+ "final_sql": "SELECT \n    ENDDATE AS `日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(TOPEN, 2) AS `开盘价(元)`,\n    ROUND(THIGH, 2) AS `最高价(元)`,\n    ROUND(TLOW, 2) AS `最低价(元)`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX\nWHERE ENDDATE = '2026-09-01'\n  AND STOCKSNAME LIKE '%招商银行%'\n  AND ISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "40.8600"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-01 00:00:00 招商银行 600036 40.86 40.04 40.88 39.90 8429.0 10304.8 46.60 1.84",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 188.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_4_38cc970f.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.27,
+  "llm_seconds_max": 9.07,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   43897
+  ],
+  "prompt_columns_raw_len": 20162
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1869,
+   "prompt_tokens": 51411,
+   "total_tokens": 53280,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 51411,
+  "completion": 1869,
+  "total": 53280
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1869,
+   "prompt_tokens": 51411,
+   "total_tokens": 53280,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9856,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

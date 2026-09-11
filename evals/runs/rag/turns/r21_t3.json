@@ -1,0 +1,151 @@
+{
+ "round_id": 21,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "现在这个指数的市盈率大概什么水平？跟上证50比谁的估值更高？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE, Price to Earnings Ratio）\n\n[2] 可能的计算公式：  \n- 市盈率 = 当前指数总市值 ÷ 指数成分股总净利润  \n或  \n- 市盈率 = 指数点位 ÷ 每股盈利（每股收益）\n\n对比估值高低，比较两个指数的市盈率数值，数值越高估值越高。\n['市盈率', 'PE', 'Price to Earnings Ratio', '指数', '上证50', '估值', '当前指数总市值', '指数成分股总净利润', '指数点位', '每股盈利', '每股收益', '净利润']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_MKT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    gen.INDX_CNAME AS `指数名称`,\n    gen.INDX_CODE AS `指数代码`,\n    val.TRD_DATE AS `行情日期`,\n    ROUND(val.PE, 2) AS `市盈率(倍)`,\n    ROUND(val.PB, 2) AS `市净率(倍)`,\n    ROUND(val.EPS, 3) AS `每股收益(元)`,\n    ROUND(val.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(val.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX val\nLEFT JOIN GET_INDX_GEN_INFO gen ON val.INNER_CODE = gen.INNER_CODE\nWHERE gen.USE_STATUS = '使用'\n  AND gen.ISVALID = 1\n  AND val.ISVALID = 1\n  AND gen.INDX_CODE IN ('000016', {此处填入用户指定指数代码}) -- 上证50，和用户当前指数，例如沪深300为000300等\n  AND val.TRD_DATE = '2026-09-02'\nORDER BY FIELD(gen.INDX_CODE, '{此处填入用户指定指数代码}', '000016')\n\n200\nMySQL Database error: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '}) -- 上证50，和用户当前指数，例如沪深300为000300等\\n  AND val.T' at line 15\")\n市盈率是通过总市值除以连续四个季度的净利润得到，具体计算公式为：市盈率 = 总市值 / 连续四个季度的净利润。结果被保留两位小数。市净率则通过总市值除以最新净资产得到，计算公式为：市净率 = 总市值 / 最新净资产。每股收益是连续四个季度净利润之和除以最新总股本得到，公式为：每股收益 = 连续四个季度净利润之和 / 最新总股本，查询中每股收益结果保留三位小数。总市值和流通市值分别进行了单位转换，公式为：总市值（亿） = 总市值 / 100000000，流通市值（亿） = 流通市值 / 100000000，结果分别保留一位小数。查询结果符合要求。\n\n查询从指数估值数据表和指数基本信息表获取信息，并通过指数内部代码进行关联。指数基本信息表提供指数名称、指数代码和状态信息，指数估值数据表提供市盈率、市净率、每股收益、总市值和流通市值等指标。筛选条件包括：仅保留状态为“使用”的指数记录，两张表都要求状态有效，筛选了上证50和用户指定指数的最新交易日期数据。结果按照用户指数优先排序，便于直接比较两个指数的估值水平。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    gen.INDX_CNAME AS `指数名称`,\n    gen.INDX_CODE AS `指数代码`,\n    val.TRD_DATE AS `行情日期`,\n    ROUND(val.PE, 2) AS `市盈率(倍)`,\n    ROUND(val.PB, 2) AS `市净率(倍)`,\n    ROUND(val.EPS, 3) AS `每股收益(元)`,\n    ROUND(val.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(val.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX val\nLEFT JOIN GET_INDX_GEN_INFO gen ON val.INNER_CODE = gen.INNER_CODE\nWHERE gen.USE_STATUS = '使用'\n  AND gen.ISVALID = 1\n  AND val.ISVALID = 1\n  AND gen.INDX_CODE IN ('000016', {此处填入用户指定指数代码}) -- 上证50，和用户当前指数，例如沪深300为000300等\n  AND val.TRD_DATE = '2026-09-02'\nORDER BY FIELD(gen.INDX_CODE, '{此处填入用户指定指数代码}', '000016')",
+ "final_sql": "SELECT \n    gen.INDX_CNAME AS `指数名称`,\n    gen.INDX_CODE AS `指数代码`,\n    val.TRD_DATE AS `行情日期`,\n    ROUND(val.PE, 2) AS `市盈率(倍)`,\n    ROUND(val.PB, 2) AS `市净率(倍)`,\n    ROUND(val.EPS, 3) AS `每股收益(元)`,\n    ROUND(val.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(val.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX val\nLEFT JOIN GET_INDX_GEN_INFO gen ON val.INNER_CODE = gen.INNER_CODE\nWHERE gen.USE_STATUS = '使用'\n  AND gen.ISVALID = 1\n  AND val.ISVALID = 1\n  AND gen.INDX_CODE IN ('000016', {此处填入用户指定指数代码}) -- 上证50，和用户当前指数，例如沪深300为000300等\n  AND val.TRD_DATE = '2026-09-02'\nORDER BY FIELD(gen.INDX_CODE, '{此处填入用户指定指数代码}', '000016')",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "上证50指数 10.6404\n中证1000指数 43.0869"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '}) -- 上证50，和用户当前指数，例如沪深300为000300等\\",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': False, '日期': True})"
+ ],
+ "elapsed_seconds": 55.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_21_0f8c5d29.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 52.89,
+  "llm_seconds_max": 9.94,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   28414
+  ],
+  "prompt_columns_raw_len": 10661
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1385,
+   "prompt_tokens": 31082,
+   "total_tokens": 32467,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31082,
+  "completion": 1385,
+  "total": 32467
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1385,
+   "prompt_tokens": 31082,
+   "total_tokens": 32467,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

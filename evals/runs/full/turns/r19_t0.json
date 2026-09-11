@@ -1,0 +1,152 @@
+{
+ "round_id": 19,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "中证1000指数最新的市盈率是多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：市盈率（PE，Price to Earnings ratio）\n\n[2] 可能的计算公式：  \n市盈率 = 中证1000指数成分股的总市值 / 成分股总净利润（过去12个月合计）\n\n或者，指数市盈率 = ∑(成分股市值) / ∑(成分股净利润)\n['中证1000指数', '市盈率', 'PE', 'Price to Earnings ratio', '计算公式', '成分股', '总市值', '净利润', '成分股市值', '成分股净利润', '指数市盈率']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_TCLOSE_WEIGHT', 'INDX_SAMP_INFO', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PE IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1\n200\n{table:[['交易日期', '指数名称', '市盈率(倍)', '市净率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2026-09-02', '中证1000指数', '43.09', '2.32', '0.31', '145,904.00', '130,275.70']]}\n市盈率的计算公式是总市值除以连续四个季度的净利润之和，具体为：市盈率（倍）等于总市值除以连续四个季度的净利润。在本次查询中，查询结果对市盈率进行了保留两位小数的处理。除此之外，还对市净率进行了保留两位小数处理，对每股收益进行了保留三位小数处理，总市值和流通市值都进行了单位转换（除以一亿并保留一位小数）。查询结果符合“中证1000指数最新市盈率”的要求。\n\n该查询通过连接指数估值数据表和指数基本信息表，筛选指数代码为中证1000指数，并只选取使用状态正常且有效的数据。为确保获取最新数据，筛选了交易日期最大的一条记录，且市盈率数据不为空。结果按交易日期降序排列，只返回一条最新记录。最终输出了交易日期、指数名称、指数代码、市盈率、市净率、每股收益、总市值及流通市值等信息。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PE IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    v.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(v.PE,2) AS `市盈率(倍)`,\n    ROUND(v.PB,2) AS `市净率(倍)`,\n    ROUND(v.EPS,3) AS `每股收益(元)`,\n    ROUND(v.SUM_TCAP/100000000,1) AS `总市值(亿)`,\n    ROUND(v.SUM_MKTCAP/100000000,1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX v\nINNER JOIN GET_INDX_GEN_INFO g\n    ON v.INNER_CODE = g.INNER_CODE\nWHERE g.INDX_CODE = '000852'\n  AND g.USE_STATUS = '使用'\n  AND g.ISVALID = 1\n  AND v.ISVALID = 1\n  AND v.PE IS NOT NULL\n  AND v.TRD_DATE = (\n      SELECT MAX(TRD_DATE)\n      FROM ANA_INDX_VAL_IDX vv\n      WHERE vv.INNER_CODE = g.INNER_CODE \n        AND vv.ISVALID = 1\n        AND vv.TRD_DATE <= '2026-09-02'\n  )\nORDER BY v.TRD_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43.0869"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中证1000指数 000852 43.09 2.32 0.310 145904.0 130275.7",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 62.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_19_2b3073b8.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 59.71,
+  "llm_seconds_max": 7.37,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_TCLOSE_WEIGHT",
+   "INDX_SAMP_INFO",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   29323
+  ],
+  "prompt_columns_raw_len": 11926
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1216,
+   "prompt_tokens": 31551,
+   "total_tokens": 32767,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31551,
+  "completion": 1216,
+  "total": 32767
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1216,
+   "prompt_tokens": 31551,
+   "total_tokens": 32767,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_TCLOSE_WEIGHT",
+   "INDX_SAMP_INFO",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

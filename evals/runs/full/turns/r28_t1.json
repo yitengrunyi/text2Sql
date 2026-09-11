@@ -1,0 +1,201 @@
+{
+ "round_id": 28,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "那它们俩的市净率呢？差距也这么明显吗？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市净率（P/B，Price-to-Book Ratio）\n\n[2] 计算公式：  \n市净率 = 每股市价 / 每股净资产  \n或  \n市净率 = 公司总市值 / 股东权益总额  \n\n应用于迪士尼（Disney）和奈飞（Netflix），需分别计算两家公司的市净率，再进行对比，得出哪家更高，以及两者差值（高出多少倍或百分比）。\n['市净率', 'PB', 'Price-to-Book Ratio', '每股市价', '每股净资产', '公司总市值', '股东权益总额', '迪士尼', 'Disney', '奈飞', 'Netflix']\n该问题可能涉及美股-'迪士尼', 它的美股股票代码为：DIS.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。该问题可能涉及美股-'奈飞', 它的美股股票代码为：NFLX.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-传媒。\n美股相关\n['美股基本信息', '美股财务', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3102_Q', 'COM3102', 'AMERICAN_STOCK_MAIN', 'VIEW_COM3103_CUM']\n是否命中召回表：False\n生成查询代码\nSELECT \n    m.CSNAME AS `公司名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表截止日`,\n    ROUND(h.TCLOSE, 2) AS `最新收盘价(美元)`,\n    ROUND(a.F014N, 3) AS `每股净资产(美元)`,\n    CASE \n        WHEN a.F014N IS NOT NULL AND a.F014N != 0 \n        THEN ROUND(h.TCLOSE / a.F014N, 2)\n        ELSE NULL \n    END AS `市净率(PB)`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN (\n    SELECT \n        FIU_ID, \n        F001D, \n        F014N\n    FROM \n        COM3102 a\n    INNER JOIN (\n        SELECT \n            FIU_ID, \n            MAX(F001D) AS F001D, \n            MAX(F004N) AS F004N\n        FROM \n            COM3102\n        WHERE \n            FIU_ID IN (\n                SELECT FIU_ID FROM AMERICAN_STOCK_MAIN \n                WHERE COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n            )\n            AND F001D IS NOT NULL \n            AND F014N IS NOT NULL \n        GROUP BY FIU_ID\n    ) AS b \n    ON a.FIU_ID = b.FIU_ID AND a.F001D = b.F001D AND a.F004N = b.F004N\n    WHERE a.F014N IS NOT NULL\n) a ON m.FIU_ID = a.FIU_ID\nJOIN (\n    SELECT \n        COMB_SYMBOL, \n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM \n        VIEW_US_EOD_EXPR\n    WHERE \n        COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n        AND TRADE_DATE <= '2026-09-02'\n    GROUP BY COMB_SYMBOL\n) hv ON m.COMB_SYMBOL = hv.COMB_SYMBOL\nJOIN VIEW_US_EOD_EXPR h \n    ON h.COMB_SYMBOL = hv.COMB_SYMBOL \n    AND h.TRADE_DATE = hv.MAX_TRADE_DATE\nWHERE \n    m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\nORDE",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    m.CSNAME AS `公司名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表截止日`,\n    ROUND(h.TCLOSE, 2) AS `最新收盘价(美元)`,\n    ROUND(a.F014N, 3) AS `每股净资产(美元)`,\n    CASE \n        WHEN a.F014N IS NOT NULL AND a.F014N != 0 \n        THEN ROUND(h.TCLOSE / a.F014N, 2)\n        ELSE NULL \n    END AS `市净率(PB)`\nFROM \n    AMERICAN_STOCK_MAIN m\nJOIN (\n    SELECT \n        FIU_ID, \n        F001D, \n        F014N\n    FROM \n        COM3102 a\n    INNER JOIN (\n        SELECT \n            FIU_ID, \n            MAX(F001D) AS F001D, \n            MAX(F004N) AS F004N\n        FROM \n            COM3102\n        WHERE \n            FIU_ID IN (\n                SELECT FIU_ID FROM AMERICAN_STOCK_MAIN \n                WHERE COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n            )\n            AND F001D IS NOT NULL \n            AND F014N IS NOT NULL \n        GROUP BY FIU_ID\n    ) AS b \n    ON a.FIU_ID = b.FIU_ID AND a.F001D = b.F001D AND a.F004N = b.F004N\n    WHERE a.F014N IS NOT NULL\n) a ON m.FIU_ID = a.FIU_ID\nJOIN (\n    SELECT \n        COMB_SYMBOL, \n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM \n        VIEW_US_EOD_EXPR\n    WHERE \n        COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n        AND TRADE_DATE <= '2026-09-02'\n    GROUP BY COMB_SYMBOL\n) hv ON m.COMB_SYMBOL = hv.COMB_SYMBOL\nJOIN VIEW_US_EOD_EXPR h \n    ON h.COMB_SYMBOL = hv.COMB_SYMBOL \n    AND h.TRADE_DATE = hv.MAX_TRADE_DATE\nWHERE \n    m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\nORDER BY `市净率(PB)` DESC",
+ "final_sql": "SELECT \n    m.CSNAME AS `公司名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    a.F001D AS `报表截止日`,\n    ROUND(h.TCLOSE, 2) AS `最新收盘价(美元)`,\n    ROUND(a.F014N, 3) AS `每股净资产(美元)`,\n    CASE\n        WHEN a.F014N IS NOT NULL AND a.F014N != 0 THEN ROUND(h.TCLOSE / a.F014N, 2)\n        ELSE NULL\n    END AS `市净率(PB)`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN (\n    SELECT \n        a.FIU_ID,\n        a.F001D,\n        a.F014N\n    FROM\n        COM3102 a\n    INNER JOIN (\n        SELECT \n            FIU_ID,\n            MAX(F001D) AS F001D\n        FROM\n            COM3102\n        WHERE \n            FIU_ID IN (\n                SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n            )\n            AND F001D IS NOT NULL\n            AND F014N IS NOT NULL\n        GROUP BY FIU_ID\n    ) b ON a.FIU_ID = b.FIU_ID AND a.F001D = b.F001D\n    WHERE a.F014N IS NOT NULL\n) a ON m.FIU_ID = a.FIU_ID\nINNER JOIN (\n    SELECT \n        COMB_SYMBOL,\n        MAX(TRADE_DATE) AS MAX_TRADE_DATE\n    FROM\n        VIEW_US_EOD_EXPR\n    WHERE \n        COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n        AND TRADE_DATE <= '2026-09-02'\n    GROUP BY COMB_SYMBOL\n) hv ON m.COMB_SYMBOL = hv.COMB_SYMBOL\nINNER JOIN VIEW_US_EOD_EXPR h ON h.COMB_SYMBOL = hv.COMB_SYMBOL AND h.TRADE_DATE = hv.MAX_TRADE_DATE\nWHERE\n    m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n    AND a.F014N IS NOT NULL\n    AND h.TCLOSE IS NOT NULL\nORDER BY `市净率(PB)` DESC",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "7.024\n4.437"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1052, \"Column 'FIU_ID' in field list is ambiguous\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 90.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_28_ca93b425.1",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 92.04,
+  "llm_seconds_max": 17.02,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3102_Q",
+   "COM3102",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3105",
+   "VIEW_COM3106",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   25059,
+   12367
+  ],
+  "prompt_columns_raw_len": 1041
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1685,
+   "prompt_tokens": 8089,
+   "total_tokens": 9774,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8089,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3126,
+   "prompt_tokens": 37783,
+   "total_tokens": 40909,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 45872,
+  "completion": 4811,
+  "total": 50683
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1685,
+   "prompt_tokens": 8089,
+   "total_tokens": 9774,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8089,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 3126,
+   "prompt_tokens": 37783,
+   "total_tokens": 40909,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3102_Q",
+   "COM3102",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3103_CUM"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

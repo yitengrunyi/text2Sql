@@ -1,0 +1,74 @@
+{
+  "round_id": 17,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+  "initial": {
+    "question": "万华化学2025年年报的营业总收入是多少？",
+    "judge": "numeric",
+    "gold_value": "203234573814.42",
+    "gold_display": "2032.35亿元",
+    "gold_entities": ["万华化学"],
+    "gold_date": "2025-12-31",
+    "gold_sql": "SELECT P110100 FROM VIEW_STK_INCOME_GEN WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+    "gold_tables": ["VIEW_STK_INCOME_GEN"],
+    "labels": {"difficulty": "单表", "followup_type": null, "route_gold": null, "time_sensitivity": "absolute"}
+  },
+  "feedbacks": [
+    {
+      "question": "那它2025年末的资产负债率大概有多高？",
+      "judge": "numeric",
+      "gold_value": "62.81",
+      "gold_display": "62.81%（负债合计约2028.80亿元/资产总计约3230.09亿元）",
+      "gold_entities": ["万华化学"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT ROUND(B200000/B100000*100,2) FROM VIEW_STK_BALA_GEN WHERE A_STOCKCODE='600309' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+      "gold_tables": ["VIEW_STK_BALA_GEN"],
+      "labels": {"difficulty": "单表", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+      "judge": "numeric",
+      "gold_value": "2.36",
+      "gold_display": "2.36倍（经营现金流净额约331.05亿元，净利润约140.40亿元）",
+      "gold_entities": ["万华化学"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT ROUND(c.C100000/i.P150101,2) FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE='600309' AND c.ENDDATE='2025-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1",
+      "gold_tables": ["VIEW_STK_CASH_GEN", "VIEW_STK_INCOME_GEN"],
+      "labels": {"difficulty": "多表join", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "那换成2024年年报，这个倍数是多少？",
+      "judge": "numeric",
+      "gold_value": "2.03",
+      "gold_display": "2.03倍（经营现金流净额约300.53亿元，净利润约147.91亿元）",
+      "gold_entities": ["万华化学"],
+      "gold_date": "2024-12-31",
+      "gold_sql": "SELECT ROUND(c.C100000/i.P150101,2) FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE='600309' AND c.ENDDATE='2024-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1",
+      "gold_tables": ["VIEW_STK_CASH_GEN", "VIEW_STK_INCOME_GEN"],
+      "labels": {"difficulty": "多表join", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "再加一家海尔智家做参照，同样按2025年年报算净现比，两家谁更高？",
+      "judge": "entity",
+      "gold_value": "2.36",
+      "gold_display": "万华化学2.36倍 > 海尔智家1.29倍，万华化学更高",
+      "gold_entities": ["万华化学", "海尔智家"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT t.A_STOCKSNAME, ROUND(t.ocf/t.np,2) AS nocf_np_ratio FROM (SELECT c.A_STOCKSNAME, c.C100000 AS ocf, i.P150101 AS np FROM VIEW_STK_CASH_GEN c JOIN VIEW_STK_INCOME_GEN i ON i.A_STOCKCODE=c.A_STOCKCODE AND i.ENDDATE=c.ENDDATE AND i.RPT_TYPE=c.RPT_TYPE AND i.RPT_SRC=c.RPT_SRC AND i.RPT_DATE=c.RPT_DATE WHERE c.A_STOCKCODE IN ('600309','600690') AND c.ENDDATE='2025-12-31' AND c.RPT_TYPE='合并' AND c.RPT_SRC='年报' AND c.ISVALID=1 AND i.ISVALID=1) t ORDER BY nocf_np_ratio DESC",
+      "gold_tables": ["VIEW_STK_CASH_GEN", "VIEW_STK_INCOME_GEN"],
+      "labels": {"difficulty": "子查询", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+    },
+    {
+      "question": "换个标的，帮我查一下隆基绿能2025年年报经营活动产生的现金流量净额是多少？",
+      "judge": "numeric",
+      "gold_value": "4359382755.77",
+      "gold_display": "43.59亿元",
+      "gold_entities": ["隆基绿能"],
+      "gold_date": "2025-12-31",
+      "gold_sql": "SELECT C100000 FROM VIEW_STK_CASH_GEN WHERE A_STOCKCODE='601012' AND ENDDATE='2025-12-31' AND RPT_TYPE='合并' AND RPT_SRC='年报' AND ISVALID=1 AND RPT_DATE=ENDDATE",
+      "gold_tables": ["VIEW_STK_CASH_GEN"],
+      "labels": {"difficulty": "单表", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+    }
+  ]
+}

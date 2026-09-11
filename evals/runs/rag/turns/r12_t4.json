@@ -1,0 +1,149 @@
+{
+ "round_id": 12,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "对了，我记得这家公司2025年上半年完成过H股上市，上市发行加上后面的超额配售，总股本一共增加了多少股？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 发行新增股份数（Initial Offering Shares）  \n- 超额配售股份数（Greenshoe/Over-allotment Shares）  \n- 总股本增加数量（Total Share Increase）\n\n[2] 可能的计算公式：  \n总股本增加 = 发行新增股份数 + 超额配售股份数\n\n即：  \n**总股本增加（股） = IPO发行股份数 + 超额配售股份数**\n['发行新增股份数', 'Initial Offering Shares', '超额配售股份数', 'Greenshoe', 'Over-allotment Shares', '总股本增加数量', '总股本增加', 'Total Share Increase', 'IPO发行股份数']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n该问题可能涉及的题材包含：['分拆上市意愿']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '分拆上市意愿'。\n个股相关\n['港股股本股东', '港股基本信息']\n['HK_SHGSTUDTLCOM', 'HK_COMBINFO', 'HK_STKCODE', 'VIEW_HK_INDUSTRY_TRACK']\n是否命中召回表：False\n生成查询代码\nSELECT\n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hsc.CHDATE AS `股本变动日期`,\n    hsc.ANNDATE AS `公告日期`,\n    CASE hsc.RSNTYREFCSHGCH\n        WHEN '1' THEN '公开发售新股'\n        WHEN '2' THEN '超额配售'\n        WHEN '3' THEN '配售新股'\n        WHEN '4' THEN '先旧后新配售'\n        WHEN '5' THEN '公开招股'\n        WHEN '6' THEN '供股'\n        ELSE '其他'\n    END AS `股本变动原因`,\n    FORMAT(hsc.NUMPUSH / 100000000, 2) AS `本次变动实收股数（亿股）`,\n    hsc.EPSHGCH AS `股本变动说明`\nFROM\n    HK_COMBINFO hc\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1\n    INNER JOIN HK_SHGSTUDTLCOM hsc ON hc.COMUNIC = hsc.COMUNIC AND hsc.ISVALID = 1\nWHERE\n    hc.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hsc.CHDATE >= '2025-01-01' AND hsc.CHDATE <= '2025-06-30'\n    AND (hsc.RSNTYREFCSHGCH = '1' OR hsc.RSNTYREFCSHGCH = '2')\n    AND hsc.REFCSHGTY = 1\nORDER BY\n    hc.COMCNNAME,\n    hsc.CHDATE\n200\nNo rows fetched. 查找结果为空，请检查SQL语句",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hsc.CHDATE AS `股本变动日期`,\n    hsc.ANNDATE AS `公告日期`,\n    CASE hsc.RSNTYREFCSHGCH\n        WHEN '1' THEN '公开发售新股'\n        WHEN '2' THEN '超额配售'\n        WHEN '3' THEN '配售新股'\n        WHEN '4' THEN '先旧后新配售'\n        WHEN '5' THEN '公开招股'\n        WHEN '6' THEN '供股'\n        ELSE '其他'\n    END AS `股本变动原因`,\n    FORMAT(hsc.NUMPUSH / 100000000, 2) AS `本次变动实收股数（亿股）`,\n    hsc.EPSHGCH AS `股本变动说明`\nFROM\n    HK_COMBINFO hc\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1\n    INNER JOIN HK_SHGSTUDTLCOM hsc ON hc.COMUNIC = hsc.COMUNIC AND hsc.ISVALID = 1\nWHERE\n    hc.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hsc.CHDATE >= '2025-01-01' AND hsc.CHDATE <= '2025-06-30'\n    AND (hsc.RSNTYREFCSHGCH = '1' OR hsc.RSNTYREFCSHGCH = '2')\n    AND hsc.REFCSHGTY = 1\nORDER BY\n    hc.COMCNNAME,\n    hsc.CHDATE",
+ "final_sql": "SELECT\n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hsc.CHDATE AS `股本变动日期`,\n    hsc.ANNDATE AS `公告日期`,\n    CASE hsc.RSNTYREFCSHGCH\n        WHEN '1' THEN '公开发售新股'\n        WHEN '2' THEN '超额配售'\n        WHEN '3' THEN '配售新股'\n        WHEN '4' THEN '先旧后新配售'\n        WHEN '5' THEN '公开招股'\n        WHEN '6' THEN '供股'\n        ELSE '其他'\n    END AS `股本变动原因`,\n    FORMAT(hsc.NUMPUSH / 100000000, 2) AS `本次变动实收股数（亿股）`,\n    hsc.EPSHGCH AS `股本变动说明`\nFROM\n    HK_COMBINFO hc\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1\n    INNER JOIN HK_SHGSTUDTLCOM hsc ON hc.COMUNIC = hsc.COMUNIC AND hsc.ISVALID = 1\nWHERE\n    hc.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hsc.CHDATE >= '2025-01-01' AND hsc.CHDATE <= '2025-06-30'\n    AND (hsc.RSNTYREFCSHGCH = '1' OR hsc.RSNTYREFCSHGCH = '2')\n    AND hsc.REFCSHGTY = 1\nORDER BY\n    hc.COMCNNAME,\n    hsc.CHDATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "258197600"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 57.5,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_12_ac4daa2f.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 54.72,
+  "llm_seconds_max": 10.69,
+  "selected_tables": [
+   "HK_SHGSTUDTLCOM",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "candidate_tables": [
+   "HK_SHGSTUDTLCOM",
+   "VIEW_HK_INDUSTRY_TRACK",
+   "HK_OFCHGBDSCM",
+   "HK_DIRSHGINTCOM",
+   "HK_MJSHHSHGSTU",
+   "STK_HK_IPO"
+  ],
+  "sql_prompt_chars": [
+   20753
+  ],
+  "prompt_columns_raw_len": 4883
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1487,
+   "prompt_tokens": 30919,
+   "total_tokens": 32406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 30919,
+  "completion": 1487,
+  "total": 32406
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1487,
+   "prompt_tokens": 30919,
+   "total_tokens": 32406,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_SHR_STRU_CHNG"
+ ],
+ "table_recall": {
+  "selected": [
+   "HK_SHGSTUDTLCOM",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 23,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "排第一的这只重仓股，占了基金净值多大比例？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净资产比例(%)`, SHARES_HOLDING AS `持股数量(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 ORDER BY MARKET_VALUE DESC LIMIT 1;\n200\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿)', '持股占基金净资产比例(%)', '持股数量(股)'], ['2026-06-30', '福耀玻璃', '600660.SH', '12.10', '9.71', '23,907,790.00']]}\n该查询筛选了“大成高新技术产业股票A”在2026年第二季度报告中的持股明细数据，重点获取了持股市值排名第一的重仓股票。查询来源为基金季度定期报告的持仓信息，筛选条件包括基金名称、报告期、数据来源及数据有效性，仅保留市值非空的记录。持股名单按持股市值从高到低排序，限定只返回排名第一的股票。结果展示了报告期、股票名称及代码、持股市值（已由元转为亿元并保留1位小数）、持股占基金净资产比例（由原始小数乘以100转为百分比，保留2位小数）、以及持股数量。持股占基金净值的比例已直接按财务披露的指标转换为百分比，无复杂计算。查询结果能够准确反映基金头号重仓股占净资产的具体比例，满足用户需求。\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿)', '持股占基金净资产比例(%)', '持股数量(股)'], ['2026-06-30', '福耀玻璃', '600660.SH', '12.10', '9.71', '23,907,790.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净资产比例(%)`, SHARES_HOLDING AS `持股数量(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 ORDER BY MARKET_VALUE DESC LIMIT 1",
+ "final_sql": "SELECT REPORT_DATE AS `报告期`, SEC_NAME AS `股票名称`, COMB_SYMBOL AS `股票代码`, ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿)`, ROUND(RATIO_IN_NV*100, 2) AS `持股占基金净资产比例(%)`, SHARES_HOLDING AS `持股数量(股)` FROM FUND_PORTFOLIO_DETAIL WHERE FUND_NAME LIKE '%大成高新技术产业股票A%' AND REPORT_DATE = '2026-06-30' AND FUND_HOLDING_SOURCE_ID = 1 AND MARKET_VALUE IS NOT NULL AND HISVALID = 1 ORDER BY MARKET_VALUE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "福耀玻璃 9.71"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-06-30 福耀玻璃 600660.SH 12.1 9.71 23907790",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 25.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_23_ef408a74.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 21.72,
+  "llm_seconds_max": 16.58,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1590,
+   "prompt_tokens": 10181,
+   "total_tokens": 11771,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1156,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10181,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 215,
+   "prompt_tokens": 3992,
+   "total_tokens": 4207,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14173,
+  "completion": 1805,
+  "total": 15978
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1590,
+   "prompt_tokens": 10181,
+   "total_tokens": 11771,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1156,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10181,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 215,
+   "prompt_tokens": 3992,
+   "total_tokens": 4207,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_PORTFOLIO_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

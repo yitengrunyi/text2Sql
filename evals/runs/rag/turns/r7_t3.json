@@ -1,0 +1,148 @@
+{
+ "round_id": 7,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "华夏上证50ETF今年以来（YTD）的收益率是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "子查询",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 华夏上证50ETF YTD收益率（Year-To-Date Return）\n\n[2] 计算公式：  \nYTD收益率 = (当前净值 - 年初净值) ÷ 年初净值 × 100%\n['华夏上证50ETF', 'YTD收益率', 'Year-To-Date Return', '当前净值', '年初净值', '收益率']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品净值', 'ETF相关信息']\n['ETF_LABEL_INFO_CHINA', 'FUND_NETVALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    '2026年年初至今' AS `时间区间`,\n    fn.FUND_NAME AS `基金名称`,\n    fn.FUND_SYMBOL AS `基金代码`,\n    MIN(fn.TRADING_DAY) AS `起始交易日`,\n    MAX(fn.TRADING_DAY) AS `截止交易日`,\n    ROUND(\n        (MAX(fn.RESTORED_ACCU_NAV) / NULLIF(MIN(fn.RESTORED_ACCU_NAV), 0) - 1) * 100, 2\n    ) AS `今年以来收益率(%)`,\n    MIN(fn.RESTORED_ACCU_NAV) AS `年初复权累计净值`,\n    MAX(fn.RESTORED_ACCU_NAV) AS `最新复权累计净值`\nFROM FUND_NETVALUE fn\nWHERE fn.FUND_SYMBOL LIKE '%510050.SH%'\n    AND fn.HISVALID = 1\n    AND fn.TRADING_DAY >= '2026-01-01'\n    AND fn.TRADING_DAY <= '2026-09-02'\nGROUP BY fn.FUND_NAME, fn.FUND_SYMBOL\n\n200\n{table:[['时间区间', '基金名称', '基金代码', '起始交易日', '截止交易日', '今年以来收益率(%)', '年初复权累计净值', '最新复权累计净值'], ['2026年年初至今', '华夏上证50ETF', '510050.SH', '2026-01-05', '2026-09-02', '12.98', '4.91', '5.54']]}\n今年以来收益率的计算公式为：（最新复权累计净值 ÷ 年初复权累计净值 - 1） × 100。查询选取时间区间内最早和最新的复权累计净值，计算2026年年初至今的收益率。同时显示了基金名称、基金代码、起始交易日、截止交易日、年初复权累计净值和最新复权累计净值。查询结果符合要求。\n\n该查询取自记录基金净值信息的表，筛选了基金代码包含“510050.SH”的基金，限定交易日在2026年1月1日至2026年9月2日之间，并只保留有效记录。通过分组返回指定基金在今年以来的收益和相关净值数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    '2026年年初至今' AS `时间区间`,\n    fn.FUND_NAME AS `基金名称`,\n    fn.FUND_SYMBOL AS `基金代码`,\n    MIN(fn.TRADING_DAY) AS `起始交易日`,\n    MAX(fn.TRADING_DAY) AS `截止交易日`,\n    ROUND(\n        (MAX(fn.RESTORED_ACCU_NAV) / NULLIF(MIN(fn.RESTORED_ACCU_NAV), 0) - 1) * 100, 2\n    ) AS `今年以来收益率(%)`,\n    MIN(fn.RESTORED_ACCU_NAV) AS `年初复权累计净值`,\n    MAX(fn.RESTORED_ACCU_NAV) AS `最新复权累计净值`\nFROM FUND_NETVALUE fn\nWHERE fn.FUND_SYMBOL LIKE '%510050.SH%'\n    AND fn.HISVALID = 1\n    AND fn.TRADING_DAY >= '2026-01-01'\n    AND fn.TRADING_DAY <= '2026-09-02'\nGROUP BY fn.FUND_NAME, fn.FUND_SYMBOL",
+ "final_sql": "SELECT\n    '2026年年初至今' AS `时间区间`,\n    fn.FUND_NAME AS `基金名称`,\n    fn.FUND_SYMBOL AS `基金代码`,\n    MIN(fn.TRADING_DAY) AS `起始交易日`,\n    MAX(fn.TRADING_DAY) AS `截止交易日`,\n    ROUND(\n        (MAX(fn.RESTORED_ACCU_NAV) / NULLIF(MIN(fn.RESTORED_ACCU_NAV), 0) - 1) * 100, 2\n    ) AS `今年以来收益率(%)`,\n    MIN(fn.RESTORED_ACCU_NAV) AS `年初复权累计净值`,\n    MAX(fn.RESTORED_ACCU_NAV) AS `最新复权累计净值`\nFROM FUND_NETVALUE fn\nWHERE fn.FUND_SYMBOL LIKE '%510050.SH%'\n    AND fn.HISVALID = 1\n    AND fn.TRADING_DAY >= '2026-01-01'\n    AND fn.TRADING_DAY <= '2026-09-02'\nGROUP BY fn.FUND_NAME, fn.FUND_SYMBOL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-0.025767"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026年年初至今 华夏上证50ETF 510050.SH 2026-01-05 2026-09-02 12.98 4.90660000 5.54330000",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 144.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_7_ee0b6321.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 48.32,
+  "llm_seconds_max": 10.49,
+  "selected_tables": [
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_NETVALUE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   14858
+  ],
+  "prompt_columns_raw_len": 4700
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1111,
+   "prompt_tokens": 21360,
+   "total_tokens": 22471,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21360,
+  "completion": 1111,
+  "total": 22471
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1111,
+   "prompt_tokens": 21360,
+   "total_tokens": 22471,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_NETVALUE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

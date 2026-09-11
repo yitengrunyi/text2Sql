@@ -1,0 +1,176 @@
+{
+ "round_id": 27,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 经营净现金流（Operating Net Cash Flow）  \n- 资本性支出（Capital Expenditures, CapEx）  \n- 自由现金流（Free Cash Flow, FCF）\n\n[2] 计算公式：  \n自由现金流 = 经营净现金流 - 资本性支出  \nFCF = Operating Net Cash Flow – Capital Expenditures\n\n比较2024财年与2025财年：  \n自由现金流的变动 = 2025年自由现金流 – 2024年自由现金流  \n若结果为正，则“改善”；为负，则“恶化”。\n['经营净现金流', 'Operating Net Cash Flow', '资本性支出', 'CapEx', '资本性支出（CapEx）', '自由现金流', 'Free Cash Flow', 'FCF', '自由现金流的变动']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务']\n['VIEW_STK_CASH_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_FIX_ASS_DEP', 'STK_IMM_ASS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.ENDDATE AS `报告截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    ROUND(a.C100000/1000000,1) AS `经营活动产生的现金流量净额(万元)`,\n    ROUND(a.C220000/1000000,1) AS `投资活动现金流出小计(万元)`,\n    ROUND(a.C220101/1000000,1) AS `购建固定资产等所支付现金(万元)`,\n    ROUND((a.C100000 - a.C220101)/1000000,1) AS `自由现金流(万元)`,\n    b.ENDDATE AS `上年报告截止日`,\n    ROUND(b.C100000/1000000,1) AS `上年经营活动产生的现金流量净额(万元)`,\n    ROUND(b.C220000/1000000,1) AS `上年投资活动现金流出小计(万元)`,\n    ROUND(b.C220101/1000000,1) AS `上年购建固定资产等所支付现金(万元)`,\n    ROUND((b.C100000 - b.C220101)/1000000,1) AS `上年自由现金流(万元)`,\n    (CASE \n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) > 0 \n            THEN '改善'\n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) < 0 \n            THEN '恶化'\n        ELSE '持平' END) AS `自由现金流变化情况`\nFROM\n    VIEW_STK_CASH_GEN a\nINNER JOIN\n    VIEW_STK_CASH_GEN b\n    ON a.COMCODE = b.COMCODE\n    AND b.ENDDATE = '2024-12-31'\n    AND b.RPT_TYPE = '合并'\nWHERE\n    a.ENDDATE = '2025-12-31'\n    AND a.RPT_TYPE = '合并'\n    AND a.C100000 IS NOT NULL\n    AND a.C220101 IS NOT NULL\n    AND b.C100000 IS NOT NULL\n    AND b.C220101 IS NOT NULL\nORDER BY\n    a.C100000 - a.C220101 DESC\n200\n{table:[['报告截止日', '股票简称', '股票代码', '经营活动产生的现金流量净额(万元)', '投资活动现金流出小计(万元)', '购建固定资产等所支付现金(万元)', '自由现金流(万元)', '上年报告截止日', '上年经营活动产生的现金流量净额(万元)', '上年投资活动现金流出小计(万",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.ENDDATE AS `报告截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    ROUND(a.C100000/1000000,1) AS `经营活动产生的现金流量净额(万元)`,\n    ROUND(a.C220000/1000000,1) AS `投资活动现金流出小计(万元)`,\n    ROUND(a.C220101/1000000,1) AS `购建固定资产等所支付现金(万元)`,\n    ROUND((a.C100000 - a.C220101)/1000000,1) AS `自由现金流(万元)`,\n    b.ENDDATE AS `上年报告截止日`,\n    ROUND(b.C100000/1000000,1) AS `上年经营活动产生的现金流量净额(万元)`,\n    ROUND(b.C220000/1000000,1) AS `上年投资活动现金流出小计(万元)`,\n    ROUND(b.C220101/1000000,1) AS `上年购建固定资产等所支付现金(万元)`,\n    ROUND((b.C100000 - b.C220101)/1000000,1) AS `上年自由现金流(万元)`,\n    (CASE \n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) > 0 \n            THEN '改善'\n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) < 0 \n            THEN '恶化'\n        ELSE '持平' END) AS `自由现金流变化情况`\nFROM\n    VIEW_STK_CASH_GEN a\nINNER JOIN\n    VIEW_STK_CASH_GEN b\n    ON a.COMCODE = b.COMCODE\n    AND b.ENDDATE = '2024-12-31'\n    AND b.RPT_TYPE = '合并'\nWHERE\n    a.ENDDATE = '2025-12-31'\n    AND a.RPT_TYPE = '合并'\n    AND a.C100000 IS NOT NULL\n    AND a.C220101 IS NOT NULL\n    AND b.C100000 IS NOT NULL\n    AND b.C220101 IS NOT NULL\nORDER BY\n    a.C100000 - a.C220101 DESC",
+ "final_sql": "SELECT\n    a.ENDDATE AS `报告截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    ROUND(a.C100000/1000000,1) AS `经营活动产生的现金流量净额(万元)`,\n    ROUND(a.C220000/1000000,1) AS `投资活动现金流出小计(万元)`,\n    ROUND(a.C220101/1000000,1) AS `购建固定资产等所支付现金(万元)`,\n    ROUND((a.C100000 - a.C220101)/1000000,1) AS `自由现金流(万元)`,\n    b.ENDDATE AS `上年报告截止日`,\n    ROUND(b.C100000/1000000,1) AS `上年经营活动产生的现金流量净额(万元)`,\n    ROUND(b.C220000/1000000,1) AS `上年投资活动现金流出小计(万元)`,\n    ROUND(b.C220101/1000000,1) AS `上年购建固定资产等所支付现金(万元)`,\n    ROUND((b.C100000 - b.C220101)/1000000,1) AS `上年自由现金流(万元)`,\n    (CASE \n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) > 0 \n            THEN '改善'\n        WHEN (ROUND((a.C100000 - a.C220101)/1000000,1) - ROUND((b.C100000 - b.C220101)/1000000,1)) < 0 \n            THEN '恶化'\n        ELSE '持平' END) AS `自由现金流变化情况`\nFROM\n    VIEW_STK_CASH_GEN a\nINNER JOIN\n    VIEW_STK_CASH_GEN b\n    ON a.COMCODE = b.COMCODE\n    AND b.ENDDATE = '2024-12-31'\n    AND b.RPT_TYPE = '合并'\nWHERE\n    a.ENDDATE = '2025-12-31'\n    AND a.RPT_TYPE = '合并'\n    AND a.C100000 IS NOT NULL\n    AND a.C220101 IS NOT NULL\n    AND b.C100000 IS NOT NULL\n    AND b.C220101 IS NOT NULL\nORDER BY\n    a.C100000 - a.C220101 DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "8919.7"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.VIEW_STK_CASH_GEN' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 64.8,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_27_bbd483d2.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 62.59,
+  "llm_seconds_max": 10.51,
+  "selected_tables": [
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST"
+  ],
+  "sql_prompt_chars": [
+   30403
+  ],
+  "prompt_columns_raw_len": 4683
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2476,
+   "prompt_tokens": 49310,
+   "total_tokens": 51786,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 49310,
+  "completion": 2476,
+  "total": 51786
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2476,
+   "prompt_tokens": 49310,
+   "total_tokens": 51786,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3104"
+ ],
+ "table_recall": {
+  "selected": [
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,191 @@
+{
+ "round_id": 7,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "它2026年9月2日的基金规模是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金规模（资产净值，Net Asset Value, NAV）\n\n[2] 可能的计算公式：  \n基金规模 = 基金份额总数 × 每份净值\n\n即：  \n基金规模（2026年9月2日） = 当日基金总份额 × 当日每份基金净值\n['华夏上证50ETF', '510050', '基金规模', '资产净值', 'Net Asset Value', 'NAV', '基金份额总数', '总份额', '每份净值', '每份基金净值']\n该问题可能涉及到申万三级行业，三级行业名称为\"资产管理\"，即SW_INDU_CODE_2021_3 LIKE \"%资产管理%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%资产管理%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金份额变动']\n['ETF_SHARES_CHANGE_ROLL', 'FUND_NETVALUE', 'FUND_SHARES_CHANGE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`\nFROM\n    ETF_SHARES_CHANGE_ROLL t\nWHERE\n    t.FUND_SYMBOL = '510050.SH'\n    AND t.TRADING_DAY = '2026-09-02'\n    AND t.HISVALID = 1\n    AND t.NET_VALUE IS NOT NULL\nORDER BY\n    t.TRADING_DAY DESC\nLIMIT 1\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询的主要目的是获取华夏上证50ETF在指定日期（2026年9月2日）的基金规模。基金规模（亿）通过将原有每日基金规模数据除以一亿，并保留两位小数进行单位转换。查询结果符合要求。\n\n该查询从ETF基金日频份额变动和资金净流入情况的表中提取数据。选择了交易日期、基金名称、基金代码以及基金规模（亿）等信息。通过筛选基金代码为“510050.SH”、交易日期为“2026-09-02”、记录有效且基金规模数据不为空的条件，确保获取到真实有效的数据。结果按交易日期降序排列，仅返回一条符合条件的最新记录。\n查询华夏上证50ETF(510050)在2026年9月2日的基金规模是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`\nFROM\n    ETF_SHARES_CHANGE_ROLL t\nWHERE\n    t.FUND_SYMBOL = '510050.SH'\n    AND t.TRADING_DAY = '2026-09-02'\n    AND t.HISVALID = 1\n    AND t.NET_VALUE IS NOT NULL\nORDER BY\n    t.TRADING_DAY DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    t.TRADING_DAY AS `日期`,\n    t.FUND_NAME AS `基金名称`,\n    t.FUND_SYMBOL AS `基金代码`,\n    ROUND(t.NET_VALUE/100000000, 2) AS `基金规模(亿)`\nFROM\n    ETF_SHARES_CHANGE_ROLL t\nWHERE\n    t.FUND_SYMBOL = '510050.SH'\n    AND t.TRADING_DAY = '2026-09-02'\n    AND t.HISVALID = 1\n    AND t.NET_VALUE IS NOT NULL\nORDER BY\n    t.TRADING_DAY DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "19579514570.0000"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 69.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_7_a0a3736f.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 66.46,
+  "llm_seconds_max": 15.99,
+  "selected_tables": [
+   "ETF_SHARES_CHANGE_ROLL",
+   "FUND_NETVALUE",
+   "FUND_SHARES_CHANGE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "FUND_SHARES_CHANGE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   17368
+  ],
+  "prompt_columns_raw_len": 6239
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1490,
+   "prompt_tokens": 8829,
+   "total_tokens": 10319,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1266,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8829,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 903,
+   "prompt_tokens": 23477,
+   "total_tokens": 24380,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 32306,
+  "completion": 2393,
+  "total": 34699
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1490,
+   "prompt_tokens": 8829,
+   "total_tokens": 10319,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1266,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8829,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 903,
+   "prompt_tokens": 23477,
+   "total_tokens": 24380,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_SHARES_CHANGE_ROLL",
+   "FUND_NETVALUE",
+   "FUND_SHARES_CHANGE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,160 @@
+{
+ "round_id": 26,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "放到同类里比一下呢，商品型基金按最新规模排前五的都是哪几只？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 基金类型（商品型基金）\n- 最新基金规模（通常指最新公布的基金资产净值，单位为亿元）\n\n[2] 可能的计算公式：\n\n- 基金规模 = ∑（基金所持有资产的市值）\n- 排名前五：将所有商品型基金按照“最新基金规模”从高到低排序，取前五只基金\n\n公式表达：\n前五基金 = Top5{基金 | 类型=商品型, 按最新规模降序排列}\n['商品型基金', '基金类型', '最新基金规模', '基金资产净值', '基金所持有资产的市值', '基金规模', '前五基金', 'Top5', '排序', '降序', '商品型', '资产净值']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及的题材包含：['大宗商品贸易']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '大宗商品贸易'。\n基金相关\n['基金产品基本信息', '基金标签']\n['FUND_TURNOVER_RATE', 'MUTUAL_FUND_SECTOR', 'FUND_AND_MANAGER_MAPPING', 'FUND_LABEL_INFO', 'FUND_FRONT_CONTROL', 'FUND_ASSET_ALLOCATION']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.REPORT_DATE AS `报告期`,\n    a.FUND_NAME AS `基金简称`,\n    a.FUND_SYMBOL AS `基金代码`,\n    CONCAT(ROUND(a.NET_VALUE/100000000, 2), '亿') AS `最新基金规模（亿）`\nFROM \n    FUND_ASSET_ALLOCATION a\nINNER JOIN \n    MUTUAL_FUND_SECTOR b \n    ON a.FUND_HCODE = b.FUND_HCODE \n    AND b.CUR_SIGN = '1'\n    AND b.HISVALID=1\n    AND b.SOURCE_ID=2\nWHERE \n    b.SECTOR_NAME_2 = '商品型基金'\n    AND a.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION a2 \n        WHERE a2.FUND_HCODE = a.FUND_HCODE\n    )\n    AND a.HISVALID=1\n    AND a.NET_VALUE IS NOT NULL\nORDER BY \n    a.NET_VALUE DESC\nLIMIT 5\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n- 查询主要目的是获取商品型基金类别中，按照最新规模排序的前五只基金基础信息及其最新规模。基金规模的计算方式是：最新基金规模（亿） = 资产净值 / 100000000，并保留两位小数，同时展示单位“亿”。查询结果符合要求。\n\n- 查询从两个表中提取数据，一个表记录基金产品资产及规模情况，另一个表用于管理基金的分类信息。通过基金内部编码进行关联，确保基金分类为商品型且记录为最新和有效，并且数据来源为Wind。\n\n- 筛选条件包含基金必须是商品型，且采用有最新标志的分类信息；基金对应资产配置记录的报告期必须为该基金的最新一期；基金资产净值和数据均有效，不为空；按照最新基金规模从大到小排序，并只取前五只基金。返回的信息包括报告期、基金简称、基金代码和最新基金规模（单位为亿）。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.REPORT_DATE AS `报告期`,\n    a.FUND_NAME AS `基金简称`,\n    a.FUND_SYMBOL AS `基金代码`,\n    CONCAT(ROUND(a.NET_VALUE/100000000, 2), '亿') AS `最新基金规模（亿）`\nFROM \n    FUND_ASSET_ALLOCATION a\nINNER JOIN \n    MUTUAL_FUND_SECTOR b \n    ON a.FUND_HCODE = b.FUND_HCODE \n    AND b.CUR_SIGN = '1'\n    AND b.HISVALID=1\n    AND b.SOURCE_ID=2\nWHERE \n    b.SECTOR_NAME_2 = '商品型基金'\n    AND a.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION a2 \n        WHERE a2.FUND_HCODE = a.FUND_HCODE\n    )\n    AND a.HISVALID=1\n    AND a.NET_VALUE IS NOT NULL\nORDER BY \n    a.NET_VALUE DESC\nLIMIT 5",
+ "final_sql": "SELECT \n    a.REPORT_DATE AS `报告期`,\n    a.FUND_NAME AS `基金简称`,\n    a.FUND_SYMBOL AS `基金代码`,\n    CONCAT(ROUND(a.NET_VALUE/100000000, 2), '亿') AS `最新基金规模（亿）`\nFROM \n    FUND_ASSET_ALLOCATION a\nINNER JOIN \n    MUTUAL_FUND_SECTOR b \n    ON a.FUND_HCODE = b.FUND_HCODE \n    AND b.CUR_SIGN = '1'\n    AND b.HISVALID=1\n    AND b.SOURCE_ID=2\nWHERE \n    b.SECTOR_NAME_2 = '商品型基金'\n    AND a.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION a2 \n        WHERE a2.FUND_HCODE = a.FUND_HCODE\n    )\n    AND a.HISVALID=1\n    AND a.NET_VALUE IS NOT NULL\nORDER BY \n    a.NET_VALUE DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "华安黄金易(ETF) 104347826801.6000\n博时黄金ETF 41941887399.7140\n易方达黄金ETF 36666801780.3780\n国泰黄金ETF 35075157811.2000\n华夏黄金ETF 17250571814.8000"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 21.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_26_4e6ecdf9.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 19.27,
+  "llm_seconds_max": 5.97,
+  "selected_tables": [
+   "MUTUAL_FUND_SECTOR",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LABEL_INFO",
+   "FUND_BENCHMARK",
+   "FUND_ASSET_ALLOCATION"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LABEL_INFO",
+   "FUND_LABEL_VALUE_SECTION",
+   "FUND_LABEL_VALUE_SERIES",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "MUTUAL_FUND_SECTOR",
+   "FUND_BENCHMARK",
+   "FUND_BENCHMARK",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   18200
+  ],
+  "prompt_columns_raw_len": 8779
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1433,
+   "prompt_tokens": 28857,
+   "total_tokens": 30290,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2944,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 28857,
+  "completion": 1433,
+  "total": 30290
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1433,
+   "prompt_tokens": 28857,
+   "total_tokens": 30290,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 2944,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "MUTUAL_FUND_SECTOR",
+  "FUND_SHARES_CHANGE"
+ ],
+ "table_recall": {
+  "selected": [
+   "MUTUAL_FUND_SECTOR",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LABEL_INFO",
+   "FUND_BENCHMARK",
+   "FUND_ASSET_ALLOCATION"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

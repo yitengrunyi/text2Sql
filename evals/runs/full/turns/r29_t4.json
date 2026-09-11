@@ -1,0 +1,173 @@
+{
+ "round_id": 29,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, v.F001D AS `财政周期结束日期`, v.F005V AS `货币`, v.F006V AS `地域英文`, v.REGION_CNAME AS `地域中文`, ROUND(v.F007N / 100, 3) AS `销售收入/亿` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID WHERE m.COMB_SYMBOL = 'GOOGL.US' AND v.F001D = (SELECT MAX(v2.F001D) FROM VIEW_COM3106 v2 WHERE v2.FIU_ID = m.FIU_ID) AND v.F007N IS NOT NULL ORDER BY v.F007N DESC;\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '货币', '地域英文', '地域中文', '销售收入/亿'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'North America', '北美', '2,456.30'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Europe', '欧洲', '847.00'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Greater China', '大中华区', '338.80'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Asia Pacific', '亚太(除中国)', '338.80'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Others', '其他', '254.10']]}\n该查询获取了谷歌A在最新披露的财年各个地域的销售收入，并将这些地域收入从高到低排列。查询提取了股票基本信息和地域收入分布数据，通过公司展示代码关联两类信息，筛选条件确保只选取最新的报告期且收入数据为有效值。销售收入以原始金额（百万美元）直接提取，并通过除以100换算为“亿元”，保留3位小数用于展示。此查询直接使用了现有的财务指标和地域分类信息。整体结果排列清晰，能满足用户关于最新财年地域收入分布及排序的需求。\n{table:[['股票名称', '股票代码', '财政周期结束日期', '货币', '地域英文', '地域中文', '销售收入/亿'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'North America', '北美', '2,456.30'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Europe', '欧洲', '847.00'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Greater China', '大中华区', '338.80'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Asia Pacific', '亚太(除中国)', '338.80'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'Others', '其他', '254.10']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, v.F001D AS `财政周期结束日期`, v.F005V AS `货币`, v.F006V AS `地域英文`, v.REGION_CNAME AS `地域中文`, ROUND(v.F007N / 100, 3) AS `销售收入/亿` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID WHERE m.COMB_SYMBOL = 'GOOGL.US' AND v.F001D = (SELECT MAX(v2.F001D) FROM VIEW_COM3106 v2 WHERE v2.FIU_ID = m.FIU_ID) AND v.F007N IS NOT NULL ORDER BY v.F007N DESC",
+ "final_sql": "SELECT m.CSNAME AS `股票名称`, m.COMB_SYMBOL AS `股票代码`, v.F001D AS `财政周期结束日期`, v.F005V AS `货币`, v.F006V AS `地域英文`, v.REGION_CNAME AS `地域中文`, ROUND(v.F007N / 100, 3) AS `销售收入/亿` FROM AMERICAN_STOCK_MAIN m INNER JOIN VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID WHERE m.COMB_SYMBOL = 'GOOGL.US' AND v.F001D = (SELECT MAX(v2.F001D) FROM VIEW_COM3106 v2 WHERE v2.FIU_ID = m.FIU_ID) AND v.F007N IS NOT NULL ORDER BY v.F007N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "北美 245630.0\n欧洲 84700.0\n大中华区 33880.0\n亚太(除中国) 33880.0\n其他 25410.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "first_result_preview": "谷歌A GOOGL.US 2025-12-31 USD North America 北美 2456.3\n谷歌A GOOGL.US 2025-12-31 USD Europe 欧洲 847.0\n谷歌A GOOGL.US 2025-12-31 USD Greater China 大中华区 338.8\n谷歌A GOOGL.US 2025-12-31 USD Asia Pacific 亚太(除中国) 33",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 51.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_29_36ccbde1.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 51.38,
+  "llm_seconds_max": 42.49,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5169,
+   "prompt_tokens": 9009,
+   "total_tokens": 14178,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4577,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9009,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 3292,
+   "total_tokens": 3435,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 12301,
+  "completion": 5312,
+  "total": 17613
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5169,
+   "prompt_tokens": 9009,
+   "total_tokens": 14178,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4577,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9009,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 143,
+   "prompt_tokens": 3292,
+   "total_tokens": 3435,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3106",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 24,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT PSN_NAME AS `基金经理`, REPORT_DATE AS `报告期`, ROUND(NET_VALUE / 100000000, 2) AS `在管总规模(亿)` FROM FUND_MANAGER_ASSET_ALLOCATION WHERE PSN_NAME = '刘彦春' AND REPORT_DATE = '2024-12-31' AND HISVALID = 1 AND NET_VALUE IS NOT NULL;\n200\n{table:[['基金经理', '报告期', '在管总规模(亿)'], ['刘彦春', '2024-12-31', '427.26']]}\n该查询提取了景顺长城基金经理刘彦春在2024年12月31日时所管理的全部主动型基金的合计规模。查询使用基金经理资产情况数据表，筛选出基金经理名称为刘彦春、报告期为2024年末且记录有效且规模数据不为空的条目。管理规模原数据以元为单位，查询中已将其除以1亿转化为亿元，并保留两位小数显示。此查询直接采用了公开披露的规模数据。最终输出的结果反映刘彦春在2024年末的在管总规模，查询结果符合用户关于盘子变动的追溯需求。\n{table:[['基金经理', '报告期', '在管总规模(亿)'], ['刘彦春', '2024-12-31', '427.26']]}",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": false,
+ "first_sql": "SELECT PSN_NAME AS `基金经理`, REPORT_DATE AS `报告期`, ROUND(NET_VALUE / 100000000, 2) AS `在管总规模(亿)` FROM FUND_MANAGER_ASSET_ALLOCATION WHERE PSN_NAME = '刘彦春' AND REPORT_DATE = '2024-12-31' AND HISVALID = 1 AND NET_VALUE IS NOT NULL",
+ "final_sql": "SELECT PSN_NAME AS `基金经理`, REPORT_DATE AS `报告期`, ROUND(NET_VALUE / 100000000, 2) AS `在管总规模(亿)` FROM FUND_MANAGER_ASSET_ALLOCATION WHERE PSN_NAME = '刘彦春' AND REPORT_DATE = '2024-12-31' AND HISVALID = 1 AND NET_VALUE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "42726346909.0300"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "刘彦春 2024-12-31 427.26",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 36.0,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_24_07a0f4f7.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 34.05,
+  "llm_seconds_max": 28.57,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2835,
+   "prompt_tokens": 14072,
+   "total_tokens": 16907,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2475,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14072,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 153,
+   "prompt_tokens": 7215,
+   "total_tokens": 7368,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21287,
+  "completion": 2988,
+  "total": 24275
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2835,
+   "prompt_tokens": 14072,
+   "total_tokens": 16907,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2475,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 14072,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 153,
+   "prompt_tokens": 7215,
+   "total_tokens": 7368,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

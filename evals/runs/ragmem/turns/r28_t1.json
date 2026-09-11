@@ -1,0 +1,173 @@
+{
+ "round_id": 28,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "那它们俩的市净率呢？差距也这么明显吗？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F016D, '%Y-%m-%d') AS `市净率更新日期`,\n  ROUND(c.F015N, 2) AS `市净率`,\n  CASE \n    WHEN m.COMB_SYMBOL = 'DIS.US' THEN '迪士尼'\n    WHEN m.COMB_SYMBOL = 'NFLX.US' THEN '奈飞'\n    ELSE m.CSNAME\n  END AS `公司简称`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n  AND c.F015N IS NOT NULL\n  AND c.F016D IS NOT NULL\nORDER BY c.F015N DESC;\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询获取了迪士尼和奈飞两家公司的最新市净率及其对应的更新时间。数据来源于美股公司基本信息表和主要估值指标表，通过公司代码关联，确保只比较这两家公司。筛选条件为市净率和其更新时间不能为空，确保数据有效；并只返回迪士尼和奈飞的市净率数据。结果按市净率数值从高到低排序。市净率为系统已直接提供的财务指标，单位为倍数，结果保留两位小数，没有涉及单位转换。查询结果可以直接对比两家公司最新的市净率，并据此判断两者的估值差距，完全满足用户关于市净率对比的需求。\nNo rows fetched. 查找结果为空，请检查SQL语句",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F016D, '%Y-%m-%d') AS `市净率更新日期`,\n  ROUND(c.F015N, 2) AS `市净率`,\n  CASE \n    WHEN m.COMB_SYMBOL = 'DIS.US' THEN '迪士尼'\n    WHEN m.COMB_SYMBOL = 'NFLX.US' THEN '奈飞'\n    ELSE m.CSNAME\n  END AS `公司简称`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n  AND c.F015N IS NOT NULL\n  AND c.F016D IS NOT NULL\nORDER BY c.F015N DESC",
+ "final_sql": "SELECT\n  m.CSNAME AS `股票名称`,\n  m.COMB_SYMBOL AS `股票代码`,\n  DATE_FORMAT(c.F016D, '%Y-%m-%d') AS `市净率更新日期`,\n  ROUND(c.F015N, 2) AS `市净率`,\n  CASE \n    WHEN m.COMB_SYMBOL = 'DIS.US' THEN '迪士尼'\n    WHEN m.COMB_SYMBOL = 'NFLX.US' THEN '奈飞'\n    ELSE m.CSNAME\n  END AS `公司简称`\nFROM \n  AMERICAN_STOCK_MAIN m\nJOIN \n  COM3101 c ON m.FIU_ID = c.FIU_ID\nWHERE \n  m.COMB_SYMBOL IN ('DIS.US', 'NFLX.US')\n  AND c.F015N IS NOT NULL\n  AND c.F016D IS NOT NULL\nORDER BY c.F015N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "7.024\n4.437"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 33.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_28_278aa98a.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 32.57,
+  "llm_seconds_max": 28.04,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2028,
+   "prompt_tokens": 13455,
+   "total_tokens": 15483,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1521,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13455,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 162,
+   "prompt_tokens": 7567,
+   "total_tokens": 7729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21022,
+  "completion": 2190,
+  "total": 23212
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2028,
+   "prompt_tokens": 13455,
+   "total_tokens": 15483,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1521,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13455,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 162,
+   "prompt_tokens": 7567,
+   "total_tokens": 7729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

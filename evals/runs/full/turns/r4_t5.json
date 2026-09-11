@@ -1,0 +1,172 @@
+{
+ "round_id": 4,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "长江电力2026年9月1日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT DATE_FORMAT(a.TRADEDATE, '%Y-%m-%d') AS `交易日期`, a.STOCKSNAME AS `股票名称`, c.SEC_CODE AS `股票代码`, ROUND(a.TCLOSE, 2) AS `收盘价（元）` FROM STK_MKT a JOIN GET_A_SEC_CODE c ON a.INNER_CODE = c.INNER_CODE WHERE a.ISVALID = 1 AND a.STOCKSNAME LIKE '%长江电力%' AND c.SEC_SNAME LIKE '%长江电力%' AND a.TRADEDATE = '2026-09-01' AND a.TCLOSE IS NOT NULL LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价（元）'], ['2026-09-01', '长江电力', '600900', '28.40']]}\n该查询获取了长江电力在2026年9月1日的收盘价、股票名称和代码。数据来源于股票交易行情信息与股票代码基础信息两类数据，通过内部关联保证信息准确。筛选条件限定记录为有效、股票简称为长江电力、交易日期为2026年9月1日且收盘价存在。结果仅返回一条记录以保证唯一性。收盘价直接使用当天的行情数据，金额单位为元，结果保留两位小数。该查询满足用户对特定公司特定交易日收盘价的需求，查询结果符合要求。\n{table:[['交易日期', '股票名称', '股票代码', '收盘价（元）'], ['2026-09-01', '长江电力', '600900', '28.40']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT DATE_FORMAT(a.TRADEDATE, '%Y-%m-%d') AS `交易日期`, a.STOCKSNAME AS `股票名称`, c.SEC_CODE AS `股票代码`, ROUND(a.TCLOSE, 2) AS `收盘价（元）` FROM STK_MKT a JOIN GET_A_SEC_CODE c ON a.INNER_CODE = c.INNER_CODE WHERE a.ISVALID = 1 AND a.STOCKSNAME LIKE '%长江电力%' AND c.SEC_SNAME LIKE '%长江电力%' AND a.TRADEDATE = '2026-09-01' AND a.TCLOSE IS NOT NULL LIMIT 1",
+ "final_sql": "SELECT DATE_FORMAT(a.TRADEDATE, '%Y-%m-%d') AS `交易日期`, a.STOCKSNAME AS `股票名称`, c.SEC_CODE AS `股票代码`, ROUND(a.TCLOSE, 2) AS `收盘价（元）` FROM STK_MKT a JOIN GET_A_SEC_CODE c ON a.INNER_CODE = c.INNER_CODE WHERE a.ISVALID = 1 AND a.STOCKSNAME LIKE '%长江电力%' AND c.SEC_SNAME LIKE '%长江电力%' AND a.TRADEDATE = '2026-09-01' AND a.TCLOSE IS NOT NULL LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "28.4000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-01 长江电力 600900 28.40",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 26.7,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_4_478a3655.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 25.86,
+  "llm_seconds_max": 20.26,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2031,
+   "prompt_tokens": 18022,
+   "total_tokens": 20053,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1602,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18022,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 138,
+   "prompt_tokens": 11078,
+   "total_tokens": 11216,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29100,
+  "completion": 2169,
+  "total": 31269
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2031,
+   "prompt_tokens": 18022,
+   "total_tokens": 20053,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1602,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18022,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 138,
+   "prompt_tokens": 11078,
+   "total_tokens": 11216,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

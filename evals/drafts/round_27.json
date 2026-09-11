@@ -1,0 +1,125 @@
+{
+ "round_id": 27,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "initial": {
+  "question": "我在看沃尔玛的年报，它最新一个财年全年的营业收入是多少？",
+  "judge": "numeric",
+  "gold_value": "926942.0",
+  "gold_display": "926942百万美元（约9269.42亿美元，2025财年，财年截止2025-12-31）",
+  "gold_entities": [
+   "沃尔玛"
+  ],
+  "gold_date": "2025-12-31",
+  "gold_sql": "SELECT F048N AS revenue FROM COM3103 WHERE FIU_ID='00000015' AND F003V='FY' ORDER BY F001D DESC LIMIT 1",
+  "gold_tables": [
+   "COM3103"
+  ],
+  "labels": {
+   "difficulty": "单表",
+   "followup_type": null,
+   "route_gold": null,
+   "time_sensitivity": "relative"
+  }
+ },
+ "feedbacks": [
+  {
+   "question": "这个财年它最终落到净利润有多少？",
+   "judge": "numeric",
+   "gold_value": "30504.0",
+   "gold_display": "30504百万美元（约305.04亿美元，2025财年）",
+   "gold_entities": [
+    "沃尔玛"
+   ],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT F032N AS net_profit FROM COM3103 WHERE FIU_ID='00000015' AND F003V='FY' AND F001D='2025-12-31'",
+   "gold_tables": [
+    "COM3103"
+   ],
+   "labels": {
+    "difficulty": "单表",
+    "followup_type": "指代继承",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "把同一财年年末的资产负债表也拉进来一起看：净利润对应期末总资产的回报率（ROA）大概多少？",
+   "judge": "numeric",
+   "gold_value": "2.07",
+   "gold_display": "约2.07%（2025财年净利润30504百万美元 ÷ 期末总资产1470720百万美元）",
+   "gold_entities": [
+    "沃尔玛"
+   ],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT ROUND(100 * i.F032N / b.F008N, 2) AS roa_pct FROM COM3103 i JOIN COM3102 b ON i.FIU_ID = b.FIU_ID AND i.F001D = b.F001D AND b.F003V = 'FY' WHERE i.FIU_ID = '00000015' AND i.F003V = 'FY' AND i.F001D = '2025-12-31'",
+   "gold_tables": [
+    "COM3103",
+    "COM3102"
+   ],
+   "labels": {
+    "difficulty": "多表join",
+    "followup_type": "条件追加",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+   "judge": "numeric",
+   "gold_value": "8919.7",
+   "gold_display": "8919.7百万美元（约89.20亿美元；2025财年为-4289.2百万美元，同比由正转负、明显恶化）",
+   "gold_entities": [
+    "沃尔玛"
+   ],
+   "gold_date": "2024-12-31",
+   "gold_sql": "SELECT ROUND(F036N - F008N, 1) AS fcf FROM COM3104 WHERE FIU_ID = '00000015' AND F003V = 'FY' AND F001D = '2024-12-31'",
+   "gold_tables": [
+    "COM3104"
+   ],
+   "labels": {
+    "difficulty": "时间窗口",
+    "followup_type": "时间漂移",
+    "route_gold": "SQL_GENERATION",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "行，大致有数了。顺便确认一下：这些美股报表都是美元列报的吧？用的是审计后的年报口径吗？",
+   "judge": "nonquery",
+   "gold_value": null,
+   "gold_display": null,
+   "gold_entities": [],
+   "gold_date": null,
+   "gold_sql": null,
+   "gold_tables": [],
+   "labels": {
+    "difficulty": null,
+    "followup_type": "非查询",
+    "route_gold": "NON_QUERY",
+    "time_sensitivity": "absolute"
+   }
+  },
+  {
+   "question": "换家公司看看：可口可乐最新一份年报期末的总资产是多少？",
+   "judge": "numeric",
+   "gold_value": "148431.0",
+   "gold_display": "148431百万美元（约1484.31亿美元，2025财年末）",
+   "gold_entities": [
+    "可口可乐"
+   ],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT F008N AS total_assets FROM COM3102 WHERE FIU_ID = '00000018' AND F003V = 'FY' ORDER BY F001D DESC LIMIT 1",
+   "gold_tables": [
+    "COM3102"
+   ],
+   "labels": {
+   "difficulty": "单表",
+   "followup_type": "话题切换",
+   "route_gold": "NEW_QUERY",
+   "time_sensitivity": "relative"
+  }
+ }
+ ]
+}

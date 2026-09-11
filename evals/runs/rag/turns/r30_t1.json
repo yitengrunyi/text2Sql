@@ -1,0 +1,166 @@
+{
+ "round_id": 30,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·中概股名单与市值/市盈率排名及今年以来、近一年阶段收益，话题切换至迪士尼股息率",
+ "question": "换成按市盈率从低到高排呢？前三名是哪几家？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n市盈率（PE，Price to Earnings Ratio）\n\n[2] 可能的计算公式  \n市盈率 = 每股市价 ÷ 每股净利润（PE = Price per Share ÷ Earnings per Share）  \n或者总市值 ÷ 净利润（PE = Market Capitalization ÷ Net Profit）\n\n根据用户的query，实际操作为：  \n- 获取全部公司的市盈率数据  \n- 按市盈率从低到高排序  \n- 输出市盈率最低的前三家公司\n['市盈率', 'PE', 'Price to Earnings Ratio', '每股市价', '每股净利润', 'Price per Share', 'Earnings per Share', '总市值', 'Market Capitalization', '净利润', 'Net Profit']\n该问题可能涉及到申万一级行业，一级行业名称为\"农林牧渔\"，即SW_INDU_CODE_2021_1 LIKE \"%农林牧渔%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%农林牧渔%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"基础化工\"，即SW_INDU_CODE_2021_1 LIKE \"%基础化工%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%基础化工%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"钢铁\"，即SW_INDU_CODE_2021_1 LIKE \"%钢铁%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%钢铁%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"有色金属\"，即SW_INDU_CODE_2021_1 LIKE \"%有色金属%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%有色金属%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"电子\"，即SW_INDU_CODE_2021_1 LIKE \"%电子%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%电子%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"汽车\"，即SW_INDU_CODE_2021_1 LIKE \"%汽车%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%汽车%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"家用电器\"，即SW_INDU_CODE_2021_1 LIKE \"%家用电器%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%家用电器%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"食品饮料\"，即SW_INDU_CODE_2021_1 LIKE \"%食品饮料%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%食品饮料%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"纺织服饰\"，即SW_INDU_CODE_2021_1 LIKE \"%纺织服饰%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%纺织服饰%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"轻工制造\"，即SW_INDU_CODE_2021_1 LIKE \"%轻工制造%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%轻工制造%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"公用事业\"，即SW_INDU_CODE_2021_1 LIKE \"%公用事业%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_C",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.TRD_DATE AS `交易日期`,\n    a.SEC_SNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.PE, 2) AS `市盈率(PE,倍)`,\n    ROUND(a.TCAP_1 / 100000000, 1) AS `总市值(亿)`,\n    b.LIST_DATE AS `上市日期`\nFROM \n    ANA_STK_VAL_IDX a\nJOIN \n    GET_A_SEC_CODE b \n    ON a.INNER_CODE = b.INNER_CODE AND b.ISVALID=1\nWHERE\n    a.TRD_DATE = '2026-09-02'\n    AND a.ISVALID = 1\n    AND a.PE IS NOT NULL \n    AND a.PE > 0\nORDER BY \n    a.PE ASC\nLIMIT 3",
+ "final_sql": "SELECT\n    a.TRD_DATE AS `交易日期`,\n    a.SEC_SNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.PE, 2) AS `市盈率(PE,倍)`,\n    ROUND(a.TCAP_1 / 100000000, 1) AS `总市值(亿)`,\n    b.LIST_DATE AS `上市日期`\nFROM \n    ANA_STK_VAL_IDX a\nJOIN \n    GET_A_SEC_CODE b \n    ON a.INNER_CODE = b.INNER_CODE AND b.ISVALID=1\nWHERE\n    a.TRD_DATE = '2026-09-02'\n    AND a.ISVALID = 1\n    AND a.PE IS NOT NULL \n    AND a.PE > 0\nORDER BY \n    a.PE ASC\nLIMIT 3",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "京东-W JD 9.35\n百度-W BIDU 10.44\n理想汽车-W LI 14.4"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.ANA_STK_VAL_IDX' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 53.6,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_30_02da0411.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 58.77,
+  "llm_seconds_max": 7.5,
+  "selected_tables": [
+   "ANA_STK_VAL_IDX",
+   "STK_COM_PROFILE",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   40569
+  ],
+  "prompt_columns_raw_len": 22625
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1492,
+   "prompt_tokens": 59645,
+   "total_tokens": 61137,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 59645,
+  "completion": 1492,
+  "total": 61137
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1492,
+   "prompt_tokens": 59645,
+   "total_tokens": 61137,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN",
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_VAL_IDX",
+   "STK_COM_PROFILE",
+   "GET_A_INDICS_LATEST",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

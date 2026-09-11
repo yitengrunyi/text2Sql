@@ -1,0 +1,156 @@
+{
+ "round_id": 23,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·持仓明细——大成高新技术产业股票A二季报前十大重仓股与占比、环比换仓变化、全市场基金最重仓个股",
+ "question": "换个角度，2026年二季报全市场公募基金持有市值最大的个股是哪只？一共被多少只基金持有？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 公募基金持有市值（Market Value Held by Public Funds）\n- 持股基金数量（Number of Holding Funds）\n\n[2] 可能的计算公式：\n\n- 公募基金持有市值（某股票） = ∑（每只基金持有该股票的股数 × 该股票二季报时点的收盘价）\n- 持股基金数量（某股票） = 统计持有该股票且持仓不为0的基金个数\n['公募基金持有市值', 'Market Value Held by Public Funds', '持股基金数量', 'Number of Holding Funds', '基金', '股票', '二季报收盘价', '收盘价', '市值', '持仓数量', '持仓', '持有市值']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['大基金持股']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '大基金持股'。\n基金相关\n['基金产品持仓', '股票标签']\n['FUND_INDUSTRY_HOLDING_MV_HY', 'FUND_TRACK_HOLDING', 'SECU_LABEL_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    s.REPORT_DATE AS `报告期`,\n    s.COMB_SYMBOL AS `股票代码`,\n    s.SEC_NAME AS `股票名称`,\n    ROUND(s.MARKET_VALUE / 100000000, 1) AS `基金持有市值(亿)`,\n    s.FUND_NUM AS `持有基金数`\nFROM (\n    SELECT\n        SH.REPORT_DATE,\n        SH.SEC_HCODE,\n        SH.COMB_SYMBOL,\n        SH.SEC_NAME,\n        SUM(SH.MARKET_VALUE) AS MARKET_VALUE,\n        COUNT(DISTINCT SH.FUND_HCODE) AS FUND_NUM\n    FROM (\n        SELECT \n            H.REPORT_DATE,\n            H.LABEL_NAME,\n            L.SEC_HCODE,\n            L.COMB_SYMBOL,\n            L.SEC_NAME,\n            H.MARKET_VALUE,\n            H.FUND_HCODE\n        FROM FUND_STOCK_HOLDING_Q H\n        INNER JOIN SECU_LABEL_INFO L\n            ON H.SEC_HCODE = L.SEC_HCODE\n        WHERE \n            H.REPORT_DATE = '2026-06-30'\n            AND H.HISVALID = 1\n            AND L.HISVALID = 1\n            AND (L.END_DATE IS NULL OR L.END_DATE > '2026-06-30')\n    ) SH\n    GROUP BY SH.REPORT_DATE, SH.SEC_HCODE, SH.COMB_SYMBOL, SH.SEC_NAME\n) s\nORDER BY s.MARKET_VALUE DESC\nLIMIT 1\n200\nMySQL Database error: (1146, \"Table 'FUND_INFO.FUND_STOCK_HOLDING_Q' doesn't exist\")\n该查询的目的是找出2026年二季度公募基金持有市值最大的个股，以及这一只股票被多少只基金持有。\n\n在计算过程中，公募基金持有市值通过所有基金对该股票的持股市值进行求和，持有基金数量是统计持有该股票的不同基金数量。市值计算公式为：持有市值等于所有基金对该股票的持股市值之和。基金数量计算公式为：持有基金数等于持有该股票的不同基金的数量。最终把总市值转换为亿元单位，并保留一位小数。查询结果符合要求。\n\n查询从两张表中获取数据，一张用于记录基金持仓明细信息，另一张用于管理和补充股票标签及基本信息。两张表通过证券内部代码进行关联。筛选出报告期为2026年6月30日且记录有效、截止日适用于该报告期的持仓明细。之后按股票分组，汇总每只股票的总市值及被多少只基金持有。最后按总市值从高到低排序，",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    s.REPORT_DATE AS `报告期`,\n    s.COMB_SYMBOL AS `股票代码`,\n    s.SEC_NAME AS `股票名称`,\n    ROUND(s.MARKET_VALUE / 100000000, 1) AS `基金持有市值(亿)`,\n    s.FUND_NUM AS `持有基金数`\nFROM (\n    SELECT\n        SH.REPORT_DATE,\n        SH.SEC_HCODE,\n        SH.COMB_SYMBOL,\n        SH.SEC_NAME,\n        SUM(SH.MARKET_VALUE) AS MARKET_VALUE,\n        COUNT(DISTINCT SH.FUND_HCODE) AS FUND_NUM\n    FROM (\n        SELECT \n            H.REPORT_DATE,\n            H.LABEL_NAME,\n            L.SEC_HCODE,\n            L.COMB_SYMBOL,\n            L.SEC_NAME,\n            H.MARKET_VALUE,\n            H.FUND_HCODE\n        FROM FUND_STOCK_HOLDING_Q H\n        INNER JOIN SECU_LABEL_INFO L\n            ON H.SEC_HCODE = L.SEC_HCODE\n        WHERE \n            H.REPORT_DATE = '2026-06-30'\n            AND H.HISVALID = 1\n            AND L.HISVALID = 1\n            AND (L.END_DATE IS NULL OR L.END_DATE > '2026-06-30')\n    ) SH\n    GROUP BY SH.REPORT_DATE, SH.SEC_HCODE, SH.COMB_SYMBOL, SH.SEC_NAME\n) s\nORDER BY s.MARKET_VALUE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    s.REPORT_DATE AS `报告期`,\n    s.COMB_SYMBOL AS `股票代码`,\n    s.SEC_NAME AS `股票名称`,\n    ROUND(s.MARKET_VALUE / 100000000, 1) AS `基金持有市值(亿)`,\n    s.FUND_NUM AS `持有基金数`\nFROM (\n    SELECT\n        SH.REPORT_DATE,\n        SH.SEC_HCODE,\n        SH.COMB_SYMBOL,\n        SH.SEC_NAME,\n        SUM(SH.MARKET_VALUE) AS MARKET_VALUE,\n        COUNT(DISTINCT SH.FUND_HCODE) AS FUND_NUM\n    FROM (\n        SELECT \n            H.REPORT_DATE,\n            H.LABEL_NAME,\n            L.SEC_HCODE,\n            L.COMB_SYMBOL,\n            L.SEC_NAME,\n            H.MARKET_VALUE,\n            H.FUND_HCODE\n        FROM FUND_STOCK_HOLDING_Q H\n        INNER JOIN SECU_LABEL_INFO L\n            ON H.SEC_HCODE = L.SEC_HCODE\n        WHERE \n            H.REPORT_DATE = '2026-06-30'\n            AND H.HISVALID = 1\n            AND L.HISVALID = 1\n            AND (L.END_DATE IS NULL OR L.END_DATE > '2026-06-30')\n    ) SH\n    GROUP BY SH.REPORT_DATE, SH.SEC_HCODE, SH.COMB_SYMBOL, SH.SEC_NAME\n) s\nORDER BY s.MARKET_VALUE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "中际旭创 258826608330.0000 2636"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'FUND_INFO.FUND_STOCK_HOLDING_Q' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False})"
+ ],
+ "elapsed_seconds": 59.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_23_edf44159.4",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 63.05,
+  "llm_seconds_max": 9.15,
+  "selected_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "STOCK_HOLD_STATISTICS_HY"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "LABEL_INFO",
+   "SECU_LABEL_INFO",
+   "STOCK_HOLD_STATISTICS_HY",
+   "CT_TRACK_DEFINE",
+   "STOCK_FACTOR_VALUE",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   15276
+  ],
+  "prompt_columns_raw_len": 5643
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1798,
+   "prompt_tokens": 27682,
+   "total_tokens": 29480,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27682,
+  "completion": 1798,
+  "total": 29480
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1798,
+   "prompt_tokens": 27682,
+   "total_tokens": 29480,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STOCK_HOLD_STATISTICS_Q"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_PORTFOLIO_DETAIL",
+   "STOCK_HOLD_STATISTICS_HY"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

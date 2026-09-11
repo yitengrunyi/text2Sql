@@ -1,0 +1,173 @@
+{
+ "round_id": 15,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "它现在的总市值有多大？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT p.EDATE AS `截止日期`, c.COMCNNAME AS `公司中文名称`, c.COMCNABB AS `公司中文简称`, CONCAT(s.STKCODE, '.HK') AS `股票代码`, s.STKABB AS `股票简称`, ROUND(p.TMKCAP / 100000000, 1) AS `总市值(亿)` FROM HK_IDC_STKPFMIDC p INNER JOIN HK_STKCODE s ON p.STKUNICODE = s.STKUNICODE AND s.ISVALID = 1 AND s.LSSTUREFC = 1 AND s.TRMKREFC = 7 AND (s.STKTYREFC = 1 OR s.STKTYREFC = 6) AND LEFT(s.STKCODE, 1) != '8' INNER JOIN HK_COMBINFO c ON s.COMUNIC = c.COMUNIC AND c.ISVALID = 1 INNER JOIN VIEW_HK_INDUSTRY_TRACK t ON s.STKUNICODE = t.STKUNICODE WHERE p.EDATE = '2026-09-02' AND p.ISVALID = 1 AND t.SW_INDU_CODE_2021_1 = '非银金融' AND c.COMCNABB LIKE '%香港交易所%' AND p.TMKCAP IS NOT NULL ORDER BY p.EDATE DESC LIMIT 1;\n200\n{table:[['截止日期', '公司中文名称', '公司中文简称', '股票代码', '股票简称', '总市值(亿)'], ['2026-09-02', '香港交易及结算所有限公司', '香港交易所', '00388.HK', '香港交易所', '5,127.10']]}\n该查询获取了香港交易所公司在2026年9月2日的最新总市值、公司名称、股票代码等基础信息。数据来自港股公司基础信息表、港股日常市场表现表和申万行业赛道划分表，通过公司名称筛选“香港交易所”，并限定行业为“非银金融”。其他筛选条件确保股票为正在香港主板正常上市的普通股且数据有效。结果按时间降序，仅显示最近一个交易日的数据。总市值的计算采用了已有的市场指标数据，将原始金额单位由元转换为亿元（数值除以1亿），并保留1位小数。查询结果可直接满足用户对于“现在总市值有多大”的需求。\n{table:[['截止日期', '公司中文名称', '公司中文简称', '股票代码', '股票简称', '总市值(亿)'], ['2026-09-02', '香港交易及结算所有限公司', '香港交易所', '00388.HK', '香港交易所', '5,127.10']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT p.EDATE AS `截止日期`, c.COMCNNAME AS `公司中文名称`, c.COMCNABB AS `公司中文简称`, CONCAT(s.STKCODE, '.HK') AS `股票代码`, s.STKABB AS `股票简称`, ROUND(p.TMKCAP / 100000000, 1) AS `总市值(亿)` FROM HK_IDC_STKPFMIDC p INNER JOIN HK_STKCODE s ON p.STKUNICODE = s.STKUNICODE AND s.ISVALID = 1 AND s.LSSTUREFC = 1 AND s.TRMKREFC = 7 AND (s.STKTYREFC = 1 OR s.STKTYREFC = 6) AND LEFT(s.STKCODE, 1) != '8' INNER JOIN HK_COMBINFO c ON s.COMUNIC = c.COMUNIC AND c.ISVALID = 1 INNER JOIN VIEW_HK_INDUSTRY_TRACK t ON s.STKUNICODE = t.STKUNICODE WHERE p.EDATE = '2026-09-02' AND p.ISVALID = 1 AND t.SW_INDU_CODE_2021_1 = '非银金融' AND c.COMCNABB LIKE '%香港交易所%' AND p.TMKCAP IS NOT NULL ORDER BY p.EDATE DESC LIMIT 1",
+ "final_sql": "SELECT p.EDATE AS `截止日期`, c.COMCNNAME AS `公司中文名称`, c.COMCNABB AS `公司中文简称`, CONCAT(s.STKCODE, '.HK') AS `股票代码`, s.STKABB AS `股票简称`, ROUND(p.TMKCAP / 100000000, 1) AS `总市值(亿)` FROM HK_IDC_STKPFMIDC p INNER JOIN HK_STKCODE s ON p.STKUNICODE = s.STKUNICODE AND s.ISVALID = 1 AND s.LSSTUREFC = 1 AND s.TRMKREFC = 7 AND (s.STKTYREFC = 1 OR s.STKTYREFC = 6) AND LEFT(s.STKCODE, 1) != '8' INNER JOIN HK_COMBINFO c ON s.COMUNIC = c.COMUNIC AND c.ISVALID = 1 INNER JOIN VIEW_HK_INDUSTRY_TRACK t ON s.STKUNICODE = t.STKUNICODE WHERE p.EDATE = '2026-09-02' AND p.ISVALID = 1 AND t.SW_INDU_CODE_2021_1 = '非银金融' AND c.COMCNABB LIKE '%香港交易所%' AND p.TMKCAP IS NOT NULL ORDER BY p.EDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "512713240338.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 香港交易及结算所有限公司 香港交易所 00388.HK 香港交易所 5127.1",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 41.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_15_36887193.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 41.06,
+  "llm_seconds_max": 34.68,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2790,
+   "prompt_tokens": 16950,
+   "total_tokens": 19740,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2220,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16950,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 165,
+   "prompt_tokens": 10370,
+   "total_tokens": 10535,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 27320,
+  "completion": 2955,
+  "total": 30275
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2790,
+   "prompt_tokens": 16950,
+   "total_tokens": 19740,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2220,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16950,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 165,
+   "prompt_tokens": 10370,
+   "total_tokens": 10535,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_IDC_STKPFMIDC",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,153 @@
+{
+ "round_id": 20,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "同样的时间区间，中证银行指数表现怎么样？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 区间收益率（Return over the period）\n- 累计收益率（Cumulative Return）\n- 年化收益率（Annualized Return）\n\n[2] 可能的计算公式：  \n- 区间收益率 = (期末指数点位 - 期初指数点位) / 期初指数点位 × 100%\n- 累计收益率 = (期末净值/期初净值) − 1\n- 年化收益率 = [(期末指数点位/期初指数点位)^(1/年数)] − 1\n\n其中关键主体为“中证银行指数”。\n['中证银行指数', '区间收益率', '累计收益率', '年化收益率', 'Return over the period', 'Cumulative Return', 'Annualized Return', '期末指数点位', '期初指数点位', '期末净值', '期初净值', '年数']\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及的题材包含：['银行']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '银行'。\n指数相关\n['境内指数']\n['INDX_TCLOSE_WEIGHT', 'INDX_SAMP_INFO', 'ANA_INDX_VAL_IDX', 'ANA_STK_EXPR_IDX', 'VIEW_STK_FIN_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRD_DATE AS `日期`,\n    INDX_CODE AS `指数代码`,\n    INDX_CNAME AS `指数名称`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(EPS, 3) AS `每股收益(元)`,\n    ROUND(SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM \n    ANA_INDX_VAL_IDX\nWHERE \n    INDX_CNAME LIKE '%中证银行%'\n    AND TRD_DATE >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n    AND TRD_DATE <= '2026-09-02'\n    AND ISVALID = 1\nORDER BY TRD_DATE ASC\n200\n{table:[['日期', '指数名称', '市盈率(倍)', '市净率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2025-09-02', '中证银行保险主题指数', '6.98', '0.65', '1.21', '175,077.70', '127,380.40'], ['2025-09-02', '中证银行指数', '6.79', '0.59', '1.09', '146,101.40', '105,364.10'], ['2025-09-02', '中证银行AH价格优选指数(人民币)', '6.49', '0.60', '2.19', '37,054.40', '34,788.60'], ['2025-09-02', '中证银行AH价格优选指数(港币)', '6.49', '0.60', '2.19', '37,054.40', '34,788.60'], ['2025-09-03', '中证银行保险主题指数', '6.90', '0.64', '1.21', '172,849.10', '125,610.20'], ['2025-09-03', '中证银行指数', '6.71', '0.58', '1.09', '144,496.90', '104,169.30'], ['2025-09-03', '中证银行AH价格优选指数(人民币)', '6.41', '0.60', '2.19', '36,629.60', '34,382.50'], ['2025-09-03', '中证银行AH价格优选指数(港币)', '6.41', '0.60', '2.19', '36,629.60', '34,382.50'], ['2025-09-04', '中证银行保险主题指数', '6.97', '0.64', '",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    TRD_DATE AS `日期`,\n    INDX_CODE AS `指数代码`,\n    INDX_CNAME AS `指数名称`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(EPS, 3) AS `每股收益(元)`,\n    ROUND(SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM \n    ANA_INDX_VAL_IDX\nWHERE \n    INDX_CNAME LIKE '%中证银行%'\n    AND TRD_DATE >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n    AND TRD_DATE <= '2026-09-02'\n    AND ISVALID = 1\nORDER BY TRD_DATE ASC",
+ "final_sql": "SELECT \n    TRD_DATE AS `日期`,\n    INDX_CODE AS `指数代码`,\n    INDX_CNAME AS `指数名称`,\n    ROUND(PE, 2) AS `市盈率(倍)`,\n    ROUND(PB, 2) AS `市净率(倍)`,\n    ROUND(EPS, 3) AS `每股收益(元)`,\n    ROUND(SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM \n    ANA_INDX_VAL_IDX\nWHERE \n    INDX_CNAME LIKE '%中证银行%'\n    AND TRD_DATE >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n    AND TRD_DATE <= '2026-09-02'\n    AND ISVALID = 1\nORDER BY TRD_DATE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-0.49"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 972
+ },
+ "first_result_preview": "2025-09-02 00:00:00 931944 中证银行保险主题指数 6.98 0.65 1.206 175077.7 127380.4\n2025-09-02 00:00:00 399986 中证银行指数 6.79 0.59 1.090 146101.4 105364.1\n2025-09-02 00:00:00 931039 中证银行AH价格优选指数(人民币) 6.49 0.60 2.192",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 972
+ },
+ "ex_final": true,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 129.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_20_adbc553e.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 61.01,
+  "llm_seconds_max": 10.85,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   31426
+  ],
+  "prompt_columns_raw_len": 6336
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1107,
+   "prompt_tokens": 33211,
+   "total_tokens": 34318,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33211,
+  "completion": 1107,
+  "total": 34318
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1107,
+   "prompt_tokens": 33211,
+   "total_tokens": 34318,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_INDX_GEN_INFO",
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

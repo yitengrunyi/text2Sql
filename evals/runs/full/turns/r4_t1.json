@@ -1,0 +1,172 @@
+{
+ "round_id": 4,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "创业板指同一天的收盘点位是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    m.TRADEDATE AS `交易日期`, \n    m.INDX_SNAME AS `指数名称`, \n    m.SECCODE AS `指数代码`, \n    ROUND(m.TOPEN, 2) AS `开盘价`, \n    ROUND(m.THIGH, 2) AS `最高价`, \n    ROUND(m.TLOW, 2) AS `最低价`, \n    ROUND(m.TCLOSE, 2) AS `收盘价`, \n    ROUND(m.LCLOSE, 2) AS `昨收`, \n    ROUND(m.CHNG, 2) AS `涨跌额`, \n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`, \n    ROUND(m.TVALUE/100000000, 2) AS `成交额(亿)`, \n    ROUND(m.TVOLUME, 0) AS `成交量`, \n    m.DEAL AS `成交笔数`\nFROM \n    INDX_MKT m\nWHERE \n    m.SECCODE = '399006'\n    AND m.TRADEDATE = '2026-08-31'\n    AND m.ISVALID = 1;\n200\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '最高价', '最低价', '收盘价', '昨收', '涨跌额', '涨跌幅(%)', '成交额(亿)', '成交量', '成交笔数'], ['2026-08-31', '创业板指', '399006', '3,367.04', '3,438.68', '3,359.14', '3,438.68', '3,424.40', '14.28', '0.42', '2,239.45', '3,549,755,334.00', '7,584,392.00']]}\n该查询获取了2026年8月31日创业板指的行情信息，包括该日的开盘价、最高价、最低价、收盘价、昨日收盘价、涨跌数值、涨跌幅百分比、成交金额、成交量和成交笔数。数据来源为指数行情数据表，筛选条件为指数代码为创业板指（399006），交易日期为2026年8月31日，且仅包含有效记录。所有价格保留两位小数，成交金额单位由元转换为亿元并保留两位小数，成交量为原始数量，涨跌幅为百分比，成交笔数为原始数值。本查询直接使用了已有的行情数据指标，能够满足用户关于创业板指在指定日期收盘点位及相关行情的查询需求。查询结果符合要求。\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '最高价', '最低价', '收盘价', '昨收', '涨跌额', '涨跌幅(%)', '成交额(亿)', '成交量', '成交笔数'], ['2026-08-31', '创业板指', '399006', '3,367.04', '3,438.68', '3,359.14', '3,438.68', '3,424.40', '14.28', '0.42', '2,239.45', '3,549,755,334.00', '7,584,392.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    m.TRADEDATE AS `交易日期`, \n    m.INDX_SNAME AS `指数名称`, \n    m.SECCODE AS `指数代码`, \n    ROUND(m.TOPEN, 2) AS `开盘价`, \n    ROUND(m.THIGH, 2) AS `最高价`, \n    ROUND(m.TLOW, 2) AS `最低价`, \n    ROUND(m.TCLOSE, 2) AS `收盘价`, \n    ROUND(m.LCLOSE, 2) AS `昨收`, \n    ROUND(m.CHNG, 2) AS `涨跌额`, \n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`, \n    ROUND(m.TVALUE/100000000, 2) AS `成交额(亿)`, \n    ROUND(m.TVOLUME, 0) AS `成交量`, \n    m.DEAL AS `成交笔数`\nFROM \n    INDX_MKT m\nWHERE \n    m.SECCODE = '399006'\n    AND m.TRADEDATE = '2026-08-31'\n    AND m.ISVALID = 1",
+ "final_sql": "SELECT \n    m.TRADEDATE AS `交易日期`, \n    m.INDX_SNAME AS `指数名称`, \n    m.SECCODE AS `指数代码`, \n    ROUND(m.TOPEN, 2) AS `开盘价`, \n    ROUND(m.THIGH, 2) AS `最高价`, \n    ROUND(m.TLOW, 2) AS `最低价`, \n    ROUND(m.TCLOSE, 2) AS `收盘价`, \n    ROUND(m.LCLOSE, 2) AS `昨收`, \n    ROUND(m.CHNG, 2) AS `涨跌额`, \n    ROUND(m.CHNG_PCT, 2) AS `涨跌幅(%)`, \n    ROUND(m.TVALUE/100000000, 2) AS `成交额(亿)`, \n    ROUND(m.TVOLUME, 0) AS `成交量`, \n    m.DEAL AS `成交笔数`\nFROM \n    INDX_MKT m\nWHERE \n    m.SECCODE = '399006'\n    AND m.TRADEDATE = '2026-08-31'\n    AND m.ISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "3438.6810"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 创业板指 399006 3367.04 3438.68 3359.14 3438.68 3424.40 14.28 0.42 2239.45 3549755334 7584392",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 79.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_4_478a3655.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 32.45,
+  "llm_seconds_max": 26.85,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2257,
+   "prompt_tokens": 12486,
+   "total_tokens": 14743,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1711,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12486,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 185,
+   "prompt_tokens": 4762,
+   "total_tokens": 4947,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17248,
+  "completion": 2442,
+  "total": 19690
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2257,
+   "prompt_tokens": 12486,
+   "total_tokens": 14743,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1711,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12486,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 185,
+   "prompt_tokens": 4762,
+   "total_tokens": 4947,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

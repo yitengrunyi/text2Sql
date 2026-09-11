@@ -1,0 +1,152 @@
+{
+ "round_id": 18,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE，Price to Earnings Ratio）\n\n[2] 可能的计算公式：  \n市盈率 = 总市值 ÷ 总净利润  \n或  \n市盈率 = 指数点位 ÷ 每股收益（整体法，使用成分股加权平均后数据）\n\n**备注：**  \n- 需要用到中证1000指数所有成分股的最新市值与净利润数据（或整体PE由指数公司公告）。  \n- 实际查询时通常直接引用中证指数公司公布的“整体法市盈率”。\n['中证1000指数', '市盈率', 'PE', 'Price to Earnings Ratio', '总市值', '总净利润', '指数点位', '每股收益', '整体法', '成分股', '加权平均', '整体PE', '指数公司', '中证指数公司', '整体法市盈率']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_SAMP_INFO', 'VIEW_STK_FIN_IDX', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ai.TRD_DATE AS `交易日期`,\n    gi.INDX_CNAME AS `指数名称`,\n    gi.INDX_CODE AS `指数代码`,\n    ROUND(ai.PE, 2) AS `市盈率(倍)`,\n    ROUND(ai.PB, 2) AS `市净率(倍)`,\n    ROUND(ai.EPS, 3) AS `每股收益(元)`,\n    ROUND(ai.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(ai.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX ai\nINNER JOIN GET_INDX_GEN_INFO gi \n    ON ai.INNER_CODE = gi.INNER_CODE\nWHERE ai.INDX_CODE = '000852'\n  AND ai.TRD_DATE = '2026-09-02'\n  AND gi.USE_STATUS = '使用'\n  AND gi.ISVALID = 1\n  AND ai.ISVALID = 1\n  AND ai.PE IS NOT NULL\n  AND gi.INDX_CNAME LIKE '%中证1000%'\nORDER BY ai.TRD_DATE DESC\nLIMIT 1\n200\n{table:[['交易日期', '指数名称', '市盈率(倍)', '市净率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2026-09-02', '中证1000指数', '43.09', '2.32', '0.31', '145,904.00', '130,275.70']]}\n市盈率的计算方式是用总市值除以连续四个季度的净利润总和。公式为：市盈率 = 总市值 / （连续四个季度净利润之和）。每股收益通过将成份股的连续四个季度净利润之和除以最新总股本得到。市净率为总市值除以最新净资产。总市值和流通市值均以亿元为单位展示，分别通过将其各自数值除以一亿得到。市盈率、每股收益和市净率均对原始数值进行了四舍五入处理。查询结果符合要求。\n\n本次查询从指数估值数据表和指数基本信息表提取数据，两者通过指数内部代码关联。查询选择了交易日期、指数名称、指数代码、市盈率、市净率、每股收益、总市值和流通市值等信息。数据筛选仅保留指数代码为“000852”、指数名称包含“中证1000”、报表使用状态为“使用”、且有效标记均为有效的记录，并限制市盈率不可为空，且只取“2026-09-02”这一天的数据。数据按交易日期倒序排列，并限制只返回一条最新数据。因此，查询返回了中证1000指数在指定日期的主要估值数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ai.TRD_DATE AS `交易日期`,\n    gi.INDX_CNAME AS `指数名称`,\n    gi.INDX_CODE AS `指数代码`,\n    ROUND(ai.PE, 2) AS `市盈率(倍)`,\n    ROUND(ai.PB, 2) AS `市净率(倍)`,\n    ROUND(ai.EPS, 3) AS `每股收益(元)`,\n    ROUND(ai.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(ai.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX ai\nINNER JOIN GET_INDX_GEN_INFO gi \n    ON ai.INNER_CODE = gi.INNER_CODE\nWHERE ai.INDX_CODE = '000852'\n  AND ai.TRD_DATE = '2026-09-02'\n  AND gi.USE_STATUS = '使用'\n  AND gi.ISVALID = 1\n  AND ai.ISVALID = 1\n  AND ai.PE IS NOT NULL\n  AND gi.INDX_CNAME LIKE '%中证1000%'\nORDER BY ai.TRD_DATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    ai.TRD_DATE AS `交易日期`,\n    gi.INDX_CNAME AS `指数名称`,\n    gi.INDX_CODE AS `指数代码`,\n    ROUND(ai.PE, 2) AS `市盈率(倍)`,\n    ROUND(ai.PB, 2) AS `市净率(倍)`,\n    ROUND(ai.EPS, 3) AS `每股收益(元)`,\n    ROUND(ai.SUM_TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(ai.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)`\nFROM ANA_INDX_VAL_IDX ai\nINNER JOIN GET_INDX_GEN_INFO gi \n    ON ai.INNER_CODE = gi.INNER_CODE\nWHERE ai.INDX_CODE = '000852'\n  AND ai.TRD_DATE = '2026-09-02'\n  AND gi.USE_STATUS = '使用'\n  AND gi.ISVALID = 1\n  AND ai.ISVALID = 1\n  AND ai.PE IS NOT NULL\n  AND gi.INDX_CNAME LIKE '%中证1000%'\nORDER BY ai.TRD_DATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43.0869"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中证1000指数 000852 43.09 2.32 0.310 145904.0 130275.7",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 52.2,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_18_af5b8ece.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 49.6,
+  "llm_seconds_max": 8.83,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   30677
+  ],
+  "prompt_columns_raw_len": 10977
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1548,
+   "prompt_tokens": 32632,
+   "total_tokens": 34180,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 32632,
+  "completion": 1548,
+  "total": 34180
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1548,
+   "prompt_tokens": 32632,
+   "total_tokens": 34180,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

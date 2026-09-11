@@ -1,0 +1,172 @@
+{
+ "round_id": 18,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "它今年以来累计上涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m1.INDX_SNAME AS `指数名称`, m1.SECCODE AS `指数代码`, ROUND(m1.TCLOSE, 2) AS `最新收盘点位`, ROUND(m2.TCLOSE, 2) AS `去年末收盘点位`, CONCAT(ROUND((m1.TCLOSE - m2.TCLOSE) / m2.TCLOSE * 100, 2), '%') AS `今年以来涨跌幅` FROM INDX_MKT m1 INNER JOIN INDX_MKT m2 ON m1.INNER_CODE = m2.INNER_CODE INNER JOIN GET_INDX_GEN_INFO g ON m1.INNER_CODE = g.INNER_CODE WHERE m1.SECCODE = '399001' AND m1.TRADEDATE = '2026-09-02' AND m1.ISVALID = 1 AND m2.SECCODE = '399001' AND m2.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE SECCODE = '399001' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1) AND m2.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用';\n200\n{table:[['指数名称', '指数代码', '最新收盘点位', '去年末收盘点位', '今年以来涨跌幅'], ['深证成指', '399001', '13,611.55', '13,525.02', '0.64%']]}\n该查询获取了深证成指今年以来的累计涨幅情况，包括指数名称、代码、最新收盘点位、去年末收盘点位以及今年以来的涨跌幅。数据来自指数行情信息和指数基本信息数据，通过指数代码筛选出深证成指，并限定只取最新一个有效交易日（如2026年9月2日）、以及去年最后一个有效交易日的数据。涨跌幅按照“（今年收盘点位–去年末收盘点位）/去年末收盘点位 ×100%”的公式计算，结果按百分比显示并保留两位小数。所有点位数据亦保留两位小数。该查询能够准确反映深证成指从去年末到指定最新交易日的累计涨跌情况，结果可直接满足今年以来累计上涨幅度的查询需求。\n{table:[['指数名称', '指数代码', '最新收盘点位', '去年末收盘点位', '今年以来涨跌幅'], ['深证成指', '399001', '13,611.55', '13,525.02', '0.64%']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m1.INDX_SNAME AS `指数名称`, m1.SECCODE AS `指数代码`, ROUND(m1.TCLOSE, 2) AS `最新收盘点位`, ROUND(m2.TCLOSE, 2) AS `去年末收盘点位`, CONCAT(ROUND((m1.TCLOSE - m2.TCLOSE) / m2.TCLOSE * 100, 2), '%') AS `今年以来涨跌幅` FROM INDX_MKT m1 INNER JOIN INDX_MKT m2 ON m1.INNER_CODE = m2.INNER_CODE INNER JOIN GET_INDX_GEN_INFO g ON m1.INNER_CODE = g.INNER_CODE WHERE m1.SECCODE = '399001' AND m1.TRADEDATE = '2026-09-02' AND m1.ISVALID = 1 AND m2.SECCODE = '399001' AND m2.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE SECCODE = '399001' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1) AND m2.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用'",
+ "final_sql": "SELECT m1.INDX_SNAME AS `指数名称`, m1.SECCODE AS `指数代码`, ROUND(m1.TCLOSE, 2) AS `最新收盘点位`, ROUND(m2.TCLOSE, 2) AS `去年末收盘点位`, CONCAT(ROUND((m1.TCLOSE - m2.TCLOSE) / m2.TCLOSE * 100, 2), '%') AS `今年以来涨跌幅` FROM INDX_MKT m1 INNER JOIN INDX_MKT m2 ON m1.INNER_CODE = m2.INNER_CODE INNER JOIN GET_INDX_GEN_INFO g ON m1.INNER_CODE = g.INNER_CODE WHERE m1.SECCODE = '399001' AND m1.TRADEDATE = '2026-09-02' AND m1.ISVALID = 1 AND m2.SECCODE = '399001' AND m2.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE SECCODE = '399001' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1) AND m2.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用'",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "0.64"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "深证成指 399001 13611.55 13525.02 0.64%",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 89.1,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_18_2487da1d.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.69,
+  "llm_seconds_max": 31.98,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4050,
+   "prompt_tokens": 12481,
+   "total_tokens": 16531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3381,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12481,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 187,
+   "prompt_tokens": 4889,
+   "total_tokens": 5076,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17370,
+  "completion": 4237,
+  "total": 21607
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4050,
+   "prompt_tokens": 12481,
+   "total_tokens": 16531,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3381,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12481,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 187,
+   "prompt_tokens": 4889,
+   "total_tokens": 5076,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

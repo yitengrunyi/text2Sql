@@ -1,0 +1,192 @@
+{
+ "round_id": 17,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 经营活动产生的现金流量净额（Operating Cash Flow，OCF，现金流量表指标）\n- 净利润（Net Profit，利润表指标）\n\n[2] 可能的计算公式：\n\n经营活动产生的现金流量净额与净利润的倍数 =  \n= 经营活动产生的现金流量净额（2025年） ÷ 净利润（2025年）\n['经营活动产生的现金流量净额', 'Operating Cash Flow', 'OCF', '现金流量表指标', '净利润', 'Net Profit', '利润表指标', '现金流量净额', '现金流量净额与净利润的倍数', '倍数', '现金流量净额/净利润']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务', '主板基本信息']\n['STK_FIX_ASS_DEP', 'VW_CONCEPT_STK', 'STK_DS_POST', 'STK_LNG_LOAN', 'STK_FIN_CHARGE', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'STK_EQT_CHNG', 'STK_PREEXP']\n是否命中召回表：False\n生成查询代码\nSELECT\n    f.A_STOCKCODE AS `股票代码`,\n    f.A_STOCKSNAME AS `股票名称`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）每股`,\n    ROUND(f.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE\n        WHEN f.F110101 <> 0 THEN ROUND((f.F112001 * f.F111401) / f.F110101, 2)\n        ELSE NULL\n    END AS `经营活动现金流净额是净利润的几倍`\nFROM\n    VIEW_STK_FIN_IDX f\nWHERE\n    f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_SRC LIKE '%年报%'\n    AND f.ISVALID = 1\n    AND f.F112001 IS NOT NULL\n    AND f.F110101 IS NOT NULL\nORDER BY f.F112001 DESC\n200\n{table:[['股票代码', '股票名称', '报表截止日期', '经营活动产生的现金流量净额（万）每股', '归母净利润（万）', '经营活动现金流净额是净利润的几倍'], ['600519', '贵州茅台', '2025-12-31', '491,285.00', '8,232,006.70', '0.00'], ['603444', '吉比特', '2025-12-31', '388,089.00', '179,366.60', '0.00'], ['601318', '中国平安', '2025-12-31', '363,732.00', '13,477,800.00', '0.00'], ['002142', '宁波银行', '2025-12-31', '356,648.00', '2,933,300.00', '0.00'], ['601336', '新华保险', '2025-12-31', '355,552.00', '3,628,400.00', '0.00'], ['601166', '兴业银行', '2025-12-31', '308,869.00', '7,746,900.00', '0.00'], ['600919', '江苏银行', '2025-12-31', '305,510.00', '3,450,100.40', '0.00'], ['300750', '宁德时代', '2025-12-31', '291,906.00', '7,220,128.20', '0.00'], ['603129', '春风动力', '2025-12-31', '259,951.00', '167,537.10', '0.00'], ['600926', '杭州银行', '2025-12-31', '219,800.00', '1,902,925.00', '0.00'], ['002379', '宏创控股', '2025-12-31', '211,153.00', '1,786,354.00', '0.00'], ['601601', '中国太保', '2025-12-31', '203,239.00', '5,350,500",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    f.A_STOCKCODE AS `股票代码`,\n    f.A_STOCKSNAME AS `股票名称`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）每股`,\n    ROUND(f.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE\n        WHEN f.F110101 <> 0 THEN ROUND((f.F112001 * f.F111401) / f.F110101, 2)\n        ELSE NULL\n    END AS `经营活动现金流净额是净利润的几倍`\nFROM\n    VIEW_STK_FIN_IDX f\nWHERE\n    f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_SRC LIKE '%年报%'\n    AND f.ISVALID = 1\n    AND f.F112001 IS NOT NULL\n    AND f.F110101 IS NOT NULL\nORDER BY f.F112001 DESC",
+ "final_sql": "SELECT\n    f.A_STOCKCODE AS `股票代码`,\n    f.A_STOCKSNAME AS `股票名称`,\n    f.ENDDATE AS `报表截止日期`,\n    ROUND(f.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）每股`,\n    ROUND(f.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE\n        WHEN f.F110101 <> 0 THEN ROUND((f.F112001 * f.F111401) / f.F110101, 2)\n        ELSE NULL\n    END AS `经营活动现金流净额是净利润的几倍`\nFROM\n    VIEW_STK_FIN_IDX f\nWHERE\n    f.ENDDATE = '2025-12-31 00:00:00'\n    AND f.RPT_SRC LIKE '%年报%'\n    AND f.ISVALID = 1\n    AND f.F112001 IS NOT NULL\n    AND f.F110101 IS NOT NULL\nORDER BY f.F112001 DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.36"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "600519 贵州茅台 2025-12-31 00:00:00 491285.0 8232006.7 0.00\n603444 吉比特 2025-12-31 00:00:00 388089.0 179366.6 0.00\n601318 中国平安 2025-12-31 00:00:00 363732.0 13477800.0 0.00\n002142 宁波银行 2025-12-31 00:00:00 3",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 73.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_17_c037c10b.2",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 69.27,
+  "llm_seconds_max": 10.08,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   46166
+  ],
+  "prompt_columns_raw_len": 10267
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2186,
+   "prompt_tokens": 62287,
+   "total_tokens": 64473,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 62287,
+  "completion": 2186,
+  "total": 64473
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2186,
+   "prompt_tokens": 62287,
+   "total_tokens": 64473,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

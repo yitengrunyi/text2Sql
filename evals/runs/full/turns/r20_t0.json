@@ -1,0 +1,148 @@
+{
+ "round_id": 20,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "中证军工指数今年以来涨跌幅是多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：中证军工指数今年以来涨跌幅（YTD涨跌幅）\n\n[2] 可能的计算公式：  \n今年以来涨跌幅 = （当前指数点位 - 年初指数点位）/ 年初指数点位 × 100%\n['中证军工指数', '今年以来涨跌幅', 'YTD涨跌幅', '当前指数点位', '年初指数点位']\n该问题可能涉及到申万一级行业，一级行业名称为\"国防军工\"，即SW_INDU_CODE_2021_1 LIKE \"%国防军工%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%国防军工%\"\n该问题可能涉及的题材包含：['军工']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '军工'。\n指数相关\n['境内指数']\n['INDX_MKT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    i2.INDX_SNAME AS `指数名称`,\n    i2.SECCODE AS `指数代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    ROUND(i2_start.TCLOSE,2) AS `年初收盘价`,\n    ROUND(i2_end.TCLOSE,2) AS `最新收盘价`,\n    ROUND(\n        CASE \n            WHEN i2_start.TCLOSE <> 0 THEN (i2_end.TCLOSE-i2_start.TCLOSE)/i2_start.TCLOSE*100 \n            ELSE NULL\n        END,2\n    ) AS `今年以来涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO i1\nJOIN \n    INDX_MKT i2_start \n        ON i1.INNER_CODE = i2_start.INNER_CODE \n        AND i2_start.TRADEDATE = '2026-01-03'  -- 今年首个交易日（若非实际首交易日请改为实际首日）\n        AND i2_start.ISVALID = 1\nJOIN \n    INDX_MKT i2_end \n        ON i1.INNER_CODE = i2_end.INNER_CODE \n        AND i2_end.TRADEDATE = '2026-09-02'      -- 2026年最新交易日 \n        AND i2_end.ISVALID = 1\nWHERE \n    i1.INDX_SNAME LIKE '%中证军工%' \n    AND i1.USE_STATUS = '使用'\n    AND i1.ISVALID = 1\n\n500\nMySQL Database error: (1054, \"Unknown column 'i2.INDX_SNAME' in 'field list'\")\n诊断 根据你的描述与执行结果，**最可能导致你遇到该错误（Unknown column 'i2.INDX_SNAME' in 'field list'）的前两大原因如下：**\n\n---\n\n### **最可能的2个原因**\n\n#### **1. SQL语法/字段引用错误：模型“捏造”了表别名 `i2`**\n\n- 错误原因分析：  \n  在你的`SELECT`子句中存在 `i2.INDX_SNAME` 和 `i2.SECCODE` 字段引用，但从`FROM/JOIN`部分可见，SQL中实际没有定义表别名`i2`。你的索引代码和名称都应该从`GET_INDX_GEN_INFO`（别名`i1`）而非`i2`获取。`i2_start`和`i2_end`实际都是`INDX_MKT`表，用于连接不同交易日的数据。\n- 举例：\n  ```sql\n  i1.INDX_SNAME AS `指数名称`,\n  i1.SECCODE   AS `指数代码`,\n  ```\n- 综上，这条SQL语句引用了不存在的表（别名），这是直接导致查询报错的最主要原因。\n\n---\n\n#### **2. 字段本身或数据可能缺失（模型捏造字段）**\n\n- 错误原因分析：  \n  `INDX_SNAME`和`SECCODE`字段可能在`INDX_MKT`表中不存在，只存在于`GET_INDX_GEN_INFO`表中（即`i1`），而模型错误地认为所有表都有。或者，你的实际表",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    i2.INDX_SNAME AS `指数名称`,\n    i2.SECCODE AS `指数代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    ROUND(i2_start.TCLOSE,2) AS `年初收盘价`,\n    ROUND(i2_end.TCLOSE,2) AS `最新收盘价`,\n    ROUND(\n        CASE \n            WHEN i2_start.TCLOSE <> 0 THEN (i2_end.TCLOSE-i2_start.TCLOSE)/i2_start.TCLOSE*100 \n            ELSE NULL\n        END,2\n    ) AS `今年以来涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO i1\nJOIN \n    INDX_MKT i2_start \n        ON i1.INNER_CODE = i2_start.INNER_CODE \n        AND i2_start.TRADEDATE = '2026-01-03'  -- 今年首个交易日（若非实际首交易日请改为实际首日）\n        AND i2_start.ISVALID = 1\nJOIN \n    INDX_MKT i2_end \n        ON i1.INNER_CODE = i2_end.INNER_CODE \n        AND i2_end.TRADEDATE = '2026-09-02'      -- 2026年最新交易日 \n        AND i2_end.ISVALID = 1\nWHERE \n    i1.INDX_SNAME LIKE '%中证军工%' \n    AND i1.USE_STATUS = '使用'\n    AND i1.ISVALID = 1",
+ "final_sql": "SELECT \n    mkt.INDX_SNAME AS `指数名称`,\n    mkt.SECCODE AS `指数代码`,\n    '2026-01-01' AS `区间起始日期`,\n    '2026-09-02' AS `区间截止日期`,\n    ROUND(start.TCLOSE, 2) AS `年初收盘价`,\n    ROUND(end.TCLOSE, 2) AS `最新收盘价`,\n    ROUND(\n        CASE \n            WHEN start.TCLOSE <> 0 THEN (end.TCLOSE - start.TCLOSE) / start.TCLOSE * 100\n            ELSE NULL\n        END, 2\n    ) AS `今年以来涨跌幅(%)`\nFROM \n    GET_INDX_GEN_INFO gen\nJOIN INDX_MKT mkt\n    ON gen.INNER_CODE = mkt.INNER_CODE\n    AND mkt.ISVALID = 1\n    AND mkt.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE <= '2026-09-02' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE)\nJOIN INDX_MKT start\n    ON gen.INNER_CODE = start.INNER_CODE\n    AND start.ISVALID = 1\n    AND start.TRADEDATE = (SELECT MIN(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2026-01-01' AND TRADEDATE <= '2026-09-02' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE)\nJOIN INDX_MKT end\n    ON gen.INNER_CODE = end.INNER_CODE\n    AND end.ISVALID = 1\n    AND end.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE <= '2026-09-02' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE)\nWHERE \n    gen.INDX_SNAME LIKE '%中证军工%'\n    AND gen.USE_STATUS = '使用'\n    AND gen.ISVALID = 1\n    AND start.TCLOSE IS NOT NULL\n    AND end.TCLOSE IS NOT NULL",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-17.58"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'i2.INDX_SNAME' in 'field list'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 81.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_20_a2b50df2.0",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 78.66,
+  "llm_seconds_max": 14.49,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   20548,
+   17452
+  ],
+  "prompt_columns_raw_len": 3016
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2761,
+   "prompt_tokens": 36942,
+   "total_tokens": 39703,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 36942,
+  "completion": 2761,
+  "total": 39703
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2761,
+   "prompt_tokens": 36942,
+   "total_tokens": 39703,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_INDX_GEN_INFO",
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 20,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "那中证军工2025年全年涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT mkt.INDX_SNAME AS `指数名称`, mkt.SECCODE AS `指数代码`, '2025-01-01' AS `区间起始日期`, '2025-12-31' AS `区间截止日期`, ROUND(start.LCLOSE, 2) AS `年初首日昨收价`, ROUND(end.TCLOSE, 2) AS `年末收盘价`, ROUND(CASE WHEN start.LCLOSE <> 0 THEN (end.TCLOSE - start.LCLOSE) / start.LCLOSE * 100 ELSE NULL END, 2) AS `2025年全年涨跌幅(%)` FROM GET_INDX_GEN_INFO gen JOIN INDX_MKT mkt ON gen.INNER_CODE = mkt.INNER_CODE AND mkt.ISVALID = 1 AND mkt.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT start ON gen.INNER_CODE = start.INNER_CODE AND start.ISVALID = 1 AND start.TRADEDATE = (SELECT MIN(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT end ON gen.INNER_CODE = end.INNER_CODE AND end.ISVALID = 1 AND end.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) WHERE gen.INDX_SNAME LIKE '%中证军工%' AND gen.USE_STATUS = '使用' AND gen.ISVALID = 1 AND start.LCLOSE IS NOT NULL AND end.TCLOSE IS NOT NULL;\n200\n{table:[['指数名称', '指数代码', '区间起始日期', '区间截止日期', '年初首日昨收价', '年末收盘价', '2025年全年涨跌幅(%)'], ['中证军工', '399967', '2025-01-01', '2025-12-31', '10,650.79', '14,011.14', '31.55'], ['中证军工全收益', 'H20229', '2025-01-01', '2025-12-31', '11,650.40', '15,409.43', '32.27']]}\n该查询获取了中证军工指数在2025年全年区间的表现，包括指数名称、指数代码、年初首日价格、年末收盘价以及全年涨跌幅。数据提取自指数基本信息数据和指数行情数据，通过内部关联，筛选了有效且当前正在使用的中证军工指数，并保证行情数据在2025年区间内。涨跌幅的计算方式为：用年末收盘价减去年初首日价格，再除以年初首日价格，最后乘以100%，并保留2位小数，计算结果单位为百分比。此查询遵循了涨跌幅以首日价格为基数的惯例，对已获得的行情数据进行直接计算。整个结果满足用户关于2025年中证军工指数全年涨跌幅的查询需求。\n{table:[['指数名称', '指数代码', '区间起始日期', '区间截止日期', '年初首日昨收价', '年末收盘价', '2025年全年涨跌幅(%)'], ['中证军工', '399967', '2025-01-01', '2025-12-31', '10,650.79', '14,011.14', '31.55'], ['中证军工全收益', 'H20229', '2025-01-01', '2025-12-31', '11,650.40', '15,409.43', '32.27']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT mkt.INDX_SNAME AS `指数名称`, mkt.SECCODE AS `指数代码`, '2025-01-01' AS `区间起始日期`, '2025-12-31' AS `区间截止日期`, ROUND(start.LCLOSE, 2) AS `年初首日昨收价`, ROUND(end.TCLOSE, 2) AS `年末收盘价`, ROUND(CASE WHEN start.LCLOSE <> 0 THEN (end.TCLOSE - start.LCLOSE) / start.LCLOSE * 100 ELSE NULL END, 2) AS `2025年全年涨跌幅(%)` FROM GET_INDX_GEN_INFO gen JOIN INDX_MKT mkt ON gen.INNER_CODE = mkt.INNER_CODE AND mkt.ISVALID = 1 AND mkt.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT start ON gen.INNER_CODE = start.INNER_CODE AND start.ISVALID = 1 AND start.TRADEDATE = (SELECT MIN(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT end ON gen.INNER_CODE = end.INNER_CODE AND end.ISVALID = 1 AND end.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) WHERE gen.INDX_SNAME LIKE '%中证军工%' AND gen.USE_STATUS = '使用' AND gen.ISVALID = 1 AND start.LCLOSE IS NOT NULL AND end.TCLOSE IS NOT NULL",
+ "final_sql": "SELECT mkt.INDX_SNAME AS `指数名称`, mkt.SECCODE AS `指数代码`, '2025-01-01' AS `区间起始日期`, '2025-12-31' AS `区间截止日期`, ROUND(start.LCLOSE, 2) AS `年初首日昨收价`, ROUND(end.TCLOSE, 2) AS `年末收盘价`, ROUND(CASE WHEN start.LCLOSE <> 0 THEN (end.TCLOSE - start.LCLOSE) / start.LCLOSE * 100 ELSE NULL END, 2) AS `2025年全年涨跌幅(%)` FROM GET_INDX_GEN_INFO gen JOIN INDX_MKT mkt ON gen.INNER_CODE = mkt.INNER_CODE AND mkt.ISVALID = 1 AND mkt.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT start ON gen.INNER_CODE = start.INNER_CODE AND start.ISVALID = 1 AND start.TRADEDATE = (SELECT MIN(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) JOIN INDX_MKT end ON gen.INNER_CODE = end.INNER_CODE AND end.ISVALID = 1 AND end.TRADEDATE = (SELECT MAX(TRADEDATE) FROM INDX_MKT WHERE TRADEDATE >= '2025-01-01' AND TRADEDATE <= '2025-12-31' AND ISVALID = 1 AND INNER_CODE = gen.INNER_CODE) WHERE gen.INDX_SNAME LIKE '%中证军工%' AND gen.USE_STATUS = '使用' AND gen.ISVALID = 1 AND start.LCLOSE IS NOT NULL AND end.TCLOSE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "31.55"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "中证军工 399967 2025-01-01 2025-12-31 10650.79 14011.14 31.55\n中证军工全收益 H20229 2025-01-01 2025-12-31 11650.40 15409.43 32.27",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 55.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_20_a2b50df2.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 54.33,
+  "llm_seconds_max": 49.13,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6237,
+   "prompt_tokens": 12973,
+   "total_tokens": 19210,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5373,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12973,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 184,
+   "prompt_tokens": 5078,
+   "total_tokens": 5262,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18051,
+  "completion": 6421,
+  "total": 24472
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6237,
+   "prompt_tokens": 12973,
+   "total_tokens": 19210,
+   "completion_tokens_details": {
+    "reasoning_tokens": 5373,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12973,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 184,
+   "prompt_tokens": 5078,
+   "total_tokens": 5262,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_INDX_GEN_INFO",
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

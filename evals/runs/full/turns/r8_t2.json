@@ -1,0 +1,172 @@
+{
+ "round_id": 8,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "英伟达最新一个交易日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT A.TRADE_DATE AS `交易日期`, M.CSNAME AS `股票名称`, M.COMB_SYMBOL AS `股票代码`, ROUND(A.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(A.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(A.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(A.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(A.CHG, 2) AS `涨跌额(美元)`, ROUND(A.CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(A.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(A.TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(A.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%英伟达%' AND A.CLOSE_PRICE IS NOT NULL ORDER BY A.TRADE_DATE DESC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '英伟达', 'NVDA.US', '172.78', '175.26', '171.03', '175.00', '1.37', '0.79', '301.72', '173.88', '252.39']]}\n该查询获取了英伟达公司最新一个交易日的主要行情信息，包括交易日期、股票名称、股票代码、开盘价、最高价、最低价、收盘价、涨跌额、涨跌幅、成交额、成交量和总股本。数据来源于美股股票基本信息表与日行情数据表，二者通过内部识别信息关联。查询筛选出股票名称包含“英伟达”，且最近收盘价有有效数据的记录，按照交易日期从近到远排序，仅取最近一天的数据。价格均为美元，成交额单位为亿美元（通过原始金额除以1亿），成交量单位为百万股（原始股数除以100万），总股本单位为亿股（原始股数除以1亿），所有金额和数量均保留2位小数。涨跌额表示今日收盘与昨日收盘的差值，涨跌幅等于涨跌额除以昨日收盘后乘以100，成交额和成交量采用单位换算后的数值。该查询直接提取了公开的行情和公司基本数据，结果满足用户关于英伟达最新收盘价以及相关行情信息的需求，查询结果符合要求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '涨跌额(美元)', '涨跌幅(%)', '成交额(亿美元)', '成交量(百万股)', '总股本(亿股)'], ['2026-08-25', '英伟达', 'NVDA.US', '172.78', '175.26', '171.03', '175.00', '1.37', '0.79', '301.72', '173.88', '252.39']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT A.TRADE_DATE AS `交易日期`, M.CSNAME AS `股票名称`, M.COMB_SYMBOL AS `股票代码`, ROUND(A.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(A.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(A.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(A.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(A.CHG, 2) AS `涨跌额(美元)`, ROUND(A.CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(A.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(A.TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(A.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%英伟达%' AND A.CLOSE_PRICE IS NOT NULL ORDER BY A.TRADE_DATE DESC LIMIT 1",
+ "final_sql": "SELECT A.TRADE_DATE AS `交易日期`, M.CSNAME AS `股票名称`, M.COMB_SYMBOL AS `股票代码`, ROUND(A.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(A.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(A.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(A.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(A.CHG, 2) AS `涨跌额(美元)`, ROUND(A.CHG_PCT_DAY, 2) AS `涨跌幅(%)`, ROUND(A.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(A.TRADE_VOLUME / 1000000, 2) AS `成交量(百万股)`, ROUND(A.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM VIEW_US_EOD_EXPR A JOIN AMERICAN_STOCK_MAIN M ON A.FIU_ID = M.FIU_ID WHERE M.CSNAME LIKE '%英伟达%' AND A.CLOSE_PRICE IS NOT NULL ORDER BY A.TRADE_DATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "175.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 英伟达 NVDA.US 172.78 175.26 171.03 175.0 1.37 0.79 301.72 173.88 252.39",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 20.7,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_8_3273ec10.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 20.06,
+  "llm_seconds_max": 14.71,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1680,
+   "prompt_tokens": 9770,
+   "total_tokens": 11450,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1031,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9770,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 268,
+   "prompt_tokens": 4057,
+   "total_tokens": 4325,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13827,
+  "completion": 1948,
+  "total": 15775
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1680,
+   "prompt_tokens": 9770,
+   "total_tokens": 11450,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1031,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9770,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 268,
+   "prompt_tokens": 4057,
+   "total_tokens": 4325,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,153 @@
+{
+ "round_id": 9,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "英伟达2025财年的净利润是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：净利润（Net Income）\n\n[2] 可能的计算公式：  \n净利润 = 总收入（Revenue） - 营业成本（Cost of Goods Sold） - 营业费用（Operating Expenses） - 利息支出（Interest Expenses） - 所得税费用（Income Tax Expenses） + 其他收入（Other Income）\n['英伟达', '2025财年', '净利润', 'Net Income', '总收入', 'Revenue', '营业成本', 'Cost of Goods Sold', '营业费用', 'Operating Expenses', '利息支出', 'Interest Expenses', '所得税费用', 'Income Tax Expenses', '其他收入', 'Other Income']\n该问题可能涉及美股-'英伟达', 它的美股股票代码为：NVDA.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-电子。\n该问题可能涉及的题材包含：['英伟达概念']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '英伟达概念'。\n美股相关\n['美股基本信息', '美股财务']\n['VIEW_COM3102_CUM', 'COM3102', 'AMERICAN_STOCK_MAIN', 'COM3103']\n是否命中召回表：False\n生成查询代码\nSELECT \n    x.CSNAME AS `股票名称`,\n    x.COMB_SYMBOL AS `股票代码`,\n    y.F001D AS `财报结束日期`,\n    y.F004N AS `报表期间天数`,\n    y.F005V AS `货币单位`,\n    y.F056N AS `财政年度`,\n    y.F032N AS `净利润(万)`,\n    ROUND(y.F032N * 10, 1) AS `净利润(万美元，万为单位)`\nFROM\n    AMERICAN_STOCK_MAIN x\nINNER JOIN\n    COM3103 y\n    ON x.FIU_ID = y.FIU_ID\nWHERE\n    x.COMB_SYMBOL = 'NVDA.US'\n    AND y.F056N = 2025\n    AND y.F032N IS NOT NULL\nORDER BY \n    y.F001D DESC,\n    y.F004N DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财报结束日期', '报表期间天数', '货币单位', '财政年度', '净利润(万)', '净利润(万美元，万为单位)'], ['英伟达', 'NVDA.US', '2025-12-31', '365', 'USD', '2,025', '131,143.00', '1,311,432.30']]}\n查询通过计算公式得到净利润（万美元，万为单位），公式为：净利润（万美元，万为单位）= 净利润（万）乘以10。净利润原本以万单位展示，将其转换为万美元（万为单位）后保留一位小数。在此查询中，计算了净利润的单位转换，直接展示了结果。\n\n查询从两个表中获取数据，一个表用于提供美股的名称、展示代码等基本信息，另一个表用于提取美股的财务报表相关信息。通过美股内部代码进行关联。筛选了股票展示代码为“NVDA.US”的记录，限定财政年度为2025，净利润数据不能为空。最终按财报结束日期和报表期间天数降序排列，只选择最新一条有效财报数据。查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    x.CSNAME AS `股票名称`,\n    x.COMB_SYMBOL AS `股票代码`,\n    y.F001D AS `财报结束日期`,\n    y.F004N AS `报表期间天数`,\n    y.F005V AS `货币单位`,\n    y.F056N AS `财政年度`,\n    y.F032N AS `净利润(万)`,\n    ROUND(y.F032N * 10, 1) AS `净利润(万美元，万为单位)`\nFROM\n    AMERICAN_STOCK_MAIN x\nINNER JOIN\n    COM3103 y\n    ON x.FIU_ID = y.FIU_ID\nWHERE\n    x.COMB_SYMBOL = 'NVDA.US'\n    AND y.F056N = 2025\n    AND y.F032N IS NOT NULL\nORDER BY \n    y.F001D DESC,\n    y.F004N DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    x.CSNAME AS `股票名称`,\n    x.COMB_SYMBOL AS `股票代码`,\n    y.F001D AS `财报结束日期`,\n    y.F004N AS `报表期间天数`,\n    y.F005V AS `货币单位`,\n    y.F056N AS `财政年度`,\n    y.F032N AS `净利润(万)`,\n    ROUND(y.F032N * 10, 1) AS `净利润(万美元，万为单位)`\nFROM\n    AMERICAN_STOCK_MAIN x\nINNER JOIN\n    COM3103 y\n    ON x.FIU_ID = y.FIU_ID\nWHERE\n    x.COMB_SYMBOL = 'NVDA.US'\n    AND y.F056N = 2025\n    AND y.F032N IS NOT NULL\nORDER BY \n    y.F001D DESC,\n    y.F004N DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "131143.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "英伟达 NVDA.US 2025-12-31 365 USD 2025 131143.0 1311432.3",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_9_10c9f817.3",
+  "llm_call_count": 12,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 42.17,
+  "llm_seconds_max": 6.35,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3103_Q"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM"
+  ],
+  "sql_prompt_chars": [
+   25250
+  ],
+  "prompt_columns_raw_len": 16588
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 989,
+   "prompt_tokens": 29632,
+   "total_tokens": 30621,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10112,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29632,
+  "completion": 989,
+  "total": 30621
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 989,
+   "prompt_tokens": 29632,
+   "total_tokens": 30621,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 10112,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3103",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3103",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3103_Q"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

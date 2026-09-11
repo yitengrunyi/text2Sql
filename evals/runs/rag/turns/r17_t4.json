@@ -1,0 +1,193 @@
+{
+ "round_id": 17,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "再加一家海尔智家做参照，同样按2025年年报算净现比，两家谁更高？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n净现比（Net Operating Cash Flow to Net Profit Ratio）：反映企业经营活动产生的现金净流量与净利润的关系，衡量利润的含现金“含金量”。\n\n[2] 可能的计算公式  \n净现比 = 经营活动产生的现金流量净额 ÷ 净利润\n\n涉及关键主体：美的集团、海尔智家（比较两家在2025年年报中的净现比，谁更高）。\n['净现比', 'Net Operating Cash Flow to Net Profit Ratio', '经营活动产生的现金流量净额', '经营活动现金流', '净利润', '利润', '现金流量净额', '现金净流量', '美的集团', '海尔智家']\n该问题可能涉及A股-'海尔智家'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-家用电器。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'STK_COM_PROFILE', 'VIEW_STK_FIN_IDX_PLUS', 'VIEW_STK_FIN_IDX', 'VIEW_STK_CASH_GEN', 'VIEW_STK_INCOME_GEN', 'STK_COMSUB_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `报表截止日期`,\n    b.SEC_SNAME AS `股票简称`,\n    b.SEC_CODE AS `股票代码`,\n    CAST(a.CS_NP AS DECIMAL(18,2)) AS `净现比(%)`\nFROM VIEW_STK_FIN_IDX_PLUS a\nINNER JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME IN ('海尔智家', '美的集团') \n    AND a.RPT_TYPE = '2'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.CS_NP IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY a.CS_NP DESC\n200\n{table:[['报表截止日期', '股票简称', '净现比(%)'], ['2025-12-31', '美的集团', '3.32']]}\n净现比的计算公式为：净现比 = 净利润 / 现金净增额 × 100%。该指标用于衡量公司的净利润相对于现金净增额的比例。\n\n在此查询中，直接用于比较海尔智家与美的集团在2025年年报的净现比。报表截止日期均为2025年12月31日，净现比结果已转为百分比显示。查询结果符合要求。\n\n该查询从“主板财务衍生指标-累计值”表获取两家公司的净现比数据，并通过公司代码与A股基础码表进行连接。筛选条件为股票简称为“海尔智家”或“美的集团”，仅选取合并类型报表，有效证券信息，报表截止日期为2025年年末，并排除净现比为空的数据。结果按净现比从高到低排序，即可直接比较两家公司在2025年年报中该指标的高低。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.ENDDATE AS `报表截止日期`,\n    b.SEC_SNAME AS `股票简称`,\n    b.SEC_CODE AS `股票代码`,\n    CAST(a.CS_NP AS DECIMAL(18,2)) AS `净现比(%)`\nFROM VIEW_STK_FIN_IDX_PLUS a\nINNER JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME IN ('海尔智家', '美的集团') \n    AND a.RPT_TYPE = '2'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.CS_NP IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY a.CS_NP DESC",
+ "final_sql": "SELECT \n    a.ENDDATE AS `报表截止日期`,\n    b.SEC_SNAME AS `股票简称`,\n    b.SEC_CODE AS `股票代码`,\n    CAST(a.CS_NP AS DECIMAL(18,2)) AS `净现比(%)`\nFROM VIEW_STK_FIN_IDX_PLUS a\nINNER JOIN GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME IN ('海尔智家', '美的集团') \n    AND a.RPT_TYPE = '2'\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.CS_NP IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY a.CS_NP DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "万华化学 2.36\n海尔智家 1.29"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 美的集团 000333 3.32",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '日期': True})"
+ ],
+ "elapsed_seconds": 55.5,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_17_d1ad8b50.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 72.4,
+  "llm_seconds_max": 9.44,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   56764
+  ],
+  "prompt_columns_raw_len": 18370
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2409,
+   "prompt_tokens": 69605,
+   "total_tokens": 72014,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 69605,
+  "completion": 2409,
+  "total": 72014
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2409,
+   "prompt_tokens": 69605,
+   "total_tokens": 72014,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

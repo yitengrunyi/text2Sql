@@ -1,0 +1,196 @@
+{
+ "round_id": 15,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：收盘价（Closing Price）\n\n[2] 可能的计算公式：  \n收盘价 = 当日最后一笔成交价格\n['腾讯控股', '收盘价', 'Closing Price', '当日最后一笔成交价格']\n该问题可能涉及港股-'腾讯控股',对应的港股行业名称为-传媒。该问题可能涉及美股-'腾讯控股 (OTC)', 它的美股股票代码为：TCEHY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['港股行情', '港股基本信息']\n['HK_STKDMK', 'HK_IDC_STKPFMIDC', 'HK_IDC_STKVIDC', 'HK_COMBINFO', 'HK_STKCODE', 'VIEW_HK_INDUSTRY_TRACK']\n是否命中召回表：False\n生成查询代码\nSELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.OPENPR, 2) AS `开盘价`,\n    ROUND(hsdmk.HIPR, 2) AS `最高价`,\n    ROUND(hsdmk.LWPR, 2) AS `最低价`,\n    ROUND(hsdmk.CLPR, 2) AS `收盘价`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`,\n    ROUND(hsdmk.TRVOL/10000, 2) AS `成交量(万股)`,\n    ROUND(hsdmk.PRCH, 2) AS `涨跌额`,\n    ROUND(hsdmk.PRCHRATE, 2) AS `涨跌幅(%)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '交易日期', '开盘价', '最高价', '最低价', '收盘价', '成交额(亿)', '成交量(万股)', '涨跌额', '涨跌幅(%)'], ['腾讯控股', '00700.HK', '2026-09-02', '439.00', '441.40', '435.00', '438.20', '93.37', '2,134.13', '-3.20', '-0.73']]}\n该查询的主要目的是获取腾讯控股在最新一个有效交易日的收盘价及相关行情信息。\n\n查询对部分结果进行了计算：开盘价、最高价、最低价、收盘价、涨跌额和涨跌幅都经过保留两位小数的处理；成交额通过公式“成交额(亿) = 成交额(元) / 100000000”转为以亿元为单位，成交量通过公式“成交量(万股) = 成交量(股) / 10000”转为以万股为单位。涨跌额和涨跌幅均保留两位小数。查询结果符合要求。\n\n查询数据来源于三个表：用于获取股票基础信息的表（包含股票名称、代码、上市状态等），提供公司基本信息的表（如公司简称等），以及存放股票每日行情数据的表（收盘价、成交量、成交额等）。\n\n查询只关注公司简称包括“腾讯控股”的有效公司信息，筛选上市状态为正常上市，股票类型限定为普通股或特定类别，且在香港联合交易所交易，并排除了以数字8开头的股票代码。行情数据限定为2026年9月2日这一交易日且保证数据有效。最终只返回一条最近交易日的结果。\n\n查询返回腾讯控股最新一个交易日的收盘价及其它主要市场行情数据。\n查询腾讯控股最新一个交易日的收盘价。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.OPENPR, 2) AS `开盘价`,\n    ROUND(hsdmk.HIPR, 2) AS `最高价`,\n    ROUND(hsdmk.LWPR, 2) AS `最低价`,\n    ROUND(hsdmk.CLPR, 2) AS `收盘价`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`,\n    ROUND(hsdmk.TRVOL/10000, 2) AS `成交量(万股)`,\n    ROUND(hsdmk.PRCH, 2) AS `涨跌额`,\n    ROUND(hsdmk.PRCHRATE, 2) AS `涨跌幅(%)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    hscode.STKABB AS `股票名称`,\n    CONCAT(hscode.STKCODE, '.HK') AS `股票代码`,\n    hsdmk.TRDATE AS `交易日期`,\n    ROUND(hsdmk.OPENPR, 2) AS `开盘价`,\n    ROUND(hsdmk.HIPR, 2) AS `最高价`,\n    ROUND(hsdmk.LWPR, 2) AS `最低价`,\n    ROUND(hsdmk.CLPR, 2) AS `收盘价`,\n    ROUND(hsdmk.TRTO/100000000, 2) AS `成交额(亿)`,\n    ROUND(hsdmk.TRVOL/10000, 2) AS `成交量(万股)`,\n    ROUND(hsdmk.PRCH, 2) AS `涨跌额`,\n    ROUND(hsdmk.PRCHRATE, 2) AS `涨跌幅(%)`\nFROM \n    HK_STKCODE hscode\n    JOIN HK_COMBINFO hc ON hscode.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    JOIN HK_STKDMK hsdmk ON hscode.STKUNICODE = hsdmk.STKUNICODE AND hsdmk.ISVALID = 1\nWHERE \n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hscode.LSSTUREFC = 1\n    AND (hscode.STKTYREFC = 1 OR hscode.STKTYREFC = 6)\n    AND hscode.TRMKREFC = 7\n    AND left(hscode.STKCODE ,1) != '8'\n    AND hsdmk.TRDATE = '2026-09-02'\nORDER BY\n    hsdmk.TRDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "438.2000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "腾讯控股 00700.HK 2026-09-02 00:00:00 439.00 441.40 435.00 438.20 93.37 2134.13 -3.20 -0.73",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 69.1,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_15_4812469b.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 66.43,
+  "llm_seconds_max": 14.27,
+  "selected_tables": [
+   "HK_STKDMK",
+   "HK_IDC_STKPFMIDC",
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "candidate_tables": [
+   "HK_STKDMK",
+   "HK_IDC_STKPFMIDC",
+   "HK_IDC_STKVIDC",
+   "VIEW_HK_INDUSTRY_TRACK",
+   "HK_OFCHGBDSCM",
+   "STK_HK_IPO"
+  ],
+  "sql_prompt_chars": [
+   26020
+  ],
+  "prompt_columns_raw_len": 5819
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1071,
+   "prompt_tokens": 21435,
+   "total_tokens": 22506,
+   "completion_tokens_details": {
+    "reasoning_tokens": 860,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 21435,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1196,
+   "prompt_tokens": 33765,
+   "total_tokens": 34961,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6784,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55200,
+  "completion": 2267,
+  "total": 57467
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1071,
+   "prompt_tokens": 21435,
+   "total_tokens": 22506,
+   "completion_tokens_details": {
+    "reasoning_tokens": 860,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 21435,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1196,
+   "prompt_tokens": 33765,
+   "total_tokens": 34961,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6784,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_STKDMK",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "HK_STKDMK",
+   "HK_IDC_STKPFMIDC",
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

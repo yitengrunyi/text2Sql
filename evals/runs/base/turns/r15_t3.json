@@ -1,0 +1,195 @@
+{
+ "round_id": 15,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "时间漂移",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n营业额（也称为营业收入、Revenue、Sales）\n\n[2] 可能的计算公式：  \n营业额 = 销售商品或提供服务所获得的收入总额  \n即：  \n营业额 = ∑（单个产品或服务的销售数量 × 单价）\n\n注：实际在财务报表中，营业额通常直接取自企业的利润表中的“营业收入”或“主营业务收入”项目（半年为“上半年累计”数据）。\n['营业额', '营业收入', 'Revenue', 'Sales', '主营业务收入', '销售数量', '单价', '产品', '服务', '收入总额', '利润表', '上半年累计']\n此问题不涉及到个股、行业或者题材\n该问题可能涉及的题材包含：['中报预增']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '中报预增'。\n个股相关\n['主板财务', '主板基本信息']\n['STK_FIN_CHARGE', 'STK_PREEXP', 'STK_RD_DTL', 'STK_ATCP_LBLT', 'STK_NON_EXTR_ITEM', 'STK_TAX_RATIO', 'STK_TAXPAY', 'VIEW_STK_CONSENSUS_FORECAST', 'STK_STOCK', 'STK_DS_POST']\n是否命中召回表：False\n生成查询代码\nSELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_FIN_CHARGE\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nUNION ALL\nSELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_ATCP_LBLT\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nORDER BY `营业收入(亿)` DESC\n200\n{table:[['股票简称', '股票代码', '报表日期', '营业收入(亿)'], ['宁德时代', '300750', '2026-06-30', '986.07'], ['上汽集团', '600104', '2026-06-30', '221.97'], ['陕西煤业', '601225', '2026-06-30', '220.08'], ['海航控股', '600221', '2026-06-30', '128.17'], ['中国建筑', '601668', '2026-06-30', '92.97'], ['紫金矿业', '601899', '2026-06-30', '89.58'], ['长安汽车', '000625', '2026-06-30', '83.70'], ['中国东航', '600115', '2026-06-30', '83.21'], ['中国广核', '003816', '2026-06-30', '81.19'], ['中国中车', '601766', '2026-06-30', '77.44'], ['中国核电', '601985', '2026-06-30', '74.24'], ['中国电建', '601669', '2026-06-30', '71.29'], ['中国铁建', '601186', '2026-06-30', '65.00'], ['中煤能源', '601898', '2026-06-30', '61.43'], ['阳光电源', '300274', '2026-06-30', '58.83'], ['东方电气', '600875', '2026-06-30', '53.34'], ['",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_FIN_CHARGE\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nUNION ALL\nSELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_ATCP_LBLT\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nORDER BY `营业收入(亿)` DESC",
+ "final_sql": "SELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_FIN_CHARGE\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nUNION ALL\nSELECT \n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    PERIODDATE AS `报表日期`,\n    ROUND(END_BOOK_VAL/100000000, 3) AS `营业收入(亿)`\nFROM STK_ATCP_LBLT\nWHERE RPT_TYPE = '合并'\n  AND PERIODDATE = '2026-06-30'\n  AND ITEM IN ('营业收入', '主营业务收入', '收入', '合计', '总计')\n  AND END_BOOK_VAL IS NOT NULL\n  AND ISVALID = 1\nORDER BY `营业收入(亿)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "401243000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "宁德时代 300750 2026-06-30 00:00:00 986.072\n上汽集团 600104 2026-06-30 00:00:00 221.974\n陕西煤业 601225 2026-06-30 00:00:00 220.085\n海航控股 600221 2026-06-30 00:00:00 128.166\n中国建筑 601668 2026-06-30 00:00:00 92.967\n紫",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 67.8,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_15_4814797f.3",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 81.51,
+  "llm_seconds_max": 11.77,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_QTR_IDX",
+   "VW_CONCEPT_STK",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   31306
+  ],
+  "prompt_columns_raw_len": 18624
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2628,
+   "prompt_tokens": 53093,
+   "total_tokens": 55721,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 53093,
+  "completion": 2628,
+  "total": 55721
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2628,
+   "prompt_tokens": 53093,
+   "total_tokens": 55721,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_NFINIS_NSTD",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_QTR_IDX",
+   "VW_CONCEPT_STK",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 17,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "那换成2024年年报，这个倍数是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.SEC_CODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.C100000/10000, 1) AS `经营活动产生的现金流量净额(万)`,\n    ROUND(a.C411001/10000, 1) AS `净利润(万)`,\n    CASE \n        WHEN a.C411001 IS NULL OR a.C411001 = 0 THEN NULL\n        ELSE ROUND(a.C100000/a.C411001, 2)\n    END AS `经营活动现金流/净利润(倍)`\nFROM \n    VIEW_STK_CASH_GEN a\nINNER JOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2024-12-31 00:00:00'\n    AND a.C100000 IS NOT NULL\n    AND a.C411001 IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC;\n200\n{table:[['股票名称', '股票代码', '报表截止日', '经营活动产生的现金流量净额(万)', '净利润(万)', '经营活动现金流/净利润(倍)'], ['万华化学', '600309', '2024-12-31', '3,005,343.50', '1,479,131.40', '2.03']]}\n该查询获取了万华化学2024年年报中经营活动产生的现金流量净额、净利润及二者之间的倍数情况。数据来源于公司基本信息和现金流量信息相关表，通过公司名称匹配“万华化学”，限定筛选条件为2024年12月31日的合并财务报表，只保留有效且数据项齐全的记录，并按报告期从新到旧排序。经营活动产生的现金流量净额和净利润均以万元为单位，数值分别通过将原始数据除以10000并保留1位小数进行转换。倍数计算为：经营活动产生的现金流量净额除以净利润，若净利润为零或缺失则不显示，结果保留2位小数。该查询输出的数据直接回答了“2024年年报，经营活动现金流量净额是净利润的几倍”这一问题，查询结果符合用户需求。\n{table:[['股票名称', '股票代码', '报表截止日', '经营活动产生的现金流量净额(万)', '净利润(万)', '经营活动现金流/净利润(倍)'], ['万华化学', '600309', '2024-12-31', '3,005,343.50', '1,479,131.40', '2.03']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.SEC_CODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.C100000/10000, 1) AS `经营活动产生的现金流量净额(万)`,\n    ROUND(a.C411001/10000, 1) AS `净利润(万)`,\n    CASE \n        WHEN a.C411001 IS NULL OR a.C411001 = 0 THEN NULL\n        ELSE ROUND(a.C100000/a.C411001, 2)\n    END AS `经营活动现金流/净利润(倍)`\nFROM \n    VIEW_STK_CASH_GEN a\nINNER JOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2024-12-31 00:00:00'\n    AND a.C100000 IS NOT NULL\n    AND a.C411001 IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC",
+ "final_sql": "SELECT \n    b.SEC_SNAME AS `股票名称`,\n    b.SEC_CODE AS `股票代码`,\n    a.ENDDATE AS `报表截止日`,\n    ROUND(a.C100000/10000, 1) AS `经营活动产生的现金流量净额(万)`,\n    ROUND(a.C411001/10000, 1) AS `净利润(万)`,\n    CASE \n        WHEN a.C411001 IS NULL OR a.C411001 = 0 THEN NULL\n        ELSE ROUND(a.C100000/a.C411001, 2)\n    END AS `经营活动现金流/净利润(倍)`\nFROM \n    VIEW_STK_CASH_GEN a\nINNER JOIN \n    GET_A_SEC_CODE b ON a.COMCODE = b.COMCODE\nWHERE \n    b.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '合并'\n    AND a.ENDDATE = '2024-12-31 00:00:00'\n    AND a.C100000 IS NOT NULL\n    AND a.C411001 IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.03"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "万华化学 600309 2024-12-31 00:00:00 3005343.5 1479131.4 2.03",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 28.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_17_f2ff9e5c.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 27.38,
+  "llm_seconds_max": 20.35,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2172,
+   "prompt_tokens": 13740,
+   "total_tokens": 15912,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1495,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13740,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 216,
+   "prompt_tokens": 7062,
+   "total_tokens": 7278,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 20802,
+  "completion": 2388,
+  "total": 23190
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2172,
+   "prompt_tokens": 13740,
+   "total_tokens": 15912,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1495,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13740,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 216,
+   "prompt_tokens": 7062,
+   "total_tokens": 7278,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

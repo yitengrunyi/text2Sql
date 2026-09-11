@@ -1,0 +1,107 @@
+{
+ "round_id": 26,
+ "index": 4,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "好，明白了。对了确认一下，这些日频的份额变动和净流入，都是按交易所每天披露的份额数据算出来的吧？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "您的反馈与数据查询任务无关，此类反馈超出了我们当前的支持范围，本次流程中断请重启新页面。\n反馈与数据查询无关",
+ "route_gold": "NON_QUERY",
+ "route_pred": "NON_QUERY",
+ "route_ok": true,
+ "first_sql": null,
+ "final_sql": null,
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": true,
+ "answer_ok": null,
+ "elapsed_seconds": 16.1,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_26_d8328bdd.4",
+  "llm_call_count": 1,
+  "llm_models": [
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 15.53,
+  "llm_seconds_max": 15.53,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 390,
+   "prompt_tokens": 11408,
+   "total_tokens": 11798,
+   "completion_tokens_details": {
+    "reasoning_tokens": 335,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11408,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 11408,
+  "completion": 390,
+  "total": 11798
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 390,
+   "prompt_tokens": 11408,
+   "total_tokens": 11798,
+   "completion_tokens_details": {
+    "reasoning_tokens": 335,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11408,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NON_QUERY",
+  "has_sql": true
+ }
+}

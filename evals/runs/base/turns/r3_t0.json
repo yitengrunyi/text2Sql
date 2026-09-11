@@ -1,0 +1,169 @@
+{
+ "round_id": 3,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "宁德时代2026年8月31日的收盘价是多少？",
+ "labels": {
+  "followup_type": null,
+  "difficulty": "时间窗口",
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n收盘价（Close Price）\n\n[2] 计算公式：  \n收盘价 = 某股票在交易日收盘时的最终成交价格\n\n（注：收盘价通常由证券交易所自动记录，无需人工计算，但在金融建模与预测中，可能会用历史价格、回归模型、时间序列分析等方法进行预测。）\n['宁德时代', '收盘价', 'Close Price', '关键金融指标', '最终成交价格', '证券交易所', '金融建模', '预测', '历史价格', '回归模型', '时间序列分析']\n该问题可能涉及A股-'宁德时代'，并且该股票为A股主板的创业板公司，该股票为A股主板的创业板公司！！！对应的一级行业名称为-电力设备。\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_EXPR_IDX', 'STK_PRE_DISCLOSURE', 'STK_MKT', 'STK_LIST_PLAN', 'VIEW_CONCEPT_DAILY_QUOTE', 'STK_COM_PROFILE', 'ANA_STK_DIV_RATE_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `交易日期`, \n    a.STOCKSNAME AS `股票名称`, \n    a.STOCKCODE AS `股票代码`, \n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`, \n    ROUND(a.TOPEN, 2) AS `开盘价（元）`, \n    ROUND(a.THIGH, 2) AS `最高价（元）`, \n    ROUND(a.TLOW, 2) AS `最低价（元）` \nFROM \n    ANA_STK_EXPR_IDX a \nWHERE \n    a.STOCKSNAME LIKE '%宁德时代%' \n    AND a.ENDDATE = '2026-08-31' \n    AND a.ISVALID = 1 \n    AND a.TCLOSE IS NOT NULL \nORDER BY \n    a.ENDDATE DESC\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）'], ['2026-08-31', '宁德时代', '300750', '363.55', '366.60', '367.33', '357.30']]}\n该查询目的是获取宁德时代在2026年8月31日的收盘价、开盘价、最高价和最低价。在结果中，将收盘价、开盘价、最高价、最低价的数据保留两位小数，使用了四个价格指标的四舍五入处理。收盘价的公式为“收盘价（元）=原始收盘价保留两位小数”。开盘价、最高价、最低价也采用同样的计算方式。查询结果符合要求。\n\n查询提取了宁德时代在指定日期的相关交易价格信息。所提取的数据来自个股市场表现指标表，该表用于记录股票每个交易日的价格及表现。通过股票简称模糊筛选“宁德时代”，筛选出截止日期为2026年8月31日的记录，并排除了收盘价为空的数据，只返回有效记录。最后按照交易日期降序排序。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    a.ENDDATE AS `交易日期`, \n    a.STOCKSNAME AS `股票名称`, \n    a.STOCKCODE AS `股票代码`, \n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`, \n    ROUND(a.TOPEN, 2) AS `开盘价（元）`, \n    ROUND(a.THIGH, 2) AS `最高价（元）`, \n    ROUND(a.TLOW, 2) AS `最低价（元）` \nFROM \n    ANA_STK_EXPR_IDX a \nWHERE \n    a.STOCKSNAME LIKE '%宁德时代%' \n    AND a.ENDDATE = '2026-08-31' \n    AND a.ISVALID = 1 \n    AND a.TCLOSE IS NOT NULL \nORDER BY \n    a.ENDDATE DESC",
+ "final_sql": "SELECT \n    a.ENDDATE AS `交易日期`, \n    a.STOCKSNAME AS `股票名称`, \n    a.STOCKCODE AS `股票代码`, \n    ROUND(a.TCLOSE, 2) AS `收盘价（元）`, \n    ROUND(a.TOPEN, 2) AS `开盘价（元）`, \n    ROUND(a.THIGH, 2) AS `最高价（元）`, \n    ROUND(a.TLOW, 2) AS `最低价（元）` \nFROM \n    ANA_STK_EXPR_IDX a \nWHERE \n    a.STOCKSNAME LIKE '%宁德时代%' \n    AND a.ENDDATE = '2026-08-31' \n    AND a.ISVALID = 1 \n    AND a.TCLOSE IS NOT NULL \nORDER BY \n    a.ENDDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "363.5500"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 203.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_3_839935ee.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 63.78,
+  "llm_seconds_max": 6.72,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   52086
+  ],
+  "prompt_columns_raw_len": 20187
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1730,
+   "prompt_tokens": 55228,
+   "total_tokens": 56958,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55228,
+  "completion": 1730,
+  "total": 56958
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1730,
+   "prompt_tokens": 55228,
+   "total_tokens": 56958,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6656,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,148 @@
+{
+ "round_id": 16,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "那7月呢？是涨还是跌，幅度多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 价格涨跌幅（如股票价格、基金净值、商品期货价格等）\n- 涨跌幅百分比（涨幅或跌幅）\n- 收盘价（7月的初始和末尾价格）\n\n[2] 可能的计算公式：  \n涨跌幅 = 期末价格 − 期初价格  \n涨跌幅百分比 = (期末价格 − 期初价格) ÷ 期初价格 × 100%\n['价格涨跌幅', '涨跌幅', 'price change', '涨跌', '涨跌幅百分比', '涨幅', '跌幅', '涨幅百分比', '跌幅百分比', '收盘价', '期末价格', '期初价格', '初始价格', '末尾价格', '股票价格', '基金净值', '商品期货价格']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_TCLOSE_WEIGHT', 'INDX_MKT', 'INDX_SAMP_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    '2026-07' AS `区间`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    DATE_FORMAT(MIN(TRADEDATE), '%Y-%m-%d') AS `区间起始日`,\n    DATE_FORMAT(MAX(TRADEDATE), '%Y-%m-%d') AS `区间截止日`,\n    ROUND(MIN(TCLOSE), 2) AS `区间起始收盘价(元)`,\n    ROUND(MAX(TCLOSE), 2) AS `区间截止收盘价(元)`,\n    CASE \n        WHEN MIN(TCLOSE) IS NOT NULL AND MIN(TCLOSE) <> 0 \n        THEN ROUND(100 * (MAX(TCLOSE) - MIN(TCLOSE)) / MIN(TCLOSE), 2) \n        ELSE NULL \n    END AS `区间涨跌幅(%)`\nFROM\n    INDX_MKT\nWHERE\n    TRADEDATE >= '2026-07-01'\n    AND TRADEDATE <= '2026-07-31'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\nGROUP BY \n    INDX_SNAME, SECCODE\nORDER BY \n    `区间涨跌幅(%)` DESC\n\n200\n{table:[['区间', '指数名称', '指数代码', '区间起始日', '区间截止日', '区间起始收盘价(元)', '区间截止收盘价(元)', '区间涨跌幅(%)'], ['2026-07', '科创成长', '000690', '2026-07-01', '2026-07-31', '1,970.39', '3,320.62', '68.53'], ['2026-07', '科创成长全收益', '000690CNY01', '2026-07-01', '2026-07-31', '2,043.26', '3,443.03', '68.51'], ['2026-07', '科创成长净收益', '000690CNY02', '2026-07-01', '2026-07-31', '2,035.83', '3,430.55', '68.51'], ['2026-07', '电子科技50', '931483', '2026-07-01', '2026-07-31', '4,818.98', '8,105.50', '68.20'], ['2026-07', '电子科技50全收益', '921483', '2026-07-01', '2026-07-31', '5,175.71', '8,702.76', '68.15'], ['2026-07', '长三角示范区50', '931234', '2026-07-01', '2026-07-31', '2,102.70', '3,514.05', '67.12'], ['2026-07', '长三角示范区50全收益', '931234CNY01', '2026-07-01', '2026-07-31', '2,253.89', '3,764.78', '67.03'], ['2026-07', '苏州创新50', '932057', '2026-07-01', '2026-07-31', '3,044.00', '5,068.65', '66.51'], ['2026-07', '苏州创新50全收益', '932057CNY01', '2026-07-01', '2026-07-31', '3,",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    '2026-07' AS `区间`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    DATE_FORMAT(MIN(TRADEDATE), '%Y-%m-%d') AS `区间起始日`,\n    DATE_FORMAT(MAX(TRADEDATE), '%Y-%m-%d') AS `区间截止日`,\n    ROUND(MIN(TCLOSE), 2) AS `区间起始收盘价(元)`,\n    ROUND(MAX(TCLOSE), 2) AS `区间截止收盘价(元)`,\n    CASE \n        WHEN MIN(TCLOSE) IS NOT NULL AND MIN(TCLOSE) <> 0 \n        THEN ROUND(100 * (MAX(TCLOSE) - MIN(TCLOSE)) / MIN(TCLOSE), 2) \n        ELSE NULL \n    END AS `区间涨跌幅(%)`\nFROM\n    INDX_MKT\nWHERE\n    TRADEDATE >= '2026-07-01'\n    AND TRADEDATE <= '2026-07-31'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\nGROUP BY \n    INDX_SNAME, SECCODE\nORDER BY \n    `区间涨跌幅(%)` DESC",
+ "final_sql": "SELECT \n    '2026-07' AS `区间`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    DATE_FORMAT(MIN(TRADEDATE), '%Y-%m-%d') AS `区间起始日`,\n    DATE_FORMAT(MAX(TRADEDATE), '%Y-%m-%d') AS `区间截止日`,\n    ROUND(MIN(TCLOSE), 2) AS `区间起始收盘价(元)`,\n    ROUND(MAX(TCLOSE), 2) AS `区间截止收盘价(元)`,\n    CASE \n        WHEN MIN(TCLOSE) IS NOT NULL AND MIN(TCLOSE) <> 0 \n        THEN ROUND(100 * (MAX(TCLOSE) - MIN(TCLOSE)) / MIN(TCLOSE), 2) \n        ELSE NULL \n    END AS `区间涨跌幅(%)`\nFROM\n    INDX_MKT\nWHERE\n    TRADEDATE >= '2026-07-01'\n    AND TRADEDATE <= '2026-07-31'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\nGROUP BY \n    INDX_SNAME, SECCODE\nORDER BY \n    `区间涨跌幅(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "12.8000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "2026-07 科创成长 000690 2026-07-01 2026-07-31 1970.39 3320.62 68.53\n2026-07 科创成长全收益 000690CNY01 2026-07-01 2026-07-31 2043.26 3443.03 68.51\n2026-07 科创成长净收益 000690CNY02 2026-07-01 2026-07-31 2035.83 3430.5",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 124.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_16_21de337b.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 52.49,
+  "llm_seconds_max": 10.39,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   18752
+  ],
+  "prompt_columns_raw_len": 4925
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1437,
+   "prompt_tokens": 23949,
+   "total_tokens": 25386,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 23949,
+  "completion": 1437,
+  "total": 25386
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1437,
+   "prompt_tokens": 23949,
+   "total_tokens": 25386,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

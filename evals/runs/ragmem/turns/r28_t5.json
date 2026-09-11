@@ -1,0 +1,172 @@
+{
+ "round_id": 28,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "先不看两两比较了——改成看整体：咱们覆盖的这批美股，平均市盈率现在大概什么水平？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "条件修改",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT MAX(com.F022D) AS `市盈率更新时间`, ROUND(AVG(com.F021N), 2) AS `平均市盈率` FROM AMERICAN_STOCK_MAIN am JOIN COM3101 com ON am.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL;\n200\n{table:[['市盈率更新时间', '平均市盈率'], ['-', '36.89']]}\n该查询获取了当前数据库中所有覆盖的美股样本的平均市盈率，并附带相关市盈率数据的最新更新时间。数据源自“美股基本信息”表与“主要财务指标”表，通过内部代码将每只股票的基础信息与最新市盈率数据匹配。仅纳入有有效市盈率数据的股票，确保计算结果准确。平均市盈率的计算方式为：将所有有数据的股票市盈率数值相加后除以股票数量，并将结果保留两位小数。市盈率的单位为倍，直接引用了已计算好的财务指标。更新时间则取所有股票中最新的一条市盈率数据的时间，作为指标的参考时刻。本查询没有限定个股或行业，反映的是全部样本美股的整体估值水平，满足用户对当前全部美股市盈率均值的查询需求。\n{table:[['市盈率更新时间', '平均市盈率'], ['-', '36.89']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT MAX(com.F022D) AS `市盈率更新时间`, ROUND(AVG(com.F021N), 2) AS `平均市盈率` FROM AMERICAN_STOCK_MAIN am JOIN COM3101 com ON am.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL",
+ "final_sql": "SELECT MAX(com.F022D) AS `市盈率更新时间`, ROUND(AVG(com.F021N), 2) AS `平均市盈率` FROM AMERICAN_STOCK_MAIN am JOIN COM3101 com ON am.FIU_ID = com.FIU_ID WHERE com.F021N IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "36.89"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": " 36.89",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 30.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_28_278aa98a.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.79,
+  "llm_seconds_max": 23.43,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2426,
+   "prompt_tokens": 13162,
+   "total_tokens": 15588,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2080,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13162,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 202,
+   "prompt_tokens": 7151,
+   "total_tokens": 7353,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 20313,
+  "completion": 2628,
+  "total": 22941
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2426,
+   "prompt_tokens": 13162,
+   "total_tokens": 15588,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2080,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13162,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 202,
+   "prompt_tokens": 7151,
+   "total_tokens": 7353,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

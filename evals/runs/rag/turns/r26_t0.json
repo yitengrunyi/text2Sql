@@ -1,0 +1,156 @@
+{
+ "round_id": 26,
+ "index": 0,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "最近黄金ETF吸金很猛，帮我看看华安黄金ETF（518880）最近一周资金净流入大概有多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 资金净流入（Fund Net Inflow）\n\n[2] 可能的计算公式：  \n资金净流入 = 当期申购金额总和 − 当期赎回金额总和\n\n其中，“当期”指的是最近一周的数据。  \n也常见计算方式为：  \n资金净流入 = 期末基金份额 × 期末基金净值 − 期初基金份额 × 期初基金净值\n\n或者直接用：  \n资金净流入 =（最近一周申购总额 − 最近一周赎回总额）\n['黄金ETF', '华安黄金ETF', '518880', '资金净流入', 'Fund Net Inflow', '申购金额', '赎回金额', '当期申购金额总和', '当期赎回金额总和', '期末基金份额', '期末基金净值', '期初基金份额', '期初基金净值', '申购总额', '赎回总额', '最近一周']\n该问题可能涉及到申万三级行业，三级行业名称为\"黄金\"，即SW_INDU_CODE_2021_3 LIKE \"%黄金%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%黄金%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及的题材包含：['黄金白银']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '黄金白银'。\n基金相关\n['基金产品净值', '基金份额变动', 'ETF相关信息']\n['FUND_SHARES_CHANGE', 'ETF_SHARES_CHANGE_ROLL', 'ETF_LABEL_INFO_CHINA', 'FUND_SHARES_CHANGE', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    esr.TRADING_DAY AS `统计日期`,\n    esr.FUND_NAME AS `基金名称`,\n    esr.FUND_SYMBOL AS `基金代码`,\n    ROUND(esr.NET_INFLOW/100000000, 2) AS `最近一周资金净流入(亿元)`,\n    esr.ROLL_NUM AS `滚动周期(天)`\nFROM\n    ETF_SHARES_CHANGE_ROLL esr\nWHERE\n    esr.FUND_SYMBOL = '518880.SH'\n    AND esr.ROLL_NUM = 5\n    AND esr.TRADING_DAY = '2026-09-02'\n    AND esr.HISVALID = 1\n    AND esr.NET_INFLOW IS NOT NULL\nLIMIT 1\n200\n{table:[['统计日期', '基金名称', '基金代码', '最近一周资金净流入(亿元)', '滚动周期(天)'], ['2026-09-02', '华安黄金易(ETF)', '518880.SH', '4.61', '5']]}\n该查询的目的是获取华安黄金ETF在最近一周的资金净流入情况。最近一周资金净流入（亿元）是通过将资金净流入（元）除以一亿，并保留两位小数来计算的。公式为：最近一周资金净流入（亿元）= 资金净流入（元） / 100000000。滚动周期为5天，代表数据统计窗口是一周。\n\n查询直接使用了基金日频份额变动及资金净流入情况的数据，筛选了基金代码为华安黄金ETF、滚动周期为5天、统计日期为指定最新交易日，并确保数据有效且资金净流入数据不为空。\n\n查询结果符合要求。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    esr.TRADING_DAY AS `统计日期`,\n    esr.FUND_NAME AS `基金名称`,\n    esr.FUND_SYMBOL AS `基金代码`,\n    ROUND(esr.NET_INFLOW/100000000, 2) AS `最近一周资金净流入(亿元)`,\n    esr.ROLL_NUM AS `滚动周期(天)`\nFROM\n    ETF_SHARES_CHANGE_ROLL esr\nWHERE\n    esr.FUND_SYMBOL = '518880.SH'\n    AND esr.ROLL_NUM = 5\n    AND esr.TRADING_DAY = '2026-09-02'\n    AND esr.HISVALID = 1\n    AND esr.NET_INFLOW IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    esr.TRADING_DAY AS `统计日期`,\n    esr.FUND_NAME AS `基金名称`,\n    esr.FUND_SYMBOL AS `基金代码`,\n    ROUND(esr.NET_INFLOW/100000000, 2) AS `最近一周资金净流入(亿元)`,\n    esr.ROLL_NUM AS `滚动周期(天)`\nFROM\n    ETF_SHARES_CHANGE_ROLL esr\nWHERE\n    esr.FUND_SYMBOL = '518880.SH'\n    AND esr.ROLL_NUM = 5\n    AND esr.TRADING_DAY = '2026-09-02'\n    AND esr.HISVALID = 1\n    AND esr.NET_INFLOW IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "460969725.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 华安黄金易(ETF) 518880.SH 4.61 5",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.3,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_26_6a6c7aa8.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 44.89,
+  "llm_seconds_max": 5.03,
+  "selected_tables": [
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_SHARES_CHANGE",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "FUND_SHARES_CHANGE",
+   "ETF_DAILY_QUOTE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   21760
+  ],
+  "prompt_columns_raw_len": 12917
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1302,
+   "prompt_tokens": 29156,
+   "total_tokens": 30458,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29156,
+  "completion": 1302,
+  "total": 30458
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1302,
+   "prompt_tokens": 29156,
+   "total_tokens": 30458,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_SHARES_CHANGE_ROLL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_SHARES_CHANGE",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

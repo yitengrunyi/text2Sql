@@ -1,0 +1,191 @@
+{
+ "round_id": 22,
+ "index": 5,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·净值与收益率——中欧医疗健康混合A单位/累计净值、年内与年度收益率、中欧基金2025年度收益榜首、华安黄金易ETF近一年回报",
+ "question": "对了，最近想配点黄金，华安黄金易ETF(518880)最近一年涨了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 涨幅（收益率）\n\n[2] 可能的计算公式  \n涨幅 = （期末价格 - 期初价格）/ 期初价格 × 100%\n\n其中，  \n- 期末价格：最近一年的收盘价（如查询日对应的收盘价）  \n- 期初价格：一年前同一天或前后最近一个交易日的收盘价\n['华安黄金易ETF', '518880', '涨幅', '收益率', '期末价格', '期末收盘价', '最近一年的收盘价', '查询日收盘价', '期初价格', '期初收盘价', '一年前同一天收盘价', '前后最近一个交易日收盘价']\n该问题可能涉及到申万三级行业，三级行业名称为\"黄金\"，即SW_INDU_CODE_2021_3 LIKE \"%黄金%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%黄金%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"有色金属\"，即SW_INDU_CODE_2021_1 LIKE \"%有色金属%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%有色金属%\"\n该问题可能涉及的题材包含：['黄金白银']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '黄金白银'。\n基金相关\n['基金产品净值', 'ETF相关信息']\n['ETF_DAILY_QUOTE', 'FUND_NETVALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    MIN(t_start.TRADING_DAY) AS `起始交易日`,\n    MAX(t_end.TRADING_DAY) AS `截止交易日`,\n    t_end.FUND_NAME AS `基金名称`,\n    t_end.FUND_SYMBOL AS `基金代码`,\n    ROUND(t_start.CLOSE_PRICE, 2) AS `起始收盘价`,\n    ROUND(t_end.CLOSE_PRICE, 2) AS `截止收盘价`,\n    ROUND((t_end.CLOSE_PRICE / t_start.CLOSE_PRICE - 1) * 100, 2) AS `最近一年涨幅(%)`\nFROM\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n        ORDER BY TRADING_DAY ASC\n        LIMIT 1\n    ) t_start\nJOIN\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY = '2026-09-02'\n    ) t_end\nON t_start.FUND_SYMBOL = t_end.FUND_SYMBOL\n200\n{table:[['起始交易日', '截止交易日', '基金名称', '基金代码', '起始收盘价', '截止收盘价', '最近一年涨幅(%)'], ['2025-09-02', '2026-09-02', '华安黄金易(ETF)', '518880.SH', '7.67', '8.90', '16.06']]}\n最近一年的涨幅是通过比较基金在一年起始交易日和截止交易日的收盘价计算得出。具体的计算方式是，用截止收盘价除以起始收",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    MIN(t_start.TRADING_DAY) AS `起始交易日`,\n    MAX(t_end.TRADING_DAY) AS `截止交易日`,\n    t_end.FUND_NAME AS `基金名称`,\n    t_end.FUND_SYMBOL AS `基金代码`,\n    ROUND(t_start.CLOSE_PRICE, 2) AS `起始收盘价`,\n    ROUND(t_end.CLOSE_PRICE, 2) AS `截止收盘价`,\n    ROUND((t_end.CLOSE_PRICE / t_start.CLOSE_PRICE - 1) * 100, 2) AS `最近一年涨幅(%)`\nFROM\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n        ORDER BY TRADING_DAY ASC\n        LIMIT 1\n    ) t_start\nJOIN\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY = '2026-09-02'\n    ) t_end\nON t_start.FUND_SYMBOL = t_end.FUND_SYMBOL",
+ "final_sql": "SELECT\n    MIN(t_start.TRADING_DAY) AS `起始交易日`,\n    MAX(t_end.TRADING_DAY) AS `截止交易日`,\n    t_end.FUND_NAME AS `基金名称`,\n    t_end.FUND_SYMBOL AS `基金代码`,\n    ROUND(t_start.CLOSE_PRICE, 2) AS `起始收盘价`,\n    ROUND(t_end.CLOSE_PRICE, 2) AS `截止收盘价`,\n    ROUND((t_end.CLOSE_PRICE / t_start.CLOSE_PRICE - 1) * 100, 2) AS `最近一年涨幅(%)`\nFROM\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY >= DATE_SUB('2026-09-02', INTERVAL 1 YEAR)\n        ORDER BY TRADING_DAY ASC\n        LIMIT 1\n    ) t_start\nJOIN\n    (\n        SELECT \n            FUND_SYMBOL, \n            FUND_NAME,\n            CLOSE_PRICE, \n            TRADING_DAY\n        FROM ETF_DAILY_QUOTE\n        WHERE FUND_SYMBOL = '518880.SH'\n            AND HISVALID = 1\n            AND TRADING_DAY IS NOT NULL\n            AND TRADING_DAY = '2026-09-02'\n    ) t_end\nON t_start.FUND_SYMBOL = t_end.FUND_SYMBOL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "16.41"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-09-02 2026-09-02 华安黄金易(ETF) 518880.SH 7.67 8.90 16.06",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 74.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_22_9fa0bd22.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 70.79,
+  "llm_seconds_max": 26.83,
+  "selected_tables": [
+   "ETF_DAILY_QUOTE",
+   "FUND_NETVALUE"
+  ],
+  "candidate_tables": [
+   "FUND_NETVALUE",
+   "INDEX_QUOTE_ALL",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "ETF_DAILY_QUOTE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   15857
+  ],
+  "prompt_columns_raw_len": 3808
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2752,
+   "prompt_tokens": 10242,
+   "total_tokens": 12994,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10242,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1216,
+   "prompt_tokens": 22915,
+   "total_tokens": 24131,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33157,
+  "completion": 3968,
+  "total": 37125
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2752,
+   "prompt_tokens": 10242,
+   "total_tokens": 12994,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2440,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10242,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1216,
+   "prompt_tokens": 22915,
+   "total_tokens": 24131,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "ETF_DAILY_QUOTE",
+   "FUND_NETVALUE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

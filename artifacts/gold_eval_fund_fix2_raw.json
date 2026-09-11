@@ -1,0 +1,369 @@
+{
+  "summary": {
+    "wall_seconds": 919.1,
+    "question_count": 18,
+    "completed_count": 17,
+    "correct_count": 14,
+    "accuracy": 0.7778,
+    "timing": {
+      "mean_seconds": 91.61,
+      "median_seconds": 73.0,
+      "p90_seconds": 99.9,
+      "min_seconds": 25.2,
+      "max_seconds": 427.9
+    },
+    "by_source": {
+      "MYSQL-1": {
+        "total": 18,
+        "correct": 14
+      }
+    }
+  },
+  "results": [
+    {
+      "round": 5,
+      "index": 0,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "华夏上证50ETF联接A基金2026年9月1日的单位净值是多少？",
+      "judge_type": "numeric",
+      "gold_display": "1.0927元",
+      "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='001051.OF' AND TRADING_DAY='2026-09-01'",
+      "answer": "[1] 关键金融指标  \n单位净值（Fund Net Asset Value per Share）\n\n[2] 可能的计算公式  \n单位净值 = 总资产净值 / 基金份额总数  \n（即：NAV per share = Net Assets / Total Shares Outstanding）\n['华夏上证50ETF联接A', '基金', '单位净值', 'Fund Net Asset Value per Share', '净值', '总资产净值', 'Net Assets', '基金份额总数', 'Total Shares Outstanding', 'NAV per share']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n该问题可能涉及的题材包含：['资产管理']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '资产管理'。\n基金相关\n['基金产品净值', 'ETF相关信息']\n['FUND_NETVALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    TRADING_DAY AS `日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(UNIT_NAV, 4) AS `单位净值`\nFROM\n    FUND_NETVALUE\nWHERE\n    FUND_NAME LIKE '%华夏上证50ETF联接A%'\n    AND TRADING_DAY = '2026-09-01'\n    AND UNIT_NAV IS NOT NULL\n    AND FUND_SYMBOL IS NOT NULL\n    AND HISVALID = 1\nORDER BY\n    TRADING_DAY DESC\nLIMIT 1\n200\n{table:[['日期', '基金名称', '基金代码', '单位净值'], ['2026-09-01', '华夏上证50ETF联接A', '001051.OF', '1.09']]}\n查询的目的是获取华夏上证50ETF联接A基金在2026年9月1日的单位净值。在本次查询中，对单位净值进行了保留四位小数的处理，具体采用的公式为：单位净值（四位小数）等于原始单位净值直接四舍五入保留四位小数。在此查询中，我们直接使用了已有的基金净值数据。查询结果符合要求。\n\n查询从基金净值数据表中筛选具体基金名称及对应交易日的记录。选择显示基金名称、基金代码、交易日期和单位净值。过滤条件包括基金简称包含“华夏上证50ETF联接A”、交易日为2026年9月1日、单位净值不为空、基金代码不为空、数据有效。结果按交易日期降序排序，并限定只展示一条最新记录。最终返回指定基金在特定日期的单位净值信息。",
+      "sql": "",
+      "elapsed_seconds": 87.5,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 5,
+      "index": 1,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "它同一天的累计净值是多少？",
+      "judge_type": "numeric",
+      "gold_display": "1.1483元",
+      "gold_sql": "SELECT ACCU_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='001051.OF' AND TRADING_DAY='2026-09-01'",
+      "answer": "生成查询代码\nSELECT TRADING_DAY AS `日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, ROUND(ACCU_NAV, 4) AS `累计净值` FROM FUND_NETVALUE WHERE FUND_NAME LIKE '%华夏上证50ETF联接A%' AND TRADING_DAY = '2026-09-01' AND ACCU_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1;\n200\n{table:[['日期', '基金名称', '基金代码', '累计净值'], ['2026-09-01', '华夏上证50ETF联接A', '001051.OF', '1.15']]}\n该查询获取了华夏上证50ETF联接A基金在2026年9月1日的累计净值及相关信息。数据来自基金净值相关信息表，筛选条件限定为基金简称包含“华夏上证50ETF联接A”、交易日期为2026年9月1日、基金代码和累计净值均有有效数据，并且数据记录处于有效状态。结果按交易日期降序排列，仅取一条记录。累计净值直接采用基金公布的数据，并将数值保留到小数点后四位，无需额外换算。本次查询结果能够准确反映该基金在指定日期的累计净值，满足用户需求。\n{table:[['日期', '基金名称', '基金代码', '累计净值'], ['2026-09-01', '华夏上证50ETF联接A', '001051.OF', '1.15']]}",
+      "sql": "",
+      "elapsed_seconds": 25.8,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 5,
+      "index": 2,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "华夏上证50ETF(510050)2026年9月1日的单位净值是多少？",
+      "judge_type": "numeric",
+      "gold_display": "3.0532元",
+      "gold_sql": "SELECT UNIT_NAV FROM FUND_NETVALUE WHERE FUND_SYMBOL='510050.SH' AND TRADING_DAY='2026-09-01'",
+      "answer": "生成查询代码\nSELECT TRADING_DAY AS `日期`, FUND_NAME AS `基金名称`, FUND_SYMBOL AS `基金代码`, UNIT_NAV AS `单位净值` FROM FUND_NETVALUE WHERE FUND_SYMBOL LIKE '%510050%' AND TRADING_DAY = '2026-09-01' AND UNIT_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1 ORDER BY TRADING_DAY DESC LIMIT 1;\n200\n{table:[['日期', '基金名称', '基金代码', '单位净值'], ['2026-09-01', '华夏上证50ETF', '510050.SH', '3.05']]}\n该查询获取了华夏上证50ETF（基金代码包含510050）在2026年9月1日的单位净值信息。数据来自基金净值信息表，仅提取有效的数据记录，并要求基金简称、基金代码与单位净值等核心信息均为有效数据。筛选条件限定为具体日期和指定基金代码，支持模糊匹配以兼容沪市等后缀，结果根据日期降序排序，仅返回最符合要求的单条数据。单位净值数据直接采用基金官方公布的净值指标，未涉及复杂计算，数值精度保持数据库原设定，小数位数未做裁剪。查询结果完全满足用户关于特定基金在指定日期单位净值的查询需求。\n{table:[['日期', '基金名称', '基金代码', '单位净值'], ['2026-09-01', '华夏上证50ETF', '510050.SH', '3.05']]}",
+      "sql": "",
+      "elapsed_seconds": 25.2,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 5,
+      "index": 3,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "易方达蓝筹精选混合2025年的年度收益率是多少？",
+      "judge_type": "numeric",
+      "gold_display": "+6.86%",
+      "gold_sql": "SELECT YIELD FROM FUND_STATISTICS_YEAR WHERE FUND_SYMBOL='005827.OF' AND YEAR=2025",
+      "answer": "生成查询代码\nWITH StartData AS (SELECT FUND_SYMBOL, FUND_NAME, RESTORED_ACCU_NAV AS START_NAV, TRADING_DAY AS START_DATE, ROW_NUMBER() OVER(PARTITION BY FUND_SYMBOL ORDER BY TRADING_DAY DESC) as rn FROM FUND_NETVALUE WHERE FUND_NAME LIKE '%易方达蓝筹精选混合%' AND TRADING_DAY <= '2024-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1), EndData AS (SELECT FUND_SYMBOL, FUND_NAME, RESTORED_ACCU_NAV AS END_NAV, TRADING_DAY AS END_DATE, ROW_NUMBER() OVER(PARTITION BY FUND_SYMBOL ORDER BY TRADING_DAY DESC) as rn FROM FUND_NETVALUE WHERE FUND_NAME LIKE '%易方达蓝筹精选混合%' AND TRADING_DAY <= '2025-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1) SELECT e.FUND_NAME AS `基金名称`, e.FUND_SYMBOL AS `基金代码`, s.START_DATE AS `期初交易日`, e.END_DATE AS `期末交易日`, s.START_NAV AS `期初复权累计净值`, e.END_NAV AS `期末复权累计净值`, CASE WHEN s.START_NAV = 0 THEN NULL ELSE (e.END_NAV / s.START_NAV - 1) * 100 END AS `年度收益率(%)` FROM (SELECT * FROM EndData WHERE rn = 1) e JOIN (SELECT * FROM StartData WHERE rn = 1) s ON e.FUND_SYMBOL = s.FUND_SYMBOL ORDER BY e.FUND_SYMBOL;\n200\n{table:[['基金名称', '基金代码', '期初交易日', '期末交易日', '期初复权累计净值', '期末复权累计净值', '年度收益率(%)'], ['易方达蓝筹精选混合', '005827.OF', '2024-12-31', '2025-12-31', '1.74', '1.86', '6.86']]}\n该查询获取了“易方达蓝筹精选混合”基金在2025年度的复权累计净值区间收益率和相关信息。数据来源于基金净值信息表，筛选条件为基金简称包含“易方达蓝筹精选混合”，并选取每个基金份额在2024年末和2025年末（即对应的最后一个交易日）各自最新且有效的复权累计净值数据，通过份额代码匹配进行连接。查询展示了基金名称、基金代码、2024年末和2025年末的交易日、对应的期初与期末复权累计净值，并采用“年度收益率 = (2025年末复权累计净值 ÷ 2024年末复权累计净值 − 1) × 100%”的公式计算出年度收益率，保留了完整百分数格式。查询结果能够准确反映2025年间该基金的区间收益表现，满足用户需求。\n{table:[['基金名称', '基金代码', '期初交易日', '期末交易日', '期初复权累计净值', '期末复权累计净值', '年度收益率(%)'], ['易方达蓝筹精选混合', '005827.OF', '2024-12-31', '2025-12-31', '1.74', '1.86', '6.86']]}",
+      "sql": "",
+      "elapsed_seconds": 277.3,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 5,
+      "index": 4,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "2025年年度收益率最高的基金是哪只？收益率是多少？",
+      "judge_type": "entity",
+      "gold_display": "永赢科技智选混合发起A(022364.OF) +233.29%",
+      "gold_sql": "SELECT FUND_SYMBOL, FUND_NAME, YIELD FROM FUND_STATISTICS_YEAR WHERE YEAR=2025 ORDER BY YIELD DESC LIMIT 1",
+      "answer": "生成查询代码\nWITH StartData AS (SELECT FUND_SYMBOL, FUND_NAME, RESTORED_ACCU_NAV AS START_NAV, TRADING_DAY AS START_DATE, ROW_NUMBER() OVER(PARTITION BY FUND_SYMBOL ORDER BY TRADING_DAY DESC) as rn FROM FUND_NETVALUE WHERE TRADING_DAY <= '2024-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1), EndData AS (SELECT FUND_SYMBOL, FUND_NAME, RESTORED_ACCU_NAV AS END_NAV, TRADING_DAY AS END_DATE, ROW_NUMBER() OVER(PARTITION BY FUND_SYMBOL ORDER BY TRADING_DAY DESC) as rn FROM FUND_NETVALUE WHERE TRADING_DAY <= '2025-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND FUND_SYMBOL IS NOT NULL AND HISVALID = 1) SELECT e.FUND_NAME AS `基金名称`, e.FUND_SYMBOL AS `基金代码`, s.START_DATE AS `期初交易日`, e.END_DATE AS `期末交易日`, s.START_NAV AS `期初复权累计净值`, e.END_NAV AS `期末复权累计净值`, CASE WHEN s.START_NAV = 0 THEN NULL ELSE (e.END_NAV / s.START_NAV - 1) * 100 END AS `年度收益率(%)` FROM (SELECT * FROM EndData WHERE rn = 1) e JOIN (SELECT * FROM StartData WHERE rn = 1) s ON e.FUND_SYMBOL = s.FUND_SYMBOL WHERE CASE WHEN s.START_NAV = 0 THEN NULL ELSE (e.END_NAV / s.START_NAV - 1) * 100 END IS NOT NULL ORDER BY `年度收益率(%)` DESC LIMIT 1;\n500\n诊断 根据你提供的背景、问题（查2025年度收益率最高的基金）、SQL语句、数据库MySQL版本，以及**执行时间为2026年9月3日**，如果上述SQL执行结果错误或没有取到结果，最可能的两个原因是：\n\n---\n\n### 1. **2025年数据尚未入库，查询数据本身缺失**\n\n- **最可能原因**：你查询2025年全年的年度收益率，意味着：\n    - 需要`FUND_NETVALUE`表中有截止到**2024-12-31**的“期初”净值数据（`START_NAV`）。\n    - 还要有**2025-12-31**或此前最近的“期末”净值数据（`END_NAV`）。\n- 如果基金的净值数据截至“2025-12-31”尚未入库（或者某只基金的数据不完整），那么对大部分基金，`EndData` CTE 选不出对应到 2025-12-31 的记录，SQL自然无法正确输出。\n    - 特别是一些数据集/批量导入的场景，年终的数据往往会在次年初才导入。\n- **即使执行时已到2026年9月3日，你的后台源数据库可能依旧缺少2025年底的数据**（如数据统计/导入/结账延迟等）。\n\n---\n\n### 2. **字段名或表结构与SQL不匹配，模型幻造了字段**\n\n- SQL语句用了如下字段：\n    - `FUND_SYMBOL`、`FUND_NAME`、`RESTORED_ACCU_NAV`、`TRADING_DAY`、`HISVALID`\n- **表/字段缺失或模型幻造字段的可能性：**\n    - `RESTORED_ACCU_NAV` 并不是所有基金数据库的标准字段，部分系统可能叫 `ACCU_NAV`、`NAV_ADJ` 或其它名字。\n    - `HISVALID` 验证历史数据有效性的字段也并非标准字段，有可能系统中根本没有这个字段。\n    - 如果表结构或者字段名称和SQL中引用的不一致，则直接导致SQL查不出数据。\n- 还有一种情况是模型写SQL时，随意假设了字段（如`RESTORED_ACCU_NAV`），实际表无此字段，查询就直接错/报错/无结果。\n\n---\n\n## 其他辅助性的次要原因（优先级较低）：\n\n3. **语法复杂造成逻辑偏差**  \n   SQL中`ROW_NUMBER`的分组和筛选逻辑可能未取得真正的“期初”和“期末”，特别是当某天多条净值或有分红/拆分事件，可能误差。\n\n4. **过滤条件过多或不当**  \n   例如`HISVALID = 1`过滤过严导致原本有数据的部分被剔除。\n\n---\n\n## 结论\n\n**结合你的业务需求、SQL语句和数据库情况：**\n\n> **最有可能的2个原因是：**\n> \n> 1. **2025年年终的基金净值数据尚未完全入库或本身不存在，导致查不出结果。**\n> 2. **实际的数据表或字段名和SQL里引用的不一致，例如 `RESTORED_ACCU_NAV` 和 `HISVALID` 字段，不存在或命名有误，模型幻造了字段，故SQL查无结果。**\n\n建议：\n- 先用`SHOW TABLES;`、`DESCRIBE FUND_NETVALUE;`命令检查表结构。\n- 单独跑`SELECT * FROM FUND_NETVALUE WHERE TRADING_DAY BETWEEN '2025-01-01' AND '2025-12-31' LIMIT 10;`验证数据是否存在。\n- 检查字段名拼写和含义，修正SQL使之与实际数据表/字段对应。\nWITH Start AS (\n    SELECT fn.FUND_SYMBOL, fn.FUND_NAME, fn.TRADING_DAY AS START_DATE, fn.RESTORED_ACCU_NAV AS START_NAV\n    FROM FUND_NETVALUE fn\n    JOIN (\n        SELECT FUND_SYMBOL, MAX(TRADING_DAY) AS TRADING_DAY\n        FROM FUND_NETVALUE\n        WHERE TRADING_DAY <= '2024-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND HISVALID = 1\n        GROUP BY FUND_SYMBOL\n    ) smax ON fn.FUND_SYMBOL = smax.FUND_SYMBOL AND fn.TRADING_DAY = smax.TRADING_DAY\n    WHERE fn.RESTORED_ACCU_NAV IS NOT NULL AND fn.HISVALID = 1\n),\nEnd AS (\n    SELECT fn.FUND_SYMBOL, fn.FUND_NAME, fn.TRADING_DAY AS END_DATE, fn.RESTORED_ACCU_NAV AS END_NAV\n    FROM FUND_NETVALUE fn\n    JOIN (\n        SELECT FUND_SYMBOL, MAX(TRADING_DAY) AS TRADING_DAY\n        FROM FUND_NETVALUE\n        WHERE TRADING_DAY <= '2025-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND HISVALID = 1\n        GROUP BY FUND_SYMBOL\n    ) emax ON fn.FUND_SYMBOL = emax.FUND_SYMBOL AND fn.TRADING_DAY = emax.TRADING_DAY\n    WHERE fn.RESTORED_ACCU_NAV IS NOT NULL AND fn.HISVALID = 1\n)\nSELECT e.FUND_NAME AS `基金名称`, e.FUND_SYMBOL AS `基金代码`, s.START_DATE AS `期初交易日`, e.END_DATE AS `期末交易日`, s.START_NAV AS `期初复权累计净值`, e.END_NAV AS `期末复权累计净值`, CASE WHEN s.START_NAV = 0 THEN NULL ELSE ROUND((e.END_NAV / s.START_NAV - 1) * 100, 4) END AS `年度收益率(%)`\nFROM End e\nJOIN Start s ON e.FUND_SYMBOL = s.FUND_SYMBOL\nWHERE s.START_NAV IS NOT NULL A",
+      "sql": "",
+      "elapsed_seconds": 427.9,
+      "had_error": true,
+      "error": "SQL执行错误: 修正SQL执行错误: SQL执行错误: Query execution timed out.. 修正后SQL: WITH Start AS (\n    SELECT fn.FUND_SYMBOL, fn.FUND_NAME, fn.TRADING_DAY AS START_DATE, fn.RESTORED_ACCU_NAV AS START_NAV\n    FROM FUND_NETVALUE fn\n    JOIN (\n        SELECT FUND_SYMBOL, MAX(TRADING_DAY) AS TRADING_DAY\n        FROM FUND_NETVALUE\n        WHERE TRADING_DAY <= '2024-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND HISVALID = 1\n        GROUP BY FUND_SYMBOL\n    ) smax ON fn.FUND_SYMBOL = smax.FUND_SYMBOL AND fn.TRADING_DAY = smax.TRADING_DAY\n    WHERE fn.RESTORED_ACCU_NAV IS NOT NULL AND fn.HISVALID = 1\n),\nEnd AS (\n    SELECT fn.FUND_SYMBOL, fn.FUND_NAME, fn.TRADING_DAY AS END_DATE, fn.RESTORED_ACCU_NAV AS END_NAV\n    FROM FUND_NETVALUE fn\n    JOIN (\n        SELECT FUND_SYMBOL, MAX(TRADING_DAY) AS TRADING_DAY\n        FROM FUND_NETVALUE\n        WHERE TRADING_DAY <= '2025-12-31' AND RESTORED_ACCU_NAV IS NOT NULL AND HISVALID = 1\n        GROUP BY FUND_SYMBOL\n    ) emax ON fn.FUND_SYMBOL = emax.FUND_SYMBOL AND fn.TRADING_DAY = emax.TRADING_DAY\n    WHERE fn.RESTORED_ACCU_NAV IS NOT NULL AND fn.HISVALID = 1\n)\nSELECT e.FUND_NAME AS `基金名称`, e.FUND_SYMBOL AS `基金代码`, s.START_DATE AS `期初交易日`, e.END_DATE AS `期末交易日`, s.START_NAV AS `期初复权累计净值`, e.END_NAV AS `期末复权累计净值`, CASE WHEN s.START_NAV = 0 THEN NULL ELSE ROUND((e.END_NAV / s.START_NAV - 1) * 100, 4) END AS `年度收益率(%)`\nFROM End e\nJOIN Start s ON e.FUND_SYMBOL = s.FUND_SYMBOL\nWHERE s.START_NAV IS NOT NULL AND e.END_NAV IS NOT NULL AND s.START_NAV <> 0\nORDER BY `年度收益率(%)` DESC\nLIMIT 1;",
+      "correct": false,
+      "reasons": [
+        "执行异常/无结果"
+      ]
+    },
+    {
+      "round": 5,
+      "index": 5,
+      "source": "MYSQL-1",
+      "theme": "基金净值与收益",
+      "question": "天弘余额宝货币基金最新的资产净值是多少？",
+      "judge_type": "numeric",
+      "gold_display": "6799.46亿元(2026-06-30)",
+      "gold_sql": "SELECT NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE FUND_SYMBOL='000198.OF' ORDER BY REPORT_DATE DESC LIMIT 1",
+      "answer": "[1] 关键金融指标：资产净值（Net Asset Value, NAV）\n\n[2] 可能的计算公式：  \n资产净值（NAV）= 基金总资产 - 基金总负债\n['天弘余额宝货币基金', '资产净值', 'Net Asset Value', 'NAV', '基金总资产', '基金总负债']\n该问题可能涉及到申万三级行业，三级行业名称为\"资产管理\"，即SW_INDU_CODE_2021_3 LIKE \"%资产管理%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%资产管理%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金产品基本信息']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'FUND_NETVALUE', 'ETF_INFO_DETAIL', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    REPORT_DATE AS `报告期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE/100000000, 2) AS `资产净值(亿元)`\nFROM \n    FUND_ASSET_ALLOCATION\nWHERE \n    FUND_NAME LIKE '%天弘余额宝%'\n    AND NET_VALUE IS NOT NULL\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION \n        WHERE FUND_NAME LIKE '%天弘余额宝%' AND NET_VALUE IS NOT NULL\n    )\nORDER BY \n    REPORT_DATE DESC\nLIMIT 1\n200\n{table:[['报告期', '基金名称', '基金代码', '资产净值(亿元)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}\n资产净值（亿元）是将基金资产净值除以一亿后保留两位小数，计算公式为：资产净值（亿元）等于资产净值除以一亿，然后取两位小数。在此查询中，我们对基金规模进行了单位转换和精度处理。查询结果符合要求。\n\n该查询从记录基金产品规模及资产配置情况的表中获取数据，筛选出基金简称包含“天弘余额宝”的记录。只选取资产净值已披露的最新报告期数据，并按报告期降序排列。最终返回天弘余额宝货币基金最新的资产净值（亿元）、基金名称、基金代码和报告期。\n天弘余额宝货币基金最新的资产净值是多少？",
+      "sql": "",
+      "elapsed_seconds": 75.5,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 0,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "易方达蓝筹精选混合2026年二季报的前三大重仓股是哪些？",
+      "judge_type": "list",
+      "gold_display": "腾讯控股(5.72%)、贵州茅台(5.62%)、百胜中国(5.49%)",
+      "gold_sql": "SELECT SEC_NAME, RATIO_IN_NV FROM FUND_PORTFOLIO_DETAIL WHERE FUND_SYMBOL='005827.OF' AND REPORT_DATE='2026-06-30' AND FUND_HOLDING_SOURCE_ID=1 ORDER BY MARKET_VALUE DESC LIMIT 3",
+      "answer": "[1] 关键金融指标  \n- 前三大重仓股（Top 3 Holdings）：指该基金在2026年二季报披露的持仓市值排名前三的股票。\n\n[2] 可能的计算公式  \n- 某股票持仓市值 = 持仓数量 × 股票期末价格  \n- 各股票持仓市值降序排列，取前3名  \n- 前三大重仓股 = 排名前三的股票名称（按持仓市值）\n\n公式展示：  \n前三大重仓股 = TOP3{股票名称 | 持仓市值 = 持仓数量 × 股票期末价格}\n['易方达蓝筹精选混合', '2026年二季报', '前三大重仓股', 'Top 3 Holdings', '持仓市值', '持仓数量', '股票期末价格', '股票名称']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品持仓']\n['FUND_PORTFOLIO_DETAIL', 'FUND_STOCK_CHANGE_HY', 'FUND_TOP10_STOCK_CHANGE_HY', 'STOCK_HOLD_STATISTICS_HY']\n是否命中召回表：False\n生成查询代码\nSELECT \n    REPORT_DATE AS `报告期`,\n    SEC_NAME AS `股票名称`,\n    COMB_SYMBOL AS `股票代码`,\n    ROUND(MARKET_VALUE/100000000, 1) AS `持股市值(亿元)`,\n    ROUND(RATIO_IN_NV*100, 2) AS `占基金净资产比例(%)`,\n    ROUND(SHARES_HOLDING, 0) AS `持股数量(股)`,\n    SERIAL_NUMBER AS `持仓序号`\nFROM \n    FUND_PORTFOLIO_DETAIL\nWHERE \n    FUND_NAME LIKE '%易方达蓝筹精选混合%'\n    AND REPORT_DATE = '2026-06-30'\n    AND FUND_HOLDING_SOURCE_ID = 1\n    AND HISVALID = 1\n    AND SEC_NAME IS NOT NULL\nORDER BY \n    RATIO_IN_NV DESC, MARKET_VALUE DESC\nLIMIT 3\n200\n{table:[['报告期', '股票名称', '股票代码', '持股市值(亿元)', '占基金净资产比例(%)', '持股数量(股)', '持仓序号'], ['2026-06-30', '腾讯控股', '00700.HK', '11.70', '5.72', '3,130,500.00', '1'], ['2026-06-30', '贵州茅台', '600519.SH', '11.50', '5.62', '968,500.00', '1'], ['2026-06-30', '百胜中国', '09987.HK', '11.20', '5.49', '4,037,500.00', '1']]}\n该查询目的是获取易方达蓝筹精选混合基金在2026年二季报披露的重仓股排名前三的详细情况。查询结果包括报告期、股票名称、股票代码、持股市值（亿元）、占基金净资产比例（%）、持股数量（股）、持仓序号。\n\n持股市值（亿元）是通过将原始持股市值（元）除以一亿，并保留一位小数，转换得出。占基金净资产比例（%）是通过将原始比例（小数）乘以100，并保留两位小数，得出百分比。持股数量是对原始数量取整。前三大重仓股按照占净资产比例从高到低排序，如果比例一致，则按持股市值降序排列，最终选出排名前三的股票。在此查询中，持股市值、占净资产比例和持股数量都采用了转换、计算或取整处理。查询结果符合要求。\n\n数据来源于用于记录基金持股明细的表格。采用筛选基金简称、报告期、数据来源和数据有效性，有效筛选出“易方达蓝筹精选混合”2026年年中披露的持仓信息，剔除无效和无股票名的数据。排序方式优先按持股占比，其次按持股市值，选取排名前三的重仓股，确保结果精确。",
+      "sql": "",
+      "elapsed_seconds": 99.9,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 1,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+      "judge_type": "entity",
+      "gold_display": "张坤、杨思亮、何一铖（共管）",
+      "gold_sql": "SELECT PSN_NAME FROM FUND_AND_MANAGER_MAPPING WHERE FUND_SYMBOL='005827.OF' AND END_DATE IS NULL",
+      "answer": "[1] 关键金融指标  \n- 基金经理名单（Management Team List）\n\n[2] 可能的计算公式  \n- 该Query主要涉及对基金经理名单（而非数值型金融指标如收益率、净值等）的查询，一般通过基金公司的公告、基金季报或中国基金业协会网站查询，并无计算公式。  \n- 若需延展可关联的金融指标，如“基金经理任职回报”可设计算法：\n  基金经理任职回报 = （当前基金净值 - 任职开始时基金净值）/ 任职开始时基金净值 × 100%\n['易方达蓝筹精选混合', '基金经理', '基金经理名单', 'Management Team List', '基金公司公告', '基金季报', '中国基金业协会网站', '基金经理任职回报', '当前基金净值', '任职开始时基金净值', '任职回报', '金融指标']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及的题材包含：['资产管理']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '资产管理'。\n基金相关\n['基金经理基本信息', '基金产品基本信息']\n['FUND_AND_MANAGER_MAPPING', 'FUND_MANAGER_INFO', 'VW_FUND_LABEL_SERIES']\n是否命中召回表：False\n生成查询代码\nSELECT\n    fam.PSN_NAME AS `基金经理名称`,\n    fam.PSN_HCODE AS `基金经理内部代码`,\n    fam.BIRTHYEAR AS `出生年份`,\n    fam.EDUCATION AS `最高学历`,\n    ROUND(fam.EXPERIENCE_TIME, 2) AS `管理年限(年)`,\n    ROUND(fam.NET_VALUE/100000000,2) AS `管理规模(亿)`,\n    fam.FUND_NUM_ACTUAL AS `在管基金数量`,\n    fam.BACK_GROUND AS `基金经理简介`,\n    fam.INST_NAME AS `在管机构`,\n    fam.HUPDATETIME AS `信息更新时间`,\n    fam.MV_OF_STOCK AS `股票投资合计资产市值(元)`,\n    fam.MV_OF_BOND AS `债券投资合计资产市值(元)`,\n    fam.MV_OF_MONEY AS `货币资产市值(元)`\nFROM FUND_MANAGER_INFO fam\nWHERE fam.PSN_HCODE IN (\n    SELECT DISTINCT mapping.PSN_HCODE\n    FROM FUND_AND_MANAGER_MAPPING mapping\n    WHERE mapping.FUND_NAME LIKE '%易方达蓝筹精选混合%'\n      AND (mapping.END_DATE IS NULL OR mapping.END_DATE >= '2026-09-03')\n      AND mapping.HISVALID = 1\n)\nAND fam.HISVALID = 1\nAND CASE WHEN fam.NET_VALUE != 0 THEN fam.MV_OF_STOCK / fam.NET_VALUE ELSE 0 END >= 0.447\nAND CASE WHEN fam.MV_OF_STOCK != 0 THEN (fam.MV_OF_STOCK - fam.MV_OF_STOCK_PASSIVE) / fam.MV_OF_STOCK ELSE 0 END >= 0.5\nORDER BY fam.NET_VALUE DESC\n200\n{table:[['基金经理名称', '出生年份', '最高学历', '管理年限(年)', '管理规模(亿)', '在管基金数量', '基金经理简介', '在管机构', '信息更新时间', '股票投资合计资产市值(元)', '债券投资合计资产市值(元)', '货币资产市值(元)'], ['何一铖', '-', '硕士', '2.05', '705.88', '2', '何一铖硕士研究生、硕士。2018年4月至2019年7月任上海申银万国证券研究所有限公司助理分析师。2019年7月起在易方达基金管理有限公司任职，现任研究员。', '易方达', '2026-09-03', '31,628,100,273.15', '35,902,780,576.35', '-'], ['张坤', '-', '硕士', '13.94', '322.85', '4', '张坤，男，中国籍，理学硕士。曾任易方达基金管理有限公司行业研究员、基金经理助理，研究部总经理助理。现任易方达基金管理有限公司副总经理级高级管理人员、权益投资决策委员会委员。易方达中小盘混合型证券投资基金基金经理、易方达亚洲精选股票型证券投资基金基金经理、易方达新丝路灵活配置混合型证券投资基金基金经理。自2018年9月5日起，担任易方达蓝筹精选混合型证券投资基金的基金经理。自2020年6月17日起，担任易方达优质企业三年持有期混合型证券投资基金的基金经理。自2021年9月10日起，担任易方达优质精选混合型证券投资基金的基金经理。自2022年8月15日起，担任东海鑫享66个月定期开放债券型证券投资基金的基金经理。\\n2019年8月28日至2020年2月18日，代任国寿安保消费新蓝海灵活配置混合型证券投资基金的基金经理。', '易方达', '2026-09-03', '24,733,290,508.05', '-', '-'], ['杨思亮', '-', '硕士', '7.94', '208.12', '1', '杨思亮，男，中国籍，中央财经大学国际金融学硕士。', '易方达', '2026-09-03', '15,954,463,574.52', '20,211,846.58', '-']]}\n管理年限（年）的数值是将原数据保留两位小数。管理规模（亿）通过将资产净值（元）除以一亿并保留两位小数计算得出，公式为 管理规模（亿） = 资产净值（元）/ 100000000。股票投资合计资产市值占管理规模的比例是以 股票投资合计资产市值（元）除以资产净值（元）得到，只有比例大于或等于0.447的基金经理才被纳入结果中。主动股票投资占股票资产市值比例，按照 (股票投资合计资产市值 – 被动基金的股票资产市值) 除以 股票投资合计资产市值 得出，只有比例大于或等于0.5的基金经理才被纳入结果中。在此查询中，对结果进行了管理年限保留两位小数、管理规模单位换算，以及两个比例的筛选。\n\n该查询先通过基金与基金经理关系表筛选出所有目前有效管理易方达蓝筹精选混合的基金经理，其中管理期间截止日期为空或不早于指定日期都视为当前在任。之后再从基金经理基本信息表中进一步筛选符合有效状态的基金经理，并要求其股票资产与管理规模、主动投资占比均满足指定要求。结果按管理规模降序排列，最终返回基金经理名称、内部代码、出生年份、最高学历、管理年限、管理规模、在管基金数量、基金经理简介、在管机构、信息更新时间、股票投资合计资产市值、债券投资合计资产市值及货币资产市值等信息。查询结果符合要求。\n易方达蓝筹精选混合现在的基金经理都有谁？",
+      "sql": "",
+      "elapsed_seconds": 78.7,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过",
+        "(软校验:{})"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 2,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+      "judge_type": "numeric",
+      "gold_display": "4只，322.85亿元",
+      "gold_sql": "SELECT FUND_NUM_ACTUAL, NET_VALUE FROM FUND_MANAGER_INFO WHERE PSN_NAME='张坤'",
+      "answer": "生成查询代码\nSELECT PSN_NAME AS `基金经理名称`, FUND_NUM_ACTUAL AS `在管基金数量`, ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)` FROM FUND_MANAGER_INFO WHERE PSN_NAME = '张坤' AND HISVALID = 1 AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447 AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5;\n200\n{table:[['基金经理名称', '在管基金数量', '管理总规模(亿)'], ['张坤', '4', '322.85']]}\n该查询获取了基金经理张坤当前真实在管的基金总数量以及其管理的资产总规模（以亿元计）。信息来源于基金经理基本信息数据，通过姓名精确匹配，只选取状态为有效的数据。筛选条件限定为：基金经理所管理基金股票投资占资产净值的比例大于44.7%，且主动管理部分占股票资产的比例在50%以上，确保结果只涵盖主动权益型基金管理情况。管理总规模的金额单位由原始的“元”转换为“亿元”，结果保留两位小数。基金数量直接使用了数据中的统计指标。整体查询结果能够准确反映张坤目前在管主动权益基金的数量和管理总规模，符合用户需要。\n{table:[['基金经理名称', '在管基金数量', '管理总规模(亿)'], ['张坤', '4', '322.85']]}",
+      "sql": "",
+      "elapsed_seconds": 35.3,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 3,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "全市场在管基金数量最多的基金经理是谁？管了几只？",
+      "judge_type": "entity",
+      "gold_display": "单宽之(华夏基金) 21只",
+      "gold_sql": "SELECT PSN_NAME, INST_NAME, FUND_NUM_ACTUAL FROM FUND_MANAGER_INFO ORDER BY FUND_NUM_ACTUAL DESC LIMIT 1",
+      "answer": "生成查询代码\nSELECT PSN_NAME AS `基金经理名称`, FUND_NUM_ACTUAL AS `在管基金数量` FROM FUND_MANAGER_INFO WHERE HISVALID = 1 AND FUND_NUM_ACTUAL IS NOT NULL ORDER BY FUND_NUM_ACTUAL DESC LIMIT 1;\n200\n{table:[['基金经理名称', '在管基金数量'], ['董瑾', '21']]}\n该查询获取了当前全市场在管基金数量最多的一位基金经理姓名及其实际管理的基金数量。数据来源于基金经理基本情况信息表，筛选条件包括只选有效数据，且实际在管基金数不为空。查询结果按照基金数量从高到低排序，仅返回数量最多的那一位。此查询直接使用了基金经理的实时管理基金数量指标，对同一基金不同分类方式只算一个，实现了准确汇总。查询结果完全符合用户要求。\n{table:[['基金经理名称', '在管基金数量'], ['董瑾', '21']]}",
+      "sql": "",
+      "elapsed_seconds": 37.0,
+      "had_error": false,
+      "error": null,
+      "correct": false,
+      "reasons": [
+        "实体",
+        "(软校验:{'数值': True})"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 4,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "易方达蓝筹精选混合最新的资产净值是多少？",
+      "judge_type": "numeric",
+      "gold_display": "204.16亿元(2026-06-30)",
+      "gold_sql": "SELECT NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE FUND_SYMBOL='005827.OF' ORDER BY REPORT_DATE DESC LIMIT 1",
+      "answer": "[1] 关键金融指标：资产净值（又称基金资产净值，Net Asset Value，简称NAV）\n\n[2] 可能的计算公式：  \n资产净值（NAV） = 基金总资产 - 基金总负债\n['易方达蓝筹精选混合', '资产净值', '基金资产净值', 'Net Asset Value', 'NAV', '基金总资产', '基金总负债']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金产品基本信息']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'FUND_STATISTICS_YEAR']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t.REPORT_DATE AS `报告期`, \n    t.FUND_NAME AS `基金简称`, \n    t.FUND_SYMBOL AS `基金代码`, \n    ROUND(t.NET_VALUE/100000000, 2) AS `资产净值(亿元)`, \n    t.TOTAL_ASSET AS `资产总值`, \n    t.MV_OF_STOCK AS `股票投资合计资产市值(元)` \nFROM \n    FUND_ASSET_ALLOCATION t\nWHERE \n    t.HISVALID = 1\n    AND t.FUND_NAME LIKE '%易方达蓝筹精选%'\n    AND t.REPORT_DATE = (\n        SELECT MAX(REPORT_DATE)\n        FROM FUND_ASSET_ALLOCATION\n        WHERE FUND_NAME LIKE '%易方达蓝筹精选%'\n          AND HISVALID = 1\n    )\nORDER BY t.REPORT_DATE DESC\nLIMIT 1\n200\n{table:[['报告期', '基金简称', '基金代码', '资产净值(亿元)', '资产总值', '股票投资合计资产市值(元)'], ['2026-06-30', '易方达蓝筹精选混合', '005827.OF', '204.16', '20,804,477,155.96', '15,603,718,951.55']]}\n资产净值(亿元)是通过把记录中的资产净值除以一亿，再保留两位小数得到的。即资产净值(亿元) = 资产净值(元) / 100000000。资产总值和股票投资合计资产市值直接取值，没有做特别的计算。在此查询中，我们对资产净值进行了单位转换，其他结果直接使用了已有的财务指标数据。查询结果符合要求。\n\n查询使用了基金产品对应的基金规模情况表，该表记录了基金基本信息和各类资产分布，包括基金简称、基金代码、报告期，以及各类资产市值。筛选条件主要包括只选择有效数据、基金简称中包含“易方达蓝筹精选”、且报告期为该基金的最新一次披露的日期。结果按报告期从新到旧排序，并限制只显示一条最新的记录。返回信息为该基金最新报告期的资产净值（亿元）、资产总值和股票投资合计资产市值。\n易方达蓝筹精选混合最新的资产净值是多少？",
+      "sql": "",
+      "elapsed_seconds": 84.1,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 6,
+      "index": 5,
+      "source": "MYSQL-1",
+      "theme": "基金持仓与基金经理",
+      "question": "全市场规模最大的基金是哪只？资产净值是多少？",
+      "judge_type": "entity",
+      "gold_display": "天弘余额宝货币 6799.46亿元(2026-06-30)",
+      "gold_sql": "SELECT FUND_SYMBOL, FUND_NAME, NET_VALUE FROM FUND_ASSET_ALLOCATION WHERE REPORT_DATE='2026-06-30' ORDER BY NET_VALUE DESC LIMIT 1",
+      "answer": "生成查询代码\nSELECT t.REPORT_DATE AS `报告期`, t.FUND_NAME AS `基金简称`, t.FUND_SYMBOL AS `基金代码`, ROUND(t.NET_VALUE / 100000000, 2) AS `资产净值(亿元)` FROM FUND_ASSET_ALLOCATION t WHERE t.HISVALID = 1 AND t.NET_VALUE IS NOT NULL AND t.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID = 1) ORDER BY t.NET_VALUE DESC LIMIT 1;\n200\n{table:[['报告期', '基金简称', '基金代码', '资产净值(亿元)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}\n该查询获取了全市场最新报告期资产净值规模最大的基金产品信息，包括基金简称、基金代码、报告期和资产净值。数据来源于基金产品资产规模情况数据，以最新披露的报告期为基准，仅筛选有效且资产净值数据不为空的基金产品，并按资产净值从高到低排序，最终只显示最大规模的那一只基金。资产净值通过将原始金额单位转换为亿元，并保留两位小数。该查询直接采用已公布的基金资产规模数据，能够准确满足用户关于“全市场规模最大的基金及其资产净值”的需求。\n{table:[['报告期', '基金简称', '基金代码', '资产净值(亿元)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}",
+      "sql": "",
+      "elapsed_seconds": 31.3,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过",
+        "(软校验:{'数值': True})"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 0,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "华夏上证50ETF(510050)2026年9月2日的收盘价是多少？",
+      "judge_type": "numeric",
+      "gold_display": "3.025元",
+      "gold_sql": "SELECT CLOSE_PRICE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+      "answer": "[1] 关键金融指标：收盘价（Closing Price）\n\n[2] 计算公式：  \n收盘价 = 当天最后一笔成交价格\n\n说明：收盘价是指在指定交易日（此处为2026年9月2日）华夏上证50ETF（510050）交易结束时的最后一笔成交价。通常不需要复杂计算，直接由市场成交数据获得。\n['华夏上证50ETF', '510050', '收盘价', 'Closing Price', '成交价格', '交易日', '市场成交数据', '最后一笔成交价']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n基金相关\n['ETF相关信息']\n['ETF_DAILY_QUOTE', 'ETF_LABEL_INFO_CHINA']\n是否命中召回表：False\n生成查询代码\nSELECT\n    TRADING_DAY AS `交易日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`,\n    ROUND(OPEN_PRICE, 2) AS `开盘价（元）`,\n    ROUND(HIGH_PRICE, 2) AS `最高价（元）`,\n    ROUND(LOW_PRICE, 2) AS `最低价（元）`,\n    ROUND(TURNOVER_VALUE/100000000, 2) AS `成交额（亿元）`\nFROM\n    ETF_DAILY_QUOTE\nWHERE\n    FUND_SYMBOL = '510050.SH'\n    AND TRADING_DAY = '2026-09-02'\n    AND CLOSE_PRICE IS NOT NULL\n    AND HISVALID = 1\n\n200\n{table:[['交易日期', '基金名称', '基金代码', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）', '成交额（亿元）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '3.03', '3.04', '3.04', '3.01', '12.28']]}\n收盘价（元）这一指标是通过将收盘价格保留两位小数得到的，公式为：收盘价（元） = 收盘价原始数据保留两位小数。查询结果中的成交额（亿元）是通过成交额原始数据除以100000000后保留两位小数得到的。开盘价、最高价、最低价同理，均为原始数据保留两位小数。在此查询中，我们对结果进行了单位转换和保留小数处理。查询结果符合要求。\n\n这次查询主要提取了ETF基金收盘行情的信息，包括交易日期、基金名称、基金代码、收盘价、开盘价、最高价、最低价和成交额。通过筛选基金代码为“510050.SH”，并限定交易日期为“2026-09-02”，同时确保该行情数据有效且收盘价不为空，保证了数据的准确性和有效性。",
+      "sql": "",
+      "elapsed_seconds": 92.8,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 1,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "它当天的涨跌幅是多少？",
+      "judge_type": "numeric",
+      "gold_display": "-0.98%",
+      "gold_sql": "SELECT CHANGE_PCT FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+      "answer": "生成查询代码\nSELECT\n    TRADING_DAY AS `交易日期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(CHANGE_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(CLOSE_PRICE, 2) AS `收盘价（元）`,\n    ROUND(OPEN_PRICE, 2) AS `开盘价（元）`,\n    ROUND(HIGH_PRICE, 2) AS `最高价（元）`,\n    ROUND(LOW_PRICE, 2) AS `最低价（元）`,\n    ROUND(TURNOVER_VALUE/100000000, 2) AS `成交额（亿元）`\nFROM\n    ETF_DAILY_QUOTE\nWHERE\n    FUND_SYMBOL = '510050.SH'\n    AND TRADING_DAY = '2026-09-02'\n    AND CLOSE_PRICE IS NOT NULL\n    AND CHANGE_PCT IS NOT NULL\n    AND HISVALID = 1;\n200\n{table:[['交易日期', '基金名称', '基金代码', '涨跌幅(%)', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）', '成交额（亿元）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '-0.01', '3.03', '3.04', '3.04', '3.01', '12.28']]}\n该查询获取了华夏上证50ETF在2026年9月2日的行情信息，包括基金名称、基金代码、涨跌幅、收盘价、开盘价、最高价、最低价和成交额。数据来源于ETF每日行情信息表，通过筛选基金代码和具体交易日期，仅提取有效且数据不为空的记录。涨跌幅为当天收盘价与前一日收盘价之差除以前一日收盘价后再乘以100%，即涨跌幅 = (当日收盘价－前一日收盘价)÷前一日收盘价×100%，保留2位小数。成交额由原始金额单位元转换成亿元后保留2位小数，其他价格指标直接按照原始数据保留2位小数。所有数据均直接引用现有行情指标，查询结果完全满足关于涨跌幅的需求。\n{table:[['交易日期', '基金名称', '基金代码', '涨跌幅(%)', '收盘价（元）', '开盘价（元）', '最高价（元）', '最低价（元）', '成交额（亿元）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '-0.01', '3.03', '3.04', '3.04', '3.01', '12.28']]}",
+      "sql": "",
+      "elapsed_seconds": 28.2,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 2,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "它2026年9月2日的基金规模是多少？",
+      "judge_type": "numeric",
+      "gold_display": "199.61亿元",
+      "gold_sql": "SELECT FUND_SIZE FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+      "answer": "[1] 关键金融指标  \n基金规模（Asset Under Management，简称AUM）\n\n[2] 可能的计算公式  \n基金规模 = 基金当日总份额 × 当日单位净值  \n即：  \n基金规模（AUM） = 基金总份额 × 单位净值\n\n说明：“基金总份额”为投资人持有的所有基金份额总和；“单位净值”为每份基金份额的价值，两者相乘即为整个基金的资产管理规模。\n['华夏上证50ETF', '510050', '基金规模', '资产管理规模', 'Asset Under Management', 'AUM', '基金当日总份额', '基金总份额', '总份额', '单位净值', '每份基金份额的价值', '投资人持有的所有基金份额总和']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n基金相关\n['基金产品持仓', '基金产品基本信息', '基金产品净值', 'ETF相关信息', '基金份额变动']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'FUND_ASSET_ALLOCATION', 'FUND_SHARES_CHANGE', 'ETF_LABEL_INFO_CHINA', 'ETF_SHARES_CHANGE_ROLL', 'ETF_DAILY_QUOTE']\n是否命中召回表：False\n生成查询代码\nSELECT\n  DATE_FORMAT(a.END_DATE, '%Y-%m-%d') AS `日期`,\n  a.FUND_NAME AS `基金名称`,\n  a.FUND_SYMBOL AS `基金代码`,\n  ROUND(a.NET_VALUE / 100000000, 2) AS `基金规模（亿）`\nFROM\n  FUND_SHARES_CHANGE a\nWHERE\n  a.FUND_SYMBOL = '510050.SH'\n  AND a.END_DATE = '2026-09-02'\n  AND a.HISVALID = 1\n  AND a.NET_VALUE IS NOT NULL\nLIMIT 1\n200\n{table:[['日期', '基金名称', '基金代码', '基金规模（亿）'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '195.80']]}\n该查询通过基金份额变动信息的表，筛选出2026年9月2日有效且不为空的数据，匹配基金代码为510050.SH的记录。查询的目的是获取华夏上证50ETF在指定日期的基金规模。\n\n基金规模（亿）是通过将基金规模（日频）除以一亿，并保留两位小数计算得出。公式为：基金规模（亿）＝基金规模（日频）／100000000。查询结果符合要求。\n\n查询只提取了报告期、基金简称、基金代码及计算后的基金规模（亿），限定条件是基金代码、截止日期、有效标记以及基金规模数据不为空。限制结果只显示一条。\n华夏上证50ETF(510050)2026年9月2日的基金规模是多少？",
+      "sql": "",
+      "elapsed_seconds": 71.7,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 3,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "华夏上证50ETF今年以来（YTD）的收益率是多少？",
+      "judge_type": "numeric",
+      "gold_display": "-2.58%(截至2026-09-02)",
+      "gold_sql": "SELECT YTD FROM ETF_PERFORMANCE_DETAIL WHERE FUND_SYMBOL='510050.SH' AND TYPE=1 AND TRADING_DAY='2026-09-02'",
+      "answer": "[1] 关键金融指标：  \n- YTD收益率（Year-to-Date Return）\n\n[2] 计算公式：  \nYTD收益率 = （当前基金净值 - 年初基金净值）/ 年初基金净值 × 100%\n['华夏上证50ETF', '510050', 'YTD收益率', 'Year-to-Date Return', '基金净值', '当前基金净值', '年初基金净值', '收益率']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品净值', 'ETF相关信息']\n['FUND_NETVALUE', 'ETF_DAILY_QUOTE', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    TRADING_DAY AS `统计区间截止日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(YTD * 100, 2) AS `今年以来收益率(%)`,\n    ROUND(CLOSE_PRICE, 2) AS `最新收盘价(元)`,\n    ROUND(FUND_SIZE / 100000000, 2) AS `基金规模(亿)`\nFROM\n    ETF_PERFORMANCE_DETAIL\nWHERE\n    FUND_SYMBOL = '510050.SH'\n    AND TYPE = 1\n    AND HISVALID = 1\n    AND TRADING_DAY = '2026-09-02'\nLIMIT 1\n200\n{table:[['统计区间截止日', '基金名称', '基金代码', '今年以来收益率(%)', '最新收盘价(元)', '基金规模(亿)'], ['2026-09-02', '华夏上证50ETF', '510050.SH', '-2.58', '3.03', '195.80']]}\n今年以来收益率（百分比）是通过公式 今年以来收益率(%) = YTD × 100 计算得到，即将YTD回报乘以100并保留两位小数；最新收盘价直接取值并保留两位小数；基金规模（单位为亿）是通过公式 基金规模(亿) = 基金规模 / 100000000 计算得到，并保留两位小数。在此查询中，对结果进行了上述计算。查询结果符合要求。\n\n查询从ETF表现相关信息表中提取数据，筛选了基金代码为510050.SH、基金类型为A股、记录有效、交易日为2026年9月2日的记录。选择了统计区间截止日、基金名称、基金代码、今年以来收益率、最新收盘价以及基金规模这些信息，并限制只返回一条结果。查询返回华夏上证50ETF今年以来（YTD）的收益率和相关指标。\n查询华夏上证50ETF(510050)今年以来（YTD）的收益率是多少？",
+      "sql": "",
+      "elapsed_seconds": 74.3,
+      "had_error": false,
+      "error": null,
+      "correct": true,
+      "reasons": [
+        "全项通过"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 4,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "目前境内的ETF一共有多少只？",
+      "judge_type": "numeric",
+      "gold_display": "11,681只",
+      "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE TYPE=1",
+      "answer": "生成查询代码\nSELECT COUNT(DISTINCT FUND_SYMBOL) AS `境内ETF总数` FROM ETF_PERFORMANCE_DETAIL WHERE TYPE = 1 AND HISVALID = 1 AND TRADING_DAY = '2026-09-02';\n200\n{table:[['境内ETF总数'], ['1,993']]}\n该查询统计了当前境内市场在2026年9月2日当日挂牌的全部交易型开放式基金（ETF）的数量。数据来源于ETF表现明细信息，限定只统计境内类别且处于有效状态的基金，确保结果准确反映实际存续、可交易的ETF总数。筛选条件包括基金类型为境内、数据有效以及日期为指定交易日。计算方法为对具备唯一标识码的基金进行去重计数，直接输出总数。查询结果能够准确满足用户对“目前境内的ETF一共有多少只”的需求。\n{table:[['境内ETF总数'], ['1,993']]}",
+      "sql": "",
+      "elapsed_seconds": 25.4,
+      "had_error": false,
+      "error": null,
+      "correct": false,
+      "reasons": [
+        "数值"
+      ]
+    },
+    {
+      "round": 7,
+      "index": 5,
+      "source": "MYSQL-1",
+      "theme": "ETF行情与统计",
+      "question": "其中QDII类型的ETF有多少只？",
+      "judge_type": "numeric",
+      "gold_display": "285只",
+      "gold_sql": "SELECT COUNT(*) FROM ETF_INFO_DETAIL WHERE IF_QDII=1",
+      "answer": "[1] 关键金融指标  \n- QDII类型的ETF总数量（2026年9月2日时点）\n\n[2] 可能的计算公式  \nQDII类型ETF数量 = 当日（2026年9月2日）在交易所挂牌交易的所有ETF中，基金类型属于“QDII”的基金数量汇总\n\n公式表示：\nQDII_ETF_数量 = COUNT( ETF基金 WHERE 基金类型 = \"QDII\" AND 上市日期 ≤ \"2026-09-02\" AND （终止/退市日期 IS NULL OR 终止/退市日期 > \"2026-09-02\") )\n['QDII', 'QDII类型', 'QDII类型的ETF', 'ETF', '基金', 'QDII_ETF_数量', 'ETF基金', '总数量', '数量', '基金类型', '挂牌交易', '上市日期', '交易所', '终止日期', '退市日期']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['ETF相关信息', '基金标签']\n['ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT\n    '2026-09-02' AS `交易日期`,\n    COUNT(DISTINCT FUND_SYMBOL) AS `QDII类型ETF只数`\nFROM\n    ETF_PERFORMANCE_DETAIL\nWHERE\n    TRADING_DAY = '2026-09-02'\n    AND FUND_NAME LIKE '%QDII%'\n    AND HISVALID = 1\n    AND FUND_SYMBOL IS NOT NULL\n200\n{table:[['交易日期', 'QDII类型ETF只数'], ['2026-09-02', '100']]}\n在该查询中，对QDII类型ETF的数量进行了计算。具体方法是，通过统计当天所有有效、基金名称包含QDII、且基金代码不为空的ETF，去重后计数。公式为：QDII类型ETF只数 = 有效且符合条件的基金代码数量（去重）。查询结果符合要求。\n\n查询主要基于ETF表现数据表，该表记录了每日各ETF的相关数据。筛选条件包括：交易日期为2026年9月2日、基金名称包含QDII、记录有效且基金代码不为空。最终统计符合要求的ETF数量。\n查询2026年9月2日QDII类型的ETF一共有多少只？",
+      "sql": "",
+      "elapsed_seconds": 71.1,
+      "had_error": false,
+      "error": null,
+      "correct": false,
+      "reasons": [
+        "数值"
+      ]
+    }
+  ]
+}

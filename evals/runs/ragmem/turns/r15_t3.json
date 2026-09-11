@@ -1,0 +1,208 @@
+{
+ "round_id": 15,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "时间漂移",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 营业额（Revenue，亦称营业收入）\n\n[2] 可能的计算公式：  \n营业额 = 产品销售收入 + 提供服务收入 + 其他主营业务收入  \n注：在上市公司财报中，营业额通常等于主营业务收入（以腾讯控股的合并报表为准），按如下公式也可表示：  \n营业额 = Σ（各业务部门收入）\n['腾讯控股', '2026年中报', '营业额', 'Revenue', '营业收入', '产品销售收入', '提供服务收入', '其他主营业务收入', '主营业务收入', '合并报表', '各业务部门收入']\n该问题可能涉及港股-'腾讯控股',对应的港股行业名称为-传媒。该问题可能涉及美股-'腾讯控股 (OTC)', 它的美股股票代码为：TCEHY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['港股财务', '港股基本信息']\n['HK_NFINIS_NSTD', 'HK_LTTFINIDC_DIDC', 'HK_ANA_STK_IDX_NFIN', 'HK_NFINBS_NSTD', 'HK_PRI_INCOME', 'HK_COMBINFO', 'HK_STKCODE', 'VIEW_HK_INDUSTRY_TRACK']\n是否命中召回表：False\n生成查询代码\nSELECT\n    cmb.COMCNNAME AS '公司中文名称',\n    cmb.COMCNABB AS '公司简称',\n    CONCAT(cds.STKCODE, '.HK') AS '股票代码',\n    isf.EDATE AS '报表截止日',\n    ROUND(isf.TTO / 100000000, 3) AS '营业额(亿)'\nFROM\n    HK_NFINIS_NSTD isf\n    INNER JOIN HK_COMBINFO cmb ON isf.COMUNIC = cmb.COMUNIC AND cmb.ISVALID = 1\n    INNER JOIN HK_STKCODE cds ON cmb.COMUNIC = cds.COMUNIC \n        AND cds.ISVALID = 1 \n        AND cds.LSSTUREFC = 1\n        AND (cds.STKTYREFC = 1 OR cds.STKTYREFC = 6)\n        AND cds.TRMKREFC = 7\n        AND LEFT(cds.STKCODE, 1) != '8'\nWHERE\n    cmb.COMCNABB LIKE '%腾讯控股%'\n    AND isf.ISVALID = 1\n    AND isf.RPTSOUREFC = 15\n    AND isf.EDATE = '2026-06-30'\n    AND isf.TTO IS NOT NULL\nLIMIT 1\n200\n{table:[['公司中文名称', '公司简称', '股票代码', '报表截止日', '营业额(亿)'], ['腾讯控股有限公司', '腾讯控股', '00700.HK', '2026-06-30', '4,012.43']]}\n营业额（亿）是通过公式“营业额（亿） = 总营业额（元）除以100000000”，得出最终结果保留三位小数。在此查询中，对总营业额进行了单位换算。\n\n该查询从三个表中获取数据。一个表提供了香港上市公司的基本信息，另一个表记录了港股公司利润表及营业额数据，第三个表记录公司股票最新代码信息。查询通过公司统一编码进行关联。\n\n查询筛选了公司简称包含“腾讯控股”的香港上市公司，限定选择有效记录，报表类型为中期业绩，报表截止日为2026年6月30日。只选取状态为正常上市、股票类型为普通股或特定类型、交易市场为香港联合交易所且股票代码首位不是8的记录。\n\n最终结果包含公司中文名称、简称、股票代码、报表截止日和营业额（亿），查询结果符合要求。\n查询腾讯控股2026年中报（上半年）的营业额是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT\n    cmb.COMCNNAME AS '公司中文名称',\n    cmb.COMCNABB AS '公司简称',\n    CONCAT(cds.STKCODE, '.HK') AS '股票代码',\n    isf.EDATE AS '报表截止日',\n    ROUND(isf.TTO / 100000000, 3) AS '营业额(亿)'\nFROM\n    HK_NFINIS_NSTD isf\n    INNER JOIN HK_COMBINFO cmb ON isf.COMUNIC = cmb.COMUNIC AND cmb.ISVALID = 1\n    INNER JOIN HK_STKCODE cds ON cmb.COMUNIC = cds.COMUNIC \n        AND cds.ISVALID = 1 \n        AND cds.LSSTUREFC = 1\n        AND (cds.STKTYREFC = 1 OR cds.STKTYREFC = 6)\n        AND cds.TRMKREFC = 7\n        AND LEFT(cds.STKCODE, 1) != '8'\nWHERE\n    cmb.COMCNABB LIKE '%腾讯控股%'\n    AND isf.ISVALID = 1\n    AND isf.RPTSOUREFC = 15\n    AND isf.EDATE = '2026-06-30'\n    AND isf.TTO IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT\n    cmb.COMCNNAME AS '公司中文名称',\n    cmb.COMCNABB AS '公司简称',\n    CONCAT(cds.STKCODE, '.HK') AS '股票代码',\n    isf.EDATE AS '报表截止日',\n    ROUND(isf.TTO / 100000000, 3) AS '营业额(亿)'\nFROM\n    HK_NFINIS_NSTD isf\n    INNER JOIN HK_COMBINFO cmb ON isf.COMUNIC = cmb.COMUNIC AND cmb.ISVALID = 1\n    INNER JOIN HK_STKCODE cds ON cmb.COMUNIC = cds.COMUNIC \n        AND cds.ISVALID = 1 \n        AND cds.LSSTUREFC = 1\n        AND (cds.STKTYREFC = 1 OR cds.STKTYREFC = 6)\n        AND cds.TRMKREFC = 7\n        AND LEFT(cds.STKCODE, 1) != '8'\nWHERE\n    cmb.COMCNABB LIKE '%腾讯控股%'\n    AND isf.ISVALID = 1\n    AND isf.RPTSOUREFC = 15\n    AND isf.EDATE = '2026-06-30'\n    AND isf.TTO IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "401243000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "腾讯控股有限公司 腾讯控股 00700.HK 2026-06-30 00:00:00 4012.430",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 62.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_15_4812469b.3",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 64.84,
+  "llm_seconds_max": 12.87,
+  "selected_tables": [
+   "HK_NFINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_NFINBS_NSTD",
+   "HK_PRI_INCOME",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "candidate_tables": [
+   "HK_CFS_NSTD",
+   "HK_FINBS_NSTD",
+   "HK_FINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_NFINBS_NSTD",
+   "HK_NFINIS_NSTD",
+   "HK_ANA_STK_IDX_FIN",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_IDC_STKVIDC",
+   "VIEW_HK_INDUSTRY_TRACK",
+   "HK_PRI_INCOME",
+   "HK_OFCHGBDSCM",
+   "HK_CDIVDSTCOM",
+   "STK_HK_IPO"
+  ],
+  "sql_prompt_chars": [
+   37224
+  ],
+  "prompt_columns_raw_len": 3925
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1039,
+   "prompt_tokens": 16865,
+   "total_tokens": 17904,
+   "completion_tokens_details": {
+    "reasoning_tokens": 784,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16865,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1463,
+   "prompt_tokens": 48635,
+   "total_tokens": 50098,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 65500,
+  "completion": 2502,
+  "total": 68002
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1039,
+   "prompt_tokens": 16865,
+   "total_tokens": 17904,
+   "completion_tokens_details": {
+    "reasoning_tokens": 784,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 16865,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1463,
+   "prompt_tokens": 48635,
+   "total_tokens": 50098,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_NFINIS_NSTD",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "HK_NFINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_NFINBS_NSTD",
+   "HK_PRI_INCOME",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

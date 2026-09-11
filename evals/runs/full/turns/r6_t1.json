@@ -1,0 +1,196 @@
+{
+ "round_id": 6,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "易方达蓝筹精选混合现在的基金经理都有谁？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金经理（Fund Manager）\n\n[2] 计算公式：  \n- 本query是关于信息查询，不涉及具体的金融指标计算，但一般涉及基金经理管理绩效时，常用如下指标：  \n  - 任期回报 = 基金净值（任期结束日） / 基金净值（任期开始日） - 1  \n  - 年化回报率 = （基金净值（结束）/基金净值（开始））^(1/年数) - 1  \n  - 超额收益 = 基金回报率 - 基准回报率\n['易方达蓝筹精选混合', '基金经理', 'Fund Manager', '任期回报', '基金净值', '年化回报率', '超额收益', '基金回报率', '基准回报率']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品基本信息', '基金经理基本信息']\n['FUND_AND_MANAGER_MAPPING', 'FUND_MANAGER_INFO', 'VW_FUND_LABEL_SERIES']\n是否命中召回表：False\n生成查询代码\nSELECT\n    m.PSN_NAME AS `基金经理名称`,\n    m.PSN_HCODE AS `基金经理内部代码`,\n    m.GENDER AS `性别`,\n    m.BIRTHYEAR AS `出生年份`,\n    m.EDUCATION AS `最高学历`,\n    ROUND(m.EXPERIENCE_TIME, 2) AS `管理年限`,\n    m.INST_NAME AS `所在机构简称`,\n    m.INST_FULL_NAME AS `所在机构全称`,\n    ROUND(m.NET_VALUE/100000000, 2) AS `管理规模（亿）`,\n    f.FUND_NAME AS `基金名称`,\n    f.FUND_SYMBOL AS `基金代码`,\n    f.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(f.END_DATE, '2099-01-01') AS `任职结束日期`,\n    f.DAYS_IN_OFFICE AS `任职天数`\nFROM\n    FUND_AND_MANAGER_MAPPING f\nINNER JOIN FUND_MANAGER_INFO m\n    ON f.PSN_HCODE = m.PSN_HCODE\nWHERE\n    f.FUND_NAME LIKE '%蓝筹精选混合%'\n    AND f.HISVALID = 1\n    AND m.HISVALID = 1\n    AND IFNULL(f.END_DATE, '2099-01-01') >= '2026-09-02'\n    AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5\nGROUP BY\n    m.PSN_HCODE, m.PSN_NAME, m.GENDER, m.BIRTHYEAR, m.EDUCATION, m.EXPERIENCE_TIME, m.INST_NAME, m.INST_FULL_NAME, m.NET_VALUE,\n    f.FUND_NAME, f.FUND_SYMBOL, f.BEGIN_DATE, f.END_DATE, f.DAYS_IN_OFFICE\nORDER BY\n    m.NET_VALUE DESC,\n    f.BEGIN_DATE DESC\n200\n{table:[['基金经理名称', '性别', '出生年份', '最高学历', '管理年限', '所在机构简称', '所在机构全称', '管理规模（亿）', '基金名称', '基金代码', '任职开始日期', '任职结束日期', '任职天数'], ['何一铖', '男', '-', '硕士', '2.05', '易方达', '易方达基金管理有限公司', '705.88', '易方达蓝筹精选混合', '005827.OF', '2026-05-23', '2099-01-01', '102'], ['张",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT\n    m.PSN_NAME AS `基金经理名称`,\n    m.PSN_HCODE AS `基金经理内部代码`,\n    m.GENDER AS `性别`,\n    m.BIRTHYEAR AS `出生年份`,\n    m.EDUCATION AS `最高学历`,\n    ROUND(m.EXPERIENCE_TIME, 2) AS `管理年限`,\n    m.INST_NAME AS `所在机构简称`,\n    m.INST_FULL_NAME AS `所在机构全称`,\n    ROUND(m.NET_VALUE/100000000, 2) AS `管理规模（亿）`,\n    f.FUND_NAME AS `基金名称`,\n    f.FUND_SYMBOL AS `基金代码`,\n    f.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(f.END_DATE, '2099-01-01') AS `任职结束日期`,\n    f.DAYS_IN_OFFICE AS `任职天数`\nFROM\n    FUND_AND_MANAGER_MAPPING f\nINNER JOIN FUND_MANAGER_INFO m\n    ON f.PSN_HCODE = m.PSN_HCODE\nWHERE\n    f.FUND_NAME LIKE '%蓝筹精选混合%'\n    AND f.HISVALID = 1\n    AND m.HISVALID = 1\n    AND IFNULL(f.END_DATE, '2099-01-01') >= '2026-09-02'\n    AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5\nGROUP BY\n    m.PSN_HCODE, m.PSN_NAME, m.GENDER, m.BIRTHYEAR, m.EDUCATION, m.EXPERIENCE_TIME, m.INST_NAME, m.INST_FULL_NAME, m.NET_VALUE,\n    f.FUND_NAME, f.FUND_SYMBOL, f.BEGIN_DATE, f.END_DATE, f.DAYS_IN_OFFICE\nORDER BY\n    m.NET_VALUE DESC,\n    f.BEGIN_DATE DESC",
+ "final_sql": "SELECT\n    m.PSN_NAME AS `基金经理名称`,\n    m.PSN_HCODE AS `基金经理内部代码`,\n    m.GENDER AS `性别`,\n    m.BIRTHYEAR AS `出生年份`,\n    m.EDUCATION AS `最高学历`,\n    ROUND(m.EXPERIENCE_TIME, 2) AS `管理年限`,\n    m.INST_NAME AS `所在机构简称`,\n    m.INST_FULL_NAME AS `所在机构全称`,\n    ROUND(m.NET_VALUE/100000000, 2) AS `管理规模（亿）`,\n    f.FUND_NAME AS `基金名称`,\n    f.FUND_SYMBOL AS `基金代码`,\n    f.BEGIN_DATE AS `任职开始日期`,\n    IFNULL(f.END_DATE, '2099-01-01') AS `任职结束日期`,\n    f.DAYS_IN_OFFICE AS `任职天数`\nFROM\n    FUND_AND_MANAGER_MAPPING f\nINNER JOIN FUND_MANAGER_INFO m\n    ON f.PSN_HCODE = m.PSN_HCODE\nWHERE\n    f.FUND_NAME LIKE '%蓝筹精选混合%'\n    AND f.HISVALID = 1\n    AND m.HISVALID = 1\n    AND IFNULL(f.END_DATE, '2099-01-01') >= '2026-09-02'\n    AND CASE WHEN m.NET_VALUE != 0 THEN m.MV_OF_STOCK / m.NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN m.MV_OF_STOCK != 0 THEN (m.MV_OF_STOCK - m.MV_OF_STOCK_PASSIVE) / m.MV_OF_STOCK ELSE 0 END >= 0.5\nGROUP BY\n    m.PSN_HCODE, m.PSN_NAME, m.GENDER, m.BIRTHYEAR, m.EDUCATION, m.EXPERIENCE_TIME, m.INST_NAME, m.INST_FULL_NAME, m.NET_VALUE,\n    f.FUND_NAME, f.FUND_SYMBOL, f.BEGIN_DATE, f.END_DATE, f.DAYS_IN_OFFICE\nORDER BY\n    m.NET_VALUE DESC,\n    f.BEGIN_DATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "张坤\n杨思亮\n何一铖"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 9
+ },
+ "first_result_preview": "何一铖 HPSN0000000000078536 男  硕士 2.05 易方达 易方达基金管理有限公司 705.88 易方达蓝筹精选混合 005827.OF 2026-05-23 2099-01-01 102\n张坤 HPSN0000000000000599 男  硕士 13.94 易方达 易方达基金管理有限公司 322.85 易方达蓝筹精选混合 005827.OF 2018-09-05 2099-",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(9行, Gold为3行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 9
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{})"
+ ],
+ "elapsed_seconds": 82.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_6_49a4726f.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 77.99,
+  "llm_seconds_max": 12.48,
+  "selected_tables": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "FUND_TURNOVER_RATE",
+   "VW_FUND_LABEL_SERIES",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   17269
+  ],
+  "prompt_columns_raw_len": 6252
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1011,
+   "prompt_tokens": 11275,
+   "total_tokens": 12286,
+   "completion_tokens_details": {
+    "reasoning_tokens": 752,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11275,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1733,
+   "prompt_tokens": 28130,
+   "total_tokens": 29863,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4224,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39405,
+  "completion": 2744,
+  "total": 42149
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1011,
+   "prompt_tokens": 11275,
+   "total_tokens": 12286,
+   "completion_tokens_details": {
+    "reasoning_tokens": 752,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11275,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1733,
+   "prompt_tokens": 28130,
+   "total_tokens": 29863,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4224,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_AND_MANAGER_MAPPING"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_MANAGER_INFO",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

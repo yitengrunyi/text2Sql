@@ -1,0 +1,172 @@
+{
+ "round_id": 10,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股全库统计",
+ "question": "其中的中概股都有哪些？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股';\n200\n{table:[['股票代码', '股票名称'], ['BABA.US', '阿里巴巴-W'], ['BIDU.US', '百度-W'], ['JD.US', '京东-W'], ['LI.US', '理想汽车-W'], ['NIO.US', '蔚来-W'], ['NTES.US', '网易-W'], ['PDD.US', '拼多多-W']]}\n该查询获取了最新交易日内所有属于中概股的美股名单，包括展示代码和股票名称。数据来源于美股日行情表和股票基本信息表，通过内部标识关联，确保仅筛选出最近有有效行情数据的股票，并进一步限定“是否为中概股”字段为“中概股”。本次查询直接提取已有的股票展示代码和名称信息，无需进行额外的公式换算或数据处理。查询结果准确反映最新有交易记录的全部中概股公司，完全满足用户关于中概股股票名单的需求。\n{table:[['股票代码', '股票名称'], ['BABA.US', '阿里巴巴-W'], ['BIDU.US', '百度-W'], ['JD.US', '京东-W'], ['LI.US', '理想汽车-W'], ['NIO.US', '蔚来-W'], ['NTES.US', '网易-W'], ['PDD.US', '拼多多-W']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股'",
+ "final_sql": "SELECT a.COMB_SYMBOL AS `股票代码`, a.CSNAME AS `股票名称` FROM VIEW_US_EOD_EXPR v JOIN AMERICAN_STOCK_MAIN a ON v.FIU_ID = a.FIU_ID WHERE v.TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM VIEW_US_EOD_EXPR WHERE TRADE_DATE IS NOT NULL) AND a.IS_CHINESE_STOCK = '中概股'",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 7,
+  "preview": "BABA 阿里巴巴-W\nPDD 拼多多-W\nBIDU 百度-W\nNTES 网易-W\nJD 京东-W\nLI 理想汽车-W\nNIO 蔚来-W"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 7
+ },
+ "first_result_preview": "BABA.US 阿里巴巴-W\nBIDU.US 百度-W\nJD.US 京东-W\nLI.US 理想汽车-W\nNIO.US 蔚来-W\nNTES.US 网易-W\nPDD.US 拼多多-W",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 7
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 29.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_10_349cd127.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 28.71,
+  "llm_seconds_max": 22.4,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1904,
+   "prompt_tokens": 9526,
+   "total_tokens": 11430,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1488,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9526,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 128,
+   "prompt_tokens": 3819,
+   "total_tokens": 3947,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13345,
+  "completion": 2032,
+  "total": 15377
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1904,
+   "prompt_tokens": 9526,
+   "total_tokens": 11430,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1488,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9526,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 128,
+   "prompt_tokens": 3819,
+   "total_tokens": 3947,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

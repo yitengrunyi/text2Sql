@@ -1,0 +1,134 @@
+{
+  "round_id": 15,
+  "source": "MYSQL-2",
+  "domain": "个股",
+  "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+  "initial": {
+    "question": "我组合里配了腾讯控股，先看下它2025年年报的营业额有多大？",
+    "judge": "numeric",
+    "gold_value": "751766000000",
+    "gold_display": "7517.66亿元（人民币，腾讯以人民币列报）",
+    "gold_entities": [
+      "腾讯控股"
+    ],
+    "gold_date": null,
+    "gold_sql": "SELECT n.TTO FROM HK_NFINIS_NSTD n JOIN HK_STKCODE c ON n.COMUNIC=c.COMUNIC WHERE c.STKCODE='00700' AND c.ISVALID=1 AND n.EDATE='2025-12-31' AND n.RPTSOUREFC=17",
+    "gold_tables": [
+      "HK_NFINIS_NSTD",
+      "HK_STKCODE"
+    ],
+    "labels": {
+      "difficulty": "多表join",
+      "followup_type": null,
+      "route_gold": null,
+      "time_sensitivity": "absolute"
+    }
+  },
+  "feedbacks": [
+    {
+      "question": "它现在股价什么水平？给我最新一个交易日的收盘价。",
+      "judge": "numeric",
+      "gold_value": "438.20",
+      "gold_display": "438.20港元（2026-09-02收盘）",
+      "gold_entities": [
+        "腾讯控股"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT CLPR FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1) ORDER BY TRDATE DESC LIMIT 1",
+      "gold_tables": [
+        "HK_STKDMK",
+        "HK_STKCODE"
+      ],
+      "labels": {
+        "difficulty": "子查询",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "那当天成交额有多大？",
+      "judge": "numeric",
+      "gold_value": "9336637626.70",
+      "gold_display": "约93.37亿港元（2026-09-02成交额）",
+      "gold_entities": [
+        "腾讯控股"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT TRTO FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1) AND TRDATE=(SELECT MAX(TRDATE) FROM HK_STKDMK WHERE STKUNICODE=(SELECT STKUNICODE FROM HK_STKCODE WHERE STKCODE='00700' AND ISVALID=1))",
+      "gold_tables": [
+        "HK_STKDMK",
+        "HK_STKCODE"
+      ],
+      "labels": {
+        "difficulty": "子查询",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "2026年中报已经出来了，它上半年的营业额是多少？",
+      "judge": "numeric",
+      "gold_value": "401243000000",
+      "gold_display": "4012.43亿元（人民币，2026年中报）",
+      "gold_entities": [
+        "腾讯控股"
+      ],
+      "gold_date": null,
+      "gold_sql": "SELECT n.TTO FROM HK_NFINIS_NSTD n JOIN HK_STKCODE c ON n.COMUNIC=c.COMUNIC WHERE c.STKCODE='00700' AND c.ISVALID=1 AND n.EDATE='2026-06-30' AND n.RPTSOUREFC=15",
+      "gold_tables": [
+        "HK_NFINIS_NSTD",
+        "HK_STKCODE"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "时间漂移",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "absolute"
+      }
+    },
+    {
+      "question": "再帮我看个港股，香港交易所最新的市净率是多少？",
+      "judge": "numeric",
+      "gold_value": "8.2839",
+      "gold_display": "8.28倍（2026-09-02）",
+      "gold_entities": [
+        "香港交易所"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT v.PB FROM HK_IDC_STKVIDC v JOIN HK_STKCODE c ON v.STKUNICODE=c.STKUNICODE WHERE c.STKCODE='00388' AND c.ISVALID=1 ORDER BY v.EDATE DESC LIMIT 1",
+      "gold_tables": [
+        "HK_IDC_STKVIDC",
+        "HK_STKCODE"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "话题切换",
+        "route_gold": "NEW_QUERY",
+        "time_sensitivity": "relative"
+      }
+    },
+    {
+      "question": "它现在的总市值有多大？",
+      "judge": "numeric",
+      "gold_value": "512713240338",
+      "gold_display": "约5127.13亿港元（2026-09-02）",
+      "gold_entities": [
+        "香港交易所"
+      ],
+      "gold_date": "2026-09-02",
+      "gold_sql": "SELECT p.TMKCAP FROM HK_IDC_STKPFMIDC p JOIN HK_STKCODE c ON p.STKUNICODE=c.STKUNICODE WHERE c.STKCODE='00388' AND c.ISVALID=1 ORDER BY p.EDATE DESC LIMIT 1",
+      "gold_tables": [
+        "HK_IDC_STKPFMIDC",
+        "HK_STKCODE"
+      ],
+      "labels": {
+        "difficulty": "多表join",
+        "followup_type": "指代继承",
+        "route_gold": "SQL_GENERATION",
+        "time_sensitivity": "relative"
+      }
+    }
+  ]
+}

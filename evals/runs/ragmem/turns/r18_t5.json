@@ -1,0 +1,195 @@
+{
+ "round_id": 18,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "帮我看看中证1000指数最新一个交易日的市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 市盈率（PE，Price to Earnings Ratio）\n\n[2] 可能的计算公式：  \n市盈率（PE） = 中证1000指数成分股总市值 ÷ 中证1000指数成分股总净利润\n\n或者，常用统计方式为（滚动市盈率）：  \n市盈率（PE, TTM） = 指数成分股加权市值总和 ÷ 指数成分股过去12个月加权净利润总和\n\n主体涉及：中证1000指数及其成分股。\n['中证1000指数', '市盈率', 'PE', 'Price to Earnings Ratio', '成分股', '总市值', '总净利润', '滚动市盈率', 'PE, TTM', '加权市值总和', '过去12个月加权净利润总和']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_SAMP_INFO', 'INDX_TCLOSE_WEIGHT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\n    INNER JOIN GET_INDX_GEN_INFO g\n        ON a.INNER_CODE = g.INNER_CODE\nWHERE\n    g.INDX_CODE = '000852'\n    AND a.TRD_DATE = '2026-09-02'\n    AND a.PE IS NOT NULL\n    AND g.USE_STATUS = '使用'\n    AND g.ISVALID = 1\n    AND a.ISVALID = 1\nLIMIT 1\n200\n{table:[['交易日期', '指数名称', '市盈率(倍)'], ['2026-09-02', '中证1000指数', '43.09']]}\n市盈率是通过总市值除以连续四个季度的净利润计算得出，即市盈率 = 总市值 ÷ 连续四个季度净利润。这里的市盈率已被四舍五入保留两位小数。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n该查询整合了指数估值数据表和指数基本信息表，通过指数内部代码进行关联。筛选出指数市场代码为“000852”的有效记录，仅保留指数处于“使用”状态以及数据有效的情况，交易日选定为2026年9月2日，且市盈率信息必须存在。结果只返回一条最近交易日的相关数据，内容包括交易日期、指数名称、指数代码和市盈率。\n查询中证1000指数最新一个交易日的市盈率是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\n    INNER JOIN GET_INDX_GEN_INFO g\n        ON a.INNER_CODE = g.INNER_CODE\nWHERE\n    g.INDX_CODE = '000852'\n    AND a.TRD_DATE = '2026-09-02'\n    AND a.PE IS NOT NULL\n    AND g.USE_STATUS = '使用'\n    AND g.ISVALID = 1\n    AND a.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT\n    a.TRD_DATE AS `交易日期`,\n    g.INDX_CNAME AS `指数名称`,\n    g.INDX_CODE AS `指数代码`,\n    ROUND(a.PE, 2) AS `市盈率(倍)`\nFROM\n    ANA_INDX_VAL_IDX a\n    INNER JOIN GET_INDX_GEN_INFO g\n        ON a.INNER_CODE = g.INNER_CODE\nWHERE\n    g.INDX_CODE = '000852'\n    AND a.TRD_DATE = '2026-09-02'\n    AND a.PE IS NOT NULL\n    AND g.USE_STATUS = '使用'\n    AND g.ISVALID = 1\n    AND a.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43.0869"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 中证1000指数 000852 43.09",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 61.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_18_2487da1d.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 57.66,
+  "llm_seconds_max": 12.97,
+  "selected_tables": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   29330
+  ],
+  "prompt_columns_raw_len": 11926
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1002,
+   "prompt_tokens": 13523,
+   "total_tokens": 14525,
+   "completion_tokens_details": {
+    "reasoning_tokens": 753,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13523,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 990,
+   "prompt_tokens": 31284,
+   "total_tokens": 32274,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 44807,
+  "completion": 1992,
+  "total": 46799
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1002,
+   "prompt_tokens": 13523,
+   "total_tokens": 14525,
+   "completion_tokens_details": {
+    "reasoning_tokens": 753,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 13523,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 990,
+   "prompt_tokens": 31284,
+   "total_tokens": 32274,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6016,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_VAL_IDX",
+   "ANA_INDX_FIN_IDX",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

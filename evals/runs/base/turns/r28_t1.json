@@ -1,0 +1,204 @@
+{
+ "round_id": 28,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "那它们俩的市净率呢？差距也这么明显吗？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：市净率（PB，Price to Book Ratio）\n\n[2] 计算公式：  \n市净率 = 股票市价 / 每股净资产  \n或  \n市净率 = 公司总市值 / 净资产总额\n['市净率', 'PB', 'Price to Book Ratio', '股票市价', '每股净资产', '公司总市值', '净资产总额']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板财务', '主板基本信息']\n['STK_FIN_CHARGE', 'VIEW_STK_INCOME_GEN', 'STK_TAX_RATIO', 'STK_IMM_ASS', 'VIEW_STK_STI_LIST_PLAN', 'STK_ASSETS', 'ANA_STK_DIV_RATE_IDX', 'STK_MKT', 'STK_NONOPT_EXPENSE', 'ANA_STK_VAL_IDX', 'STK_ATCP_LBLT']\n是否命中召回表：False\n生成查询代码\nSELECT\n    SEC_SNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PB, 2) AS `市净率(倍)`\nFROM\n    ANA_STK_VAL_IDX\nWHERE\n    TRD_DATE = '2026-09-02'\n    AND ISVALID = 1\n    AND PB IS NOT NULL\n    AND PB > 0\nORDER BY\n    PB DESC\nLIMIT 2\n200\n{table:[['股票简称', '股票代码', '交易日期', '市净率(倍)'], ['法尔胜', '000890', '2026-09-02', '2,502.80'], ['佳创视讯', '300264', '2026-09-02', '2,168.08']]}\n市净率的计算公式是：市净率 = 总市值 ÷ 最新净资产。查询中直接对市净率进行了保留两位小数的处理，并筛选了市净率大于零且不为空的股票。查询结果符合要求。\n\n本次查询从股票估值指标表提取数据，选取了交易日期为2026年9月2日且有效的记录。检索了证券简称、股票代码、交易日期以及市净率（倍）。结果按照市净率从高到低排序，仅显示前两名，方便直观比较两只股票的市净率差异。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    SEC_SNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PB, 2) AS `市净率(倍)`\nFROM\n    ANA_STK_VAL_IDX\nWHERE\n    TRD_DATE = '2026-09-02'\n    AND ISVALID = 1\n    AND PB IS NOT NULL\n    AND PB > 0\nORDER BY\n    PB DESC\nLIMIT 2",
+ "final_sql": "SELECT\n    SEC_SNAME AS `股票简称`,\n    STOCKCODE AS `股票代码`,\n    TRD_DATE AS `交易日期`,\n    ROUND(PB, 2) AS `市净率(倍)`\nFROM\n    ANA_STK_VAL_IDX\nWHERE\n    TRD_DATE = '2026-09-02'\n    AND ISVALID = 1\n    AND PB IS NOT NULL\n    AND PB > 0\nORDER BY\n    PB DESC\nLIMIT 2",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "7.024\n4.437"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.ANA_STK_VAL_IDX' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 50.0,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_28_6e096666.1",
+  "llm_call_count": 17,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 72.83,
+  "llm_seconds_max": 8.33,
+  "selected_tables": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "STK_EQT_CHNG",
+   "GET_A_INDICS_LATEST",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_BALA_GEN",
+   "STK_COMSUB_PROFILE",
+   "STK_LIST_RESULT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   61753
+  ],
+  "prompt_columns_raw_len": 22781
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2234,
+   "prompt_tokens": 74561,
+   "total_tokens": 76795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 74561,
+  "completion": 2234,
+  "total": 76795
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2234,
+   "prompt_tokens": 74561,
+   "total_tokens": 76795,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8960,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_VAL_IDX",
+   "STK_MKT",
+   "STK_EQT_CHNG",
+   "GET_A_INDICS_LATEST",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_BALA_GEN",
+   "STK_COMSUB_PROFILE",
+   "STK_LIST_RESULT",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

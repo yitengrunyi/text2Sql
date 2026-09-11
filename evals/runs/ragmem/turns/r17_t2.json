@@ -1,0 +1,230 @@
+{
+ "round_id": 17,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "把利润表和现金流量表放在一起看，它2025年经营活动产生的现金流量净额是净利润的几倍？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 经营活动产生的现金流量净额（Operating Cash Flow, OCF）\n- 净利润（Net Profit）\n\n[2] 可能的计算公式  \n倍数 = 经营活动产生的现金流量净额 ÷ 净利润\n['万华化学', '经营活动产生的现金流量净额', 'Operating Cash Flow', 'OCF', '净利润', 'Net Profit', '倍数']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'VIEW_STK_CASH_GEN', 'VIEW_STK_INCOME_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1\n200\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）', '归母净利润（万）', '经营活动产生的现金流量净额/归母净利润（倍）'], ['2025-12-31', '万华化学', '600309', '105,751.00', '1,252,720.10', '0.00']]}\n该查询通过筛选有效记录，限定公司股票简称中包含“万华化学”、截止日期为2025年12月31日的数据，获取公司经营活动产生的现金流量净额和归属于母公司净利润。将经营活动产生的现金流量净额从每股换算到万元，并将归母净利润也换算到万元。然后，通过计算公式“经营活动产生的现金流量净额 / 归母净利润”，得出了二者的倍数结果。查询结果符合要求。\n\n查询主要从上市公司主要财务指标表提取信息，该表记录了公司季度累计财务数据。查询选择了报告截止日、股票名称、股票代码、经营活动产生的现金流量净额（万元）、归母净利润（万元）以及二者的比值。筛选条件包括记录有效、公司为万华化学、数据截止到2025年末、并排除相关数据为空的记录，最多只返回一条结果。\n万华化学2025年经营活动产生的现金流量净额是净利润的几倍？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND fa.A_STOCKSNAME LIKE '%万华化学%'\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2.36"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 万华化学 600309 105751.0 1252720.1 0.00",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 89.3,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_17_782aa971.2",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 103.2,
+  "llm_seconds_max": 38.08,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   39377
+  ],
+  "prompt_columns_raw_len": 2136
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3764,
+   "prompt_tokens": 30050,
+   "total_tokens": 33814,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3481,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 30050,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2123,
+   "prompt_tokens": 57585,
+   "total_tokens": 59708,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 87635,
+  "completion": 5887,
+  "total": 93522
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3764,
+   "prompt_tokens": 30050,
+   "total_tokens": 33814,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3481,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 30050,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2123,
+   "prompt_tokens": 57585,
+   "total_tokens": 59708,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

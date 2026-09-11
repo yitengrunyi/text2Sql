@@ -1,0 +1,202 @@
+{
+ "round_id": 10,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与多轮实体切换",
+ "question": "微软的呢？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "snapshot"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：总市值（Market Capitalization）\n\n[2] 计算公式：  \n总市值 = 每股当前价格 × 总流通在外的普通股数量  \nMarket Cap = Current Share Price × Total Shares Outstanding\n['微软', '总市值', 'Market Capitalization', '市值', 'Market Cap', '每股当前价格', 'Current Share Price', '总流通在外的普通股数量', 'Total Shares Outstanding']\n该问题可能涉及美股-'微软', 它的美股股票代码为：MSFT.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n美股相关\n['美股基本信息', '美股行情']\n['AMERICAN_STOCK_MAIN', 'COM3101', 'STK2401', 'VIEW_STOCK_US_TURNOUT_SHARES']\n是否命中召回表：False\n生成查询代码\nSELECT\n    b.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F013N AS `市值（亿元）`,\n    ROUND(c.F013N / 10, 1) AS `市值（亿，保留1位小数）`,\n    c.F014D AS `市值更新时间`\nFROM\n    AMERICAN_STOCK_MAIN a\n    INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID\n    INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'MSFT.US'\n    AND c.F013N IS NOT NULL\nORDER BY\n    c.F014D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '市值（亿元）', '市值（亿，保留1位小数）', '市值更新时间'], ['微软', 'MSFT.US', '26,373,600.00', '2,637,360.00', '-']]}\n市值（亿元）的值是直接查得的，查询还计算了市值的单位转换结果，市值（亿，保留1位小数）通过公式“市值（亿）等于市值（百万元）除以十”，并保留了一位小数。在此查询中，市值的更新时间会同步返回，即当前样本的最新数据。查询结果符合要求。\n\n查询涉及美股上市股票信息的表和美股主要技术指标的表，通过内部代码进行连接。查询选取了股票名称、美股展示代码、市值（亿元）、市值（亿，保留1位小数）、市值更新时间等内容。仅筛选股票代码为微软（MSFT.US）且市值信息有效的样本，按市值更新时间降序排序并返回最新一条数据。\n微软当前样本的总市值是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    b.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F013N AS `市值（亿元）`,\n    ROUND(c.F013N / 10, 1) AS `市值（亿，保留1位小数）`,\n    c.F014D AS `市值更新时间`\nFROM\n    AMERICAN_STOCK_MAIN a\n    INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID\n    INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'MSFT.US'\n    AND c.F013N IS NOT NULL\nORDER BY\n    c.F014D DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    b.CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    c.F013N AS `市值（亿元）`,\n    ROUND(c.F013N / 10, 1) AS `市值（亿，保留1位小数）`,\n    c.F014D AS `市值更新时间`\nFROM\n    AMERICAN_STOCK_MAIN a\n    INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID\n    INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID\nWHERE\n    a.COMB_SYMBOL = 'MSFT.US'\n    AND c.F013N IS NOT NULL\nORDER BY\n    c.F014D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "微软 26373600.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "微软 MSFT.US 26373600.0 2637360.0 ",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.7,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_10_54579ef3.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 40.46,
+  "llm_seconds_max": 6.15,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "STK2401",
+   "VIEW_STOCK_US_TURNOUT_SHARES"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   14247
+  ],
+  "prompt_columns_raw_len": 5268
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 383,
+   "prompt_tokens": 2433,
+   "total_tokens": 2816,
+   "completion_tokens_details": {
+    "reasoning_tokens": 230,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 2433,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 860,
+   "prompt_tokens": 18880,
+   "total_tokens": 19740,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21313,
+  "completion": 1243,
+  "total": 22556
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 383,
+   "prompt_tokens": 2433,
+   "total_tokens": 2816,
+   "completion_tokens_details": {
+    "reasoning_tokens": 230,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 2433,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 860,
+   "prompt_tokens": 18880,
+   "total_tokens": 19740,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "STK2401",
+   "VIEW_STOCK_US_TURNOUT_SHARES"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

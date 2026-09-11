@@ -1,0 +1,169 @@
+{
+ "round_id": 7,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "ETF行情与统计",
+ "question": "它当天的涨跌幅是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：涨跌幅（也称为“涨跌幅度”或“价格变动百分比”）\n\n[2] 可能的计算公式：\n涨跌幅 = （当日收盘价 - 前一交易日收盘价）÷ 前一交易日收盘价 × 100%\n['涨跌幅', '涨跌幅度', '价格变动百分比', '当日收盘价', '前一交易日收盘价']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['STK_MKT', 'ANA_STK_EXPR_IDX', 'GET_A_INDICS_LATEST', 'DERI_STK_AH_PRC', 'VIEW_CONCEPT_DAILY_QUOTE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    MAX_TRADATE AS `日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_1, 2) AS `涨跌幅(%)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND CHNG_PCT_1 IS NOT NULL\nORDER BY \n    CHNG_PCT_1 DESC\n200\n{table:[['日期', '股票名称', '收盘价(元)', '涨跌幅(%)'], ['2026-09-02', '格林生物', '53.82', '104.41'], ['2026-09-02', '维琪科技', '70.66', '29.99'], ['2026-09-02', '晟楠科技', '22.21', '29.96'], ['2026-09-02', '智新电子', '14.10', '29.95'], ['2026-09-02', '路桥信息', '32.71', '21.64'], ['2026-09-02', '益坤电气', '28.77', '17.24'], ['2026-09-02', '科隆新材', '21.54', '14.57'], ['2026-09-02', '北方长龙', '106.30', '13.90'], ['2026-09-02', '路德科技', '22.21', '12.51'], ['2026-09-02', '长江能科', '9.25', '12.12'], ['2026-09-02', '奥尼电子', '60.24', '11.56'], ['2026-09-02', '同惠电子', '22.27', '10.63'], ['2026-09-02', '悦龙科技', '24.51', '10.55'], ['2026-09-02', '德固特', '19.28', '10.30'], ['2026-09-02', '*ST宝馨', '2.27', '10.19'], ['2026-09-02', '信达地产', '3.05', '10.11'], ['2026-09-02', '大晟文化', '5.35', '10.08'], ['2026-09-02', '茂业商业', '4.81', '10.07'], ['2026-09-02', '云南旅游', '5.25', '10.06'], ['2026-09-02', '天禾股份', '7.33', '10.06'], ['2026-09-02', '京能热力', '11.17', '10.05'], ['2026-09-02', '华昌化工', '7.12', '10.05'], ['2026-09-02', '雪人集团', '13.27', '10.03'], ['2026-09-02', '国晟科技', '10.75', '10.03'], ['2026-09-02', '深圳新星', '22.61', '10.02'], ['2026-09-02', '一彬科技', '18.22', '10.02'], ['2026-09-02', '九鼎新材', '9.22', '10.02'], ['2026-09-02', '光洋股份', '14.16', '10.02'], ['2026-09-02', '道明光学', '9.88', '10.02'], ['2026-09-02', '龙版传媒', '12.85', '10.02'], ['2026-09-02', '恒宝股份', '13.51', '10.02'], ['2026-09-02', '播恩集团', '14.50', '10.",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    MAX_TRADATE AS `日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_1, 2) AS `涨跌幅(%)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND CHNG_PCT_1 IS NOT NULL\nORDER BY \n    CHNG_PCT_1 DESC",
+ "final_sql": "SELECT \n    MAX_TRADATE AS `日期`,\n    SEC_SNAME AS `股票名称`,\n    SEC_CODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(CHNG_PCT_1, 2) AS `涨跌幅(%)`\nFROM \n    GET_A_INDICS_LATEST\nWHERE \n    MAX_TRADATE = '2026-09-02'\n    AND CHNG_PCT_1 IS NOT NULL\nORDER BY \n    CHNG_PCT_1 DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-0.009820"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'FUND_INFO.GET_A_INDICS_LATEST' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 50.4,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_7_ee0b6321.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 59.32,
+  "llm_seconds_max": 7.21,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   28176
+  ],
+  "prompt_columns_raw_len": 6729
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1571,
+   "prompt_tokens": 38780,
+   "total_tokens": 40351,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38780,
+  "completion": 1571,
+  "total": 40351
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1571,
+   "prompt_tokens": 38780,
+   "total_tokens": 40351,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

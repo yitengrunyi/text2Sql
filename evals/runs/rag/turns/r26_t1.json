@@ -1,0 +1,146 @@
+{
+ "round_id": 26,
+ "index": 1,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·份额变动与规模排名：华安黄金ETF(518880)资金净流入/最新规模/同类商品型基金规模排名，话题切换至中欧医疗健康混合A单位净值",
+ "question": "它现在最新规模做到多大了？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标\n- 资产规模（Total Assets）\n- 市值（Market Capitalization）\n- 营业收入（Revenue）\n- 净资产（Net Assets）\n- 管理资产规模（AUM，Assets Under Management）\n- 负债总额（Total Liabilities）\n\n[2] 可能的计算公式\n- 资产规模 = 资产总额 = 所有者权益 + 负债总额\n- 市值 = 股票价格 × 已发行股份总数\n- 营业收入 = 产品或服务销售收入总和\n- 管理资产规模（AUM）= 公司/机构所管理客户资产的总和\n['资产规模', 'Total Assets', '资产总额', '所有者权益', '负债总额', '市值', 'Market Capitalization', '股票价格', '已发行股份总数', '营业收入', 'Revenue', '产品销售收入', '服务销售收入', '净资产', 'Net Assets', '管理资产规模', 'AUM', 'Assets Under Management', '客户资产', '公司所管理资产', '机构所管理资产']\n此问题不涉及到个股、行业或者题材\n基金相关\n['基金产品基本信息']\n['FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL']\n是否命中召回表：False\n生成查询代码\nSELECT\n  FUND_NAME AS `基金名称`,\n  FUND_SYMBOL AS `基金代码`,\n  REPORT_DATE AS `报告期`,\n  ROUND(NET_VALUE/100000000, 2) AS `基金最新规模(亿)`,\n  ROUND(TOTAL_ASSET/100000000, 2) AS `资产总值(亿)`,\n  ROUND(MV_OF_STOCK/100000000, 2) AS `股票投资合计市值(亿)`,\n  ROUND(MV_OF_BOND/100000000, 2) AS `债券投资合计市值(亿)`,\n  ROUND(MV_OF_MONEY/100000000, 2) AS `货币市场工具市值(亿)`,\n  ROUND(MV_OF_CONVERTIBLE/100000000, 2) AS `可转换债券市值(亿)`\nFROM\n  FUND_ASSET_ALLOCATION\nWHERE\n  REPORT_DATE = (\n    SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID=1\n  )\n  AND HISVALID = 1\n  AND NET_VALUE IS NOT NULL\nORDER BY\n  NET_VALUE DESC\n200\n{table:[['基金名称', '基金代码', '报告期', '基金最新规模(亿)', '资产总值(亿)', '股票投资合计市值(亿)', '债券投资合计市值(亿)', '货币市场工具市值(亿)', '可转换债券市值(亿)'], ['天弘余额宝货币', '000198.OF', '2026-06-30', '6,799.46', '6,803.02', '-', '712.89', '-', '-'], ['建信嘉薪宝货币A', '000686.OF', '2026-06-30', '3,960.49', '4,172.21', '-', '1,481.47', '-', '-'], ['建信嘉薪宝货币B', '002753.OF', '2026-06-30', '3,960.49', '4,172.21', '-', '1,481.47', '-', '-'], ['华夏财富宝货币A', '000343.OF', '2026-06-30', '3,253.97', '3,578.23', '-', '2,042.09', '-', '-'], ['华夏财富宝货币B', '004201.OF', '2026-06-30', '3,253.97', '3,578.23', '-', '2,042.09', '-', '-'], ['易方达易理财货币A', '000359.OF', '2026-06-30', '2,973.40', '3,205.63', '-', '1,204.47', '-', '-'], ['易方达易理财货币B', '008733.OF', '2026-06-30', '2,973.40', '3,205.63', '-', '1,204.47', '-', '-'], ['南方现金通货币A', '000493.OF', '2026-06-30",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n  FUND_NAME AS `基金名称`,\n  FUND_SYMBOL AS `基金代码`,\n  REPORT_DATE AS `报告期`,\n  ROUND(NET_VALUE/100000000, 2) AS `基金最新规模(亿)`,\n  ROUND(TOTAL_ASSET/100000000, 2) AS `资产总值(亿)`,\n  ROUND(MV_OF_STOCK/100000000, 2) AS `股票投资合计市值(亿)`,\n  ROUND(MV_OF_BOND/100000000, 2) AS `债券投资合计市值(亿)`,\n  ROUND(MV_OF_MONEY/100000000, 2) AS `货币市场工具市值(亿)`,\n  ROUND(MV_OF_CONVERTIBLE/100000000, 2) AS `可转换债券市值(亿)`\nFROM\n  FUND_ASSET_ALLOCATION\nWHERE\n  REPORT_DATE = (\n    SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID=1\n  )\n  AND HISVALID = 1\n  AND NET_VALUE IS NOT NULL\nORDER BY\n  NET_VALUE DESC",
+ "final_sql": "SELECT\n  FUND_NAME AS `基金名称`,\n  FUND_SYMBOL AS `基金代码`,\n  REPORT_DATE AS `报告期`,\n  ROUND(NET_VALUE/100000000, 2) AS `基金最新规模(亿)`,\n  ROUND(TOTAL_ASSET/100000000, 2) AS `资产总值(亿)`,\n  ROUND(MV_OF_STOCK/100000000, 2) AS `股票投资合计市值(亿)`,\n  ROUND(MV_OF_BOND/100000000, 2) AS `债券投资合计市值(亿)`,\n  ROUND(MV_OF_MONEY/100000000, 2) AS `货币市场工具市值(亿)`,\n  ROUND(MV_OF_CONVERTIBLE/100000000, 2) AS `可转换债券市值(亿)`\nFROM\n  FUND_ASSET_ALLOCATION\nWHERE\n  REPORT_DATE = (\n    SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID=1\n  )\n  AND HISVALID = 1\n  AND NET_VALUE IS NOT NULL\nORDER BY\n  NET_VALUE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "104347826801.6000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "天弘余额宝货币 000198.OF 2026-06-30 6799.46 6803.02  712.89  \n建信嘉薪宝货币A 000686.OF 2026-06-30 3960.49 4172.21  1481.47  \n建信嘉薪宝货币B 002753.OF 2026-06-30 3960.49 4172.21  1481.47  \n华夏财富宝货币A 000343.OF 2026-06-30 3",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": true,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 46.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_26_6a6c7aa8.1",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 41.9,
+  "llm_seconds_max": 6.08,
+  "selected_tables": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_TURNOVER_RATE",
+   "ETF_INFO_DETAIL"
+  ],
+  "sql_prompt_chars": [
+   12892
+  ],
+  "prompt_columns_raw_len": 2434
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1267,
+   "prompt_tokens": 21242,
+   "total_tokens": 22509,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 21242,
+  "completion": 1267,
+  "total": 22509
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1267,
+   "prompt_tokens": 21242,
+   "total_tokens": 22509,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_SHARES_CHANGE"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

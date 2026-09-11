@@ -1,0 +1,170 @@
+{
+ "round_id": 25,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·ETF标签与分类：华宝中证医疗ETF的跟踪指数与行业标签、行业类ETF数量分布、基金规模时序变化，切换QDII类ETF数量口径",
+ "question": "回到这只医疗ETF，它目前最新的基金规模有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n基金规模（AUM, Asset Under Management）\n\n[2] 可能的计算公式：  \n基金规模 = 基金每份净值 × 已发行基金份额总数\n\n其中：  \n- 基金每份净值：基金当日总资产减去总负债后的净值，除以总份额数  \n- 已发行基金份额总数：市场上流通的ETF份额数量\n\n即：  \nAUM = 基金净值 × 基金份额\n['基金规模', 'AUM', 'Asset Under Management', '基金每份净值', '基金净值', '净值', '已发行基金份额总数', '基金份额', '总份额数', 'ETF份额', '市场上流通的ETF份额数量', '基金当日总资产', '总资产', '总负债']\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及的题材包含：['医疗保健']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '医疗保健'。\n基金相关\n['基金产品持仓', '基金产品净值', 'ETF相关信息', '基金份额变动']\n['ETF_PERFORMANCE_DETAIL', 'STOCK_HOLD_STATISTICS_HY', 'ETF_SHARES_CHANGE_ROLL', 'FUND_STOCK_CHANGE_HY', 'INDEX_QUOTE_ALL', 'STOCK_FACTOR_VALUE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(FUND_SIZE, 2) AS `最新基金规模(亿)`\nFROM\n    ETF_PERFORMANCE_DETAIL\nWHERE\n    TYPE = 1\n    AND FUND_NAME LIKE '%医疗%'\n    AND FUND_SIZE IS NOT NULL\n    AND TRADING_DAY = '2026-09-02'\nORDER BY\n    FUND_SIZE DESC\n200\n{table:[['交易日', '基金名称', '基金代码', '最新基金规模(亿)'], ['2026-09-02', '华宝中证医疗ETF', '512170.SH', '24,231,835,329.00'], ['2026-09-02', '博时恒生医疗保健(QDII-ETF)', '513060.SH', '4,910,844,967.60'], ['2026-09-02', '永赢中证全指医疗器械ETF', '159883.SZ', '3,957,376,650.92'], ['2026-09-02', '富国恒生港股通创新药及医疗保健ETF', '159506.SZ', '3,336,367,333.12'], ['2026-09-02', '国泰中证医疗ETF', '159828.SZ', '1,947,731,014.34'], ['2026-09-02', '平安中证医药及医疗器械创新ETF', '516820.SH', '1,601,988,489.60'], ['2026-09-02', '易方达中证医疗ETF', '159847.SZ', '1,560,394,268.37'], ['2026-09-02', '广发中证医疗ETF', '560260.SH', '1,472,896,977.30'], ['2026-09-02', '永赢中证港股通医疗主题ETF', '159366.SZ', '536,904,289.82'], ['2026-09-02', '招商中证全指医疗器械ETF', '159898.SZ', '441,776,720.73'], ['2026-09-02', '华夏中证全指医疗器械ETF', '562600.SH', '353,291,172.00'], ['2026-09-02', '汇添富中证全指医疗器械ETF', '159797.SZ', '267,012,730.97'], ['2026-09-02', '天弘中证全指医疗保健设备与服务ETF', '159873.SZ', '247,233,000.00'], ['2026-09-02', '嘉实中证医疗ETF', '1",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(FUND_SIZE, 2) AS `最新基金规模(亿)`\nFROM\n    ETF_PERFORMANCE_DETAIL\nWHERE\n    TYPE = 1\n    AND FUND_NAME LIKE '%医疗%'\n    AND FUND_SIZE IS NOT NULL\n    AND TRADING_DAY = '2026-09-02'\nORDER BY\n    FUND_SIZE DESC",
+ "final_sql": "SELECT\n    TRADING_DAY AS `交易日`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(FUND_SIZE, 2) AS `最新基金规模(亿)`\nFROM\n    ETF_PERFORMANCE_DETAIL\nWHERE\n    TYPE = 1\n    AND FUND_NAME LIKE '%医疗%'\n    AND FUND_SIZE IS NOT NULL\n    AND TRADING_DAY = '2026-09-02'\nORDER BY\n    FUND_SIZE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "24231835329.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 38
+ },
+ "first_result_preview": "2026-09-02 华宝中证医疗ETF 512170.SH 24231835329.00\n2026-09-02 博时恒生医疗保健(QDII-ETF) 513060.SH 4910844967.60\n2026-09-02 永赢中证全指医疗器械ETF 159883.SZ 3957376650.92\n2026-09-02 富国恒生港股通创新药及医疗保健ETF 159506.SZ 3336367333.",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(38行, Gold为1行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 38
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 52.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_25_c397df97.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 59.34,
+  "llm_seconds_max": 7.0,
+  "selected_tables": [
+   "FUND_ASSET_ALLOCATION",
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_STOCK_CHANGE_HY",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_INDUSTRY_CHANGE_HY",
+   "FUND_INDUSTRY_HOLDING_MV_DETAIL_HY",
+   "FUND_INDUSTRY_HOLDING_MV_HY",
+   "FUND_NETVALUE",
+   "FUND_PORTFOLIO_DETAIL",
+   "FUND_TOP10_STOCK_CHANGE_HY",
+   "FUND_TRACK_HOLDING",
+   "INDEX_QUOTE_ALL",
+   "STOCK_HOLD_STATISTICS_HY",
+   "ETF_LABEL_INFO_CHINA",
+   "ETF_LABEL_INFO_USA",
+   "FUND_SHARES_CHANGE",
+   "STOCK_FACTOR_VALUE",
+   "ETF_DAILY_QUOTE",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_INDUSTRY_ASSET_RATIO_ALL",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR",
+   "STOCK_FACTOR_VALUE"
+  ],
+  "sql_prompt_chars": [
+   29034
+  ],
+  "prompt_columns_raw_len": 15939
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1595,
+   "prompt_tokens": 38067,
+   "total_tokens": 39662,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38067,
+  "completion": 1595,
+  "total": 39662
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1595,
+   "prompt_tokens": 38067,
+   "total_tokens": 39662,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6272,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ETF_PERFORMANCE_DETAIL"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_ASSET_ALLOCATION",
+   "ETF_LABEL_INFO_CHINA",
+   "FUND_SHARES_CHANGE",
+   "ETF_SHARES_CHANGE_ROLL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

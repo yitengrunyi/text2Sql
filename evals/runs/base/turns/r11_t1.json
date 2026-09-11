@@ -1,0 +1,200 @@
+{
+ "round_id": 11,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "这块业务占了公司总营收多大比重？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 某块业务的营收（该业务收入）  \n- 公司总营收  \n- 该业务营收占比（比重）\n\n[2] 可能的计算公式：  \n该业务营收占比 = 该业务营收 / 公司总营收\n['某块业务的营收', '该业务收入', '公司总营收', '该业务营收占比', '比重', '业务营收占比']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_PRODUCT', 'STK_DS_POST', 'STK_LIST_PLAN', 'STK_COMSUB_PROFILE', 'ASTK_REVENUE_OVERSEAS']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT\n    PERIODDATE AS `报表日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    ITEM_NAME AS `主营业务名称`,\n    ROUND(PRI_RVNU_PCT, 2) AS `该业务收入占总营收比重(%)`,\n    ROUND(INCOME / 10000, 3) AS `该业务收入(亿元)`,\n    ROUND(COST / 10000, 3) AS `该业务成本(亿元)`,\n    ROUND(GRS_PRFT_VAL / 10000, 3) AS `该业务毛利(亿元)`,\n    ROUND(GP_RATIO, 2) AS `主营业务毛利率(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT\nWHERE\n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND PERIODDATE = '2025-12-31'\n    AND PRI_RVNU_PCT IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\nORDER BY\n    PERIODDATE DESC, 股票简称, `该业务收入占总营收比重(%)` DESC\n200\n{table:[['报表日期', '股票简称', '股票代码', '主营业务名称', '该业务收入占总营收比重(%)', '该业务收入(亿元)', '该业务成本(亿元)', '该业务毛利(亿元)', '主营业务毛利率(%)'], ['2025-12-31', '*ST万方', '000638', '粮食加工及销售', '78.62', '1.94', '1.91', '0.03', '1.57'], ['2025-12-31', '*ST万方', '000638', '有色金属', '10.41', '0.26', '0.25', '0.01', '3.63'], ['2025-12-31', '*ST万方', '000638', '军工产品', '6.26', '0.15', '0.14', '0.01', '7.12'], ['2025-12-31', '*ST万方', '000638', '其他主营业务', '4.71', '0.12', '0.10', '0.02', '14.05'], ['2025-12-31', '*ST三房', '600370', '聚酯切片', '87.27', '173.46', '177.00', '-3.54', '-2.04'], ['2025-12-31', '*ST三房', '600370', 'PTA(行业)', '10.10', '20.08', '21.84', '-1.76', '-8.74'], ['2025-12-31', '*ST三房', '600370', '电、蒸汽', '1.10', '2.18', '1.53', '0.65', '29.91'], ['2025-12-31', '*ST三房', '600370', 'PBT改性树脂', '0.81', '1.62', '1.35', '0.26', '16.17'], ['2025-12-31', '*ST三房', '600370', '其他主营业务', '0.72', '1.42', '0.84', '0.59', '41.26'], ['2025-12-31', '*ST东易', '002713', '工程施工', '71.50', '4.94', '3.13', '1.81', '36.68'], ['2025-12-31', '*ST东易', '002713', '装饰设计', '19.29', '1.33', '0.79', '0.54', '40.64'], ['2025-12-31'",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    PERIODDATE AS `报表日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    ITEM_NAME AS `主营业务名称`,\n    ROUND(PRI_RVNU_PCT, 2) AS `该业务收入占总营收比重(%)`,\n    ROUND(INCOME / 10000, 3) AS `该业务收入(亿元)`,\n    ROUND(COST / 10000, 3) AS `该业务成本(亿元)`,\n    ROUND(GRS_PRFT_VAL / 10000, 3) AS `该业务毛利(亿元)`,\n    ROUND(GP_RATIO, 2) AS `主营业务毛利率(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT\nWHERE\n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND PERIODDATE = '2025-12-31'\n    AND PRI_RVNU_PCT IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\nORDER BY\n    PERIODDATE DESC, 股票简称, `该业务收入占总营收比重(%)` DESC",
+ "final_sql": "SELECT\n    PERIODDATE AS `报表日期`,\n    A_STOCKSNAME AS `股票简称`,\n    A_STOCKCODE AS `股票代码`,\n    ITEM_NAME AS `主营业务名称`,\n    ROUND(PRI_RVNU_PCT, 2) AS `该业务收入占总营收比重(%)`,\n    ROUND(INCOME / 10000, 3) AS `该业务收入(亿元)`,\n    ROUND(COST / 10000, 3) AS `该业务成本(亿元)`,\n    ROUND(GRS_PRFT_VAL / 10000, 3) AS `该业务毛利(亿元)`,\n    ROUND(GP_RATIO, 2) AS `主营业务毛利率(%)`\nFROM\n    STK_PRI_INCOME_PRODUCT\nWHERE\n    ISVALID = 1\n    AND RPT_TYPE = '合并'\n    AND PERIODDATE = '2025-12-31'\n    AND PRI_RVNU_PCT IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\nORDER BY\n    PERIODDATE DESC, 股票简称, `该业务收入占总营收比重(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "36.93"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "2025-12-31 00:00:00 *ST万方 000638 粮食加工及销售 78.62 1.939 1.908 0.030 1.57\n2025-12-31 00:00:00 *ST万方 000638 有色金属 10.41 0.257 0.247 0.009 3.63\n2025-12-31 00:00:00 *ST万方 000638 军工产品 6.26 0.154 0.143 0.011 7.",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 61.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_11_e709ef3d.1",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 62.02,
+  "llm_seconds_max": 8.78,
+  "selected_tables": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   31387
+  ],
+  "prompt_columns_raw_len": 22356
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1351,
+   "prompt_tokens": 38101,
+   "total_tokens": 39452,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 452,
+   "total_tokens": 453,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 452,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 38553,
+  "completion": 1352,
+  "total": 39905
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1351,
+   "prompt_tokens": 38101,
+   "total_tokens": 39452,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 7296,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 452,
+   "total_tokens": 453,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 452,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_PRI_INCOME_DISTRICT",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

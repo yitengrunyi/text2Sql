@@ -1,0 +1,74 @@
+{
+ "round_id": 29,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "initial": {
+  "question": "帮我查下谷歌A 2025财年按板块拆的销售收入，主营业务这一块是多少？",
+  "judge": "numeric",
+  "gold_value": "262570.0",
+  "gold_display": "262570百万美元（约2625.7亿美元）",
+  "gold_entities": ["谷歌A"],
+  "gold_date": "2025-12-31",
+  "gold_sql": "SELECT F007N FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2025-12-31' AND SECTOR_CNAME='主营业务'",
+  "gold_tables": ["VIEW_COM3105", "AMERICAN_STOCK_MAIN"],
+  "labels": {"difficulty": "子查询", "followup_type": null, "route_gold": null, "time_sensitivity": "absolute"}
+ },
+ "feedbacks": [
+  {
+   "question": "主营业务占它各板块收入合计的比例大概多少？",
+   "judge": "numeric",
+   "gold_value": "62.0",
+   "gold_display": "62.00%（262570/423500）",
+   "gold_entities": ["谷歌A"],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT ROUND(SUM(CASE WHEN SECTOR_CNAME='主营业务' THEN F007N ELSE 0 END)/SUM(F007N)*100,2) AS pct FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2025-12-31'",
+   "gold_tables": ["VIEW_COM3105", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "聚合", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+  },
+  {
+   "question": "同期它在北美市场实现的销售收入呢？",
+   "judge": "numeric",
+   "gold_value": "245630.0",
+   "gold_display": "245630百万美元（约2456.3亿美元）",
+   "gold_entities": ["谷歌A"],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT v.F007N FROM VIEW_COM3106 v JOIN AMERICAN_STOCK_MAIN m ON v.FIU_ID=m.FIU_ID WHERE m.CSNAME='谷歌A' AND v.F001D='2025-12-31' AND v.REGION_CNAME='北美'",
+   "gold_tables": ["VIEW_COM3106", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "多表join", "followup_type": "指代继承", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+  },
+  {
+   "question": "往回看一个财年，2024年主营业务板块这块做了多少收入？",
+   "judge": "numeric",
+   "gold_value": "238700.0",
+   "gold_display": "238700百万美元（约2387.0亿美元）",
+   "gold_entities": ["谷歌A"],
+   "gold_date": "2024-12-31",
+   "gold_sql": "SELECT F007N FROM VIEW_COM3105 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='谷歌A') AND F001D='2024-12-31' AND SECTOR_CNAME='主营业务'",
+   "gold_tables": ["VIEW_COM3105", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "子查询", "followup_type": "时间漂移", "route_gold": "SQL_GENERATION", "time_sensitivity": "absolute"}
+  },
+  {
+   "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+   "judge": "list",
+   "gold_value": null,
+   "gold_display": "北美245630 > 欧洲84700 > 大中华区33880 = 亚太(除中国)33880 > 其他25410（百万美元，2025财年）",
+   "gold_entities": ["北美", "欧洲", "大中华区", "亚太(除中国)", "其他"],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT v.REGION_CNAME, v.F007N FROM VIEW_COM3106 v JOIN AMERICAN_STOCK_MAIN m ON v.FIU_ID=m.FIU_ID WHERE m.CSNAME='谷歌A' AND v.F001D=(SELECT MAX(F001D) FROM VIEW_COM3106 WHERE FIU_ID=v.FIU_ID) ORDER BY v.F007N DESC",
+   "gold_tables": ["VIEW_COM3106", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "多表join", "followup_type": "条件追加", "route_gold": "SQL_GENERATION", "time_sensitivity": "relative"}
+  },
+  {
+   "question": "换个标的，波音2025财年全年的营业收入总共是多少？",
+   "judge": "numeric",
+  "gold_value": "156534.0",
+   "gold_display": "156534百万美元（约1565.3亿美元）",
+   "gold_entities": ["波音"],
+   "gold_date": "2025-12-31",
+   "gold_sql": "SELECT F048N FROM COM3103 WHERE FIU_ID=(SELECT FIU_ID FROM AMERICAN_STOCK_MAIN WHERE CSNAME='波音') AND F001D='2025-12-31' AND F003V='FY'",
+   "gold_tables": ["COM3103", "AMERICAN_STOCK_MAIN"],
+   "labels": {"difficulty": "子查询", "followup_type": "话题切换", "route_gold": "NEW_QUERY", "time_sensitivity": "absolute"}
+  }
+ ]
+}

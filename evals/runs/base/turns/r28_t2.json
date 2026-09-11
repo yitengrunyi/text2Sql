@@ -1,0 +1,163 @@
+{
+ "round_id": 28,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与技术指标：迪士尼与奈飞市盈率市净率对比切入（COM3101取最新、不加日期条件），扩展全市场股息率筛选与迪士尼近一年涨幅，话题切换至油气双雄估值比较",
+ "question": "光盯这两家还不够——把范围放宽到全部美股、剔除掉中概股：现在股息率超过2.5%的有哪些？按股息率从高到低排一下",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 股息率（Dividend Yield）\n\n[2] 可能的计算公式  \n股息率 = 年度股息 / 当前股价 × 100%\n['股息率', 'Dividend Yield', '年度股息', '当前股价', '年股息', '分红收益率']\n该问题可能涉及到申万一级行业，一级行业名称为\"农林牧渔\"，即SW_INDU_CODE_2021_1 LIKE \"%农林牧渔%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%农林牧渔%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"基础化工\"，即SW_INDU_CODE_2021_1 LIKE \"%基础化工%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%基础化工%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"钢铁\"，即SW_INDU_CODE_2021_1 LIKE \"%钢铁%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%钢铁%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"有色金属\"，即SW_INDU_CODE_2021_1 LIKE \"%有色金属%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%有色金属%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"电子\"，即SW_INDU_CODE_2021_1 LIKE \"%电子%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%电子%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"汽车\"，即SW_INDU_CODE_2021_1 LIKE \"%汽车%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%汽车%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"家用电器\"，即SW_INDU_CODE_2021_1 LIKE \"%家用电器%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%家用电器%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"食品饮料\"，即SW_INDU_CODE_2021_1 LIKE \"%食品饮料%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%食品饮料%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"纺织服饰\"，即SW_INDU_CODE_2021_1 LIKE \"%纺织服饰%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%纺织服饰%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"轻工制造\"，即SW_INDU_CODE_2021_1 LIKE \"%轻工制造%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%轻工制造%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"医药生物\"，即SW_INDU_CODE_2021_1 LIKE \"%医药生物%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%医药生物%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"公用事业\"，即SW_INDU_CODE_2021_1 LIKE \"%公用事业%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%公用事业%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"交通运输\"，即SW_INDU_CODE_2021_1 LIKE \"%交通运输%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%交通运输%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    asm.COMB_SYMBOL AS `股票代码`,\n    asm.CSNAME AS `股票名称`,\n    ROUND(c1.F013N / 10, 1) AS `市值(亿美元)`,  -- F013N单位百万，换算为亿：百万元*100/1亿 = /10\n    ROUND(c1.F007N * 100, 2) AS `股息率(%)`,\n    c1.F008D AS `股息率更新日期`\nFROM \n    COM3101 c1\n    INNER JOIN AMERICAN_STOCK_MAIN asm ON c1.FIU_ID = asm.FIU_ID\nWHERE \n    c1.F007N IS NOT NULL\n    AND c1.F007N >= 0.025\n    AND asm.MARKET_FLAG = 'US'\n    AND (asm.SEC_TYPE IS NULL OR asm.SEC_TYPE NOT LIKE '%CHINA%')\nORDER BY \n    c1.F007N DESC",
+ "final_sql": "SELECT \n    asm.COMB_SYMBOL AS `股票代码`,\n    asm.CSNAME AS `股票名称`,\n    ROUND(c1.F013N / 10, 1) AS `市值(亿美元)`,  -- F013N单位百万，换算为亿：百万元*100/1亿 = /10\n    ROUND(c1.F007N * 100, 2) AS `股息率(%)`,\n    c1.F008D AS `股息率更新日期`\nFROM \n    COM3101 c1\n    INNER JOIN AMERICAN_STOCK_MAIN asm ON c1.FIU_ID = asm.FIU_ID\nWHERE \n    c1.F007N IS NOT NULL\n    AND c1.F007N >= 0.025\n    AND asm.MARKET_FLAG = 'US'\n    AND (asm.SEC_TYPE IS NULL OR asm.SEC_TYPE NOT LIKE '%CHINA%')\nORDER BY \n    c1.F007N DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 4,
+  "preview": "雪佛龙 3.334\n卡特彼勒 3.031\n联合健康 2.757\n思科 2.534"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1054, \"Unknown column 'asm.MARKET_FLAG' in 'where clause'\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 63.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_28_6e096666.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 66.56,
+  "llm_seconds_max": 9.45,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "STK2401",
+   "COM3101",
+   "COM3102",
+   "COM3103",
+   "COM3104",
+   "VIEW_COM3102_Q",
+   "VIEW_COM3103_Q",
+   "VIEW_COM3104_Q",
+   "VIEW_COM3102_CUM",
+   "VIEW_COM3103_CUM",
+   "VIEW_COM3104_CUM",
+   "VIEW_ADS_STOCK_US_EOD_DI",
+   "VIEW_STOCK_US_TURNOUT_SHARES",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_US_EXPR_IDX"
+  ],
+  "sql_prompt_chars": [
+   28476
+  ],
+  "prompt_columns_raw_len": 17057
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1188,
+   "prompt_tokens": 43329,
+   "total_tokens": 44517,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 43329,
+  "completion": 1188,
+  "total": 44517
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1188,
+   "prompt_tokens": 43329,
+   "total_tokens": 44517,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "COM3101",
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3104_CUM",
+   "VIEW_US_EOD_EXPR",
+   "VIEW_ADS_STOCK_US_EOD_DI"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

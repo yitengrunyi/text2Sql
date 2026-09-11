@@ -1,0 +1,169 @@
+{
+ "round_id": 4,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "长江电力2026年9月1日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：收盘价（Closing Price）\n\n[2] 可能的计算公式：  \n收盘价 = 某一交易日结束时，该股票的最后一笔成交价格\n\n解释：收盘价不通过计算直接得出，而是由当日股票市场交易最终成交价格确定，即该日股市收盘时的价格。\n['长江电力', '收盘价', 'Closing Price', '交易日', '成交价格', '股票', '股票市场', '股市收盘']\n该问题可能涉及A股-'长江电力'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-公用事业。\n个股相关\n['主板行情', '主板基本信息']\n['DERI_STK_AH_PRC', 'STK_LIST_RESULT', 'MARGIN_TRD_DTL', 'VW_CONCEPT_STK', 'ANA_STK_EXPR_IDX', 'STK_COM_PROFILE', 'VIEW_CONCEPT_DAILY_QUOTE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ANA.ENDDATE AS `交易日期`,\n    ANA.STOCKSNAME AS `股票名称`,\n    ANA.STOCKCODE AS `股票代码`,\n    ROUND(ANA.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(ANA.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(ANA.THIGH, 2) AS `最高价(元)`,\n    ROUND(ANA.TLOW, 2) AS `最低价(元)`,\n    ROUND(ANA.TVOLUME / 10000, 2) AS `成交量(万股)`,\n    ROUND(ANA.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(ANA.MKTCAP / 100000000, 1) AS `流通市值(亿元)`,\n    ROUND(ANA.TCAP / 100000000, 1) AS `总市值(亿元)`,\n    ANA.CHNG_PCT_DAY AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX ANA\nWHERE ANA.STOCKSNAME LIKE '%长江电力%'\n  AND ANA.ENDDATE = '2026-09-01'\n  AND ANA.ISVALID = 1\n  AND ANA.TCLOSE IS NOT NULL\nLIMIT 1\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价(元)', '开盘价(元)', '最高价(元)', '最低价(元)', '成交量(万股)', '成交额(亿元)', '流通市值(亿元)', '总市值(亿元)', '涨跌幅(%)'], ['2026-09-01', '长江电力', '600900', '28.40', '28.02', '28.46', '27.90', '12,404.73', '35.07', '6,949.00', '6,949.00', '1.10']]}\n查询中，收盘价（元）通过将查询结果中记录的收盘价数据保留两位小数直接显示。查询还对成交量（二次转换为万股）、成交额（二次转换为亿元）、流通市值和总市值（二次转换为亿元）进行了四舍五入和单位转换。其中流通市值和总市值分别通过流通股本乘股价、总股本乘股价得出，在此查询中仅进行了数值单位转换和保留小数位的处理。涨跌幅、开盘价、最高价、最低价等指标也进行了保留两位小数的直接显示。\n\n查询结果符合对长江电力2026年9月1日收盘价的请求。\n\n本次查询的数据来源于个股市场表现指标表，通过筛选公司简称包含“长江电力”、交易日期为2026年9月1日且数据有效的记录，并排除收盘价为空的情况。返回了包括交易日期、股票名称、股票代码、收盘价、开盘价、最高价、最低价、成交量、成交额、流通市值、总市值、涨跌幅等信息，并且只保留一条最符合条件的记录。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ANA.ENDDATE AS `交易日期`,\n    ANA.STOCKSNAME AS `股票名称`,\n    ANA.STOCKCODE AS `股票代码`,\n    ROUND(ANA.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(ANA.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(ANA.THIGH, 2) AS `最高价(元)`,\n    ROUND(ANA.TLOW, 2) AS `最低价(元)`,\n    ROUND(ANA.TVOLUME / 10000, 2) AS `成交量(万股)`,\n    ROUND(ANA.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(ANA.MKTCAP / 100000000, 1) AS `流通市值(亿元)`,\n    ROUND(ANA.TCAP / 100000000, 1) AS `总市值(亿元)`,\n    ANA.CHNG_PCT_DAY AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX ANA\nWHERE ANA.STOCKSNAME LIKE '%长江电力%'\n  AND ANA.ENDDATE = '2026-09-01'\n  AND ANA.ISVALID = 1\n  AND ANA.TCLOSE IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    ANA.ENDDATE AS `交易日期`,\n    ANA.STOCKSNAME AS `股票名称`,\n    ANA.STOCKCODE AS `股票代码`,\n    ROUND(ANA.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(ANA.TOPEN, 2) AS `开盘价(元)`,\n    ROUND(ANA.THIGH, 2) AS `最高价(元)`,\n    ROUND(ANA.TLOW, 2) AS `最低价(元)`,\n    ROUND(ANA.TVOLUME / 10000, 2) AS `成交量(万股)`,\n    ROUND(ANA.TVALUE / 100000000, 2) AS `成交额(亿元)`,\n    ROUND(ANA.MKTCAP / 100000000, 1) AS `流通市值(亿元)`,\n    ROUND(ANA.TCAP / 100000000, 1) AS `总市值(亿元)`,\n    ANA.CHNG_PCT_DAY AS `涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX ANA\nWHERE ANA.STOCKSNAME LIKE '%长江电力%'\n  AND ANA.ENDDATE = '2026-09-01'\n  AND ANA.ISVALID = 1\n  AND ANA.TCLOSE IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "28.4000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-01 00:00:00 长江电力 600900 28.40 28.02 28.46 27.90 12404.73 35.07 6949.0 6949.0 1.1036",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 126.3,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_4_38cc970f.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 57.73,
+  "llm_seconds_max": 7.26,
+  "selected_tables": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   53004
+  ],
+  "prompt_columns_raw_len": 20185
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1898,
+   "prompt_tokens": 55697,
+   "total_tokens": 57595,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9728,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 55697,
+  "completion": 1898,
+  "total": 57595
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1898,
+   "prompt_tokens": 55697,
+   "total_tokens": 57595,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9728,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_A_INDICS_LATEST",
+   "DERI_STK_AH_PRC",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

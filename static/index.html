@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text2SQL 测试环境</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .query-container {
+            margin-bottom: 20px;
+        }
+        .response-container {
+            min-height: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 500px;
+            background-color: #f9f9f9;
+        }
+        .feedback-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        .query {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .answer {
+            background-color: #f1f8e9;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .system {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Text2SQL 测试控制台</h1>
+        
+        <!-- 查询输入区 -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">查询输入</h5>
+            </div>
+            <div class="card-body">
+                <div class="query-container">
+                    <textarea id="queryInput" class="form-control" rows="3" placeholder="输入您的查询问题..."></textarea>
+                    <div class="mt-2">
+                        <button id="sendBtn" class="btn btn-primary">发送查询</button>
+                        <button id="newSessionBtn" class="btn btn-outline-secondary ml-2">新建会话</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>当前会话ID: </label>
+                            <div class="input-group">
+                                <input id="sessionIdDisplay" class="form-control">
+                                <div class="input-group-append">
+                                    <button id="updateSessionIdBtn" class="btn btn-outline-secondary">更新</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>用户ID: </label>
+                            <div class="input-group">
+                                <input id="userIdInput" class="form-control" value="test-user-1">
+                                <div class="input-group-append">
+                                    <button id="updateUserIdBtn" class="btn btn-outline-secondary">更新</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 响应展示区 -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">响应内容</h5>
+            </div>
+            <div class="card-body">
+                <div id="responseContainer" class="response-container"></div>
+            </div>
+        </div>
+        
+        <!-- 反馈输入区 -->
+        <div class="card feedback-container">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">反馈输入</h5>
+            </div>
+            <div class="card-body">
+                <textarea id="feedbackInput" class="form-control" rows="2" placeholder="输入对上一次查询的反馈或追问..."></textarea>
+                <div class="mt-2">
+                    <button id="sendFeedbackBtn" class="btn btn-info">发送反馈</button>
+                    <div class="btn-group ml-2">
+                        <button id="satisfiedBtn" class="btn btn-outline-success">满意</button>
+                        <button id="unsatisfiedBtn" class="btn btn-outline-danger">不满意</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let ws;
+        let sessionId = generateRandomId();
+        let userId = "test-user-1";
+        let context = {};
+        
+        // DOM元素引用
+        const queryInput = document.getElementById('queryInput');
+        const feedbackInput = document.getElementById('feedbackInput');
+        const responseContainer = document.getElementById('responseContainer');
+        const sendBtn = document.getElementById('sendBtn');
+        const sendFeedbackBtn = document.getElementById('sendFeedbackBtn');
+        const newSessionBtn = document.getElementById('newSessionBtn');
+        const satisfiedBtn = document.getElementById('satisfiedBtn');
+        const unsatisfiedBtn = document.getElementById('unsatisfiedBtn');
+        const sessionIdDisplay = document.getElementById('sessionIdDisplay');
+        const updateSessionIdBtn = document.getElementById('updateSessionIdBtn');
+        const userIdInput = document.getElementById('userIdInput');
+        const updateUserIdBtn = document.getElementById('updateUserIdBtn');
+        
+        // 初始化函数
+        function init() {
+            // 显示会话ID和用户ID
+            updateSessionIdDisplay();
+            
+            // 连接WebSocket
+            connectWebSocket();
+            
+            // 绑定事件处理函数
+            sendBtn.addEventListener('click', sendQuery);
+            sendFeedbackBtn.addEventListener('click', sendFeedback);
+            newSessionBtn.addEventListener('click', createNewSession);
+            satisfiedBtn.addEventListener('click', () => sendFeedbackRating('1'));
+            unsatisfiedBtn.addEventListener('click', () => sendFeedbackRating('0'));
+            updateUserIdBtn.addEventListener('click', updateUserId);
+            updateSessionIdBtn.addEventListener('click', updateSessionId);
+            
+            // 支持按Enter键发送
+            queryInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendQuery();
+                }
+            });
+            
+            feedbackInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendFeedback();
+                }
+            });
+            
+            // 支持会话ID输入框按Enter键更新
+            sessionIdDisplay.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    updateSessionId();
+                }
+            });
+            
+            // 支持用户ID输入框按Enter键更新
+            userIdInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    updateUserId();
+                }
+            });
+        }
+        
+        // 更新用户ID
+        function updateUserId() {
+            const newUserId = userIdInput.value.trim();
+            if (!newUserId) {
+                alert('用户ID不能为空');
+                userIdInput.value = userId; // 恢复原值
+                return;
+            }
+            
+            userId = newUserId;
+            addSystemMessage(`用户ID已更新为: ${userId}`);
+        }
+        
+        // 连接WebSocket
+        function connectWebSocket() {
+            // 关闭之前的连接
+            if (ws) {
+                ws.close();
+            }
+            
+            // 创建新连接
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                addSystemMessage('WebSocket连接已建立');
+            };
+            
+            ws.onmessage = function(event) {
+                handleWebSocketMessage(event.data);
+            };
+            
+            ws.onclose = function() {
+                addSystemMessage('WebSocket连接已关闭，5秒后尝试重新连接...');
+                setTimeout(connectWebSocket, 5000);
+            };
+            
+            ws.onerror = function(error) {
+                addErrorMessage('WebSocket错误: ' + error.message);
+            };
+        }
+        
+        // 处理WebSocket消息
+        function handleWebSocketMessage(data) {
+            try {
+                const response = JSON.parse(data);
+                console.log('收到消息:', response);
+                
+                // 保存上下文信息
+                if (response.context) {
+                    context = response.context;
+                }
+                
+                // 处理不同类型的响应
+                if (response.data) {
+                    const messageType = response.messageType || '';
+                    const answer = response.data.answer || '';
+                    
+                    switch (messageType) {
+                        case 'PROCESS_START':
+                            addSystemMessage('开始处理查询...');
+                            break;
+                        case 'SQL1':
+                            addSystemMessage('生成SQL: ' + answer);
+                            break;
+                        case 'SQL1_CODE':
+                            addSystemMessage('SQL执行状态码: ' + answer);
+                            break;
+                        case 'SQL1_RES':
+                            addAnswerMessage('查询结果: ' + formatOutput(answer));
+                            break;
+                        case 'EXPLAIN_RES':
+                            addAnswerMessage('说明: ' + answer);
+                            break;
+                        case 'RENEW':
+                            addSystemMessage('基于您的反馈生成新问题: ' + answer);
+                            queryInput.value = answer;
+                            break;
+                        case 'REJECT':
+                            addErrorMessage('拒绝: ' + answer);
+                            break;
+                        case 'EXCEPTION':
+                            addErrorMessage('异常: ' + answer);
+                            break;
+                        default:
+                            addAnswerMessage(answer);
+                    }
+                    
+                    // 如果是最终响应，清空输入框
+                    if (response.data.isEnd) {
+                        feedbackInput.value = '';
+                    }
+                }
+            } catch (error) {
+                addErrorMessage('解析响应时出错: ' + error.message);
+                console.error('解析响应出错:', error);
+            }
+        }
+        
+        // 发送查询
+        function sendQuery() {
+            const query = queryInput.value.trim();
+            if (!query) {
+                alert('请输入查询内容');
+                return;
+            }
+            
+            // 添加用户查询到显示区
+            addQueryMessage(query);
+            
+            // 准备请求数据
+            const request = {
+                question: query,
+                sessionId: sessionId,
+                userId: userId,
+                userName: '测试用户'
+            };
+            
+            // 发送到服务器
+            ws.send(JSON.stringify(request));
+            
+            // 清空输入框
+            queryInput.value = '';
+        }
+        
+        // 发送反馈
+        function sendFeedback() {
+            const feedback = feedbackInput.value.trim();
+            if (!feedback) {
+                alert('请输入反馈内容');
+                return;
+            }
+            
+            // 添加用户反馈到显示区
+            addQueryMessage('反馈: ' + feedback);
+            
+            // 准备请求数据
+            const request = {
+                question: feedback,
+                sessionId: sessionId,
+                userId: userId,
+                userName: '测试用户',
+                isRightVal: '',  // 可选的满意度评价
+                feedbackQuestion: feedback  // 反馈内容
+            };
+            
+            // 发送到服务器
+            ws.send(JSON.stringify(request));
+            
+            // 清空输入框
+            feedbackInput.value = '';
+        }
+        
+        // 发送满意度评价
+        function sendFeedbackRating(rating) {
+            // 准备请求数据
+            const request = {
+                question: '满意度评价',
+                sessionId: sessionId,
+                userId: userId,
+                userName: '测试用户',
+                isRightVal: rating
+            };
+            
+            // 添加评价信息到显示区
+            addSystemMessage('满意度评价: ' + (rating === '1' ? '满意' : '不满意'));
+            
+            // 发送到服务器
+            ws.send(JSON.stringify(request));
+        }
+        
+        // 创建新会话
+        function createNewSession() {
+            sessionId = generateRandomId();
+            context = {};
+            updateSessionIdDisplay();
+            addSystemMessage('已创建新会话，ID: ' + sessionId);
+            
+            // 清空显示区
+            responseContainer.innerHTML = '';
+        }
+        
+        // 更新会话ID显示
+        function updateSessionIdDisplay() {
+            sessionIdDisplay.value = sessionId;
+        }
+        
+        // 添加查询消息
+        function addQueryMessage(message) {
+            const div = document.createElement('div');
+            div.className = 'message query';
+            div.textContent = message;
+            responseContainer.appendChild(div);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+        }
+        
+        // 添加回答消息
+        function addAnswerMessage(message) {
+            const div = document.createElement('div');
+            div.className = 'message answer';
+            div.innerHTML = message;
+            responseContainer.appendChild(div);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+        }
+        
+        // 添加系统消息
+        function addSystemMessage(message) {
+            const div = document.createElement('div');
+            div.className = 'message system';
+            div.textContent = message;
+            responseContainer.appendChild(div);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+        }
+        
+        // 添加错误消息
+        function addErrorMessage(message) {
+            const div = document.createElement('div');
+            div.className = 'message error';
+            div.textContent = message;
+            responseContainer.appendChild(div);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+        }
+        
+        // 格式化输出，处理表格数据
+        function formatOutput(output) {
+            // 检查是否包含表格数据
+            const tablePattern = /{table:(.*?)}/;
+            const match = output.match(tablePattern);
+            
+            if (match) {
+                try {
+                    const tableData = match[1].replace(/'/g, '"');
+                    const tableObj = JSON.parse(tableData);
+                    
+                    let tableHTML = '<table class="table table-striped">';
+                    
+                    // 添加表头
+                    tableHTML += '<thead><tr>';
+                    tableObj.columns.forEach(column => {
+                        tableHTML += `<th>${column}</th>`;
+                    });
+                    tableHTML += '</tr></thead>';
+                    
+                    // 添加表体
+                    tableHTML += '<tbody>';
+                    tableObj.data.forEach(row => {
+                        tableHTML += '<tr>';
+                        row.forEach(cell => {
+                            tableHTML += `<td>${cell}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    });
+                    tableHTML += '</tbody></table>';
+                    
+                    return output.replace(match[0], tableHTML);
+                } catch (error) {
+                    console.error('解析表格数据出错:', error);
+                    return output;
+                }
+            }
+            
+            return output;
+        }
+        
+        // 生成随机ID
+        function generateRandomId() {
+            return Math.random().toString(36).substring(2, 10);
+        }
+        
+        // 更新会话ID
+        function updateSessionId() {
+            const newSessionId = sessionIdDisplay.value.trim();
+            if (!newSessionId) {
+                alert('会话ID不能为空');
+                sessionIdDisplay.value = sessionId; // 恢复原值
+                return;
+            }
+            
+            sessionId = newSessionId;
+            addSystemMessage(`会话ID已更新为: ${sessionId}`);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html> 

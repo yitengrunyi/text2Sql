@@ -1,0 +1,172 @@
+{
+ "round_id": 11,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "它的毛利率大概是什么水平？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT spip.PERIODDATE AS `报告期`, spip.A_STOCKSNAME AS `股票简称`, spip.A_STOCKCODE AS `股票代码`, spip.ITEM_NAME AS `产品名称`, ROUND(spip.INCOME/10000, 3) AS `营业收入(亿元)`, spip.PRI_RVNU_PCT AS `营收占比(%)`, ROUND(spip.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT spip JOIN GET_A_SEC_CODE gasc ON spip.COMCODE = gasc.COMCODE AND gasc.ISVALID = 1 WHERE spip.ISVALID = 1 AND gasc.SEC_SNAME LIKE '%万华化学%' AND spip.RPT_TYPE = '合并' AND spip.PERIODDATE = '2025-12-31 00:00:00.000' AND spip.ITEM_NAME LIKE '%聚氨酯%' AND spip.GP_RATIO IS NOT NULL ORDER BY spip.PERIODDATE DESC, spip.ITEM_NAME;\n200\n{table:[['报告期', '股票简称', '股票代码', '产品名称', '营业收入(亿元)', '营收占比(%)', '毛利率(%)'], ['2025-12-31', '万华化学', '600309', '聚氨酯系列', '750.58', '36.93', '26.88']]}\n该查询提取了万华化学在2025年年报中聚氨酯系列产品相关的信息，包括报告期、股票简称、股票代码、具体产品名称、营业收入（单位为亿元，源数据为万元并换算为亿元保留3位小数）、该类业务在公司总营收中的占比，以及聚氨酯产品的毛利率（保留2位小数）。数据来源于公司主营业务产品收入与股票基础信息数据库，通过公司唯一标识将二者关联，只筛选有效数据、合并口径、报表日期为2025年12月31日、产品名称包含“聚氨酯”，并且毛利率数据需为有效值，最终结果按报告期和产品名称排序。聚氨酯系列产品的毛利率直接采用企业披露的财务指标，无需额外计算。查询结果可以准确反映聚氨酯业务的毛利率水平，能够满足您的需求。\n{table:[['报告期', '股票简称', '股票代码', '产品名称', '营业收入(亿元)', '营收占比(%)', '毛利率(%)'], ['2025-12-31', '万华化学', '600309', '聚氨酯系列', '750.58', '36.93', '26.88']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT spip.PERIODDATE AS `报告期`, spip.A_STOCKSNAME AS `股票简称`, spip.A_STOCKCODE AS `股票代码`, spip.ITEM_NAME AS `产品名称`, ROUND(spip.INCOME/10000, 3) AS `营业收入(亿元)`, spip.PRI_RVNU_PCT AS `营收占比(%)`, ROUND(spip.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT spip JOIN GET_A_SEC_CODE gasc ON spip.COMCODE = gasc.COMCODE AND gasc.ISVALID = 1 WHERE spip.ISVALID = 1 AND gasc.SEC_SNAME LIKE '%万华化学%' AND spip.RPT_TYPE = '合并' AND spip.PERIODDATE = '2025-12-31 00:00:00.000' AND spip.ITEM_NAME LIKE '%聚氨酯%' AND spip.GP_RATIO IS NOT NULL ORDER BY spip.PERIODDATE DESC, spip.ITEM_NAME",
+ "final_sql": "SELECT spip.PERIODDATE AS `报告期`, spip.A_STOCKSNAME AS `股票简称`, spip.A_STOCKCODE AS `股票代码`, spip.ITEM_NAME AS `产品名称`, ROUND(spip.INCOME/10000, 3) AS `营业收入(亿元)`, spip.PRI_RVNU_PCT AS `营收占比(%)`, ROUND(spip.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT spip JOIN GET_A_SEC_CODE gasc ON spip.COMCODE = gasc.COMCODE AND gasc.ISVALID = 1 WHERE spip.ISVALID = 1 AND gasc.SEC_SNAME LIKE '%万华化学%' AND spip.RPT_TYPE = '合并' AND spip.PERIODDATE = '2025-12-31 00:00:00.000' AND spip.ITEM_NAME LIKE '%聚氨酯%' AND spip.GP_RATIO IS NOT NULL ORDER BY spip.PERIODDATE DESC, spip.ITEM_NAME",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "26.88"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 万华化学 600309 聚氨酯系列 750.582 36.93 26.88",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 43.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_11_a515b79f.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 42.23,
+  "llm_seconds_max": 35.18,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2993,
+   "prompt_tokens": 10093,
+   "total_tokens": 13086,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2395,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10093,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 218,
+   "prompt_tokens": 4114,
+   "total_tokens": 4332,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14207,
+  "completion": 3211,
+  "total": 17418
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2993,
+   "prompt_tokens": 10093,
+   "total_tokens": 13086,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2395,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10093,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 218,
+   "prompt_tokens": 4114,
+   "total_tokens": 4332,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

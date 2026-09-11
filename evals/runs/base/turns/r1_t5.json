@@ -1,0 +1,190 @@
+{
+ "round_id": 1,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "美的集团2025年的归母净利润是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：归属于母公司股东的净利润（简称归母净利润）\n\n[2] 可能的计算公式：  \n归母净利润 = 净利润 - 少数股东损益  \n其中：  \n净利润 = 营业收入 - 营业成本 - 税费及各项期间费用 + 投资收益等  \n归母净利润反映企业为母公司股东实际带来的最终盈利。  \n\n实际2025年数据需参考美的集团2025年年度报告或权威业绩发布。\n['美的集团', '归属于母公司股东的净利润', '归母净利润', '净利润', '少数股东损益', '营业收入', '营业成本', '税费及各项期间费用', '投资收益', '母公司股东', '年度报告', '业绩发布']\n该问题可能涉及A股-'美的集团'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-家用电器。\n个股相关\n['主板财务', '主板基本信息']\n['STK_HUMAN_RESOURCE', 'STK_LNG_LOAN', 'STK_COM_RELA_NBALA', 'VIEW_STK_FIX_ASS', 'STK_TAX_RATIO', 'STK_COMSUB_PROFILE', 'VIEW_STK_INCOME_GEN_QTR', 'STK_COM_PROFILE', 'STK_FIX_ASS_DEP']\n是否命中召回表：False\n生成查询代码\nSELECT \n    ic.A_STOCKSNAME AS `股票名称`,\n    ic.A_STOCKCODE AS `股票代码`,\n    ic.ENDDATE AS `报表截止日`,\n    ROUND(ic.P160101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR ic\nWHERE \n    ic.ISVALID = 1\n    AND ic.A_STOCKSNAME LIKE '%美的集团%'\n    AND ic.RPT_TYPE = '合并'\n    AND ic.ENDDATE >= '2025-01-01' AND ic.ENDDATE <= '2025-12-31'\nORDER BY ic.ENDDATE DESC\n200\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万)'], ['美的集团', '000333', '2025-12-31', '606,202.80'], ['美的集团', '000333', '2025-09-30', '1,186,969.30'], ['美的集团', '000333', '2025-06-30', '1,359,145.70'], ['美的集团', '000333', '2025-03-31', '1,242,223.30']]}\n查询的主要目的是获取美的集团在2025年各个季度的归属于母公司所有者的净利润。\n\n归母净利润（万）是通过归属于母公司净利润（元）除以一万得出，即归母净利润（万）等于归属于母公司净利润（元）除以一万。这一指标方便用万元为单位展示净利润数据。查询语句对结果进行了单位换算操作。查询结果符合要求。\n\n本次查询使用了利润表（通用-单季度）这张表，该表记录了上市公司每个季度的利润相关信息，包括公司简称、公司代码、报表截止日和归属于母公司所有者的净利润。\n\n查询设置了筛选条件，筛选简称为“美的集团”的记录，仅保留报表类型为“合并”的数据，且报表截止日期在2025年全年范围内，仅返回有效数据。最后按报表截止日降序排列。结果展示了美的集团2025年各报告期归母净利润的情况。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    ic.A_STOCKSNAME AS `股票名称`,\n    ic.A_STOCKCODE AS `股票代码`,\n    ic.ENDDATE AS `报表截止日`,\n    ROUND(ic.P160101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR ic\nWHERE \n    ic.ISVALID = 1\n    AND ic.A_STOCKSNAME LIKE '%美的集团%'\n    AND ic.RPT_TYPE = '合并'\n    AND ic.ENDDATE >= '2025-01-01' AND ic.ENDDATE <= '2025-12-31'\nORDER BY ic.ENDDATE DESC",
+ "final_sql": "SELECT \n    ic.A_STOCKSNAME AS `股票名称`,\n    ic.A_STOCKCODE AS `股票代码`,\n    ic.ENDDATE AS `报表截止日`,\n    ROUND(ic.P160101/10000, 1) AS `归母净利润(万)`\nFROM \n    VIEW_STK_INCOME_GEN_QTR ic\nWHERE \n    ic.ISVALID = 1\n    AND ic.A_STOCKSNAME LIKE '%美的集团%'\n    AND ic.RPT_TYPE = '合并'\n    AND ic.ENDDATE >= '2025-01-01' AND ic.ENDDATE <= '2025-12-31'\nORDER BY ic.ENDDATE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "43945411000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "first_result_preview": "美的集团 000333 2025-12-31 00:00:00 606202.8\n美的集团 000333 2025-09-30 00:00:00 1186969.3\n美的集团 000333 2025-06-30 00:00:00 1359145.7\n美的集团 000333 2025-03-31 00:00:00 1242223.3",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 4
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 54.6,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_1_2d509774.5",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 69.5,
+  "llm_seconds_max": 9.65,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   53247
+  ],
+  "prompt_columns_raw_len": 22705
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2437,
+   "prompt_tokens": 66658,
+   "total_tokens": 69095,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 66658,
+  "completion": 2437,
+  "total": 69095
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2437,
+   "prompt_tokens": 66658,
+   "total_tokens": 69095,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9088,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_COM_PROFILE",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,172 @@
+{
+ "round_id": 21,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "那2025年全年呢，累计涨幅有多少？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT im.TRADEDATE AS `交易日期`, im.INDX_SNAME AS `指数名称`, im.SECCODE AS `指数代码`, ROUND(im.TCLOSE, 2) AS `收盘点位`, ROUND(im.THIGH, 2) AS `最高点位`, ROUND(im.TLOW, 2) AS `最低点位`, ROUND(im.TOPEN, 2) AS `开盘点位`, ROUND(im.CHNG, 2) AS `涨跌点数`, ROUND(im.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((im.TCLOSE / FIRST_VALUE(im.LCLOSE) OVER (PARTITION BY im.SECCODE ORDER BY im.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)`, ROUND(im.TVOLUME, 0) AS `成交量(股)`, ROUND(im.TVALUE / 100000000, 2) AS `成交金额(亿)` FROM INDX_MKT im WHERE im.SECCODE = '000852' AND im.TRADEDATE >= '2025-01-01' AND im.TRADEDATE <= '2025-12-31' AND im.ISVALID = 1 AND im.TCLOSE IS NOT NULL AND im.LCLOSE IS NOT NULL ORDER BY im.TRADEDATE ASC;\n200\n{table:[['交易日期', '指数名称', '指数代码', '收盘点位', '最高点位', '最低点位', '开盘点位', '涨跌点数', '日涨跌幅(%)', '累计涨跌幅(%)', '成交量(股)', '成交金额(亿)'], ['2025-01-02', '中证1000', '000852', '5,797.09', '5,982.55', '5,743.18', '5,948.68', '-160.63', '-2.70', '-2.70', '244,125,606.00', '2,937.18'], ['2025-01-03', '中证1000', '000852', '5,625.21', '5,826.08', '5,609.77', '5,808.54', '-171.88', '-2.96', '-5.58', '237,093,211.00', '2,723.48'], ['2025-01-06', '中证1000', '000852', '5,608.03', '5,688.92', '5,561.90', '5,614.03', '-17.17', '-0.31', '-5.87', '203,047,676.00', '2,348.77'], ['2025-01-07', '中证1000', '000852', '5,692.04', '5,694.00', '5,580.89', '5,610.95', '84.01', '1.50', '-4.46', '193,912,450.00', '2,342.87'], ['2025-01-08', '中证1000', '000852', '5,661.78', '5,706.66', '5,501.49', '5,664.31', '-30.26', '-0.53', '-4.97', '225,800,830.00', '2,720.84'], ['2025-01-09', '中证1000', '000852', '5,672.78', '5,714.46', '5,629.82', '5,629.90', '11.00', '0.19', '-4.78', '193,320,421.00', '2,482.20'], ['2025-01-10', '中证1000', '000852', '5,544.92', '5,718.21', '5,544.92', '5,662.77', '-127.86', '-2.25', '-6.93', '198,014,877.00', '2,429.89'], ['2025-01-13', '中证1000', '000852', '5,559.47', '5,599.33', '5,457.51', '5,487.12', '14.56', '0.26', '-6.68', '169,309,190.00', '2,016.44'], ['2025-01-14', '中证1000', '000852', '5,811.05', '5,814.71',",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT im.TRADEDATE AS `交易日期`, im.INDX_SNAME AS `指数名称`, im.SECCODE AS `指数代码`, ROUND(im.TCLOSE, 2) AS `收盘点位`, ROUND(im.THIGH, 2) AS `最高点位`, ROUND(im.TLOW, 2) AS `最低点位`, ROUND(im.TOPEN, 2) AS `开盘点位`, ROUND(im.CHNG, 2) AS `涨跌点数`, ROUND(im.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((im.TCLOSE / FIRST_VALUE(im.LCLOSE) OVER (PARTITION BY im.SECCODE ORDER BY im.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)`, ROUND(im.TVOLUME, 0) AS `成交量(股)`, ROUND(im.TVALUE / 100000000, 2) AS `成交金额(亿)` FROM INDX_MKT im WHERE im.SECCODE = '000852' AND im.TRADEDATE >= '2025-01-01' AND im.TRADEDATE <= '2025-12-31' AND im.ISVALID = 1 AND im.TCLOSE IS NOT NULL AND im.LCLOSE IS NOT NULL ORDER BY im.TRADEDATE ASC",
+ "final_sql": "SELECT im.TRADEDATE AS `交易日期`, im.INDX_SNAME AS `指数名称`, im.SECCODE AS `指数代码`, ROUND(im.TCLOSE, 2) AS `收盘点位`, ROUND(im.THIGH, 2) AS `最高点位`, ROUND(im.TLOW, 2) AS `最低点位`, ROUND(im.TOPEN, 2) AS `开盘点位`, ROUND(im.CHNG, 2) AS `涨跌点数`, ROUND(im.CHNG_PCT, 2) AS `日涨跌幅(%)`, ROUND((im.TCLOSE / FIRST_VALUE(im.LCLOSE) OVER (PARTITION BY im.SECCODE ORDER BY im.TRADEDATE ASC) - 1) * 100, 2) AS `累计涨跌幅(%)`, ROUND(im.TVOLUME, 0) AS `成交量(股)`, ROUND(im.TVALUE / 100000000, 2) AS `成交金额(亿)` FROM INDX_MKT im WHERE im.SECCODE = '000852' AND im.TRADEDATE >= '2025-01-01' AND im.TRADEDATE <= '2025-12-31' AND im.ISVALID = 1 AND im.TCLOSE IS NOT NULL AND im.LCLOSE IS NOT NULL ORDER BY im.TRADEDATE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "27.49"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 243
+ },
+ "first_result_preview": "2025-01-02 00:00:00 中证1000 000852 5797.09 5982.55 5743.18 5948.68 -160.63 -2.70 -2.70 244125606 2937.18\n2025-01-03 00:00:00 中证1000 000852 5625.21 5826.08 5609.77 5808.54 -171.88 -2.96 -5.58 237093211 ",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(243行, Gold为1行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 243
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 77.6,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_21_1bd420a8.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 35.7,
+  "llm_seconds_max": 26.88,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3253,
+   "prompt_tokens": 12547,
+   "total_tokens": 15800,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2605,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12547,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 272,
+   "prompt_tokens": 4893,
+   "total_tokens": 5165,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17440,
+  "completion": 3525,
+  "total": 20965
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3253,
+   "prompt_tokens": 12547,
+   "total_tokens": 15800,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2605,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12547,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 272,
+   "prompt_tokens": 4893,
+   "total_tokens": 5165,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

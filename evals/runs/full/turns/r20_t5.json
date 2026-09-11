@@ -1,0 +1,173 @@
+{
+ "round_id": 20,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数时间窗口涨跌幅排名与聚合·主题指数年内表现盘点",
+ "question": "把这三个指数今年以来涨跌幅从高到低排一下，谁最抗跌？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH TargetIndx AS (\n    SELECT INNER_CODE, INDX_SNAME, INDX_CODE \n    FROM GET_INDX_GEN_INFO \n    WHERE (INDX_CODE = '000016' OR INDX_SNAME LIKE '%中证白酒%' OR INDX_SNAME LIKE '%中证医疗%') \n      AND USE_STATUS = '使用' \n      AND ISVALID = 1\n),\nMktData AS (\n    SELECT m.INNER_CODE, \n           m.LCLOSE, \n           m.TCLOSE,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE ASC) as rn_asc,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE DESC) as rn_desc\n    FROM INDX_MKT m\n    JOIN TargetIndx t ON m.INNER_CODE = t.INNER_CODE\n    WHERE m.TRADEDATE >= '2026-01-01' AND m.TRADEDATE <= '2026-09-02'\n      AND m.ISVALID = 1\n)\nSELECT ti.INDX_SNAME AS `指数名称`,\n       ti.INDX_CODE AS `指数代码`,\n       (MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) / MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) - 1) * 100 AS `今年以来涨跌幅(%)`\nFROM TargetIndx ti\nJOIN MktData m ON ti.INNER_CODE = m.INNER_CODE\nWHERE m.rn_asc = 1 OR m.rn_desc = 1\nGROUP BY ti.INDX_SNAME, ti.INDX_CODE\nHAVING MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) IS NOT NULL \n   AND MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) != 0\n   AND MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) IS NOT NULL\nORDER BY `今年以来涨跌幅(%)` DESC;\n200\n{table:[['指数名称', '指数代码', '今年以来涨跌幅(%)'], ['中证医疗全收益', 'H20451', '-0.17'], ['中证医疗', '399989', '-1.18'], ['上证50', '000016', '-3.85'], ['中证白酒全收益', 'H20539', '-23.30'], ['中证白酒净收益', '399997CNY02', '-23.59'], ['中证白酒', '399997', '-26.11']]}\n该查询获取了上证50、中证白酒、中证医疗这三个指数在2026年初至2026年9月2日期间的区间涨跌幅表现，并按照涨跌幅从高到低进行排序。查询基于指数基本信息数据和指数日行情数据，通过简称或代码筛选出目标指数，仅统计在用且有效的指数。查询判断每个指数在2026年首个交易日和2026年9月2日附近最后一个交易日的收盘价，计算区间涨跌幅，具体算法为“今年以来涨跌幅 =（区间最后一个交易日收盘价 ÷ 区间首个交易日昨收 − 1）× 100%”，结果以百分比形式展示，并剔除无效或异常数据。排序后即可一目了然哪只指数区间表现最好（即最抗跌或最强势）。查询结果完全满足用户“今年以来这三个指数涨跌幅排序及最抗跌指数”的需求。\n{table:[['指数名称', '指数代码', '今年以来涨跌幅(%)'], ['中证医疗全收益', 'H20451', '-0.17'], ['中证医疗', '399989', '-1.18'], ['上证50', '000016', '-3.85'], ['中证白酒全收益', 'H20539', '-23.30'], ['中证白酒净收益', '399997CNY02', '-23.59'], ['中证白酒', '399997', '-2",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH TargetIndx AS (\n    SELECT INNER_CODE, INDX_SNAME, INDX_CODE \n    FROM GET_INDX_GEN_INFO \n    WHERE (INDX_CODE = '000016' OR INDX_SNAME LIKE '%中证白酒%' OR INDX_SNAME LIKE '%中证医疗%') \n      AND USE_STATUS = '使用' \n      AND ISVALID = 1\n),\nMktData AS (\n    SELECT m.INNER_CODE, \n           m.LCLOSE, \n           m.TCLOSE,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE ASC) as rn_asc,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE DESC) as rn_desc\n    FROM INDX_MKT m\n    JOIN TargetIndx t ON m.INNER_CODE = t.INNER_CODE\n    WHERE m.TRADEDATE >= '2026-01-01' AND m.TRADEDATE <= '2026-09-02'\n      AND m.ISVALID = 1\n)\nSELECT ti.INDX_SNAME AS `指数名称`,\n       ti.INDX_CODE AS `指数代码`,\n       (MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) / MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) - 1) * 100 AS `今年以来涨跌幅(%)`\nFROM TargetIndx ti\nJOIN MktData m ON ti.INNER_CODE = m.INNER_CODE\nWHERE m.rn_asc = 1 OR m.rn_desc = 1\nGROUP BY ti.INDX_SNAME, ti.INDX_CODE\nHAVING MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) IS NOT NULL \n   AND MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) != 0\n   AND MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) IS NOT NULL\nORDER BY `今年以来涨跌幅(%)` DESC",
+ "final_sql": "WITH TargetIndx AS (\n    SELECT INNER_CODE, INDX_SNAME, INDX_CODE \n    FROM GET_INDX_GEN_INFO \n    WHERE (INDX_CODE = '000016' OR INDX_SNAME LIKE '%中证白酒%' OR INDX_SNAME LIKE '%中证医疗%') \n      AND USE_STATUS = '使用' \n      AND ISVALID = 1\n),\nMktData AS (\n    SELECT m.INNER_CODE, \n           m.LCLOSE, \n           m.TCLOSE,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE ASC) as rn_asc,\n           ROW_NUMBER() OVER(PARTITION BY m.INNER_CODE ORDER BY m.TRADEDATE DESC) as rn_desc\n    FROM INDX_MKT m\n    JOIN TargetIndx t ON m.INNER_CODE = t.INNER_CODE\n    WHERE m.TRADEDATE >= '2026-01-01' AND m.TRADEDATE <= '2026-09-02'\n      AND m.ISVALID = 1\n)\nSELECT ti.INDX_SNAME AS `指数名称`,\n       ti.INDX_CODE AS `指数代码`,\n       (MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) / MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) - 1) * 100 AS `今年以来涨跌幅(%)`\nFROM TargetIndx ti\nJOIN MktData m ON ti.INNER_CODE = m.INNER_CODE\nWHERE m.rn_asc = 1 OR m.rn_desc = 1\nGROUP BY ti.INDX_SNAME, ti.INDX_CODE\nHAVING MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) IS NOT NULL \n   AND MAX(CASE WHEN m.rn_asc = 1 THEN m.LCLOSE END) != 0\n   AND MAX(CASE WHEN m.rn_desc = 1 THEN m.TCLOSE END) IS NOT NULL\nORDER BY `今年以来涨跌幅(%)` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 3,
+  "preview": "中证医疗指数 -1.18\n上证50指数 -3.85\n中证白酒指数 -26.11"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 6
+ },
+ "first_result_preview": "中证医疗全收益 H20451 -0.17296745\n中证医疗 399989 -1.18272300\n上证50 000016 -3.84942453\n中证白酒全收益 H20539 -23.29907911\n中证白酒净收益 399997CNY02 -23.58616515\n中证白酒 399997 -26.10643310",
+ "ex_first": false,
+ "ex_reasons": [
+  "名单"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 6
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 74.7,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_20_a2b50df2.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 72.97,
+  "llm_seconds_max": 66.59,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8318,
+   "prompt_tokens": 12729,
+   "total_tokens": 21047,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7377,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12729,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 222,
+   "prompt_tokens": 5226,
+   "total_tokens": 5448,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17955,
+  "completion": 8540,
+  "total": 26495
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 8318,
+   "prompt_tokens": 12729,
+   "total_tokens": 21047,
+   "completion_tokens_details": {
+    "reasoning_tokens": 7377,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12729,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 222,
+   "prompt_tokens": 5226,
+   "total_tokens": 5448,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "GET_INDX_GEN_INFO",
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

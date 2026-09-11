@@ -1,0 +1,2870 @@
+{
+ "AMERICAN_STOCK_MAIN": {
+  "comment": "",
+  "row_estimate": 43,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(255)",
+    "comment": "美股内部代码"
+   },
+   "SYMBOL": {
+    "type": "varchar(255)",
+    "comment": "交易代码"
+   },
+   "COMB_SYMBOL": {
+    "type": "varchar(255)",
+    "comment": "美股展示代码"
+   },
+   "CSNAME": {
+    "type": "varchar(255)",
+    "comment": "美股名称"
+   },
+   "IS_CHINESE_STOCK": {
+    "type": "varchar(255)",
+    "comment": "是否中概股"
+   },
+   "EXCH_HCODE": {
+    "type": "varchar(255)",
+    "comment": "交易所"
+   },
+   "SEC_HCODE": {
+    "type": "varchar(255)",
+    "comment": "讯兔内部代码"
+   },
+   "IS_IMPORTANT_STOCK": {
+    "type": "varchar(255)",
+    "comment": "是否重要个股"
+   },
+   "SW_INDU_CODE_2021_1": {
+    "type": "varchar(255)",
+    "comment": "申万一级行业名称"
+   },
+   "SW1_CODE": {
+    "type": "varchar(255)",
+    "comment": "申万一级行业code"
+   }
+  }
+ },
+ "COM3101": {
+  "comment": "",
+  "row_estimate": 43,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F003N": {
+    "type": "float",
+    "comment": "已发行普通股"
+   },
+   "F004D": {
+    "type": "date",
+    "comment": "已发行普通股的更新日期"
+   },
+   "F005N": {
+    "type": "float",
+    "comment": "证券类普通股"
+   },
+   "F006D": {
+    "type": "date",
+    "comment": "证券类普通股的更新日期"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "股息率(最新收盘价和月度股息)"
+   },
+   "F008D": {
+    "type": "date",
+    "comment": "股息率更新日期"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "证券股息率(最新收盘价和月度股息)"
+   },
+   "F010D": {
+    "type": "date",
+    "comment": "证券股息率更新日期"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "净收益率(最新收盘价和月度每股收益)"
+   },
+   "F012D": {
+    "type": "date",
+    "comment": "净收益率的更新日期"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "市值(最新收盘价和月度股本)，数据单位百万元"
+   },
+   "F014D": {
+    "type": "date",
+    "comment": "市值更新日期"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "市净率(最新收盘价和月度账面价值)"
+   },
+   "F016D": {
+    "type": "date",
+    "comment": "市净率更新日期"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "证券市净率(最新收盘价和月度账面价值)"
+   },
+   "F018D": {
+    "type": "date",
+    "comment": "证券市净率更新日期"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "价格现金流量比(最新价格和月度现金流量)"
+   },
+   "F020D": {
+    "type": "date",
+    "comment": "价格现金流量比更新日期"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "市盈率(最新收盘价和月度每股收益)"
+   },
+   "F022D": {
+    "type": "date",
+    "comment": "市盈率更新日期"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "证券市盈率(最新收盘价和月度每股收益)"
+   },
+   "F024D": {
+    "type": "date",
+    "comment": "证券市盈率更新日期"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "市销率(最新收盘价和月度销售额)"
+   },
+   "F026D": {
+    "type": "date",
+    "comment": "市销率更新日期"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "最新股份"
+   },
+   "F028D": {
+    "type": "date",
+    "comment": "最新股份更新日期"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "已发行的股份数减去非上市股份"
+   },
+   "F030D": {
+    "type": "date",
+    "comment": "流通股本更新日期"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "最新每股现金流量"
+   },
+   "F032D": {
+    "type": "date",
+    "comment": "最新每股现金流量更新日期"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "每股股息"
+   },
+   "F034D": {
+    "type": "date",
+    "comment": "每股派息公告日期"
+   }
+  }
+ },
+ "COM3102": {
+  "comment": "",
+  "row_estimate": 1591,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "应计费用(不包括应计薪金)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "总资产"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "总流动资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "其他流动资产"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "其他资产"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "其他资产(包括无形资产)"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "总投资-银行"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "每股净资产"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股净资产-有形资产"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "现金和同业拆借款"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "现金"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "现金和短期投资"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "普通股权益"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "留存收益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "客户承兑责任"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "总债务"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "长期债务"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "可转换债券"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "短期债务"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "总存款"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "客户总存款"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "递延税"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "递延税负债"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "递延税资产"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "递延税和投资税收抵免"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "所有权益"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "保险合同负债"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "无形资产"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "应付利息"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "存货"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "总投资"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "长期股权投资"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "房地产资产"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "总负债"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "总流动负债"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "其他流动负债"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "其他负债"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "负债和股东权益 –总计"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "负债(不包括少数股东权益)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "客户贷款净额"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "少数股东权益累计"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "净债务"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "长期应收票据"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "应付账款"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "应付所得税"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "优先股 –账面价值"
+   },
+   "F053N": {
+    "type": "float",
+    "comment": "净物业厂房及设备"
+   },
+   "F054N": {
+    "type": "float",
+    "comment": "应收保费"
+   },
+   "F055N": {
+    "type": "float",
+    "comment": "风险费用准备金"
+   },
+   "F056N": {
+    "type": "float",
+    "comment": "应收利息"
+   },
+   "F057N": {
+    "type": "float",
+    "comment": "短期应收账款"
+   },
+   "F058N": {
+    "type": "float",
+    "comment": "应收账款总额"
+   },
+   "F059N": {
+    "type": "float",
+    "comment": "非股权储备"
+   },
+   "F060N": {
+    "type": "float",
+    "comment": "托管证券"
+   },
+   "F061N": {
+    "type": "float",
+    "comment": "投资性证券"
+   },
+   "F062N": {
+    "type": "float",
+    "comment": "所有股东权益"
+   },
+   "F063N": {
+    "type": "float",
+    "comment": "总资本"
+   },
+   "F064N": {
+    "type": "float",
+    "comment": "一级资本"
+   },
+   "F065N": {
+    "type": "float",
+    "comment": "二级资本"
+   },
+   "F066D": {
+    "type": "date",
+    "comment": "源文件归档日期 –资产负债表"
+   },
+   "F067V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F068D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F069N": {
+    "type": "int",
+    "comment": "财政年度"
+   }
+  }
+ },
+ "COM3103": {
+  "comment": "",
+  "row_estimate": 1591,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "其他税后收入(费用)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "限制现金"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "成本(含折旧、损耗)"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "合并净利"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "优先股股息"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "息税前利润"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "每股息税前利润"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "息税折旧摊销前利润"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股基本收益(不包含特别项目)"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "摊薄每股收益"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "摊薄每股收益(不包含非经常损 益)"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "每股收益"
+   },
+   "F019D": {
+    "type": "date",
+    "comment": "每股收益报告日期"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "联属公司盈利的权益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "总开支"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "毛利润"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "所得税"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "利息费用"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "总利息支出-银行"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "利息收入"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "利息收入(扣除贷款损失准备金)"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "净利息收入"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "贷款损失准备金"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "损失、索赔和储备"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "少数股东权益开支"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "净利润"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "净利润(包含特别项目)"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "归属于普通股东的净利润"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "净收入(包括已终止经营业务)"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "非利息支出"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "非利息收入"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "非营业利润(亏损)"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "其他营业费用"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "营业费用 –合计"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "营业利润（可作为非保险公司的营 业利润）"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "营业利润(扣除利息费用)(该字段 为美股保险行业公司适用）"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "营业利润(未扣除利息费)"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "税前净利"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "非经常支出(税前)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "非经常性贷款(税前)"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "储量增加(减少)"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "销售收入（营业收入）"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "每股销售收入（每股营业收入）"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用及其他"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "非经常损益"
+   },
+   "F053D": {
+    "type": "date",
+    "comment": "源文件归档日期 –损益表"
+   },
+   "F054V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F055D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F056N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "COM3104": {
+  "comment": "",
+  "row_estimate": 1591,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "由收购所得之净资产"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "资本性支出"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "现金净变动"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "债务变动净额"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧和摊销"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "存款减少"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "存款增加"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "递延税增减"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "发放现金股利"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "每股股息"
+   },
+   "F017D": {
+    "type": "date",
+    "comment": "每股股息-公告日期"
+   },
+   "F018D": {
+    "type": "date",
+    "comment": "每股股息-除权日"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "其他融资活动产生的净现金流"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "融资净现金流"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "汇率影响"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "股票自由现金流"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "股本减红利的自由现金流"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "运营资金"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "联邦住房贷款预付款增加(减少)"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "投资活动-其他用途"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "投资净现金流"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "投资买卖净额"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "投资活动-其他来源"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "其他用途"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "贷款减少"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "贷款增加"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "其他现金流"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "收入(净现金流量)"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "非现金项目"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "经营净现金流"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "出售固定资产及业务"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "股权融资净现金流"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "营运资金变动"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "特别项目"
+   },
+   "F041D": {
+    "type": "date",
+    "comment": "源文件归档日期-现金流量表"
+   },
+   "F042V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F043D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F044N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "COM3105": {
+  "comment": "",
+  "row_estimate": 396,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "类型"
+   },
+   "F003N": {
+    "type": "int",
+    "comment": "编号"
+   },
+   "F004D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006V": {
+    "type": "varchar(250)",
+    "comment": "板块"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "销售"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "运营收入"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "资本支出"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧"
+   },
+   "F012V": {
+    "type": "char(4)",
+    "comment": "根据公司的主要业务活动划 分 SIC 代码"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "COM3106": {
+  "comment": "",
+  "row_estimate": 645,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "类型"
+   },
+   "F003N": {
+    "type": "int",
+    "comment": "编号"
+   },
+   "F004D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006V": {
+    "type": "varchar(250)",
+    "comment": "地域"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "销售"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "运营收入"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "资本支出"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧"
+   }
+  }
+ },
+ "STK2401": {
+  "comment": "",
+  "row_estimate": 2000,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "美股内部代码"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F003N": {
+    "type": "float",
+    "comment": "昨收价"
+   },
+   "F004N": {
+    "type": "float",
+    "comment": "开盘价"
+   },
+   "F005N": {
+    "type": "float",
+    "comment": "最高价"
+   },
+   "F006N": {
+    "type": "float",
+    "comment": "最低价"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "收盘价"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "成交量"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "成交额"
+   },
+   "F010N": {
+    "type": "decimal(18,3)",
+    "comment": "换手率(%)"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "总股本"
+   }
+  }
+ },
+ "VIEW_ADS_STOCK_US_EOD_DI": {
+  "comment": "",
+  "row_estimate": 0,
+  "columns": {
+   "TRADE_DATE": {
+    "type": "date",
+    "comment": "交易日期"
+   },
+   "SYMBOL": {
+    "type": "varchar(16)",
+    "comment": "股票代码"
+   },
+   "NAME": {
+    "type": "varchar(256)",
+    "comment": "股票名称"
+   },
+   "PRE_PRICE": {
+    "type": "double",
+    "comment": "昨收"
+   },
+   "LASTPRICE": {
+    "type": "double",
+    "comment": "最新价"
+   },
+   "OPEN_PRICE": {
+    "type": "double",
+    "comment": "开盘价"
+   },
+   "HIGH_PRICE": {
+    "type": "double",
+    "comment": "最高价"
+   },
+   "LOW_PRICE": {
+    "type": "double",
+    "comment": "最低价"
+   },
+   "CLOSE_PRICE": {
+    "type": "double",
+    "comment": "收盘价"
+   },
+   "TRADE_VOLUME": {
+    "type": "bigint",
+    "comment": "成交量"
+   },
+   "TRADE_AMOUNT": {
+    "type": "double",
+    "comment": "成交金额"
+   }
+  }
+ },
+ "VIEW_COM3102_CUM": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "应计费用(不包括应计薪金)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "总资产"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "总流动资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "其他流动资产"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "其他资产"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "其他资产(包括无形资产)"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "总投资-银行"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "每股净资产"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股净资产-有形资产"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "现金和同业拆借款"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "现金"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "现金和短期投资"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "普通股权益"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "留存收益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "客户承兑责任"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "总债务"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "长期债务"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "可转换债券"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "短期债务"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "总存款"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "客户总存款"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "递延税"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "递延税负债"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "递延税资产"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "递延税和投资税收抵免"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "所有权益"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "保险合同负债"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "无形资产"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "应付利息"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "存货"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "总投资"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "长期股权投资"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "房地产资产"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "总负债"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "总流动负债"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "其他流动负债"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "其他负债"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "负债和股东权益 –总计"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "负债(不包括少数股东权益)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "客户贷款净额"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "少数股东权益累计"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "净债务"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "长期应收票据"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "应付账款"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "应付所得税"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "优先股 –账面价值"
+   },
+   "F053N": {
+    "type": "float",
+    "comment": "净物业厂房及设备"
+   },
+   "F054N": {
+    "type": "float",
+    "comment": "应收保费"
+   },
+   "F055N": {
+    "type": "float",
+    "comment": "风险费用准备金"
+   },
+   "F056N": {
+    "type": "float",
+    "comment": "应收利息"
+   },
+   "F057N": {
+    "type": "float",
+    "comment": "短期应收账款"
+   },
+   "F058N": {
+    "type": "float",
+    "comment": "应收账款总额"
+   },
+   "F059N": {
+    "type": "float",
+    "comment": "非股权储备"
+   },
+   "F060N": {
+    "type": "float",
+    "comment": "托管证券"
+   },
+   "F061N": {
+    "type": "float",
+    "comment": "投资性证券"
+   },
+   "F062N": {
+    "type": "float",
+    "comment": "所有股东权益"
+   },
+   "F063N": {
+    "type": "float",
+    "comment": "总资本"
+   },
+   "F064N": {
+    "type": "float",
+    "comment": "一级资本"
+   },
+   "F065N": {
+    "type": "float",
+    "comment": "二级资本"
+   },
+   "F066D": {
+    "type": "date",
+    "comment": "源文件归档日期 –资产负债表"
+   },
+   "F067V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F068D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F069N": {
+    "type": "int",
+    "comment": "财政年度"
+   }
+  }
+ },
+ "VIEW_COM3102_Q": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "应计费用(不包括应计薪金)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "总资产"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "总流动资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "其他流动资产"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "其他资产"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "其他资产(包括无形资产)"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "总投资-银行"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "每股净资产"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股净资产-有形资产"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "现金和同业拆借款"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "现金"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "现金和短期投资"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "普通股权益"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "留存收益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "客户承兑责任"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "总债务"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "长期债务"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "可转换债券"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "短期债务"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "总存款"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "客户总存款"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "递延税"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "递延税负债"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "递延税资产"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "递延税和投资税收抵免"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "所有权益"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "保险合同负债"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "无形资产"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "应付利息"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "存货"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "总投资"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "长期股权投资"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "房地产资产"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "总负债"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "总流动负债"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "其他流动负债"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "其他负债"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "负债和股东权益 –总计"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "负债(不包括少数股东权益)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "客户贷款净额"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "少数股东权益累计"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "净债务"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "长期应收票据"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "应付账款"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "应付所得税"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "优先股 –账面价值"
+   },
+   "F053N": {
+    "type": "float",
+    "comment": "净物业厂房及设备"
+   },
+   "F054N": {
+    "type": "float",
+    "comment": "应收保费"
+   },
+   "F055N": {
+    "type": "float",
+    "comment": "风险费用准备金"
+   },
+   "F056N": {
+    "type": "float",
+    "comment": "应收利息"
+   },
+   "F057N": {
+    "type": "float",
+    "comment": "短期应收账款"
+   },
+   "F058N": {
+    "type": "float",
+    "comment": "应收账款总额"
+   },
+   "F059N": {
+    "type": "float",
+    "comment": "非股权储备"
+   },
+   "F060N": {
+    "type": "float",
+    "comment": "托管证券"
+   },
+   "F061N": {
+    "type": "float",
+    "comment": "投资性证券"
+   },
+   "F062N": {
+    "type": "float",
+    "comment": "所有股东权益"
+   },
+   "F063N": {
+    "type": "float",
+    "comment": "总资本"
+   },
+   "F064N": {
+    "type": "float",
+    "comment": "一级资本"
+   },
+   "F065N": {
+    "type": "float",
+    "comment": "二级资本"
+   },
+   "F066D": {
+    "type": "date",
+    "comment": "源文件归档日期 –资产负债表"
+   },
+   "F067V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F068D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F069N": {
+    "type": "int",
+    "comment": "财政年度"
+   }
+  }
+ },
+ "VIEW_COM3103_CUM": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "其他税后收入(费用)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "限制现金"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "成本(含折旧、损耗)"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "合并净利"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "优先股股息"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "息税前利润"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "每股息税前利润"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "息税折旧摊销前利润"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股基本收益(不包含特别项目)"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "摊薄每股收益"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "摊薄每股收益(不包含非经常损 益)"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "每股收益"
+   },
+   "F019D": {
+    "type": "date",
+    "comment": "每股收益报告日期"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "联属公司盈利的权益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "总开支"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "毛利润"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "所得税"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "利息费用"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "总利息支出-银行"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "利息收入"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "利息收入(扣除贷款损失准备金)"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "净利息收入"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "贷款损失准备金"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "损失、索赔和储备"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "少数股东权益开支"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "净利润"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "净利润(包含特别项目)"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "归属于普通股东的净利润"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "净收入(包括已终止经营业务)"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "非利息支出"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "非利息收入"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "非营业利润(亏损)"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "其他营业费用"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "营业费用 –合计"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "营业利润（可作为非保险公司的营 业利润）"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "营业利润(扣除利息费用)(该字段 为美股保险行业公司适用）"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "营业利润(未扣除利息费)"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "税前净利"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "非经常支出(税前)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "非经常性贷款(税前)"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "储量增加(减少)"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "销售收入（营业收入）"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "每股销售收入（每股营业收入）"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用及其他"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "非经常损益"
+   },
+   "F053D": {
+    "type": "date",
+    "comment": "源文件归档日期 –损益表"
+   },
+   "F054V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F055D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F056N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "VIEW_COM3103_Q": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "其他税后收入(费用)"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "限制现金"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "成本(含折旧、损耗)"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "合并净利"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "优先股股息"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "息税前利润"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "每股息税前利润"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "息税折旧摊销前利润"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "每股基本收益(不包含特别项目)"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "摊薄每股收益"
+   },
+   "F017N": {
+    "type": "float",
+    "comment": "摊薄每股收益(不包含非经常损 益)"
+   },
+   "F018N": {
+    "type": "float",
+    "comment": "每股收益"
+   },
+   "F019D": {
+    "type": "date",
+    "comment": "每股收益报告日期"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "联属公司盈利的权益"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "总开支"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "毛利润"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "所得税"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "利息费用"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "总利息支出-银行"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "利息收入"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "利息收入(扣除贷款损失准备金)"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "净利息收入"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "贷款损失准备金"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "损失、索赔和储备"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "少数股东权益开支"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "净利润"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "净利润(包含特别项目)"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "归属于普通股东的净利润"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "净收入(包括已终止经营业务)"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "非利息支出"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "非利息收入"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "非营业利润(亏损)"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "其他营业费用"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "营业费用 –合计"
+   },
+   "F041N": {
+    "type": "float",
+    "comment": "营业利润（可作为非保险公司的营 业利润）"
+   },
+   "F042N": {
+    "type": "float",
+    "comment": "营业利润(扣除利息费用)(该字段 为美股保险行业公司适用）"
+   },
+   "F043N": {
+    "type": "float",
+    "comment": "营业利润(未扣除利息费)"
+   },
+   "F044N": {
+    "type": "float",
+    "comment": "税前净利"
+   },
+   "F045N": {
+    "type": "float",
+    "comment": "非经常支出(税前)"
+   },
+   "F046N": {
+    "type": "float",
+    "comment": "非经常性贷款(税前)"
+   },
+   "F047N": {
+    "type": "float",
+    "comment": "储量增加(减少)"
+   },
+   "F048N": {
+    "type": "float",
+    "comment": "销售收入（营业收入）"
+   },
+   "F049N": {
+    "type": "float",
+    "comment": "每股销售收入（每股营业收入）"
+   },
+   "F050N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用"
+   },
+   "F051N": {
+    "type": "float",
+    "comment": "销售、行政和管理费用及其他"
+   },
+   "F052N": {
+    "type": "float",
+    "comment": "非经常损益"
+   },
+   "F053D": {
+    "type": "date",
+    "comment": "源文件归档日期 –损益表"
+   },
+   "F054V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F055D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F056N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "VIEW_COM3104_CUM": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "由收购所得之净资产"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "资本性支出"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "现金净变动"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "债务变动净额"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧和摊销"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "存款减少"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "存款增加"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "递延税增减"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "发放现金股利"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "每股股息"
+   },
+   "F017D": {
+    "type": "date",
+    "comment": "每股股息-公告日期"
+   },
+   "F018D": {
+    "type": "date",
+    "comment": "每股股息-除权日"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "其他融资活动产生的净现金流"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "融资净现金流"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "汇率影响"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "股票自由现金流"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "股本减红利的自由现金流"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "运营资金"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "联邦住房贷款预付款增加(减少)"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "投资活动-其他用途"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "投资净现金流"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "投资买卖净额"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "投资活动-其他来源"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "其他用途"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "贷款减少"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "贷款增加"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "其他现金流"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "收入(净现金流量)"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "非现金项目"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "经营净现金流"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "出售固定资产及业务"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "股权融资净现金流"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "营运资金变动"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "特别项目"
+   },
+   "F041D": {
+    "type": "date",
+    "comment": "源文件归档日期-现金流量表"
+   },
+   "F042V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F043D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F044N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "VIEW_COM3104_Q": {
+  "comment": "VIEW",
+  "row_estimate": null,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F004N": {
+    "type": "int",
+    "comment": "财政期间长度-日"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006N": {
+    "type": "decimal(6,0)",
+    "comment": "财政周期结束日期(YYYYMM)"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "由收购所得之净资产"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "资本性支出"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "现金净变动"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "债务变动净额"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧和摊销"
+   },
+   "F012N": {
+    "type": "float",
+    "comment": "存款减少"
+   },
+   "F013N": {
+    "type": "float",
+    "comment": "存款增加"
+   },
+   "F014N": {
+    "type": "float",
+    "comment": "递延税增减"
+   },
+   "F015N": {
+    "type": "float",
+    "comment": "发放现金股利"
+   },
+   "F016N": {
+    "type": "float",
+    "comment": "每股股息"
+   },
+   "F017D": {
+    "type": "date",
+    "comment": "每股股息-公告日期"
+   },
+   "F018D": {
+    "type": "date",
+    "comment": "每股股息-除权日"
+   },
+   "F019N": {
+    "type": "float",
+    "comment": "其他融资活动产生的净现金流"
+   },
+   "F020N": {
+    "type": "float",
+    "comment": "融资净现金流"
+   },
+   "F021N": {
+    "type": "float",
+    "comment": "汇率影响"
+   },
+   "F022N": {
+    "type": "float",
+    "comment": "股票自由现金流"
+   },
+   "F023N": {
+    "type": "float",
+    "comment": "股本减红利的自由现金流"
+   },
+   "F024N": {
+    "type": "float",
+    "comment": "运营资金"
+   },
+   "F025N": {
+    "type": "float",
+    "comment": "联邦住房贷款预付款增加(减少)"
+   },
+   "F026N": {
+    "type": "float",
+    "comment": "投资活动-其他用途"
+   },
+   "F027N": {
+    "type": "float",
+    "comment": "投资净现金流"
+   },
+   "F028N": {
+    "type": "float",
+    "comment": "投资买卖净额"
+   },
+   "F029N": {
+    "type": "float",
+    "comment": "投资活动-其他来源"
+   },
+   "F030N": {
+    "type": "float",
+    "comment": "其他用途"
+   },
+   "F031N": {
+    "type": "float",
+    "comment": "贷款减少"
+   },
+   "F032N": {
+    "type": "float",
+    "comment": "贷款增加"
+   },
+   "F033N": {
+    "type": "float",
+    "comment": "其他现金流"
+   },
+   "F034N": {
+    "type": "float",
+    "comment": "收入(净现金流量)"
+   },
+   "F035N": {
+    "type": "float",
+    "comment": "非现金项目"
+   },
+   "F036N": {
+    "type": "float",
+    "comment": "经营净现金流"
+   },
+   "F037N": {
+    "type": "float",
+    "comment": "出售固定资产及业务"
+   },
+   "F038N": {
+    "type": "float",
+    "comment": "股权融资净现金流"
+   },
+   "F039N": {
+    "type": "float",
+    "comment": "营运资金变动"
+   },
+   "F040N": {
+    "type": "float",
+    "comment": "特别项目"
+   },
+   "F041D": {
+    "type": "date",
+    "comment": "源文件归档日期-现金流量表"
+   },
+   "F042V": {
+    "type": "varchar(40)",
+    "comment": "源文件"
+   },
+   "F043D": {
+    "type": "date",
+    "comment": "结帐日期"
+   },
+   "F044N": {
+    "type": "int",
+    "comment": "财政年度"
+   },
+   "F003V": {
+    "type": "varchar(2)",
+    "comment": "报表种类"
+   }
+  }
+ },
+ "VIEW_COM3105": {
+  "comment": "",
+  "row_estimate": 396,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "类型"
+   },
+   "F003N": {
+    "type": "int",
+    "comment": "编号"
+   },
+   "F004D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006V": {
+    "type": "varchar(250)",
+    "comment": "板块英文"
+   },
+   "SECTOR_CNAME": {
+    "type": "varchar(250)",
+    "comment": "板块中文"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "销售"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "运营收入"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "资本支出"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧"
+   },
+   "F012V": {
+    "type": "char(4)",
+    "comment": "根据公司的主要业务活动划 分 SIC 代码"
+   }
+  }
+ },
+ "VIEW_COM3106": {
+  "comment": "",
+  "row_estimate": 645,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部 ID"
+   },
+   "F001D": {
+    "type": "date",
+    "comment": "财政周期结束日期"
+   },
+   "F002V": {
+    "type": "char(3)",
+    "comment": "类型"
+   },
+   "F003N": {
+    "type": "int",
+    "comment": "编号"
+   },
+   "F004D": {
+    "type": "date",
+    "comment": "企业行动执行日期"
+   },
+   "F005V": {
+    "type": "char(3)",
+    "comment": "货币"
+   },
+   "F006V": {
+    "type": "varchar(250)",
+    "comment": "地域英文"
+   },
+   "REGION_CNAME": {
+    "type": "varchar(250)",
+    "comment": "地域中文"
+   },
+   "F007N": {
+    "type": "float",
+    "comment": "销售"
+   },
+   "F008N": {
+    "type": "float",
+    "comment": "运营收入"
+   },
+   "F009N": {
+    "type": "float",
+    "comment": "资产"
+   },
+   "F010N": {
+    "type": "float",
+    "comment": "资本支出"
+   },
+   "F011N": {
+    "type": "float",
+    "comment": "折旧"
+   }
+  }
+ },
+ "VIEW_STOCK_US_TURNOUT_SHARES": {
+  "comment": "",
+  "row_estimate": 2580,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "美股内部代码"
+   },
+   "TURN_RATIO_PCT": {
+    "type": "decimal(18,3)",
+    "comment": "换手率(%)"
+   },
+   "TOTAL_SHARES": {
+    "type": "float",
+    "comment": "总股本"
+   },
+   "TRADE_DATE": {
+    "type": "date",
+    "comment": "交易日期"
+   },
+   "SYMBOL": {
+    "type": "varchar(16)",
+    "comment": "股票代码"
+   },
+   "CSNAME": {
+    "type": "varchar(256)",
+    "comment": "股票简称"
+   },
+   "ENAME": {
+    "type": "varchar(256)",
+    "comment": "股票英文名称"
+   }
+  }
+ },
+ "VIEW_US_EOD_EXPR": {
+  "comment": "",
+  "row_estimate": 39679,
+  "columns": {
+   "TRADE_DATE": {
+    "type": "date",
+    "comment": "交易日期"
+   },
+   "SYMBOL": {
+    "type": "varchar(16)",
+    "comment": "股票代码"
+   },
+   "COMB_SYMBOL": {
+    "type": "varchar(24)",
+    "comment": "展示代码"
+   },
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部代码"
+   },
+   "NAME": {
+    "type": "varchar(256)",
+    "comment": "股票名称"
+   },
+   "PRE_CLOSE": {
+    "type": "double",
+    "comment": "昨收"
+   },
+   "OPEN_PRICE": {
+    "type": "double",
+    "comment": "开盘价"
+   },
+   "HIGH_PRICE": {
+    "type": "double",
+    "comment": "最高价"
+   },
+   "LOW_PRICE": {
+    "type": "double",
+    "comment": "最低价"
+   },
+   "CLOSE_PRICE": {
+    "type": "double",
+    "comment": "收盘价"
+   },
+   "LAST_PRICE": {
+    "type": "double",
+    "comment": "最新价"
+   },
+   "CHG": {
+    "type": "double",
+    "comment": "涨跌额"
+   },
+   "CHG_PCT_DAY": {
+    "type": "double",
+    "comment": "涨跌幅"
+   },
+   "SWING_DAY": {
+    "type": "double",
+    "comment": "振幅"
+   },
+   "AVG_PRICE": {
+    "type": "double",
+    "comment": "成交均价"
+   },
+   "TRADE_VOLUME": {
+    "type": "bigint",
+    "comment": "成交量"
+   },
+   "TRADE_AMOUNT": {
+    "type": "double",
+    "comment": "成交额"
+   },
+   "TURN_RATIO_PCT": {
+    "type": "decimal(18,3)",
+    "comment": "换手率"
+   },
+   "TOTAL_SHARES": {
+    "type": "double",
+    "comment": "总股本"
+   },
+   "ISIN": {
+    "type": "varchar(20)",
+    "comment": "ISIN"
+   },
+   "SEC_TYPE": {
+    "type": "varchar(8)",
+    "comment": "证券类型"
+   },
+   "ETF_FLAG": {
+    "type": "varchar(8)",
+    "comment": "ETF标识"
+   }
+  }
+ },
+ "VIEW_US_EXPR_IDX": {
+  "comment": "",
+  "row_estimate": 28450,
+  "columns": {
+   "FIU_ID": {
+    "type": "varchar(16)",
+    "comment": "内部代码"
+   },
+   "SYMBOL_NASDAQ": {
+    "type": "varchar(16)",
+    "comment": "NASDAQ代码"
+   },
+   "ISIN": {
+    "type": "varchar(20)",
+    "comment": "ISIN"
+   },
+   "F002V": {
+    "type": "varchar(100)",
+    "comment": "中文简称"
+   },
+   "F003V": {
+    "type": "varchar(256)",
+    "comment": "英文名称"
+   },
+   "F001V": {
+    "type": "varchar(50)",
+    "comment": "上市交易所"
+   },
+   "F004V": {
+    "type": "varchar(8)",
+    "comment": "证券类型"
+   },
+   "F006V": {
+    "type": "varchar(8)",
+    "comment": "ETF标识"
+   },
+   "TRADE_DATE": {
+    "type": "date",
+    "comment": "交易日期"
+   },
+   "SYMBOL": {
+    "type": "varchar(16)",
+    "comment": "股票代码"
+   },
+   "COMB_SYMBOL": {
+    "type": "varchar(24)",
+    "comment": "展示代码"
+   },
+   "CLOSE_PRICE": {
+    "type": "double",
+    "comment": "收盘价"
+   },
+   "CHG_PCT_DAY": {
+    "type": "double",
+    "comment": "当日涨跌幅(%)"
+   },
+   "CHG_PCT_WEEK": {
+    "type": "double",
+    "comment": "近1周收益率(%)"
+   },
+   "CHG_PCT_MONTH": {
+    "type": "double",
+    "comment": "近1月收益率(%)"
+   },
+   "CHG_PCT_QUARTER": {
+    "type": "double",
+    "comment": "近3月收益率(%)"
+   },
+   "CHG_PCT_YEAR": {
+    "type": "double",
+    "comment": "近1年收益率(%)"
+   },
+   "CHG_PCT_WTD": {
+    "type": "double",
+    "comment": "本周以来收益率(%)"
+   },
+   "CHG_PCT_MTD": {
+    "type": "double",
+    "comment": "本月以来收益率(%)"
+   },
+   "CHG_PCT_YTD": {
+    "type": "double",
+    "comment": "本年以来收益率(%)"
+   },
+   "NAME": {
+    "type": "varchar(24)",
+    "comment": "股票名称"
+   }
+  }
+ }
+}

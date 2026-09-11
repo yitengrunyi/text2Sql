@@ -1,0 +1,170 @@
+{
+ "round_id": 16,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 月度涨跌幅（亦称月度涨跌百分比、月度回报率）\n\n[2] 可能的计算公式  \n月度涨跌幅 = （8月月末收盘价 - 8月月初开盘价） / 8月月初开盘价 × 100%\n['格力电器', '月度涨跌幅', '月度涨跌百分比', '月度回报率', '8月月末收盘价', '8月月初开盘价']\n该问题可能涉及A股-'格力电器'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-家用电器。\n该问题可能涉及的题材包含：['家用电器']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '家用电器'。\n个股相关\n['主板行情', '主板基本信息']\n['VW_CONCEPT_STK', 'ANA_STK_EXPR_IDX', 'STK_MKT', 'GET_A_INDICS_LATEST', 'VW_CONCEPT_STK', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    '2026-08' AS `月份`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    a.CHNG_PCT_TMONTH AS `月度涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX a\nJOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE b.SEC_SNAME LIKE '%格力电器%'\n  AND a.ENDDATE = (SELECT MAX(ENDDATE) FROM ANA_STK_EXPR_IDX \n                   WHERE STOCKCODE = a.STOCKCODE AND ENDDATE >= '2026-08-01' AND ENDDATE <= '2026-08-31')\n  AND a.CHNG_PCT_TMONTH IS NOT NULL\nLIMIT 1\n500\nQuery execution timed out.\n诊断 分析你的问题及SQL，考虑所有常见原因，**最可能导致“Query execution timed out”的两个原因如下**：\n\n---\n\n**1. 数据表中缺失2026年8月的数据或者该月份的数据量异常大**  \n- 很可能 ANA_STK_EXPR_IDX 表中根本没有 2026 年 8 月的记录（即 ENDDATE 在 2026-08-01 和 2026-08-31 之间的数据）。\n- 如果存在大量数据（如历史或未来误填的大量8月数据），MAX(ENDDATE) 的子查询会扫描全表，导致超时。\n- 或者 GET_A_SEC_CODE 表没有“格力电器”的 INNER_CODE 匹配，导致 JOIN 生成了很大的临时表。\n- 由于 2026 年数据为“未来数据”，数据库没有及时更新或填充，造成查询找不到条件对应的数据但仍扫描大量历史记录。\n\n**2. SQL语句设计不合理，子查询和模糊匹配导致性能问题**  \n- LIKE ‘%格力电器%’ 没有索引作用，会让 MYSQL 全表扫描 GET_A_SEC_CODE。\n- MAX(ENDDATE) 的相关子查询在大表上执行，优化器无法利用索引，执行计划变复杂，极易超时。\n- JOIN 关系、WHERE筛选都导致 Query Plan 复杂且耗时，未限制索引使用和有效过滤条件。\n\n---\n\n### 其他次要可能性：\n\n- **字段名错误或模型捏造字段**：你的字段名基本合理，未发现明显捏造（如 CHNG_PCT_TMONTH），但 ANA_STK_EXPR_IDX 是否真的存在该字段需确认。\n- **表格缺失/数据缺失**：如果 ANA_STK_EXPR_IDX 或 GET_A_SEC_CODE 表不存在会报错而非超时，而不是你遇到的超时。\n- **语法句法问题**：SQL语法正确，未见错误，只是性能瓶颈，导致超时。\n- **数据库锁/其他系统原因**：可能有，但通常超时主要由SQL设计和数据量导致。\n\n---\n\n## 最可能的两个原因总结：\n\n1. **2026年8月的数据缺失或数据量异常，导致 SQL 扫描大量无效数据耗时太久。**\n2. **SQL子查询和 LIKE '%格力电器%' 的模糊查询导致全表扫描，性能极差，查询超时。**\n\n---\n\n**建议优先检查：**\n\n- ANA_STK_EXPR_IDX、GET_A_SEC_CODE 有没有2026年8月的数据和“格力电器”记录。\n- 用 EXP",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    '2026-08' AS `月份`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    a.CHNG_PCT_TMONTH AS `月度涨跌幅(%)`\nFROM ANA_STK_EXPR_IDX a\nJOIN GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE b.SEC_SNAME LIKE '%格力电器%'\n  AND a.ENDDATE = (SELECT MAX(ENDDATE) FROM ANA_STK_EXPR_IDX \n                   WHERE STOCKCODE = a.STOCKCODE AND ENDDATE >= '2026-08-01' AND ENDDATE <= '2026-08-31')\n  AND a.CHNG_PCT_TMONTH IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT\n    DATE_FORMAT(a.ENDDATE, '%Y-%m') AS `月份`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.CHNG_PCT_TMONTH, 2) AS `月度涨跌幅(%)`\nFROM\n    ANA_STK_EXPR_IDX a\nJOIN\n    GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    b.SEC_SNAME LIKE '%格力电器%'\n    AND a.ENDDATE = (\n        SELECT MAX(ENDDATE)\n        FROM ANA_STK_EXPR_IDX\n        WHERE INNER_CODE = a.INNER_CODE\n            AND ENDDATE >= '2026-08-01 00:00:00'\n            AND ENDDATE <= '2026-08-31 23:59:59'\n    )\n    AND a.CHNG_PCT_TMONTH IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": true,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-7.9196"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 278.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_16_d6f8214f.0",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 83.77,
+  "llm_seconds_max": 8.87,
+  "selected_tables": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   27802,
+   17601
+  ],
+  "prompt_columns_raw_len": 2450
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2719,
+   "prompt_tokens": 51729,
+   "total_tokens": 54448,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 51729,
+  "completion": 2719,
+  "total": 54448
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2719,
+   "prompt_tokens": 51729,
+   "total_tokens": 54448,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "VW_CONCEPT_STK",
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "GET_A_INDICS_LATEST",
+   "VW_CONCEPT_STK",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,165 @@
+{
+ "round_id": 18,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "那2025年全年它涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：全年涨幅（Yearly Return 或 年度涨幅）\n\n[2] 可能的计算公式：  \n全年涨幅 = （2025年年末价格 - 2025年年初价格）÷ 2025年年初价格 × 100% \n\n即：  \n全年涨幅 (%) = [(P_end - P_start) / P_start] × 100%  \n其中，P_end 代表2025年年末的价格，P_start 代表2025年年初的价格。\n['全年涨幅', '年度涨幅', 'Yearly Return', '年末价格', '年初价格', 'P_end', 'P_start']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板行情', '主板基本信息']\n['STK_PRE_DISCLOSURE', 'DERI_STK_AH_PRC', 'VIEW_CONCEPT_DAILY_QUOTE', 'MARGIN_TRD_DTL', 'ANA_STK_DIV_RATE_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRADEDATE AS `交易日期`,\n    A_STOCKSNAME AS `A股名称`,\n    A_STOCKCODE AS `A股代码`,\n    ROUND(A_PRC, 2) AS `A股价格（元）`,\n    ROUND(A_CHNG_PCT, 2) AS `A股涨跌幅(%)`\nFROM \n    DERI_STK_AH_PRC\nWHERE \n    A_STOCKSNAME IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\n    AND TRADEDATE IN (\n        (SELECT MIN(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL),\n        (SELECT MAX(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL)\n    )\n    AND ISVALID=1\nORDER BY \n    A_STOCKSNAME, TRADEDATE\n200\n{table:[['交易日期', 'A股名称', 'A股代码', 'A股价格（元）', 'A股涨跌幅(%)'], ['2025-01-02', 'ST墨龙', '002490', '2.79', '0.36'], ['2025-12-31', 'ST晨鸣', '000488', '2.20', '0.92'], ['2025-01-02', '一拖股份', '601038', '14.23', '-3.72'], ['2025-12-31', '一拖股份', '601038', '14.17', '0.50'], ['2025-01-02', '万科A', '000002', '7.11', '-2.07'], ['2025-12-31', '万科A', '000002', '4.65', '0.65'], ['2025-12-31', '三一重工', '600031', '21.13', '0.43'], ['2025-12-31', '三花智控', '002050', '55.31', '5.35'], ['2025-01-02', '上海医药', '601607', '20.60', '-1.90'], ['2025-12-31', '上海医药', '601607', '17.86', '0.22'], ['2025-01-02', '上海电气', '601727', '7.62', '-6.04'], ['2025-12-31', '上海电气', '601727', '8.61', '1.77'], ['2025-01-02', '上海石化', '600688', '2.93', '-2.98'], ['2025-12-31', '上海石化', '600688', '2.78', '-2.46'], ['2025-01-02', '东方电气', '600875', '15.00', '-5.60'], ['2025-12-31', '东方电气', '600875', '24.28', '-0.49'], ['2025-01-02', '东方证券', '600958', '10.00', '-5.30'], ['2025-12-31', '东方证券', '600958', '10.90', '0.37'], ['2025-01-02', ",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    TRADEDATE AS `交易日期`,\n    A_STOCKSNAME AS `A股名称`,\n    A_STOCKCODE AS `A股代码`,\n    ROUND(A_PRC, 2) AS `A股价格（元）`,\n    ROUND(A_CHNG_PCT, 2) AS `A股涨跌幅(%)`\nFROM \n    DERI_STK_AH_PRC\nWHERE \n    A_STOCKSNAME IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\n    AND TRADEDATE IN (\n        (SELECT MIN(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL),\n        (SELECT MAX(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL)\n    )\n    AND ISVALID=1\nORDER BY \n    A_STOCKSNAME, TRADEDATE",
+ "final_sql": "SELECT \n    TRADEDATE AS `交易日期`,\n    A_STOCKSNAME AS `A股名称`,\n    A_STOCKCODE AS `A股代码`,\n    ROUND(A_PRC, 2) AS `A股价格（元）`,\n    ROUND(A_CHNG_PCT, 2) AS `A股涨跌幅(%)`\nFROM \n    DERI_STK_AH_PRC\nWHERE \n    A_STOCKSNAME IS NOT NULL\n    AND A_STOCKCODE IS NOT NULL\n    AND TRADEDATE IN (\n        (SELECT MIN(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL),\n        (SELECT MAX(TRADEDATE) FROM DERI_STK_AH_PRC WHERE YEAR(TRADEDATE)=2025 AND A_STOCKSNAME IS NOT NULL)\n    )\n    AND ISVALID=1\nORDER BY \n    A_STOCKSNAME, TRADEDATE",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "29.87"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 324
+ },
+ "first_result_preview": "2025-01-02 00:00:00 ST墨龙 002490 2.79 0.36\n2025-12-31 00:00:00 ST晨鸣 000488 2.20 0.92\n2025-01-02 00:00:00 一拖股份 601038 14.23 -3.72\n2025-12-31 00:00:00 一拖股份 601038 14.17 0.50\n2025-01-02 00:00:00 万科A 00000",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 324
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 58.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_18_1103d433.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 64.01,
+  "llm_seconds_max": 12.06,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   19406
+  ],
+  "prompt_columns_raw_len": 7812
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1825,
+   "prompt_tokens": 33427,
+   "total_tokens": 35252,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 33427,
+  "completion": 1825,
+  "total": 35252
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1825,
+   "prompt_tokens": 33427,
+   "total_tokens": 35252,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

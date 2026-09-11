@@ -1,0 +1,173 @@
+{
+ "round_id": 1,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股年报财务·宁德时代",
+ "question": "加权净资产收益率是多少？",
+ "labels": {
+  "followup_type": "指代继承",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vf.ENDDATE AS `报告期截止日期`,\n    ROUND(vf.ROER, 2) AS `加权净资产收益率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS vf\nLEFT JOIN\n    GET_A_SEC_CODE ga ON vf.COMCODE = ga.COMCODE\nWHERE\n    ga.SEC_SNAME LIKE '%宁德时代%'\n    AND vf.RPT_TYPE = '2'\n    AND vf.RPT_YEAR = 2025\n    AND vf.RPT_TAG = 7\n    AND vf.ENDDATE = '2025-12-31 00:00:00'\n    AND vf.ROER IS NOT NULL\n    AND vf.ISVALID = 1\n    AND ga.ISVALID = 1\nLIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报告期截止日期', '加权净资产收益率(%)'], ['宁德时代', '300750', '2025-12-31', '24.91']]}\n该查询获取了宁德时代2025年年报披露的加权净资产收益率数据。数据来源于公司财务衍生指标表和股票基本信息表，通过公司名称筛选出宁德时代，并限定为2025年度合并报表的年报（截至2025年12月31日），仅提取有效且有加权净资产收益率数据的记录。加权净资产收益率指标表示公司在一定期间内净利润与期初期末平均归属于母公司股东净资产加权计算的比值，是衡量股东投资回报水平的重要指标，单位为百分比。查询结果保留两位小数，直接引用了已披露的加权净资产收益率，无需额外计算。查询结果符合用户对于2025年加权净资产收益率的需求。\n{table:[['股票名称', '股票代码', '报告期截止日期', '加权净资产收益率(%)'], ['宁德时代', '300750', '2025-12-31', '24.91']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vf.ENDDATE AS `报告期截止日期`,\n    ROUND(vf.ROER, 2) AS `加权净资产收益率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS vf\nLEFT JOIN\n    GET_A_SEC_CODE ga ON vf.COMCODE = ga.COMCODE\nWHERE\n    ga.SEC_SNAME LIKE '%宁德时代%'\n    AND vf.RPT_TYPE = '2'\n    AND vf.RPT_YEAR = 2025\n    AND vf.RPT_TAG = 7\n    AND vf.ENDDATE = '2025-12-31 00:00:00'\n    AND vf.ROER IS NOT NULL\n    AND vf.ISVALID = 1\n    AND ga.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT \n    ga.SEC_SNAME AS `股票名称`,\n    ga.SEC_CODE AS `股票代码`,\n    vf.ENDDATE AS `报告期截止日期`,\n    ROUND(vf.ROER, 2) AS `加权净资产收益率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS vf\nLEFT JOIN\n    GET_A_SEC_CODE ga ON vf.COMCODE = ga.COMCODE\nWHERE\n    ga.SEC_SNAME LIKE '%宁德时代%'\n    AND vf.RPT_TYPE = '2'\n    AND vf.RPT_YEAR = 2025\n    AND vf.RPT_TAG = 7\n    AND vf.ENDDATE = '2025-12-31 00:00:00'\n    AND vf.ROER IS NOT NULL\n    AND vf.ISVALID = 1\n    AND ga.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "24.9100"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "宁德时代 300750 2025-12-31 00:00:00 24.91",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 34.6,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_1_d0ed21c8.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.47,
+  "llm_seconds_max": 23.61,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2221,
+   "prompt_tokens": 27508,
+   "total_tokens": 29729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1708,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 27508,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 185,
+   "prompt_tokens": 20190,
+   "total_tokens": 20375,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 47698,
+  "completion": 2406,
+  "total": 50104
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2221,
+   "prompt_tokens": 27508,
+   "total_tokens": 29729,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1708,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 27508,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 185,
+   "prompt_tokens": 20190,
+   "total_tokens": 20375,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

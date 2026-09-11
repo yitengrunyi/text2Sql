@@ -1,0 +1,245 @@
+{
+ "round_id": 11,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "再从地区维度拆一下，2025年来自国外的收入占比有多大？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 国外营业收入占比（即国外收入占总营业收入的比例）\n\n[2] 计算公式：  \n国外营业收入占比 = 国外营业收入 / 总营业收入 × 100%\n['万华化学', '国外营业收入占比', '国外营业收入', '总营业收入', '营业收入占比', '国外收入', '国外收入占比']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_DISTRICT', 'STK_COM_PROFILE', 'STK_PRE_DISCLOSURE', 'ASTK_REVENUE_OVERSEAS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n['国外']\nquery抽取的主体词是['国外']\n生成查询代码\ntop30召回:{}\nSELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            COALESCE(a.REVENUE_ASIA_RATIO,0) +\n            COALESCE(a.REVENUE_OCEANIA_RATIO,0) +\n            COALESCE(a.REVENUE_EU_RATIO,0) +\n            COALESCE(a.REVENUE_NON_EU_RATIO,0) +\n            COALESCE(a.REVENUE_AFRICA_RATIO,0) +\n            COALESCE(a.REVENUE_MID_EAST_RATIO,0) +\n            COALESCE(a.REVENUE_LATIN_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_NORTH_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_JAPAN_RATIO,0) +\n            COALESCE(a.REVENUE_KOREA_RATIO,0) +\n            COALESCE(a.REVENUE_TW_RATIO,0) +\n            COALESCE(a.REVENUE_RUSSIA_RATIO,0)\n        ), 2\n    ) AS `海外营业收入占比(%)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2025-12-31'\n    AND a.HISVALID = 1\n\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询通过将亚洲（除中国）、大洋洲、欧洲欧盟、欧洲非欧盟、非洲、中东、拉丁美洲、北美、日本、韩国、中国台湾和俄罗斯的收入占营业收入比例分别求和，合计得到总的海外营业收入占比。具体计算方式为：海外营业收入占比等于各地区收入占营业收入比例之和。各项比例为空时记为0，并将结果保留两位小数。在此查询中，对相关比例进行了相加求和和数值处理。\n\n查询从记录公司分地区海外收入情况的数据表中提取信息，包括报告期、股票名称、股票代码，并根据公司简称筛选出万华化学，同时限定报告期为2025年年报，并筛选有效记录。最终返回万华化学2025年年报中来自国外各地区的营业收入占总营业收入的百分比，查询结果符合要求。\n查询万华化学2025年年报中来自国外的营业收入占比是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            COALESCE(a.REVENUE_ASIA_RATIO,0) +\n            COALESCE(a.REVENUE_OCEANIA_RATIO,0) +\n            COALESCE(a.REVENUE_EU_RATIO,0) +\n            COALESCE(a.REVENUE_NON_EU_RATIO,0) +\n            COALESCE(a.REVENUE_AFRICA_RATIO,0) +\n            COALESCE(a.REVENUE_MID_EAST_RATIO,0) +\n            COALESCE(a.REVENUE_LATIN_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_NORTH_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_JAPAN_RATIO,0) +\n            COALESCE(a.REVENUE_KOREA_RATIO,0) +\n            COALESCE(a.REVENUE_TW_RATIO,0) +\n            COALESCE(a.REVENUE_RUSSIA_RATIO,0)\n        ), 2\n    ) AS `海外营业收入占比(%)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2025-12-31'\n    AND a.HISVALID = 1",
+ "final_sql": "SELECT\n    a.END_DATE AS `报告期`,\n    a.SEC_CSNAME AS `股票名称`,\n    a.COMB_SYMBOL AS `股票代码`,\n    ROUND(\n        (\n            COALESCE(a.REVENUE_ASIA_RATIO,0) +\n            COALESCE(a.REVENUE_OCEANIA_RATIO,0) +\n            COALESCE(a.REVENUE_EU_RATIO,0) +\n            COALESCE(a.REVENUE_NON_EU_RATIO,0) +\n            COALESCE(a.REVENUE_AFRICA_RATIO,0) +\n            COALESCE(a.REVENUE_MID_EAST_RATIO,0) +\n            COALESCE(a.REVENUE_LATIN_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_NORTH_AMERICA_RATIO,0) +\n            COALESCE(a.REVENUE_JAPAN_RATIO,0) +\n            COALESCE(a.REVENUE_KOREA_RATIO,0) +\n            COALESCE(a.REVENUE_TW_RATIO,0) +\n            COALESCE(a.REVENUE_RUSSIA_RATIO,0)\n        ), 2\n    ) AS `海外营业收入占比(%)`\nFROM\n    ASTK_REVENUE_OVERSEAS a\nWHERE\n    a.SEC_CSNAME LIKE '%万华化学%'\n    AND a.END_DATE = '2025-12-31'\n    AND a.HISVALID = 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "47.39"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 84.7,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_11_134700e3.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 89.25,
+  "llm_seconds_max": 21.82,
+  "selected_tables": [
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   36011
+  ],
+  "prompt_columns_raw_len": 22468
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2154,
+   "prompt_tokens": 10121,
+   "total_tokens": 12275,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1839,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10121,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1283,
+   "prompt_tokens": 40074,
+   "total_tokens": 41357,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 50623,
+  "completion": 3438,
+  "total": 54061
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2154,
+   "prompt_tokens": 10121,
+   "total_tokens": 12275,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1839,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10121,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1283,
+   "prompt_tokens": 40074,
+   "total_tokens": 41357,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8704,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_DISTRICT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

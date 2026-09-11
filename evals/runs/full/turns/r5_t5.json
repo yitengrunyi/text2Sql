@@ -1,0 +1,200 @@
+{
+ "round_id": 5,
+ "index": 5,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金净值与收益",
+ "question": "天弘余额宝货币基金最新的资产净值是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 资产净值（Net Asset Value, NAV）\n\n[2] 可能的计算公式：  \n资产净值（NAV）= 资产总值 - 负债总值  \n（NAV = Total Assets - Total Liabilities）\n\n其中，资产、负债为天弘余额宝货币基金的最新财务报表数据。\n['天弘余额宝货币基金', '资产净值', 'Net Asset Value', 'NAV', '资产总值', 'Total Assets', '负债总值', 'Total Liabilities', '财务报表']\n该问题可能涉及到申万三级行业，三级行业名称为\"资产管理\"，即SW_INDU_CODE_2021_3 LIKE \"%资产管理%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%资产管理%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金产品净值', '基金产品基本信息']\n['FUND_NETVALUE', 'FUND_ASSET_ALLOCATION', 'FUND_FRONT_CONTROL', 'ETF_INFO_DETAIL', 'ETF_PERFORMANCE_DETAIL']\n是否命中召回表：False\n生成查询代码\nSELECT \n    REPORT_DATE AS `报告期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE/100000000, 2) AS `资产净值(亿元)`\nFROM FUND_ASSET_ALLOCATION\nWHERE \n    FUND_NAME LIKE '%天弘余额宝%' \n    AND FUND_SYMBOL LIKE '%000198.OF%'\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION \n        WHERE \n            FUND_NAME LIKE '%天弘余额宝%' \n            AND FUND_SYMBOL LIKE '%000198.OF%' \n            AND HISVALID=1\n    )\n    AND HISVALID=1\n\n200\n{table:[['报告期', '基金名称', '基金代码', '资产净值(亿元)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}\n查询的主要目的是获取天弘余额宝货币基金在最新报告期的资产净值。资产净值（亿元）是通过将资产净值数据除以一亿并保留两位小数得出的，公式为：资产净值（亿元）= 资产净值 / 100000000。查询结果符合要求。\n\n查询从基金产品对应的基金规模情况表中提取了信息，提供了基金的资产结构及基本数据。选择了报告期、基金名称、基金代码以及资产净值（亿元）等字段。通过模糊匹配筛选基金名称和基金代码，确保只查询天弘余额宝货币基金的数据。只查找最新报告期的记录，并确保数据有效。查询返回了天弘余额宝货币基金最新报告期的资产净值。\n天弘余额宝货币基金最新的资产净值是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    REPORT_DATE AS `报告期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE/100000000, 2) AS `资产净值(亿元)`\nFROM FUND_ASSET_ALLOCATION\nWHERE \n    FUND_NAME LIKE '%天弘余额宝%' \n    AND FUND_SYMBOL LIKE '%000198.OF%'\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION \n        WHERE \n            FUND_NAME LIKE '%天弘余额宝%' \n            AND FUND_SYMBOL LIKE '%000198.OF%' \n            AND HISVALID=1\n    )\n    AND HISVALID=1",
+ "final_sql": "SELECT \n    REPORT_DATE AS `报告期`,\n    FUND_NAME AS `基金名称`,\n    FUND_SYMBOL AS `基金代码`,\n    ROUND(NET_VALUE/100000000, 2) AS `资产净值(亿元)`\nFROM FUND_ASSET_ALLOCATION\nWHERE \n    FUND_NAME LIKE '%天弘余额宝%' \n    AND FUND_SYMBOL LIKE '%000198.OF%'\n    AND REPORT_DATE = (\n        SELECT MAX(REPORT_DATE) \n        FROM FUND_ASSET_ALLOCATION \n        WHERE \n            FUND_NAME LIKE '%天弘余额宝%' \n            AND FUND_SYMBOL LIKE '%000198.OF%' \n            AND HISVALID=1\n    )\n    AND HISVALID=1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "679946059599.3200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-06-30 天弘余额宝货币 000198.OF 6799.46",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 94.5,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_5_b6f29e97.5",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 97.24,
+  "llm_seconds_max": 37.09,
+  "selected_tables": [
+   "FUND_NETVALUE",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   22529
+  ],
+  "prompt_columns_raw_len": 9865
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2676,
+   "prompt_tokens": 10161,
+   "total_tokens": 12837,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2475,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10161,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1190,
+   "prompt_tokens": 30087,
+   "total_tokens": 31277,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 40248,
+  "completion": 3866,
+  "total": 44114
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2676,
+   "prompt_tokens": 10161,
+   "total_tokens": 12837,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2475,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10161,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1190,
+   "prompt_tokens": 30087,
+   "total_tokens": 31277,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_NETVALUE",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

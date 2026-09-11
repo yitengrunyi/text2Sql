@@ -1,0 +1,126 @@
+{
+ "round_id": 21,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "明白了，谢谢。顺便确认下，这些点位和涨跌幅都是交易所收盘后公布的官方行情口径吧？",
+ "labels": {
+  "difficulty": null,
+  "followup_type": "非查询",
+  "route_gold": "NON_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "nonquery",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 点位：通常指某一指数（如上证指数、深证成指、沪深300等）收盘时的数值。\n- 涨跌幅：反映某一指数或股票与前一交易日收盘价相比的涨跌百分比。\n\n[2] 可能的计算公式  \n- 指数点位：由交易所根据样本股票的加权平均（不同指数规则不同）计算得出，直接以官方发布数据为准。  \n- 涨跌幅 = (当日收盘价 - 昨日收盘价) ÷ 昨日收盘价 × 100%\n\n这两个指标均以交易所收盘后公布的官方行情口径为准。\n['点位', '指数点位', '指数', '上证指数', '深证成指', '沪深300', '收盘价', '收盘', '昨日收盘价', '前一交易日收盘价', '涨跌幅', '涨跌百分比', '样本股票加权平均', '交易所', '官方行情口径', '行情口径']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_STK_EXPR_IDX', 'INDX_SAMP_INFO', 'INDX_TCLOSE_WEIGHT']\n是否命中召回表：False\n生成查询代码\nSELECT\n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `今日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(TURNOVER_DAY, 2) AS `换手率(%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND STOCKSNAME IS NOT NULL\n\n200\n{table:[['交易日期', '股票名称', '股票代码', '收盘价', '开盘价', '最高价', '最低价', '流通市值(亿)', '总市值(亿)', '今日涨跌幅(%)', '近1周涨跌幅(%)', '近1月涨跌幅(%)', '成交额(亿)', '换手率(%)'], ['2026-09-02', '上海莱士', '002252', '4.91', '4.98', '4.99', '4.89', '323.50', '323.70', '-1.41', '-1.01', '-5.21', '1.98', '0.61'], ['2026-09-02', '川大智胜', '002253', '10.12', '10.15', '10.22', '10.02', '21.20', '22.80', '-0.39', '4.44', '8.93', '0.43', '2.01'], ['2026-09-02', '平安银行', '000001', '11.91', '11.92', '11.99', '11.85', '2,311.20', '2,311.20', '-0.08', '1.53', '2.41', '10.63', '0.46'], ['2026-09-02', '万科A', '000002', '3.08', '3.12', '3.15', '3.06', '299.20', '367.50', '-2.53', '-1.60', '-7.78', '4.73', '1.58'], ['2026-09-02', '深振业A', '000006', '7.04', '7.08', '7.17', '6.95', '95.00', '95.00', '-2.22', '-0.98', '7.98', '1.10', '1.16'], ['2026-09-02', '全新好', '000007', '12.93', '12.81', '13.16', '12.66', '44.",
+ "route_gold": "NON_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `今日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(TURNOVER_DAY, 2) AS `换手率(%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND STOCKSNAME IS NOT NULL",
+ "final_sql": "SELECT\n    ENDDATE AS `交易日期`,\n    STOCKSNAME AS `股票名称`,\n    STOCKCODE AS `股票代码`,\n    ROUND(TCLOSE, 2) AS `收盘价`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(MKTCAP/100000000, 1) AS `流通市值(亿)`,\n    ROUND(TCAP/100000000, 1) AS `总市值(亿)`,\n    ROUND(CHNG_PCT_DAY, 2) AS `今日涨跌幅(%)`,\n    ROUND(CHNG_PCT_WEEK, 2) AS `近1周涨跌幅(%)`,\n    ROUND(CHNG_PCT_MONTH, 2) AS `近1月涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    ROUND(TURNOVER_DAY, 2) AS `换手率(%)`\nFROM\n    ANA_STK_EXPR_IDX\nWHERE\n    ENDDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\n    AND STOCKCODE IS NOT NULL\n    AND STOCKSNAME IS NOT NULL",
+ "reflection_triggered": false,
+ "exec_first": null,
+ "ex_first": null,
+ "exec_final": null,
+ "ex_final": false,
+ "answer_ok": null,
+ "elapsed_seconds": 239.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_21_2093afc3.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 59.4,
+  "llm_seconds_max": 8.07,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   24945
+  ],
+  "prompt_columns_raw_len": 3138
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1439,
+   "prompt_tokens": 30424,
+   "total_tokens": 31863,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 30424,
+  "completion": 1439,
+  "total": 31863
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1439,
+   "prompt_tokens": 30424,
+   "total_tokens": 31863,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5248,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": null,
+  "selected_hit_any": null,
+  "candidate_hit_all": null
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

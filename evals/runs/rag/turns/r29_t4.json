@@ -1,0 +1,201 @@
+{
+ "round_id": 29,
+ "index": 4,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "再把最新披露财年它在各地域的销售收入从高到低拉个清单",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n各地域销售收入（Revenue by Region）\n\n[2] 可能的计算公式：  \n各地域销售收入 = 报告期内该地域销售产品或提供服务获得的总收入（可表示为：销售收入（某地域） = ∑该地域所有销售金额）\n\n如果需要进一步计算比例或排名：  \n排序后清单 = 按各地域销售收入从高到低排列\n\n如需计算占比：  \n各地域销售收入占比 = 该地域销售收入 / 全部销售收入 × 100%\n['地域', '销售收入', '各地域销售收入', '销售产品', '提供服务', '总收入', '报告期', '销售收入（某地域）', '销售金额', '全部销售收入', '各地域销售收入占比', '排序后清单', '比例', '排名']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板经营', '主板基本信息']\n['STK_PRI_INCOME_DISTRICT', 'STK_COM_PROFILE', 'ASTK_REVENUE_OVERSEAS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：True\n[]\n是否要召回：False\n未抽取到主体词\n生成查询代码\nSELECT \n    a.PERIODDATE AS `报告期截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    a.ITEM_NAME AS `地区名称`,\n    ROUND(a.INCOME/10000, 3) AS `营业收入（亿）`,\n    a.PRI_RVNU_PCT AS `营收占比（%）`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_PRI_INCOME_DISTRICT t\n    INNER JOIN (\n        SELECT \n            COMCODE, \n            MAX(PERIODDATE) AS MAX_PERIODDATE\n        FROM \n            STK_PRI_INCOME_DISTRICT\n        WHERE \n            ISVALID = 1 \n            AND RPT_TYPE = '合并'\n            AND PERIODDATE IS NOT NULL\n        GROUP BY \n            COMCODE\n    ) m \n    ON t.COMCODE = m.COMCODE \n       AND t.PERIODDATE = m.MAX_PERIODDATE\n    WHERE \n        t.ISVALID = 1 \n        AND t.RPT_TYPE = '合并'\n        AND t.PERIODDATE IS NOT NULL\n        AND t.INCOME IS NOT NULL\n        AND t.ITEM_NAME IS NOT NULL\n) a\nORDER BY \n    a.PERIODDATE DESC,\n    a.INCOME DESC\n200\n{table:[['报告期截止日', '股票简称', '股票代码', '地区名称', '营业收入（亿）', '营收占比（%）'], ['2026-06-30', '中国石油', '601857', '中国大陆', '9,236.23', '60.47'], ['2026-06-30', '中国石油', '601857', '其他国家及地区', '6,033.13', '39.50'], ['2026-06-30', '中国中铁', '601390', '中国内地', '4,364.03', '92.51'], ['2026-06-30', '中国铁建', '601186', '中国大陆', '3,886.80', '90.72'], ['2026-06-30', '中国平安', '601318', '其他项目', '3,126.47', '54.36'], ['2026-06-30', '中国银行', '601988', '中国大陆', '2,813.55', '78.83'], ['2026-06-30', '江西铜业', '600362', '中国大陆', '2,556.52', '83.23'], ['2026-06-30', '中国交建', '601800', '中国大陆', '2,442.15', '73.30'], ['2026-06-30', '中国电建",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.PERIODDATE AS `报告期截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    a.ITEM_NAME AS `地区名称`,\n    ROUND(a.INCOME/10000, 3) AS `营业收入（亿）`,\n    a.PRI_RVNU_PCT AS `营收占比（%）`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_PRI_INCOME_DISTRICT t\n    INNER JOIN (\n        SELECT \n            COMCODE, \n            MAX(PERIODDATE) AS MAX_PERIODDATE\n        FROM \n            STK_PRI_INCOME_DISTRICT\n        WHERE \n            ISVALID = 1 \n            AND RPT_TYPE = '合并'\n            AND PERIODDATE IS NOT NULL\n        GROUP BY \n            COMCODE\n    ) m \n    ON t.COMCODE = m.COMCODE \n       AND t.PERIODDATE = m.MAX_PERIODDATE\n    WHERE \n        t.ISVALID = 1 \n        AND t.RPT_TYPE = '合并'\n        AND t.PERIODDATE IS NOT NULL\n        AND t.INCOME IS NOT NULL\n        AND t.ITEM_NAME IS NOT NULL\n) a\nORDER BY \n    a.PERIODDATE DESC,\n    a.INCOME DESC",
+ "final_sql": "SELECT \n    a.PERIODDATE AS `报告期截止日`,\n    a.A_STOCKSNAME AS `股票简称`,\n    a.A_STOCKCODE AS `股票代码`,\n    a.ITEM_NAME AS `地区名称`,\n    ROUND(a.INCOME/10000, 3) AS `营业收入（亿）`,\n    a.PRI_RVNU_PCT AS `营收占比（%）`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_PRI_INCOME_DISTRICT t\n    INNER JOIN (\n        SELECT \n            COMCODE, \n            MAX(PERIODDATE) AS MAX_PERIODDATE\n        FROM \n            STK_PRI_INCOME_DISTRICT\n        WHERE \n            ISVALID = 1 \n            AND RPT_TYPE = '合并'\n            AND PERIODDATE IS NOT NULL\n        GROUP BY \n            COMCODE\n    ) m \n    ON t.COMCODE = m.COMCODE \n       AND t.PERIODDATE = m.MAX_PERIODDATE\n    WHERE \n        t.ISVALID = 1 \n        AND t.RPT_TYPE = '合并'\n        AND t.PERIODDATE IS NOT NULL\n        AND t.INCOME IS NOT NULL\n        AND t.ITEM_NAME IS NOT NULL\n) a\nORDER BY \n    a.PERIODDATE DESC,\n    a.INCOME DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "北美 245630.0\n欧洲 84700.0\n大中华区 33880.0\n亚太(除中国) 33880.0\n其他 25410.0"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.STK_PRI_INCOME_DISTRICT' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "名单"
+ ],
+ "elapsed_seconds": 56.8,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_29_67f4f9f9.4",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 54.87,
+  "llm_seconds_max": 9.2,
+  "selected_tables": [
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_COM_PROFILE",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_PRI_INCOME_PRODUCT",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ASTK_REVENUE_OVERSEAS",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   33818
+  ],
+  "prompt_columns_raw_len": 22560
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1414,
+   "prompt_tokens": 38793,
+   "total_tokens": 40207,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39221,
+  "completion": 1415,
+  "total": 40636
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1414,
+   "prompt_tokens": 38793,
+   "total_tokens": 40207,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 428,
+   "total_tokens": 429,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 428,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3106",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_PRI_INCOME_DISTRICT",
+   "STK_COM_PROFILE",
+   "ASTK_REVENUE_OVERSEAS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

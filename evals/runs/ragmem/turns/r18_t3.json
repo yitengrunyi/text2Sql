@@ -1,0 +1,173 @@
+{
+ "round_id": 18,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "那2025年全年它涨了多少？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nWITH RankedData AS ( SELECT m.INDX_SNAME, m.SECCODE, m.LCLOSE, m.TCLOSE, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE ASC) AS rn_asc, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE DESC) AS rn_desc FROM INDX_MKT m INNER JOIN GET_INDX_GEN_INFO g ON m.INNER_CODE = g.INNER_CODE WHERE m.SECCODE = '000016' AND m.TRADEDATE >= '2025-01-01' AND m.TRADEDATE <= '2025-12-31' AND m.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用' AND m.TCLOSE IS NOT NULL AND m.LCLOSE IS NOT NULL ) SELECT MAX(INDX_SNAME) AS `指数名称`, MAX(SECCODE) AS `指数代码`, ROUND(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 2) AS `年初昨收`, ROUND(MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END), 2) AS `年末收盘`, ROUND((MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END) - MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END)) / NULLIF(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 0) * 100, 2) AS `2025年全年涨跌幅(%)` FROM RankedData;\n200\n{table:[['指数名称', '指数代码', '年初昨收', '年末收盘', '2025年全年涨跌幅(%)'], ['上证50', '000016', '2,684.77', '3,031.13', '12.90']]}\n该查询获取了上证50指数在2025年全年首日和末日的核心点位信息，包括年初的前一交易日收盘点位、年末收盘点位，以及根据这两个数据计算的全年累计涨跌幅。数据来源于指数行情数据和指数基础信息，确保查找时仅包含处于正常使用状态且有效的数据记录。查询筛选了2025年1月1日至2025年12月31日期间的所有相关交易日，并通过日期先后顺序，分别提取年初第一个交易日的前一收盘价和年末最后一个交易日的收盘价。全年涨跌幅的计算公式为：[(年末收盘点位 - 年初昨收点位) ÷ 年初昨收点位] × 100%，结果以百分数展示并保留2位小数。本查询未涉及单位换算，所有点位数据均直接引用原始行情数据。该结果将直观反映上证50指数2025年全年的净涨跌，查询结果完全满足用户关于全年累计涨跌幅的需求。\n{table:[['指数名称', '指数代码', '年初昨收', '年末收盘', '2025年全年涨跌幅(%)'], ['上证50', '000016', '2,684.77', '3,031.13', '12.90']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "WITH RankedData AS ( SELECT m.INDX_SNAME, m.SECCODE, m.LCLOSE, m.TCLOSE, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE ASC) AS rn_asc, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE DESC) AS rn_desc FROM INDX_MKT m INNER JOIN GET_INDX_GEN_INFO g ON m.INNER_CODE = g.INNER_CODE WHERE m.SECCODE = '000016' AND m.TRADEDATE >= '2025-01-01' AND m.TRADEDATE <= '2025-12-31' AND m.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用' AND m.TCLOSE IS NOT NULL AND m.LCLOSE IS NOT NULL ) SELECT MAX(INDX_SNAME) AS `指数名称`, MAX(SECCODE) AS `指数代码`, ROUND(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 2) AS `年初昨收`, ROUND(MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END), 2) AS `年末收盘`, ROUND((MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END) - MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END)) / NULLIF(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 0) * 100, 2) AS `2025年全年涨跌幅(%)` FROM RankedData",
+ "final_sql": "WITH RankedData AS ( SELECT m.INDX_SNAME, m.SECCODE, m.LCLOSE, m.TCLOSE, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE ASC) AS rn_asc, ROW_NUMBER() OVER (ORDER BY m.TRADEDATE DESC) AS rn_desc FROM INDX_MKT m INNER JOIN GET_INDX_GEN_INFO g ON m.INNER_CODE = g.INNER_CODE WHERE m.SECCODE = '000016' AND m.TRADEDATE >= '2025-01-01' AND m.TRADEDATE <= '2025-12-31' AND m.ISVALID = 1 AND g.ISVALID = 1 AND g.USE_STATUS = '使用' AND m.TCLOSE IS NOT NULL AND m.LCLOSE IS NOT NULL ) SELECT MAX(INDX_SNAME) AS `指数名称`, MAX(SECCODE) AS `指数代码`, ROUND(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 2) AS `年初昨收`, ROUND(MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END), 2) AS `年末收盘`, ROUND((MAX(CASE WHEN rn_desc = 1 THEN TCLOSE END) - MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END)) / NULLIF(MAX(CASE WHEN rn_asc = 1 THEN LCLOSE END), 0) * 100, 2) AS `2025年全年涨跌幅(%)` FROM RankedData",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "29.87"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "上证50 000016 2684.77 3031.13 12.90",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 57.7,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_18_2487da1d.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 47.92,
+  "llm_seconds_max": 41.67,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5240,
+   "prompt_tokens": 12358,
+   "total_tokens": 17598,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4514,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12358,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 245,
+   "prompt_tokens": 4993,
+   "total_tokens": 5238,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17351,
+  "completion": 5485,
+  "total": 22836
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 5240,
+   "prompt_tokens": 12358,
+   "total_tokens": 17598,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4514,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12358,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 245,
+   "prompt_tokens": 4993,
+   "total_tokens": 5238,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

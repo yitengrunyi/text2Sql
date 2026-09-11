@@ -1,0 +1,187 @@
+{
+ "round_id": 9,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年收入最高的业务板块是哪个？收入多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 各业务板块收入（Revenue by Segment/Business）\n- 总收入（Total Revenue）\n\n[2] 可能的计算公式：\n\n- 各业务板块收入 = ∑该业务板块中所有产品/服务的销售收入\n\n例如：\n单一业务板块收入 = ∑（产品或服务销售数量 × 单价）\n\n- 各业务板块收入占比 = 该业务板块收入 / 总收入 × 100%\n\n所以，query 关注的是苹果公司（Apple Inc.）在2025财年各业务板块（如iPhone、iPad、Mac、Wearables, Home and Accessories、Services等）分别创造的收入，并要找出收入最高的板块及其具体金额。计算时需依赖各板块分部报表的销售数据。\n['苹果公司', 'Apple Inc.', '2025财年', '收入', '业务板块', '分部', '板块', '各业务板块收入', 'Revenue by Segment', 'Revenue by Business', '业务板块收入', '产品', '服务', '销售收入', '总收入', 'Total Revenue', '销售数量', '单价', '业务板块收入占比', 'iPhone', 'iPad', 'Mac', 'Wearables, Home and Accessories', 'Services', '分部报表', '销售数据', '最高收入', '金额']\n该问题可能涉及美股-'苹果', 它的美股股票代码为：AAPL.US，请注意美股筛选的时候使用股票代码进行关联。对应的美股行业名称为-计算机。\n该问题可能涉及的题材包含：['苹果概念']。\n请在定位的时候优先考虑 VW_CONCEPT_STK 表，即在 SQL 中加入条件：CONCEPT_NAME = '苹果概念'。\n美股相关\n['美股基本信息', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3105']\n是否命中召回表：True\n['业务板块']\nquery抽取的主体词是['业务板块']\n生成查询代码\ntop30召回:{}\nSELECT \n    acm.CSNAME AS `股票名称`,\n    acm.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财报日期`,\n    vc.SECTOR_CNAME AS `业务板块`,\n    vc.F005V AS `币种`,\n    ROUND(vc.F007N/100000000, 3) AS `营业收入(亿美元)`\nFROM \n    AMERICAN_STOCK_MAIN acm\nINNER JOIN \n    VIEW_COM3105 vc\n    ON acm.FIU_ID = vc.FIU_ID\nWHERE \n    acm.COMB_SYMBOL = 'AAPL.US'\n    AND vc.F001D >= '2024-10-01'\n    AND vc.F001D <= '2025-09-30'\n    AND vc.F007N IS NOT NULL\n    AND vc.SECTOR_CNAME IS NOT NULL\n    AND vc.F005V = 'USD'\nORDER BY \n    vc.F007N DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财报日期', '业务板块', '币种', '营业收入(亿美元)'], ['苹果', 'AAPL.US', '2024-12-31', '手机', 'USD', '0.00']]}\n该查询的主要目的是获取苹果公司在2025财年中，收入最高的业务板块及其对应的收入。营业收入（亿美元）通过将销售金额除以1亿并保留三位小数得到，即营业收入（亿美元）= 业务板块销售额 / 100000000。这实现了单位的转换，方便直观地展示收入规模。查询结果符合要求。\n\n查询连接了美股上市公司基础信息表和板块收入分布表，通过美股内部代码进行关联。筛选部分通过指定美股展示代码为苹果公司，确保只查询苹果公司相关数据。同时，限定财报日期在2024年10月1日至2025年9月30日之间，保证只统计2025财年内的数据。进一步筛选只保留销售金额和业务板块名称不为空，和货币为美元的数据。结果按销售金额降序排列，并只取收入最高的记录。最终返回苹果公司2025财年收入最高的业务板块名称及其营业收入。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    acm.CSNAME AS `股票名称`,\n    acm.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财报日期`,\n    vc.SECTOR_CNAME AS `业务板块`,\n    vc.F005V AS `币种`,\n    ROUND(vc.F007N/100000000, 3) AS `营业收入(亿美元)`\nFROM \n    AMERICAN_STOCK_MAIN acm\nINNER JOIN \n    VIEW_COM3105 vc\n    ON acm.FIU_ID = vc.FIU_ID\nWHERE \n    acm.COMB_SYMBOL = 'AAPL.US'\n    AND vc.F001D >= '2024-10-01'\n    AND vc.F001D <= '2025-09-30'\n    AND vc.F007N IS NOT NULL\n    AND vc.SECTOR_CNAME IS NOT NULL\n    AND vc.F005V = 'USD'\nORDER BY \n    vc.F007N DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    acm.CSNAME AS `股票名称`,\n    acm.COMB_SYMBOL AS `股票代码`,\n    vc.F001D AS `财报日期`,\n    vc.SECTOR_CNAME AS `业务板块`,\n    vc.F005V AS `币种`,\n    ROUND(vc.F007N/100000000, 3) AS `营业收入(亿美元)`\nFROM \n    AMERICAN_STOCK_MAIN acm\nINNER JOIN \n    VIEW_COM3105 vc\n    ON acm.FIU_ID = vc.FIU_ID\nWHERE \n    acm.COMB_SYMBOL = 'AAPL.US'\n    AND vc.F001D >= '2024-10-01'\n    AND vc.F001D <= '2025-09-30'\n    AND vc.F007N IS NOT NULL\n    AND vc.SECTOR_CNAME IS NOT NULL\n    AND vc.F005V = 'USD'\nORDER BY \n    vc.F007N DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "手机 246017.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 2024-12-31 手机 USD 0.002",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '实体数值同行': False})"
+ ],
+ "elapsed_seconds": 50.5,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_9_10c9f817.5",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash"
+  ],
+  "llm_seconds_total": 48.8,
+  "llm_seconds_max": 6.47,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105",
+   "VIEW_COM3106"
+  ],
+  "sql_prompt_chars": [
+   11446
+  ],
+  "prompt_columns_raw_len": 2186
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1097,
+   "prompt_tokens": 17218,
+   "total_tokens": 18315,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 2,
+   "prompt_tokens": 458,
+   "total_tokens": 460,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 2,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 458,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17676,
+  "completion": 1099,
+  "total": 18775
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1097,
+   "prompt_tokens": 17218,
+   "total_tokens": 18315,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 2,
+   "prompt_tokens": 458,
+   "total_tokens": 460,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 2,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 458,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

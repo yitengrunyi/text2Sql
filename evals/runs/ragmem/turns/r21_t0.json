@@ -1,0 +1,146 @@
+{
+ "round_id": 21,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数与个股混合：中证1000指数行情与估值切入，话题切换至万华化学年报财务",
+ "question": "帮我看看中证1000指数最新收盘在多少点？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 中证1000指数最新收盘点位\n\n[2] 可能的计算公式：  \n- 指数最新收盘点位 = 指数成分股根据其规定的加权方式聚合后的最新收盘结果\n\n具体公式（以加权股价指数为例）：  \n最新收盘点位 = Σ（成分股收盘价 × 成分股权重）\n\n**说明：最新收盘点位一般由中证公司按照成分股，按自由流通市值加权计算得出。**\n['中证1000指数', '最新收盘点位', '成分股', '收盘价', '成分股权重', '自由流通市值', '加权方式', '指数最新收盘点位', '中证公司']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'GET_INDX_GEN_INFO']\n是否命中召回表：False\n生成查询代码\nSELECT \n    DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`,\n    info.INDX_SNAME AS `指数简称`,\n    info.INDX_CODE AS `指数代码`,\n    ROUND(mkt.TCLOSE, 2) AS `最新收盘点位`\nFROM \n    GET_INDX_GEN_INFO info\nJOIN \n    INDX_MKT mkt\n    ON info.INNER_CODE = mkt.INNER_CODE\nWHERE \n    info.INDX_CODE = '000852'\n    AND info.USE_STATUS = '使用'\n    AND info.ISVALID = 1\n    AND mkt.SECCODE = '000852'\n    AND mkt.TRADEDATE = '2026-09-02'\n    AND mkt.ISVALID = 1\nLIMIT 1\n200\n{table:[['交易日期', '指数简称', '最新收盘点位'], ['2026-09-02', '中证1000', '7,583.76']]}\n该查询的目的是获取中证1000指数在指定日期的最新收盘点位。查询中对收盘点位采用了四舍五入保留两位小数的处理，计算公式为：最新收盘点位 = 收盘价保留两位小数。查询结果符合要求。\n\n查询从两个用于提供指数基本信息和指数行情数据的表中提取数据，通过指数内部代码进行关联。筛选了指数市场代码为指定的中证1000指数，限定指数使用状态为“使用”且数据有效。只选择指定交易日期的指数行情数据，并确保成交数据有效，最后返回中证1000指数的简称、代码、交易日期和最新收盘点位，结果最多只显示一条。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`,\n    info.INDX_SNAME AS `指数简称`,\n    info.INDX_CODE AS `指数代码`,\n    ROUND(mkt.TCLOSE, 2) AS `最新收盘点位`\nFROM \n    GET_INDX_GEN_INFO info\nJOIN \n    INDX_MKT mkt\n    ON info.INNER_CODE = mkt.INNER_CODE\nWHERE \n    info.INDX_CODE = '000852'\n    AND info.USE_STATUS = '使用'\n    AND info.ISVALID = 1\n    AND mkt.SECCODE = '000852'\n    AND mkt.TRADEDATE = '2026-09-02'\n    AND mkt.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(mkt.TRADEDATE, '%Y-%m-%d') AS `交易日期`,\n    info.INDX_SNAME AS `指数简称`,\n    info.INDX_CODE AS `指数代码`,\n    ROUND(mkt.TCLOSE, 2) AS `最新收盘点位`\nFROM \n    GET_INDX_GEN_INFO info\nJOIN \n    INDX_MKT mkt\n    ON info.INNER_CODE = mkt.INNER_CODE\nWHERE \n    info.INDX_CODE = '000852'\n    AND info.USE_STATUS = '使用'\n    AND info.ISVALID = 1\n    AND mkt.SECCODE = '000852'\n    AND mkt.TRADEDATE = '2026-09-02'\n    AND mkt.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7583.7559"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 中证1000 000852 7583.76",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 53.5,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_21_46239809.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 51.61,
+  "llm_seconds_max": 10.27,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   20280
+  ],
+  "prompt_columns_raw_len": 1874
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 973,
+   "prompt_tokens": 25583,
+   "total_tokens": 26556,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25583,
+  "completion": 973,
+  "total": 26556
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 973,
+   "prompt_tokens": 25583,
+   "total_tokens": 26556,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 8,
+ "index": 1,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股行情",
+ "question": "特斯拉2026年8月25日的收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT V.TRADE_DATE AS `交易日期`, A.CSNAME AS `股票名称`, A.COMB_SYMBOL AS `股票代码`, ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM AMERICAN_STOCK_MAIN A INNER JOIN VIEW_US_EOD_EXPR V ON A.FIU_ID = V.FIU_ID WHERE A.COMB_SYMBOL = 'TSLA.US' AND V.TRADE_DATE = '2026-08-25' AND V.CLOSE_PRICE IS NOT NULL AND V.OPEN_PRICE IS NOT NULL AND V.HIGH_PRICE IS NOT NULL AND V.LOW_PRICE IS NOT NULL AND V.TRADE_AMOUNT IS NOT NULL AND V.TOTAL_SHARES IS NOT NULL LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '成交额(亿美元)', '总股本(亿股)'], ['2026-08-25', '特斯拉', 'TSLA.US', '328.98', '341.23', '327.05', '340.00', '50.23', '32.97']]}\n该查询获取了特斯拉公司在2026年8月25日的美股收盘价及相关行情信息。数据来源于美股股票基本信息表和行情增强数据表，通过内部代码匹配，将特斯拉的展示代码作为筛选条件，并限定具体交易日期为2026年8月25日。筛选规则要求所需的价格、成交额、总股本等数据全部有效。结果包含股票名称、展示代码、当天开盘价、最高价、最低价、收盘价、成交额和总股本。成交额和总股本的原始单位为“美元”与“股”，查询中分别换算为“亿美元”和“亿股”，并统一保留两位小数。其他价格数据直接采用已调整后的行情值。整体查询结果完整涵盖了用户需要的特斯拉公司指定日期的收盘价及相关指标，查询结果符合要求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价(美元)', '最高价(美元)', '最低价(美元)', '收盘价(美元)', '成交额(亿美元)', '总股本(亿股)'], ['2026-08-25', '特斯拉', 'TSLA.US', '328.98', '341.23', '327.05', '340.00', '50.23', '32.97']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT V.TRADE_DATE AS `交易日期`, A.CSNAME AS `股票名称`, A.COMB_SYMBOL AS `股票代码`, ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM AMERICAN_STOCK_MAIN A INNER JOIN VIEW_US_EOD_EXPR V ON A.FIU_ID = V.FIU_ID WHERE A.COMB_SYMBOL = 'TSLA.US' AND V.TRADE_DATE = '2026-08-25' AND V.CLOSE_PRICE IS NOT NULL AND V.OPEN_PRICE IS NOT NULL AND V.HIGH_PRICE IS NOT NULL AND V.LOW_PRICE IS NOT NULL AND V.TRADE_AMOUNT IS NOT NULL AND V.TOTAL_SHARES IS NOT NULL LIMIT 1",
+ "final_sql": "SELECT V.TRADE_DATE AS `交易日期`, A.CSNAME AS `股票名称`, A.COMB_SYMBOL AS `股票代码`, ROUND(V.OPEN_PRICE, 2) AS `开盘价(美元)`, ROUND(V.HIGH_PRICE, 2) AS `最高价(美元)`, ROUND(V.LOW_PRICE, 2) AS `最低价(美元)`, ROUND(V.CLOSE_PRICE, 2) AS `收盘价(美元)`, ROUND(V.TRADE_AMOUNT / 100000000, 2) AS `成交额(亿美元)`, ROUND(V.TOTAL_SHARES / 100000000, 2) AS `总股本(亿股)` FROM AMERICAN_STOCK_MAIN A INNER JOIN VIEW_US_EOD_EXPR V ON A.FIU_ID = V.FIU_ID WHERE A.COMB_SYMBOL = 'TSLA.US' AND V.TRADE_DATE = '2026-08-25' AND V.CLOSE_PRICE IS NOT NULL AND V.OPEN_PRICE IS NOT NULL AND V.HIGH_PRICE IS NOT NULL AND V.LOW_PRICE IS NOT NULL AND V.TRADE_AMOUNT IS NOT NULL AND V.TOTAL_SHARES IS NOT NULL LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "TSLA 340.0 2026-08-25"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-25 特斯拉 TSLA.US 328.98 341.23 327.05 340.0 50.23 32.97",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 24.5,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_8_cb6b009a.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 23.45,
+  "llm_seconds_max": 19.23,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1906,
+   "prompt_tokens": 9801,
+   "total_tokens": 11707,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1321,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9801,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 202,
+   "prompt_tokens": 3982,
+   "total_tokens": 4184,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 13783,
+  "completion": 2108,
+  "total": 15891
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1906,
+   "prompt_tokens": 9801,
+   "total_tokens": 11707,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1321,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 9801,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 202,
+   "prompt_tokens": 3982,
+   "total_tokens": 4184,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_US_EOD_EXPR"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

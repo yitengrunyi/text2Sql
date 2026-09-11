@@ -1,0 +1,154 @@
+{
+ "round_id": 24,
+ "index": 3,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金·基金经理：刘彦春在管基金、任职时长与管理规模变迁，切换谢治宇及兴证全球同公司规模对比",
+ "question": "感觉他这两年盘子缩了不少，往回看，2024年末的时候他的在管总规模是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：在管总规模（AUM, Assets Under Management）\n\n[2] 可能的计算公式：\n\n在管总规模（AUM） = 期初AUM + 本期净流入/净流出资金 + 本期投资收益/损失\n\n其中，\n- 期初AUM：上一期（如2023年末）的在管总规模\n- 本期净流入/净流出资金：本期客户新增投资或赎回的资金净额\n- 本期投资收益/损失：本期资产管理所获得的投资收益或产生的损失\n['在管总规模', 'AUM', 'Assets Under Management', '期初AUM', '本期净流入', '本期净流出', '净流入', '净流出', '资金净额', '客户新增投资', '客户赎回', '本期投资收益', '本期投资损失', '投资收益', '投资损失']\n该问题可能涉及到申万三级行业，三级行业名称为\"资产管理\"，即SW_INDU_CODE_2021_3 LIKE \"%资产管理%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%资产管理%\"\n基金相关\n['基金产品基本信息', '基金产品净值']\n['FUND_ASSET_ALLOCATION', 'FUND_AND_COMPANY_MAPPING', 'FUND_AND_MANAGER_MAPPING']\n是否命中召回表：False\n生成查询代码\nSELECT \n    c.COMPANY_NAME AS `基金公司全称`,\n    c.COMPANY_ABBR AS `基金公司简称`,\n    c.COMPANY_CODE AS `基金公司内部代码`,\n    fa.REPORT_DATE AS `报告期`,\n    fa.FUND_NAME AS `基金简称`,\n    fa.FUND_SYMBOL AS `基金代码`,\n    ROUND(fa.NET_VALUE/100000000, 2) AS `基金净资产（亿）`,\n    ROUND(fa.TOTAL_ASSET/100000000, 2) AS `基金资产总值（亿）`\nFROM \n    FUND_AND_COMPANY_MAPPING c\nJOIN\n    FUND_ASSET_ALLOCATION fa ON c.FUND_HCODE = fa.FUND_HCODE\nWHERE \n    c.HISVALID = 1\n    AND fa.HISVALID = 1\n    AND (c.END_DATE IS NULL OR c.END_DATE > '2024-12-31')\n    AND (fa.REPORT_DATE = '2024-12-31')\n    AND c.COMPANY_NAME = '他'\nORDER BY\n    fa.NET_VALUE DESC\n\n200\nNo rows fetched. 查找结果为空，请检查SQL语句\n该查询的核心目的是获取名为“他”的基金公司在2024年末时旗下各基金的净资产与资产总值。基金净资产（亿）和基金资产总值（亿）均通过将原始金额除以一亿并保留两位小数实现单位转换，公式为：基金净资产（亿） = 基金净资产原始金额 / 100000000，基金资产总值（亿） = 基金资产总值原始金额 / 100000000。在此查询中，对结果进行了金额单位换算。查询结果符合要求。\n\n查询汇总了基金公司与基金产品的对应关系表和基金产品资产情况表，通过基金内部代码进行关联。筛选条件设定为只包括有效记录、基金公司全称为“他”、公司记录截止日期需晚于2024年末、资产报表日期必须为2024年12月31日。最终以基金净资产降序展示每只基金的相关规模数据。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    c.COMPANY_NAME AS `基金公司全称`,\n    c.COMPANY_ABBR AS `基金公司简称`,\n    c.COMPANY_CODE AS `基金公司内部代码`,\n    fa.REPORT_DATE AS `报告期`,\n    fa.FUND_NAME AS `基金简称`,\n    fa.FUND_SYMBOL AS `基金代码`,\n    ROUND(fa.NET_VALUE/100000000, 2) AS `基金净资产（亿）`,\n    ROUND(fa.TOTAL_ASSET/100000000, 2) AS `基金资产总值（亿）`\nFROM \n    FUND_AND_COMPANY_MAPPING c\nJOIN\n    FUND_ASSET_ALLOCATION fa ON c.FUND_HCODE = fa.FUND_HCODE\nWHERE \n    c.HISVALID = 1\n    AND fa.HISVALID = 1\n    AND (c.END_DATE IS NULL OR c.END_DATE > '2024-12-31')\n    AND (fa.REPORT_DATE = '2024-12-31')\n    AND c.COMPANY_NAME = '他'\nORDER BY\n    fa.NET_VALUE DESC",
+ "final_sql": "SELECT \n    c.COMPANY_NAME AS `基金公司全称`,\n    c.COMPANY_ABBR AS `基金公司简称`,\n    c.COMPANY_CODE AS `基金公司内部代码`,\n    fa.REPORT_DATE AS `报告期`,\n    fa.FUND_NAME AS `基金简称`,\n    fa.FUND_SYMBOL AS `基金代码`,\n    ROUND(fa.NET_VALUE/100000000, 2) AS `基金净资产（亿）`,\n    ROUND(fa.TOTAL_ASSET/100000000, 2) AS `基金资产总值（亿）`\nFROM \n    FUND_AND_COMPANY_MAPPING c\nJOIN\n    FUND_ASSET_ALLOCATION fa ON c.FUND_HCODE = fa.FUND_HCODE\nWHERE \n    c.HISVALID = 1\n    AND fa.HISVALID = 1\n    AND (c.END_DATE IS NULL OR c.END_DATE > '2024-12-31')\n    AND (fa.REPORT_DATE = '2024-12-31')\n    AND c.COMPANY_NAME = '他'\nORDER BY\n    fa.NET_VALUE DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "42726346909.0300"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "first_result_preview": "No rows fetched. 查找结果为空，请检查SQL语句",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "empty",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 45.3,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_24_f42bce95.3",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 49.0,
+  "llm_seconds_max": 6.1,
+  "selected_tables": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING"
+  ],
+  "candidate_tables": [
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   14753
+  ],
+  "prompt_columns_raw_len": 4963
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1555,
+   "prompt_tokens": 25638,
+   "total_tokens": 27193,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25638,
+  "completion": 1555,
+  "total": 27193
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1555,
+   "prompt_tokens": 25638,
+   "total_tokens": 27193,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6144,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_ASSET_ALLOCATION",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

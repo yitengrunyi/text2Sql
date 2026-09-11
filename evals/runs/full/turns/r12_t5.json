@@ -1,0 +1,201 @@
+{
+ "round_id": 12,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·股东与股本结构——恒瑞医药前十大股东与2025年H股上市股本变动",
+ "question": "换家公司看看，中国神华2025年度累计现金分红总额是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "话题切换",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n- 累计现金分红总额（2025年度）\n\n[2] 可能的计算公式  \n累计现金分红总额 = 每股现金分红 × 总股本（或已分红股份数）  \n或者  \n累计现金分红总额 = ∑（各次分红金额）\n['中国神华', '累计现金分红总额', '2025年度', '每股现金分红', '总股本', '已分红股份数', '各次分红金额', '分红']\n该问题可能涉及A股-'中国神华'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-煤炭。\n个股相关\n['主板分红', '主板基本信息']\n['STK_DIV_STAT', 'STK_DIV_INFO', 'STK_DIVPAY', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.TOT_ACCUM_DIV / 100000000, 2) AS `年度累计现金分红总额(亿)`,\n    s.ACCUM_UNIT_DIV AS `年度累计单位分红(元)`,\n    ROUND(s.NET_PROFIT / 10000, 1) AS `归母净利润(万)`,\n    ROUND(s.CASH_NP_PROP, 2) AS `现金分红与净利润比率(%)`\nFROM\n    STK_DIV_STAT s\nJOIN\n    GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    s.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND s.DIV_YEAR = 2025\n    AND s.TOT_ACCUM_DIV IS NOT NULL\nORDER BY\n    s.DIV_YEAR DESC\n\n200\n{table:[['股票名称', '股票代码', '分红年度', '年度累计现金分红总额(亿)', '年度累计单位分红(元)', '归母净利润(万)', '现金分红与净利润比率(%)'], ['中国神华', '601088', '2,025', '418.11', '2.01', '5,284,900.00', '79.11']]}\n年度累计现金分红总额（亿）是通过将年度累计分红总额（以元为单位）除以一亿，保留两位小数来得到结果；年度累计单位分红直接取值；归属于母公司所有者的净利润通过将净利润（以元为单位）除以一万，保留一位小数展示；现金分红与净利润比率的结果保留两位小数。在此查询中，对主要结果做了单位换算和数值保留小数处理。查询结果符合要求。\n\n本次查询主要获取上市公司股票分红统计表中的股票名称、股票代码、分红年度、年度累计现金分红总额、单位分红、归母净利润以及现金分红与净利润比率。通过与A股基础信息表进行关联，确保只查找有效记录且证券简称包含“中国神华”的公司数据。筛选分红年度为2025年，并且累计分红总额不为空的记录，最终按照分红年度降序排列。\n中国神华2025年度累计现金分红总额是多少？",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.TOT_ACCUM_DIV / 100000000, 2) AS `年度累计现金分红总额(亿)`,\n    s.ACCUM_UNIT_DIV AS `年度累计单位分红(元)`,\n    ROUND(s.NET_PROFIT / 10000, 1) AS `归母净利润(万)`,\n    ROUND(s.CASH_NP_PROP, 2) AS `现金分红与净利润比率(%)`\nFROM\n    STK_DIV_STAT s\nJOIN\n    GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    s.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND s.DIV_YEAR = 2025\n    AND s.TOT_ACCUM_DIV IS NOT NULL\nORDER BY\n    s.DIV_YEAR DESC",
+ "final_sql": "SELECT\n    s.A_STOCKSNAME AS `股票名称`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.DIV_YEAR AS `分红年度`,\n    ROUND(s.TOT_ACCUM_DIV / 100000000, 2) AS `年度累计现金分红总额(亿)`,\n    s.ACCUM_UNIT_DIV AS `年度累计单位分红(元)`,\n    ROUND(s.NET_PROFIT / 10000, 1) AS `归母净利润(万)`,\n    ROUND(s.CASH_NP_PROP, 2) AS `现金分红与净利润比率(%)`\nFROM\n    STK_DIV_STAT s\nJOIN\n    GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1\nWHERE\n    s.ISVALID = 1\n    AND c.SEC_SNAME LIKE '%中国神华%'\n    AND s.DIV_YEAR = 2025\n    AND s.TOT_ACCUM_DIV IS NOT NULL\nORDER BY\n    s.DIV_YEAR DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "41811266889.02"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国神华 601088 2025 418.11 2.010000 5284900.0 79.11",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 67.9,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_12_50d4de07.5",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 71.92,
+  "llm_seconds_max": 15.3,
+  "selected_tables": [
+   "STK_DIV_STAT",
+   "STK_DIV_INFO",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_DIV_INFO",
+   "STK_DIV_STAT",
+   "STK_LIST_ORG",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DIVPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   17790
+  ],
+  "prompt_columns_raw_len": 4100
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1150,
+   "prompt_tokens": 23502,
+   "total_tokens": 24652,
+   "completion_tokens_details": {
+    "reasoning_tokens": 884,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23502,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1292,
+   "prompt_tokens": 29972,
+   "total_tokens": 31264,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 53474,
+  "completion": 2442,
+  "total": 55916
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1150,
+   "prompt_tokens": 23502,
+   "total_tokens": 24652,
+   "completion_tokens_details": {
+    "reasoning_tokens": 884,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23502,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1292,
+   "prompt_tokens": 29972,
+   "total_tokens": 31264,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_STAT"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_DIV_STAT",
+   "STK_DIV_INFO",
+   "STK_DIVPAY",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

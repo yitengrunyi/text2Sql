@@ -1,0 +1,175 @@
+{
+ "round_id": 17,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "再加一家海尔智家做参照，同样按2025年年报算净现比，两家谁更高？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "条件追加",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND (fa.A_STOCKSNAME LIKE '%万华化学%' OR fa.A_STOCKSNAME LIKE '%海尔智家%')\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nORDER BY\n    `经营活动产生的现金流量净额/归母净利润（倍）` DESC;\n200\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）', '归母净利润（万）', '经营活动产生的现金流量净额/归母净利润（倍）'], ['2025-12-31', '海尔智家', '600690', '27,729.00', '1,955,279.80', '0.00'], ['2025-12-31', '万华化学', '600309', '105,751.00', '1,252,720.10', '0.00']]}\n该查询获取了万华化学和海尔智家在2025年年报的净现比相关信息，包括报告截止日、公司名称、股票代码、经营活动产生的现金流量净额（单位为万元）、归母净利润（单位为万元）、以及经营活动现金流量净额与归母净利润的倍数。数据来源于主板公司财务指标汇总表，筛选条件限定为有效记录、两家公司名称、2025年年报、且现金流量净额与净利润数据均非空。结果按净现比降序排列，便于比较两家公司谁更高。现金流量和净利润的数据在原始基础上单位由元转换为万元，并保留1位小数；净现比以现金流量净额除以归母净利润，遇到净利润为零则结果为空，计算结果保留2位小数。此查询直接采用了已有的财务指标，无需额外计算，能够满足用户比较两家公司净现比高低的需求。\n{table:[['报告截止日', '股票名称', '股票代码', '经营活动产生的现金流量净额（万）', '归母净利润（万）', '经营活动产生的现金流量净额/归母净利润（倍）'], ['2025-12-31', '海尔智家', '600690', '27,729.00', '1,955,279.80', '0.00'], ['2025-12-31', '万华化学', '600309', '105,751.00', '1,252,720.10', '0.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND (fa.A_STOCKSNAME LIKE '%万华化学%' OR fa.A_STOCKSNAME LIKE '%海尔智家%')\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nORDER BY\n    `经营活动产生的现金流量净额/归母净利润（倍）` DESC",
+ "final_sql": "SELECT\n    fa.ENDDATE AS `报告截止日`,\n    fa.A_STOCKSNAME AS `股票名称`,\n    fa.A_STOCKCODE AS `股票代码`,\n    ROUND(fa.F112001 * 10000, 1) AS `经营活动产生的现金流量净额（万）`,\n    ROUND(fa.F110101 / 10000, 1) AS `归母净利润（万）`,\n    CASE \n        WHEN fa.F110101 <> 0 THEN ROUND(fa.F112001 / fa.F110101, 2)\n        ELSE NULL\n    END AS `经营活动产生的现金流量净额/归母净利润（倍）`\nFROM\n    VIEW_STK_FIN_IDX fa\nWHERE\n    fa.ISVALID = 1\n    AND (fa.A_STOCKSNAME LIKE '%万华化学%' OR fa.A_STOCKSNAME LIKE '%海尔智家%')\n    AND fa.ENDDATE = '2025-12-31 00:00:00'\n    AND fa.F112001 IS NOT NULL\n    AND fa.F110101 IS NOT NULL\nORDER BY\n    `经营活动产生的现金流量净额/归母净利润（倍）` DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 2,
+  "preview": "万华化学 2.36\n海尔智家 1.29"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "first_result_preview": "2025-12-31 00:00:00 海尔智家 600690 27729.0 1955279.8 0.00\n2025-12-31 00:00:00 万华化学 600309 105751.0 1252720.1 0.00",
+ "ex_first": false,
+ "ex_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '日期': True, '实体数值同行': False})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 2
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "(软校验:{'数值': False, '日期': True, '实体数值同行': False})"
+ ],
+ "elapsed_seconds": 68.4,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_17_782aa971.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 62.83,
+  "llm_seconds_max": 55.91,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6714,
+   "prompt_tokens": 26501,
+   "total_tokens": 33215,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6014,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26501,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 231,
+   "prompt_tokens": 19216,
+   "total_tokens": 19447,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 45717,
+  "completion": 6945,
+  "total": 52662
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 6714,
+   "prompt_tokens": 26501,
+   "total_tokens": 33215,
+   "completion_tokens_details": {
+    "reasoning_tokens": 6014,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 26501,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 231,
+   "prompt_tokens": 19216,
+   "total_tokens": 19447,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_CASH_GEN",
+  "VIEW_STK_INCOME_GEN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

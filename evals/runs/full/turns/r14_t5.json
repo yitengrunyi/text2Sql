@@ -1,0 +1,196 @@
+{
+ "round_id": 14,
+ "index": 5,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "另外帮我查一下，2026年半年报业绩预告里预计净利润上限最高的前五家公司是哪些？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "话题切换",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 预计净利润上限（指公司半年报业绩预告中预估的“净利润”最大值）\n\n[2] 可能的计算公式：  \n预计净利润上限 = 预计净利润区间中的最大值  \n（通常公司半年报业绩预告会给出预计净利润的区间，例如：[1亿元, 1.2亿元]，则预计净利润上限为1.2亿元）\n\n查询逻辑：  \n- 筛选2026年半年报业绩预告信息  \n- 提取每家公司的预计净利润区间中的最大值（净利润上限）  \n- 按净利润上限降序排列  \n- 选取前五名公司\n['2026年半年报', '业绩预告', '净利润上限', '预计净利润上限', '净利润', '净利润区间', '最大值', '公司', '公司半年报业绩预告', '业绩预告区间', '降序排列', '前五公司', '前五名', '筛选', '提取', '预估净利润最大值']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板业绩预告', '主板基本信息']\n['STK_ACHIEVE_FORECAST', 'STK_COM_PROFILE', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    s.ENDDATE AS `业绩预告截止日期`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.A_STOCKSNAME AS `股票简称`,\n    s.MAX_VAL AS `净利润预测上限（万）`,\n    ROUND(s.MAX_VAL/10000, 3) AS `净利润预测上限（亿）`,\n    s.MIN_VAL AS `净利润预测下限（万）`,\n    ROUND(s.SR_MAX_VAL/10000, 3) AS `营业收入预测上限（亿）`,\n    s.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    s.DECLAREDATE AS `业绩预告发布日期`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_ACHIEVE_FORECAST t\n    WHERE \n        t.ISVALID = 1\n        AND t.ENDDATE = '2026-06-30 00:00:00'\n        AND t.A_STOCKCODE IS NOT NULL\n        AND t.A_STOCKSNAME IS NOT NULL\n        AND t.MAX_VAL IS NOT NULL\n) s\nORDER BY s.MAX_VAL DESC\nLIMIT 5\n200\n{table:[['业绩预告截止日期', '股票代码', '股票简称', '净利润预测上限（万）', '净利润预测上限（亿）', '净利润预测下限（万）', '营业收入预测上限（亿）', '净利润同比增长上限(%)', '业绩预告发布日期'], ['2026-06-30', '601628', '中国人寿', '13,711,900.00', '1,371.19', '12,893,300.00', '-', '235.00', '2026-07-15'], ['2026-06-30', '601899', '紫金矿业', '3,910,000.00', '391.00', '3,910,000.00', '-', '68.00', '2026-07-10'], ['2026-06-30', '601088', '中国神华', '2,980,000.00', '298.00', '2,630,000.00', '-', '8.00', '2026-07-15'], ['2026-06-30', '601138', '工业富联', '2,440,000.00', '244.00', '2,340,000.00', '-', '101.00', '2026-07-10'], ['2026-06-30', '601336', '新华保险', '2,367,800.00', '236.78', '2,071,900.00', '-', '60.00', '2026-07-14']]}\n该查询目的是获取2026年半年报业绩预告中，预计净利润上限最高的前五家上市公司。\n\n在查询中，对净利润预测的上限和营业收入预测的上限进行了单位转换。净利润预测上限用“净利润预测上限（万）”直接取值，并通过“净利润预测上限（亿）=净利润预测上限（万）/10000”计算得出，以亿元为单位展示。营业收入预测上限亦是直接取值“营业收入预测上限（万）”，并通过“营业收入预测上限（亿）=营业收入预测上限（万）/10000",
+ "route_gold": "NEW_QUERY",
+ "route_pred": "NEW_QUERY",
+ "route_ok": true,
+ "first_sql": "SELECT \n    s.ENDDATE AS `业绩预告截止日期`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.A_STOCKSNAME AS `股票简称`,\n    s.MAX_VAL AS `净利润预测上限（万）`,\n    ROUND(s.MAX_VAL/10000, 3) AS `净利润预测上限（亿）`,\n    s.MIN_VAL AS `净利润预测下限（万）`,\n    ROUND(s.SR_MAX_VAL/10000, 3) AS `营业收入预测上限（亿）`,\n    s.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    s.DECLAREDATE AS `业绩预告发布日期`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_ACHIEVE_FORECAST t\n    WHERE \n        t.ISVALID = 1\n        AND t.ENDDATE = '2026-06-30 00:00:00'\n        AND t.A_STOCKCODE IS NOT NULL\n        AND t.A_STOCKSNAME IS NOT NULL\n        AND t.MAX_VAL IS NOT NULL\n) s\nORDER BY s.MAX_VAL DESC\nLIMIT 5",
+ "final_sql": "SELECT \n    s.ENDDATE AS `业绩预告截止日期`,\n    s.A_STOCKCODE AS `股票代码`,\n    s.A_STOCKSNAME AS `股票简称`,\n    s.MAX_VAL AS `净利润预测上限（万）`,\n    ROUND(s.MAX_VAL/10000, 3) AS `净利润预测上限（亿）`,\n    s.MIN_VAL AS `净利润预测下限（万）`,\n    ROUND(s.SR_MAX_VAL/10000, 3) AS `营业收入预测上限（亿）`,\n    s.NTINC_GR_CEIL AS `净利润同比增长上限(%)`,\n    s.DECLAREDATE AS `业绩预告发布日期`\nFROM (\n    SELECT \n        t.* \n    FROM \n        STK_ACHIEVE_FORECAST t\n    WHERE \n        t.ISVALID = 1\n        AND t.ENDDATE = '2026-06-30 00:00:00'\n        AND t.A_STOCKCODE IS NOT NULL\n        AND t.A_STOCKSNAME IS NOT NULL\n        AND t.MAX_VAL IS NOT NULL\n) s\nORDER BY s.MAX_VAL DESC\nLIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "中国人寿 13711900.0000\n紫金矿业 3910000.0000\n中国神华 2980000.0000\n工业富联 2440000.0000\n新华保险 2367800.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "first_result_preview": "2026-06-30 00:00:00 601628 中国人寿 13711900.0000 1371.190 12893300.0000  235.0000 2026-07-15 00:00:00\n2026-06-30 00:00:00 601899 紫金矿业 3910000.0000 391.000 3910000.0000  68.0000 2026-07-10 00:00:00\n2026-0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 82.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_14_b4d6f2e3.5",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 79.37,
+  "llm_seconds_max": 11.73,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   29593
+  ],
+  "prompt_columns_raw_len": 16274
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 892,
+   "prompt_tokens": 8539,
+   "total_tokens": 9431,
+   "completion_tokens_details": {
+    "reasoning_tokens": 660,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8539,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1496,
+   "prompt_tokens": 35863,
+   "total_tokens": 37359,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 44402,
+  "completion": 2388,
+  "total": 46790
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 892,
+   "prompt_tokens": 8539,
+   "total_tokens": 9431,
+   "completion_tokens_details": {
+    "reasoning_tokens": 660,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 8539,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1496,
+   "prompt_tokens": 35863,
+   "total_tokens": 37359,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8576,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

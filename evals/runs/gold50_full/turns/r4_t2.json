@@ -1,0 +1,173 @@
+{
+ "round_id": 4,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "A股指数与跨日行情",
+ "question": "科创50指数同一天的收盘点位是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000688'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000688'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1;\n200\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '收盘价', '最高价', '最低价', '昨收', '涨跌', '涨跌幅(%)', '成交金额(亿)'], ['2026-08-31', '科创50', '000688', '1,623.20', '1,684.39', '1,684.39', '1,620.36', '1,662.15', '22.24', '1.34', '907.63']]}\n该查询获取了科创50指数在2026年8月31日交易日的收盘点位、开盘价、最高价、最低价、前一交易日收盘价、涨跌额、涨跌幅、成交金额等信息。查询数据来源于指数基本信息表和指数每日行情数据表，二者通过指数唯一标识进行关联。筛选条件要求指数为当前在用且有效的科创50指数，并限定交易日期为2026年8月31日，且只选取有效的行情数据。成交金额由元单位除以1亿，转换为亿元并保留2位小数，所有价格类数据及涨跌、涨跌幅同样保留2位小数。涨跌额为当日收盘价减前一日收盘价，涨跌幅为涨跌额除以前一日收盘价再乘以100%。该查询直接使用了行情指标和基本信息数据，满足用户了解科创50指数指定日期收盘点位及相关行情的需求。查询结果符合要求。\n{table:[['交易日期', '指数名称', '指数代码', '开盘价', '收盘价', '最高价', '最低价', '昨收', '涨跌', '涨跌幅(%)', '成交金额(亿)'], ['2026-08-31', '科创50', '000688', '1,623.20', '1,684.39', '1,684.39', '1,620.36', '1,662.15', '22.24', '1.34', '907.63']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000688'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000688'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1",
+ "final_sql": "SELECT \n    b.TRADEDATE AS `交易日期`,\n    b.INDX_SNAME AS `指数名称`,\n    b.SECCODE AS `指数代码`,\n    ROUND(b.TOPEN, 2) AS `开盘价`,\n    ROUND(b.TCLOSE, 2) AS `收盘价`,\n    ROUND(b.THIGH, 2) AS `最高价`,\n    ROUND(b.TLOW, 2) AS `最低价`,\n    ROUND(b.LCLOSE, 2) AS `昨收`,\n    ROUND(b.CHNG, 2) AS `涨跌`,\n    ROUND(b.CHNG_PCT, 2) AS `涨跌幅(%)`,\n    ROUND(b.TVALUE/100000000, 2) AS `成交金额(亿)`\nFROM \n    GET_INDX_GEN_INFO a\nJOIN \n    INDX_MKT b\n    ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.INDX_CODE = '000688'\n    AND a.USE_STATUS = '使用'\n    AND a.ISVALID = 1\n    AND b.SECCODE = '000688'\n    AND b.TRADEDATE = '2026-08-31'\n    AND b.ISVALID = 1\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "1684.3873"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 科创50 000688 1623.20 1684.39 1684.39 1620.36 1662.15 22.24 1.34 907.63",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 29.7,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_4_661b8fe8.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 28.83,
+  "llm_seconds_max": 23.52,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2550,
+   "prompt_tokens": 12540,
+   "total_tokens": 15090,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1930,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12540,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 232,
+   "prompt_tokens": 4829,
+   "total_tokens": 5061,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 17369,
+  "completion": 2782,
+  "total": 20151
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2550,
+   "prompt_tokens": 12540,
+   "total_tokens": 15090,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1930,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12540,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 232,
+   "prompt_tokens": 4829,
+   "total_tokens": 5061,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

@@ -1,0 +1,149 @@
+{
+ "round_id": 16,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "8月里单日涨幅最大的是哪一天？那天涨了多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 单日涨幅（即日度涨幅，通常以股票、指数、基金等为主体）\n\n[2] 可能的计算公式：  \n- 单日涨幅 = （当日收盘价 - 前一日收盘价）÷ 前一日收盘价 × 100%\n['单日涨幅', '日度涨幅', '涨幅', '股票', '指数', '基金', '收盘价', '当日收盘价', '前一日收盘价']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['ANA_INDX_FIN_IDX', 'INDX_TCLOSE_WEIGHT', 'ANA_STK_EXPR_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    DATE_FORMAT(sub.ENDDATE, '%Y-%m-%d') AS `日期`,\n    sub.STOCKSNAME AS `股票名称`,\n    sub.STOCKCODE AS `股票代码`,\n    ROUND(sub.MAX_CHNG_PCT, 2) AS `涨幅（%）`\nFROM (\n    SELECT \n        ENDDATE,\n        STOCKSNAME,\n        STOCKCODE,\n        MAX(CHNG_PCT_DAY) AS MAX_CHNG_PCT\n    FROM ANA_STK_EXPR_IDX\n    WHERE \n        ENDDATE >= '2026-08-01' \n        AND ENDDATE <= '2026-08-31'\n        AND ISVALID = 1\n        AND CHNG_PCT_DAY IS NOT NULL\n    GROUP BY ENDDATE\n) AS sub\nORDER BY sub.MAX_CHNG_PCT DESC\nLIMIT 1\n200\nMySQL Database error: (1055, \"Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'juling.ANA_STK_EXPR_IDX.STOCKSNAME' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by\")\n该查询目的在于找出2026年8月期间单日涨幅最大的日期，并展示当天对应股票名称、股票代码和涨幅数据。涨幅以百分比格式呈现，并保留两位小数。\n\n涨幅百分比是通过（收盘价减去前一交易日收盘价，再除以前一交易日收盘价）这一公式得出的，并转化为百分比。在此查询中，直接采用了已经计算好的涨幅数据。查询结果符合要求。\n\n查询基于个股市场表现指标表，先筛选出2026年8月1日至8月31日、有效且涨跌幅不为空的所有交易日数据。然后以日期为分组，找到每一天涨幅最大的股票及其相关信息。最后，对所有交易日中的最大涨幅按降序排列，选取全月涨幅第一的那天做结果输出。\n\n返回内容包括涨幅最大日期的日期、当天最大涨幅股票的名称及代码、并显示其最大涨幅数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    DATE_FORMAT(sub.ENDDATE, '%Y-%m-%d') AS `日期`,\n    sub.STOCKSNAME AS `股票名称`,\n    sub.STOCKCODE AS `股票代码`,\n    ROUND(sub.MAX_CHNG_PCT, 2) AS `涨幅（%）`\nFROM (\n    SELECT \n        ENDDATE,\n        STOCKSNAME,\n        STOCKCODE,\n        MAX(CHNG_PCT_DAY) AS MAX_CHNG_PCT\n    FROM ANA_STK_EXPR_IDX\n    WHERE \n        ENDDATE >= '2026-08-01' \n        AND ENDDATE <= '2026-08-31'\n        AND ISVALID = 1\n        AND CHNG_PCT_DAY IS NOT NULL\n    GROUP BY ENDDATE\n) AS sub\nORDER BY sub.MAX_CHNG_PCT DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    DATE_FORMAT(sub.ENDDATE, '%Y-%m-%d') AS `日期`,\n    sub.STOCKSNAME AS `股票名称`,\n    sub.STOCKCODE AS `股票代码`,\n    ROUND(sub.MAX_CHNG_PCT, 2) AS `涨幅（%）`\nFROM (\n    SELECT \n        ENDDATE,\n        STOCKSNAME,\n        STOCKCODE,\n        MAX(CHNG_PCT_DAY) AS MAX_CHNG_PCT\n    FROM ANA_STK_EXPR_IDX\n    WHERE \n        ENDDATE >= '2026-08-01' \n        AND ENDDATE <= '2026-08-31'\n        AND ISVALID = 1\n        AND CHNG_PCT_DAY IS NOT NULL\n    GROUP BY ENDDATE\n) AS sub\nORDER BY sub.MAX_CHNG_PCT DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-19 00:00:00 3.1453"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1055, \"Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'juling.ANA_STK_EXPR_IDX.STOCKSNAME' which is not functionally dependent on colum",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体",
+  "(软校验:{'数值': False, '日期': False})"
+ ],
+ "elapsed_seconds": 49.0,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_16_21de337b.3",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 46.28,
+  "llm_seconds_max": 6.76,
+  "selected_tables": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   28242
+  ],
+  "prompt_columns_raw_len": 5906
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1043,
+   "prompt_tokens": 31009,
+   "total_tokens": 32052,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31009,
+  "completion": 1043,
+  "total": 32052
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1043,
+   "prompt_tokens": 31009,
+   "total_tokens": 32052,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "ANA_STK_EXPR_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

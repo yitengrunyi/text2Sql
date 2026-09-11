@@ -1,0 +1,176 @@
+{
+ "round_id": 10,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股估值与多轮实体切换",
+ "question": "苹果、微软和英伟达中，谁的当前样本总市值最高？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "多表join",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "snapshot"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT b.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, c.F013N AS `市值（百万元）`, ROUND(c.F013N / 100, 1) AS `市值（亿，保留1位小数）`, c.F014D AS `市值更新时间` FROM AMERICAN_STOCK_MAIN a INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID WHERE (a.COMB_SYMBOL IN ('AAPL.US', 'MSFT.US', 'NVDA.US') OR b.CSNAME LIKE '%苹果%' OR b.CSNAME LIKE '%微软%' OR b.CSNAME LIKE '%英伟达%' OR b.CSNAME LIKE '%Apple%' OR b.CSNAME LIKE '%Microsoft%' OR b.CSNAME LIKE '%NVIDIA%') AND c.F013N IS NOT NULL ORDER BY c.F013N DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '市值（百万元）', '市值（亿，保留1位小数）', '市值更新时间'], ['英伟达', 'NVDA.US', '30,870,000.00', '308,700.00', '-']]}\n该查询用于获取苹果、微软和英伟达三家公司中当前样本总市值最高的公司信息。数据来源于股票基本信息和主要财务指标数据，通过名称和展示代码筛选出指定三家公司，并只保留总市值数据存在的记录。查询按照总市值从高到低排序，并返回市值最大的那家公司。总市值直接采用已公布的财务指标，单位原为百万元，通过将原数值除以100换算为亿元，并保留1位小数。市值的更新时间也一并展示。查询结果可以明确识别出三家公司中市值最高者，完全满足用户关于总市值对比的需求。\n{table:[['股票名称', '股票代码', '市值（百万元）', '市值（亿，保留1位小数）', '市值更新时间'], ['英伟达', 'NVDA.US', '30,870,000.00', '308,700.00', '-']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT b.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, c.F013N AS `市值（百万元）`, ROUND(c.F013N / 100, 1) AS `市值（亿，保留1位小数）`, c.F014D AS `市值更新时间` FROM AMERICAN_STOCK_MAIN a INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID WHERE (a.COMB_SYMBOL IN ('AAPL.US', 'MSFT.US', 'NVDA.US') OR b.CSNAME LIKE '%苹果%' OR b.CSNAME LIKE '%微软%' OR b.CSNAME LIKE '%英伟达%' OR b.CSNAME LIKE '%Apple%' OR b.CSNAME LIKE '%Microsoft%' OR b.CSNAME LIKE '%NVIDIA%') AND c.F013N IS NOT NULL ORDER BY c.F013N DESC LIMIT 1",
+ "final_sql": "SELECT b.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, c.F013N AS `市值（百万元）`, ROUND(c.F013N / 100, 1) AS `市值（亿，保留1位小数）`, c.F014D AS `市值更新时间` FROM AMERICAN_STOCK_MAIN a INNER JOIN COM3101 c ON a.FIU_ID = c.FIU_ID INNER JOIN AMERICAN_STOCK_MAIN b ON c.FIU_ID = b.FIU_ID WHERE (a.COMB_SYMBOL IN ('AAPL.US', 'MSFT.US', 'NVDA.US') OR b.CSNAME LIKE '%苹果%' OR b.CSNAME LIKE '%微软%' OR b.CSNAME LIKE '%英伟达%' OR b.CSNAME LIKE '%Apple%' OR b.CSNAME LIKE '%Microsoft%' OR b.CSNAME LIKE '%NVIDIA%') AND c.F013N IS NOT NULL ORDER BY c.F013N DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "NVDA 英伟达 30870000.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "英伟达 NVDA.US 30870000.0 308700.0 ",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '实体数值同行': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True, '实体数值同行': True})"
+ ],
+ "elapsed_seconds": 52.2,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_10_54579ef3.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 51.04,
+  "llm_seconds_max": 46.18,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4845,
+   "prompt_tokens": 10388,
+   "total_tokens": 15233,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4295,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10388,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 152,
+   "prompt_tokens": 4650,
+   "total_tokens": 4802,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 15038,
+  "completion": 4997,
+  "total": 20035
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4845,
+   "prompt_tokens": 10388,
+   "total_tokens": 15233,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4295,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10388,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 152,
+   "prompt_tokens": 4650,
+   "total_tokens": 4802,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3101",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

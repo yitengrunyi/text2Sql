@@ -1,0 +1,172 @@
+{
+ "round_id": 2,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "中国平安2025年的归母净利润是多少？",
+ "labels": {
+  "followup_type": "普通追问",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, b.ENDDATE AS `报表截止日`, ROUND(b.F110101 / 10000, 1) AS `归母净利润(万元)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX b ON a.COMCODE = b.COMCODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE = '2025-12-31 00:00:00' AND b.ISVALID = 1 AND a.ISVALID = 1 AND b.F110101 IS NOT NULL ORDER BY b.ENDDATE DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万元)'], ['中国平安', '601318', '2025-12-31', '13,477,800.00']]}\n该查询获取了中国平安在2025年年报时点的归属于母公司股东的净利润信息。查询涉及公司基本信息和主要财务指标这两类数据，通过公司内部编号将两者关联。筛选条件包括公司简称为“中国平安”、统计截至日期为2025年12月31日，并限定仅包含有效且数据完整的记录，确保数据准确权威。结果按照报告截止日期从新到旧排列，并选取最新一条。归属于母公司净利润以原始“元”为基础，转换为“万元”，并保留1位小数，便于用户查阅和比较。本次查询直接调用了财务指标中的归母净利润，无需额外计算。查询结果能够准确满足用户对中国平安2025年归母净利润的需求。\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万元)'], ['中国平安', '601318', '2025-12-31', '13,477,800.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, b.ENDDATE AS `报表截止日`, ROUND(b.F110101 / 10000, 1) AS `归母净利润(万元)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX b ON a.COMCODE = b.COMCODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE = '2025-12-31 00:00:00' AND b.ISVALID = 1 AND a.ISVALID = 1 AND b.F110101 IS NOT NULL ORDER BY b.ENDDATE DESC LIMIT 1",
+ "final_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, b.ENDDATE AS `报表截止日`, ROUND(b.F110101 / 10000, 1) AS `归母净利润(万元)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX b ON a.COMCODE = b.COMCODE WHERE a.SEC_SNAME LIKE '%中国平安%' AND b.ENDDATE = '2025-12-31 00:00:00' AND b.ISVALID = 1 AND a.ISVALID = 1 AND b.F110101 IS NOT NULL ORDER BY b.ENDDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "134778000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "中国平安 601318 2025-12-31 00:00:00 13477800.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 41.2,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_2_ff9b86a2.1",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 39.99,
+  "llm_seconds_max": 33.38,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3267,
+   "prompt_tokens": 23336,
+   "total_tokens": 26603,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2714,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23336,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 181,
+   "prompt_tokens": 16219,
+   "total_tokens": 16400,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39555,
+  "completion": 3448,
+  "total": 43003
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3267,
+   "prompt_tokens": 23336,
+   "total_tokens": 26603,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2714,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23336,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 181,
+   "prompt_tokens": 16219,
+   "total_tokens": 16400,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

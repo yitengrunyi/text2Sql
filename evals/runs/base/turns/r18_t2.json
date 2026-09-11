@@ -1,0 +1,146 @@
+{
+ "round_id": 18,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数·境内指数行情与多指数对比：深证成指行情点位、年内涨幅、上证50同日对比与中证1000估值切换",
+ "question": "上证50在同一个交易日收在多少点？",
+ "labels": {
+  "difficulty": "子查询",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 上证50指数收盘点位（Closing Price of SSE 50 Index）\n\n[2] 可能的计算公式：  \n上证50指数收盘点数 = 当天成分股基于自由流通市值加权平均后的指数点位  \n公式表示：  \n上证50指数 = Σ（成分股收盘价 × 成分股自由流通股本）/ 基期调整因子\n\n简洁表达：  \n上证50收盘点 = 成分股收盘总市值 / 基期调整因子\n['上证50指数', '上证50', '上证50指数收盘点位', '收盘点数', '收盘点', '成分股收盘价', '成分股自由流通股本', '自由流通市值', '市值加权平均', '指数点位', '成分股收盘总市值', '基期调整因子']\n此问题不涉及到个股、行业或者题材\n指数相关\n['境内指数']\n['INDX_MKT', 'ANA_INDX_VAL_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    TRADEDATE AS `交易日期`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    ROUND(TCLOSE, 2) AS `收盘点位`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(LCLOSE, 2) AS `昨收`,\n    ROUND(CHNG, 2) AS `涨跌点数`,\n    ROUND(CHNG_PCT * 100, 2) AS `涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    TVOLUME AS `成交量(股)`\nFROM \n    INDX_MKT\nWHERE \n    SECCODE = '000016'\n    AND TRADEDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL\n\n200\n{table:[['交易日期', '指数名称', '指数代码', '收盘点位', '开盘价', '最高价', '最低价', '昨收', '涨跌点数', '涨跌幅(%)', '成交额(亿)', '成交量(股)'], ['2026-09-02', '上证50', '000016', '2,914.44', '2,927.81', '2,930.99', '2,905.77', '2,941.82', '-27.38', '-93.06', '1,244.94', '45,281,228.00']]}\n收盘点位是通过收盘价直接获取，并进行了保留两位小数的处理。成交额通过公式“成交额(亿) = 成交金额(元) / 100000000”进行单位转换。涨跌幅使用“涨跌幅(%) = 涨跌幅 × 100”计算后保留两位小数。其余数据，如开盘价、最高价、最低价、昨收、涨跌点数和成交量，均为直接取值或简单四舍五入处理。在此查询中，我们对相关结果进行了单位转换和计算。\n\n查询结果匹配了上证50指数在指定交易日的收盘点位等行情信息，符合要求。\n\n查询提供了指数行情信息，根据筛选条件，仅返回指数代码为“000016”、交易日期为“2026-09-02”、并且数据有效且收盘价不为空的记录。包含了该指数的交易日期、名称、代码、收盘点位、开盘价、最高价、最低价、昨收、涨跌点数、涨跌幅、成交额和成交量等核心数据。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    TRADEDATE AS `交易日期`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    ROUND(TCLOSE, 2) AS `收盘点位`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(LCLOSE, 2) AS `昨收`,\n    ROUND(CHNG, 2) AS `涨跌点数`,\n    ROUND(CHNG_PCT * 100, 2) AS `涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    TVOLUME AS `成交量(股)`\nFROM \n    INDX_MKT\nWHERE \n    SECCODE = '000016'\n    AND TRADEDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL",
+ "final_sql": "SELECT \n    TRADEDATE AS `交易日期`,\n    INDX_SNAME AS `指数名称`,\n    SECCODE AS `指数代码`,\n    ROUND(TCLOSE, 2) AS `收盘点位`,\n    ROUND(TOPEN, 2) AS `开盘价`,\n    ROUND(THIGH, 2) AS `最高价`,\n    ROUND(TLOW, 2) AS `最低价`,\n    ROUND(LCLOSE, 2) AS `昨收`,\n    ROUND(CHNG, 2) AS `涨跌点数`,\n    ROUND(CHNG_PCT * 100, 2) AS `涨跌幅(%)`,\n    ROUND(TVALUE/100000000, 2) AS `成交额(亿)`,\n    TVOLUME AS `成交量(股)`\nFROM \n    INDX_MKT\nWHERE \n    SECCODE = '000016'\n    AND TRADEDATE = '2026-09-02'\n    AND ISVALID = 1\n    AND TCLOSE IS NOT NULL",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2914.4449"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-09-02 00:00:00 上证50 000016 2914.44 2927.81 2930.99 2905.77 2941.82 -27.38 -93.06 1244.94 45281228",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 69.9,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_18_1103d433.2",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 55.2,
+  "llm_seconds_max": 9.1,
+  "selected_tables": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   17807
+  ],
+  "prompt_columns_raw_len": 5031
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1159,
+   "prompt_tokens": 24122,
+   "total_tokens": 25281,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5760,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24122,
+  "completion": 1159,
+  "total": 25281
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1159,
+   "prompt_tokens": 24122,
+   "total_tokens": 25281,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5760,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "INDX_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "INDX_MKT",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,165 @@
+{
+ "round_id": 16,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·行情多时间窗口与聚合：格力电器月度涨跌幅/日均成交额/单日最强涨幅，海康威视年内涨幅与月成交量",
+ "question": "格力电器2026年8月单月跌了多少？给我8月的月度涨跌幅。",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 月度涨跌幅（Month-on-Month Return/Change）\n- 收盘价（Closing Price）\n\n[2] 可能的计算公式：\n\n月度涨跌幅 = (8月月末收盘价 − 8月月初收盘价) ÷ 8月月初收盘价 × 100%\n['格力电器', '月度涨跌幅', 'Month-on-Month Return', 'Month-on-Month Change', '收盘价', 'Closing Price', '8月月末收盘价', '8月月初收盘价']\n该问题可能涉及A股-'格力电器'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-家用电器。\n个股相关\n['主板行情', '主板基本信息']\n['ANA_STK_EXPR_IDX', 'STK_MKT', 'DERI_STK_AH_PRC', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_TMONTH, 2) AS `2026年8月月度涨跌幅(%)`\nFROM\n    ANA_STK_EXPR_IDX a\nJOIN\n    GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.STOCKSNAME LIKE '%格力电器%'\n    AND a.ENDDATE >= '2026-08-01'\n    AND a.ENDDATE <= '2026-08-31'\n    AND a.CHNG_PCT_TMONTH IS NOT NULL\n    AND a.TCLOSE IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY\n    a.ENDDATE DESC\nLIMIT 1\n200\n{table:[['截止日期', '股票名称', '股票代码', '收盘价(元)', '2026年8月月度涨跌幅(%)'], ['2026-08-31', '格力电器', '000651', '38.95', '-3.27']]}\n单月涨跌幅的计算是通过以下公式得到的：2026年8月月度涨跌幅等于本月最后一个交易日收盘价减去月初首个交易日前收盘价，再除以月初首个交易日前收盘价，最终结果再乘以百分比。该查询在结果中对收盘价和涨跌幅进行了保留两位小数的处理。\n\n在这个查询里，我们选取了格力电器在2026年8月的最后一个交易日的数据，直接使用了月度涨跌幅的现有财务指标数据（即本月涨跌幅已在数据库中预先计算好）。查询结果符合要求。\n\n数据来源于个股市场表现指标表，其中包含交易日、股票简称、股票代码、收盘价和已计算的本月涨跌幅。通过内部代码与A股证券基础信息表进行关联，并筛选出公司简称包含“格力电器”的记录。只选取有效信息，限定截止日期在2026年8月，并确保收盘价和月度涨跌幅数据不为空。结果按截止日期降序排列，取最近的交易日数据。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT\n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_TMONTH, 2) AS `2026年8月月度涨跌幅(%)`\nFROM\n    ANA_STK_EXPR_IDX a\nJOIN\n    GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.STOCKSNAME LIKE '%格力电器%'\n    AND a.ENDDATE >= '2026-08-01'\n    AND a.ENDDATE <= '2026-08-31'\n    AND a.CHNG_PCT_TMONTH IS NOT NULL\n    AND a.TCLOSE IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY\n    a.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    a.ENDDATE AS `截止日期`,\n    a.STOCKSNAME AS `股票名称`,\n    a.STOCKCODE AS `股票代码`,\n    ROUND(a.TCLOSE, 2) AS `收盘价(元)`,\n    ROUND(a.CHNG_PCT_TMONTH, 2) AS `2026年8月月度涨跌幅(%)`\nFROM\n    ANA_STK_EXPR_IDX a\nJOIN\n    GET_A_SEC_CODE b ON a.INNER_CODE = b.INNER_CODE\nWHERE\n    a.STOCKSNAME LIKE '%格力电器%'\n    AND a.ENDDATE >= '2026-08-01'\n    AND a.ENDDATE <= '2026-08-31'\n    AND a.CHNG_PCT_TMONTH IS NOT NULL\n    AND a.TCLOSE IS NOT NULL\n    AND b.ISVALID = 1\nORDER BY\n    a.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "-7.9196"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "first_result_preview": "harness exec timeout",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "timeout",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值"
+ ],
+ "elapsed_seconds": 217.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_16_1fe43b35.0",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 63.13,
+  "llm_seconds_max": 8.41,
+  "selected_tables": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "MARGIN_TRD_DTL",
+   "STK_COM_PROFILE",
+   "STK_MKT",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_EXPR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "GET_A_INDICS_LATEST",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "ANA_STK_DIV_RATE_IDX",
+   "DERI_STK_AH_PRC",
+   "VIEW_STK_STI_LIST_PLAN",
+   "STK_BOL_IND",
+   "STK_KDJ_IND",
+   "STK_MAC_IND",
+   "STK_RSI_IND"
+  ],
+  "sql_prompt_chars": [
+   25896
+  ],
+  "prompt_columns_raw_len": 4068
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1827,
+   "prompt_tokens": 39680,
+   "total_tokens": 41507,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39680,
+  "completion": 1827,
+  "total": 41507
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1827,
+   "prompt_tokens": 39680,
+   "total_tokens": 41507,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9216,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_EXPR_IDX",
+   "STK_MKT",
+   "DERI_STK_AH_PRC",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

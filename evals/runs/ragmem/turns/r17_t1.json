@@ -1,0 +1,239 @@
+{
+ "round_id": 17,
+ "index": 1,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·财务三表交叉：万华化学2025年报利润表/资产负债表/现金流量表交叉验证，净现比纵向与横向对比",
+ "question": "那它2025年末的资产负债率大概有多高？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n资产负债率（Asset-Liability Ratio）\n\n[2] 可能的计算公式：  \n资产负债率 = 负债总额 ÷ 资产总额 × 100%  \n（或：Asset-Liability Ratio = Total Liabilities ÷ Total Assets × 100%）\n['万华化学', '资产负债率', 'Asset-Liability Ratio', '负债总额', 'Total Liabilities', '资产总额', 'Total Assets']\n该问题可能涉及A股-'万华化学'，并且该股票为A股主板公司，该股票为A股主板公司！！！对应的一级行业名称为-基础化工。\n个股相关\n['主板财务', '主板基本信息']\n['ANA_STK_QTR_IDX', 'STK_EQT_CHNG', 'VIEW_STK_BALA_GEN', 'VIEW_STK_FIN_IDX', 'VIEW_STK_FIN_IDX_PLUS', 'STK_COMSUB_PROFILE', 'STK_LNG_LOAN', 'STK_COM_RELA_NBALA', 'STK_IMM_ASS', 'VIEW_STK_FIX_ASS', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `截止日期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(a.TA_TLIA, 2) AS `资产负债率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS a\n    INNER JOIN GET_A_SEC_CODE c ON a.COMCODE = c.COMCODE\nWHERE\n    c.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '2'\n    AND a.RPT_TAG = 7\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.TA_TLIA IS NOT NULL\nLIMIT 1\n200\n{table:[['截止日期', '股票简称', '资产负债率(%)'], ['2025-12-31', '万华化学', '62.81']]}\n资产负债率通过公式“资产负债率 = 负债总额 / 资产总额 × 100%”进行计算。此次查询中，对资产负债率的结果值进行了保留两位小数处理。在此查询中，我们直接使用了已有的财务指标数据。查询结果符合要求。\n\n该查询提取了公司财务衍生指标累计值表以及A股基础信息表的数据，通过公司代码进行关联。查询筛选了证券简称中包含“万华化学”的记录，仅选取报表类型为合并、报告期间为全年累计值、截止日期为2025年末、且资产负债率数据不为空的记录。最终返回了万华化学在2025年末的资产负债率、截止日期、股票简称和股票代码等信息。\n万华化学2025年末的资产负债率是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.ENDDATE AS `截止日期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(a.TA_TLIA, 2) AS `资产负债率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS a\n    INNER JOIN GET_A_SEC_CODE c ON a.COMCODE = c.COMCODE\nWHERE\n    c.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '2'\n    AND a.RPT_TAG = 7\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.TA_TLIA IS NOT NULL\nLIMIT 1",
+ "final_sql": "SELECT \n    a.ENDDATE AS `截止日期`,\n    c.SEC_SNAME AS `股票简称`,\n    c.SEC_CODE AS `股票代码`,\n    ROUND(a.TA_TLIA, 2) AS `资产负债率(%)`\nFROM\n    VIEW_STK_FIN_IDX_PLUS a\n    INNER JOIN GET_A_SEC_CODE c ON a.COMCODE = c.COMCODE\nWHERE\n    c.SEC_SNAME LIKE '%万华化学%'\n    AND a.RPT_TYPE = '2'\n    AND a.RPT_TAG = 7\n    AND a.ENDDATE = '2025-12-31 00:00:00'\n    AND a.TA_TLIA IS NOT NULL\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "62.81"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 万华化学 600309 62.81",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 74.2,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_17_782aa971.1",
+  "llm_call_count": 16,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 81.27,
+  "llm_seconds_max": 19.04,
+  "selected_tables": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_LNG_LOAN",
+   "STK_COM_RELA_NBALA",
+   "STK_IMM_ASS",
+   "VIEW_STK_FIX_ASS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_COM_PROFILE",
+   "STK_EQT_CHNG",
+   "STK_PRE_DISCLOSURE",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_COMSUB_PROFILE",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   45915
+  ],
+  "prompt_columns_raw_len": 12380
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1675,
+   "prompt_tokens": 27177,
+   "total_tokens": 28852,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1405,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 27177,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2072,
+   "prompt_tokens": 63128,
+   "total_tokens": 65200,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 90305,
+  "completion": 3747,
+  "total": 94052
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1675,
+   "prompt_tokens": 27177,
+   "total_tokens": 28852,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1405,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 27177,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2072,
+   "prompt_tokens": 63128,
+   "total_tokens": 65200,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_BALA_GEN"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_STK_QTR_IDX",
+   "STK_EQT_CHNG",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_COMSUB_PROFILE",
+   "STK_LNG_LOAN",
+   "STK_COM_RELA_NBALA",
+   "STK_IMM_ASS",
+   "VIEW_STK_FIX_ASS",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

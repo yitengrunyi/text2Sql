@@ -1,0 +1,174 @@
+{
+ "round_id": 6,
+ "index": 5,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "全市场规模最大的基金是哪只？资产净值是多少？",
+ "labels": {
+  "followup_type": "条件追加",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "entity",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT faa.REPORT_DATE AS `报告期`, faa.FUND_NAME AS `基金名称`, faa.FUND_SYMBOL AS `基金代码`, ROUND(faa.NET_VALUE / 100000000, 2) AS `资产净值(亿)` FROM FUND_ASSET_ALLOCATION faa WHERE faa.HISVALID = 1 AND faa.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID = 1) AND faa.NET_VALUE IS NOT NULL ORDER BY faa.NET_VALUE DESC LIMIT 1;\n200\n{table:[['报告期', '基金名称', '基金代码', '资产净值(亿)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}\n该查询获取了全市场中资产净值规模最大的基金及其最新一期的资产净值信息。数据来源于基金资产管理情况的功能表，通过筛选最新报告期且状态有效的基金产品，并确保资产净值数据存在，将所有结果按资产净值从高到低排序，最终只选出资产规模最大的基金。资产净值将原始金额（元）除以一亿，转换为亿元单位后保留两位小数，直接采用了基金披露的净资产数据。查询结果可以准确反映全市场当前资产净值规模最大的基金，完全符合用户需求。\n{table:[['报告期', '基金名称', '基金代码', '资产净值(亿)'], ['2026-06-30', '天弘余额宝货币', '000198.OF', '6,799.46']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT faa.REPORT_DATE AS `报告期`, faa.FUND_NAME AS `基金名称`, faa.FUND_SYMBOL AS `基金代码`, ROUND(faa.NET_VALUE / 100000000, 2) AS `资产净值(亿)` FROM FUND_ASSET_ALLOCATION faa WHERE faa.HISVALID = 1 AND faa.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID = 1) AND faa.NET_VALUE IS NOT NULL ORDER BY faa.NET_VALUE DESC LIMIT 1",
+ "final_sql": "SELECT faa.REPORT_DATE AS `报告期`, faa.FUND_NAME AS `基金名称`, faa.FUND_SYMBOL AS `基金代码`, ROUND(faa.NET_VALUE / 100000000, 2) AS `资产净值(亿)` FROM FUND_ASSET_ALLOCATION faa WHERE faa.HISVALID = 1 AND faa.REPORT_DATE = (SELECT MAX(REPORT_DATE) FROM FUND_ASSET_ALLOCATION WHERE HISVALID = 1) AND faa.NET_VALUE IS NOT NULL ORDER BY faa.NET_VALUE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "000198.OF 天弘余额宝货币 679946059599.3200"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-06-30 天弘余额宝货币 000198.OF 6799.46",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 25.6,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_6_0734904b.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 23.96,
+  "llm_seconds_max": 15.74,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1481,
+   "prompt_tokens": 11201,
+   "total_tokens": 12682,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1100,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11201,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 134,
+   "prompt_tokens": 4790,
+   "total_tokens": 4924,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 15991,
+  "completion": 1615,
+  "total": 17606
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1481,
+   "prompt_tokens": 11201,
+   "total_tokens": 12682,
+   "completion_tokens_details": {
+    "reasoning_tokens": 1100,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 11201,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 134,
+   "prompt_tokens": 4790,
+   "total_tokens": 4924,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_ASSET_ALLOCATION"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

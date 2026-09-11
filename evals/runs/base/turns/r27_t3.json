@@ -1,0 +1,173 @@
+{
+ "round_id": 27,
+ "index": 3,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股三大报表交叉：沃尔玛最新财年利润表切入，联动资产负债表算ROA、现金流量表算自由现金流（财年FY口径），话题切换至可口可乐资产负债表",
+ "question": "再看看现金流这块——那2024财年呢？按经营净现金流减资本性支出的口径，自由现金流是多少？相比2025财年是改善还是恶化了？",
+ "labels": {
+  "difficulty": "时间窗口",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 经营活动产生的现金流量净额（Operating Cash Flow, OCF）  \n- 资本性支出（Capital Expenditure, CapEx）  \n- 自由现金流（Free Cash Flow, FCF）\n\n[2] 可能的计算公式：  \n自由现金流（FCF） = 经营活动产生的现金流量净额（OCF） - 资本性支出（CapEx）\n\n比如：\nFCF_2024 = OCF_2024 - CapEx_2024  \nFCF_2025 = OCF_2025 - CapEx_2025  \n变化量 = FCF_2025 - FCF_2024（若为正，则“改善”，为负则“恶化”）\n['经营活动产生的现金流量净额', 'Operating Cash Flow', 'OCF', '资本性支出', 'Capital Expenditure', 'CapEx', '自由现金流', 'Free Cash Flow', 'FCF', '变化量']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板财务']\n['STK_RD_DTL', 'STK_ACCT_RCV', 'STK_NONOPT_EXPENSE', 'STK_COM_RELA_NBALA', 'VIEW_STK_FIN_IDX_PLUS']\n是否命中召回表：False\n生成查询代码\nSELECT \n    t2024.ENDDATE AS `报表截止日`,\n    t2024.STOCKCODE AS `股票代码`,\n    t2024.INNER_CODE AS `内部参考代码`,\n    t2024.COMCODE AS `内部公司代码`,\n    t2024.PS_NOCF AS `每股经营现金流净额（元/股）`,\n    t2024.PS_NINVCF AS `每股投资现金流净额（元/股）`,\n    t2024.PS_FCFF AS `每股企业自由现金流（元/股）`,\n    t2024.PS_FCFE AS `每股股东自由现金流（元/股）`,\n    (t2024.PS_NOCF - t2024.PS_NINVCF) AS `每股自由现金流（净经营-资本性支出,元/股）`,\n    t2025.ENDDATE AS `比较期报表截止日`,\n    t2025.PS_NOCF AS `比较期每股经营现金流净额（元/股）`,\n    t2025.PS_NINVCF AS `比较期每股投资现金流净额（元/股）`,\n    t2025.PS_FCFF AS `比较期每股企业自由现金流（元/股）`,\n    t2025.PS_FCFE AS `比较期每股股东自由现金流（元/股）`,\n    (t2025.PS_NOCF - t2025.PS_NINVCF) AS `比较期每股自由现金流（净经营-资本性支出,元/股）`,\n    CASE \n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) > (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '改善'\n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) < (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '恶化'\n        ELSE '无明显变化'\n    END AS `自由现金流改善情况`\nFROM \n    VIEW_STK_FIN_IDX_PLUS t2024\nLEFT JOIN \n    VIEW_STK_FIN_IDX_PLUS t2025\nON \n    t2024.COMCODE = t2025.COMCODE\n    AND t2024.INNER_CODE = t2025.INNER_CODE\n    AND t2024.RPT_TYPE = t2025.RPT_TYPE\n    AND t2024.DATA_TYPE = t2025.DATA_TYPE\n    AND t2025.RPT_TAG = 7\n    AND t2025.RPT_YEAR = 2025\nWHERE \n    t2024.RPT_TYPE = 2\n    AND t2024.DATA_TYPE = 1\n    AND t2024.RPT_TAG = 7\n    AND t2024.RPT_YEAR = 2024\n    AND t2024.PS_NOCF IS NOT NULL\n    AND t2024.PS_NINVCF IS NOT NULL\n    AND t2025.PS_NOCF IS NO",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    t2024.ENDDATE AS `报表截止日`,\n    t2024.STOCKCODE AS `股票代码`,\n    t2024.INNER_CODE AS `内部参考代码`,\n    t2024.COMCODE AS `内部公司代码`,\n    t2024.PS_NOCF AS `每股经营现金流净额（元/股）`,\n    t2024.PS_NINVCF AS `每股投资现金流净额（元/股）`,\n    t2024.PS_FCFF AS `每股企业自由现金流（元/股）`,\n    t2024.PS_FCFE AS `每股股东自由现金流（元/股）`,\n    (t2024.PS_NOCF - t2024.PS_NINVCF) AS `每股自由现金流（净经营-资本性支出,元/股）`,\n    t2025.ENDDATE AS `比较期报表截止日`,\n    t2025.PS_NOCF AS `比较期每股经营现金流净额（元/股）`,\n    t2025.PS_NINVCF AS `比较期每股投资现金流净额（元/股）`,\n    t2025.PS_FCFF AS `比较期每股企业自由现金流（元/股）`,\n    t2025.PS_FCFE AS `比较期每股股东自由现金流（元/股）`,\n    (t2025.PS_NOCF - t2025.PS_NINVCF) AS `比较期每股自由现金流（净经营-资本性支出,元/股）`,\n    CASE \n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) > (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '改善'\n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) < (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '恶化'\n        ELSE '无明显变化'\n    END AS `自由现金流改善情况`\nFROM \n    VIEW_STK_FIN_IDX_PLUS t2024\nLEFT JOIN \n    VIEW_STK_FIN_IDX_PLUS t2025\nON \n    t2024.COMCODE = t2025.COMCODE\n    AND t2024.INNER_CODE = t2025.INNER_CODE\n    AND t2024.RPT_TYPE = t2025.RPT_TYPE\n    AND t2024.DATA_TYPE = t2025.DATA_TYPE\n    AND t2025.RPT_TAG = 7\n    AND t2025.RPT_YEAR = 2025\nWHERE \n    t2024.RPT_TYPE = 2\n    AND t2024.DATA_TYPE = 1\n    AND t2024.RPT_TAG = 7\n    AND t2024.RPT_YEAR = 2024\n    AND t2024.PS_NOCF IS NOT NULL\n    AND t2024.PS_NINVCF IS NOT NULL\n    AND t2025.PS_NOCF IS NOT NULL\n    AND t2025.PS_NINVCF IS NOT NULL\nORDER BY \n    t2024.PS_NOCF - t2024.PS_NINVCF DESC",
+ "final_sql": "SELECT \n    t2024.ENDDATE AS `报表截止日`,\n    t2024.STOCKCODE AS `股票代码`,\n    t2024.INNER_CODE AS `内部参考代码`,\n    t2024.COMCODE AS `内部公司代码`,\n    t2024.PS_NOCF AS `每股经营现金流净额（元/股）`,\n    t2024.PS_NINVCF AS `每股投资现金流净额（元/股）`,\n    t2024.PS_FCFF AS `每股企业自由现金流（元/股）`,\n    t2024.PS_FCFE AS `每股股东自由现金流（元/股）`,\n    (t2024.PS_NOCF - t2024.PS_NINVCF) AS `每股自由现金流（净经营-资本性支出,元/股）`,\n    t2025.ENDDATE AS `比较期报表截止日`,\n    t2025.PS_NOCF AS `比较期每股经营现金流净额（元/股）`,\n    t2025.PS_NINVCF AS `比较期每股投资现金流净额（元/股）`,\n    t2025.PS_FCFF AS `比较期每股企业自由现金流（元/股）`,\n    t2025.PS_FCFE AS `比较期每股股东自由现金流（元/股）`,\n    (t2025.PS_NOCF - t2025.PS_NINVCF) AS `比较期每股自由现金流（净经营-资本性支出,元/股）`,\n    CASE \n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) > (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '改善'\n        WHEN (t2024.PS_NOCF - t2024.PS_NINVCF) < (t2025.PS_NOCF - t2025.PS_NINVCF) \n            THEN '恶化'\n        ELSE '无明显变化'\n    END AS `自由现金流改善情况`\nFROM \n    VIEW_STK_FIN_IDX_PLUS t2024\nLEFT JOIN \n    VIEW_STK_FIN_IDX_PLUS t2025\nON \n    t2024.COMCODE = t2025.COMCODE\n    AND t2024.INNER_CODE = t2025.INNER_CODE\n    AND t2024.RPT_TYPE = t2025.RPT_TYPE\n    AND t2024.DATA_TYPE = t2025.DATA_TYPE\n    AND t2025.RPT_TAG = 7\n    AND t2025.RPT_YEAR = 2025\nWHERE \n    t2024.RPT_TYPE = 2\n    AND t2024.DATA_TYPE = 1\n    AND t2024.RPT_TAG = 7\n    AND t2024.RPT_YEAR = 2024\n    AND t2024.PS_NOCF IS NOT NULL\n    AND t2024.PS_NINVCF IS NOT NULL\n    AND t2025.PS_NOCF IS NOT NULL\n    AND t2025.PS_NINVCF IS NOT NULL\nORDER BY \n    t2024.PS_NOCF - t2024.PS_NINVCF DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "8919.7"
+ },
+ "exec_first": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "first_result_preview": "MySQL Database error: (1146, \"Table 'fiu.VIEW_STK_FIN_IDX_PLUS' doesn't exist\")",
+ "ex_first": false,
+ "ex_reasons": [
+  "执行异常/无结果"
+ ],
+ "exec_final": {
+  "status": 500,
+  "kind": "error",
+  "rows": 0
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 254.1,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_27_7991d800.3",
+  "llm_call_count": 15,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 82.38,
+  "llm_seconds_max": 11.7,
+  "selected_tables": [
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_FIN_IDX",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_EQT_CHNG",
+   "ANA_STK_QTR_IDX",
+   "ANA_STK_VAL_IDX",
+   "VIEW_STK_BALA_GEN",
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_INCOME_GEN",
+   "VIEW_STK_FIN_IDX",
+   "VIEW_STK_INCOME_GEN_QTR",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "STK_ACCT_RCV",
+   "STK_ASSET_DEPR",
+   "STK_ASSETS",
+   "STK_ATCP_LBLT",
+   "STK_COM_RELA_NBALA",
+   "STK_FIN_CHARGE",
+   "STK_FIX_ASS_DEP",
+   "STK_IMM_ASS",
+   "STK_LNG_LOAN",
+   "STK_NON_EXTR_ITEM",
+   "STK_NONOPT_EXPENSE",
+   "STK_PREEXP",
+   "STK_STOCK",
+   "STK_TAX_RATIO",
+   "STK_TAXPAY",
+   "STK_RD_DTL",
+   "ANA_STK_DIV_RATE_IDX",
+   "VIEW_STK_FIX_ASS",
+   "VIEW_STK_CONSENSUS_FORECAST"
+  ],
+  "sql_prompt_chars": [
+   37285
+  ],
+  "prompt_columns_raw_len": 8960
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2518,
+   "prompt_tokens": 54508,
+   "total_tokens": 57026,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9728,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 54508,
+  "completion": 2518,
+  "total": 57026
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 2518,
+   "prompt_tokens": 54508,
+   "total_tokens": 57026,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 9728,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "COM3104"
+ ],
+ "table_recall": {
+  "selected": [
+   "VIEW_STK_CASH_GEN",
+   "VIEW_STK_FIN_IDX_PLUS",
+   "VIEW_STK_FIN_IDX",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

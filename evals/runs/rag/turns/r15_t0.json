@@ -1,0 +1,165 @@
+{
+ "round_id": 15,
+ "index": 0,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·港股行情与财务：腾讯控股年报/中报营业额与最新行情，香港交易所估值与市值",
+ "question": "我组合里配了腾讯控股，先看下它2025年年报的营业额有多大？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": null,
+  "route_gold": null,
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n- 营业额（也称收入、营业收入、Revenue）\n\n[2] 可能的计算公式：\n- 营业额 = 产品或服务销售总额（不含增值税等税金）\n\n具体公式可表示为：  \n**营业额 = ∑（各项主营业务收入） + 其他营业收入**\n['腾讯控股', '营业额', '收入', '营业收入', 'Revenue', '产品或服务销售总额', '主营业务收入', '其他营业收入', '增值税']\n该问题可能涉及港股-'腾讯控股',对应的港股行业名称为-传媒。该问题可能涉及美股-'腾讯控股 (OTC)', 它的美股股票代码为：TCEHY.US，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n个股相关\n['港股财务', '港股基本信息']\n['HK_NFINIS_NSTD', 'HK_LTTFINIDC_DIDC', 'HK_ANA_STK_IDX_NFIN', 'HK_PRI_INCOME', 'HK_IDC_STKVIDC', 'HK_COMBINFO', 'HK_STKCODE', 'VIEW_HK_INDUSTRY_TRACK']\n是否命中召回表：False\n生成查询代码\nSELECT \n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hn.EDATE AS `报表截止日期`,\n    ROUND(hn.TTO/100000000, 3) AS `总营业额（亿元）`,\n    ROUND(hn.SR_TA/100000000, 3) AS `营业收入合计（亿元）`\nFROM\n    HK_NFINIS_NSTD hn\n    INNER JOIN HK_COMBINFO hc ON hn.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND LEFT(hs.STKCODE, 1) != '8'\nWHERE\n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hn.EDATE BETWEEN '2025-01-01' AND '2025-12-31'\n    AND hn.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hn.TTO IS NOT NULL\nORDER BY\n    hn.EDATE DESC\nLIMIT 1\n200\n{table:[['公司中文名称', '公司中文简称', '股票代码', '报表截止日期', '总营业额（亿元）', '营业收入合计（亿元）'], ['腾讯控股有限公司', '腾讯控股', '00700.HK', '2025-12-31', '7,517.66', '7,706.46']]}\n该查询主要目的是获取腾讯控股在2025年年报期间的总营业额和营业收入合计。\n\n总营业额（亿元）通过公式 总营业额（亿元）= 总营业额（元）/ 100000000 计算得出。营业收入合计（亿元）通过公式 营业收入合计（亿元）= 营业收入合计（元）/ 100000000 计算得出。查询结果符合要求。\n\n查询从三个表提取信息：一个表提供香港上市公司的基本情况，包括公司名称、简称等；一个表给出公司详细的财务数据如营业额和营业收入合计；另一个表用于查询公司关联的最新股票代码及其状态信息。\n\n筛选条件包括：公司简称需包含“腾讯控股”，公司、财报、股票记录均需有效，股票类型为普通股或指定类型，股票必须处于正常上市状态，且上市地点为香港联合交易所。同时，查询限制于2025年内的年报，且只取有总营业额数据的记录，并最终按照报表截止日期由近到远排序，取最新一条作为结果。",
+ "route_gold": null,
+ "route_pred": null,
+ "route_ok": null,
+ "first_sql": "SELECT \n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hn.EDATE AS `报表截止日期`,\n    ROUND(hn.TTO/100000000, 3) AS `总营业额（亿元）`,\n    ROUND(hn.SR_TA/100000000, 3) AS `营业收入合计（亿元）`\nFROM\n    HK_NFINIS_NSTD hn\n    INNER JOIN HK_COMBINFO hc ON hn.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND LEFT(hs.STKCODE, 1) != '8'\nWHERE\n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hn.EDATE BETWEEN '2025-01-01' AND '2025-12-31'\n    AND hn.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hn.TTO IS NOT NULL\nORDER BY\n    hn.EDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    hc.COMCNNAME AS `公司中文名称`,\n    hc.COMCNABB AS `公司中文简称`,\n    CONCAT(hs.STKCODE, '.HK') AS `股票代码`,\n    hn.EDATE AS `报表截止日期`,\n    ROUND(hn.TTO/100000000, 3) AS `总营业额（亿元）`,\n    ROUND(hn.SR_TA/100000000, 3) AS `营业收入合计（亿元）`\nFROM\n    HK_NFINIS_NSTD hn\n    INNER JOIN HK_COMBINFO hc ON hn.COMUNIC = hc.COMUNIC AND hc.ISVALID = 1\n    INNER JOIN HK_STKCODE hs ON hc.COMUNIC = hs.COMUNIC AND hs.ISVALID = 1 AND LEFT(hs.STKCODE, 1) != '8'\nWHERE\n    hc.COMCNABB LIKE '%腾讯控股%'\n    AND hn.EDATE BETWEEN '2025-01-01' AND '2025-12-31'\n    AND hn.ISVALID = 1\n    AND hs.LSSTUREFC = 1\n    AND (hs.STKTYREFC = 1 OR hs.STKTYREFC = 6)\n    AND hs.TRMKREFC = 7\n    AND hn.TTO IS NOT NULL\nORDER BY\n    hn.EDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "751766000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "腾讯控股有限公司 腾讯控股 00700.HK 2025-12-31 00:00:00 7517.660 7706.460",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.9,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_15_86005a99.0",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 51.18,
+  "llm_seconds_max": 8.52,
+  "selected_tables": [
+   "HK_NFINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_PRI_INCOME",
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "candidate_tables": [
+   "HK_CFS_NSTD",
+   "HK_FINBS_NSTD",
+   "HK_FINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_NFINBS_NSTD",
+   "HK_NFINIS_NSTD",
+   "HK_ANA_STK_IDX_FIN",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_IDC_STKVIDC",
+   "VIEW_HK_INDUSTRY_TRACK",
+   "HK_PRI_INCOME",
+   "HK_OFCHGBDSCM",
+   "HK_CDIVDSTCOM",
+   "STK_HK_IPO"
+  ],
+  "sql_prompt_chars": [
+   35173
+  ],
+  "prompt_columns_raw_len": 5196
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1582,
+   "prompt_tokens": 47260,
+   "total_tokens": 48842,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 47260,
+  "completion": 1582,
+  "total": 48842
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1582,
+   "prompt_tokens": 47260,
+   "total_tokens": 48842,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 8832,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "HK_NFINIS_NSTD",
+  "HK_STKCODE"
+ ],
+ "table_recall": {
+  "selected": [
+   "HK_NFINIS_NSTD",
+   "HK_LTTFINIDC_DIDC",
+   "HK_ANA_STK_IDX_NFIN",
+   "HK_PRI_INCOME",
+   "HK_IDC_STKVIDC",
+   "HK_COMBINFO",
+   "HK_STKCODE",
+   "VIEW_HK_INDUSTRY_TRACK"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "round_id": 19,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "往回看，2025年末的时候它的市盈率是多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.TRD_DATE AS `交易日期`, b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, ROUND(a.PB, 2) AS `市净率(倍)`, ROUND(a.PE, 2) AS `市盈率(倍)`, ROUND(a.EPS, 3) AS `每股收益(元)`, ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`, ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)` FROM ANA_INDX_VAL_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE IN ('000852', '000922') OR b.INDX_CNAME LIKE '%上证180%') AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.PE IS NOT NULL AND a.TRD_DATE = (SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE INNER_CODE = b.INNER_CODE AND TRD_DATE <= '2025-12-31') ORDER BY a.PE ASC;\n200\n{table:[['交易日期', '指数名称', '指数代码', '市净率(倍)', '市盈率(倍)', '每股收益(元)', '总市值(亿)', '流通市值(亿)'], ['2023-01-13', '上证180相对全收益价值指数', 'H00031', '0.77', '7.25', '1.07', '237,075.60', '171,973.60'], ['2025-12-31', '上证180金融股指数', '000018', '0.69', '7.31', '1.25', '192,160.90', '140,734.70'], ['2025-12-31', '上证180金融股全收益指数', 'H00018', '0.69', '7.31', '1.25', '192,160.90', '140,734.70'], ['2025-12-31', '上证180金融地产指数', 'H50007', '0.68', '7.34', '1.24', '192,891.10', '141,464.90'], ['2025-12-31', '上证180金融地产全收益指数', 'H40007', '0.68', '7.34', '1.24', '192,891.10', '141,464.90'], ['2025-11-04', '上证180金融指数', '950215', '0.69', '7.35', '1.25', '192,996.70', '140,330.70'], ['2025-07-22', '上证180金融全收益指数', '950215CNY01', '0.70', '7.54', '1.18', '186,137.70', '134,814.40'], ['2025-12-31', '上证180红利全收益指数', 'H00149', '0.70', '7.61', '1.14', '188,280.40', '134,485.80'], ['2025-12-31', '上证180红利指数', '000149', '0.70', '7.61', '1.14', '188,280.40', '134,485.80'], ['2025-12-31', '上证180价值指数', '000029', '0.71', '7.80', '1.12', '240,913.30', '178,640.30'], ['2025-12-31', '上证180价值全收益指数', 'H00029', '0.71', '7.80', '1.12', '240,913.30', '178,640.30'], ['2025-12-31', '中证红利指数', '000922', '0.72', '7.86', '1.10', '217,535.10', '159,625.00'], ['2025-07-22', '上证180红利质量净收益指数', '950259CNY020', '0.77', '8.21', '1.11', '236,417.60', '162,482.50'], ['2025-07-22', '上证180红利质量全收益指数', '950259CNY010', '0",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.TRD_DATE AS `交易日期`, b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, ROUND(a.PB, 2) AS `市净率(倍)`, ROUND(a.PE, 2) AS `市盈率(倍)`, ROUND(a.EPS, 3) AS `每股收益(元)`, ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`, ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)` FROM ANA_INDX_VAL_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE IN ('000852', '000922') OR b.INDX_CNAME LIKE '%上证180%') AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.PE IS NOT NULL AND a.TRD_DATE = (SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE INNER_CODE = b.INNER_CODE AND TRD_DATE <= '2025-12-31') ORDER BY a.PE ASC",
+ "final_sql": "SELECT a.TRD_DATE AS `交易日期`, b.INDX_CNAME AS `指数名称`, b.INDX_CODE AS `指数代码`, ROUND(a.PB, 2) AS `市净率(倍)`, ROUND(a.PE, 2) AS `市盈率(倍)`, ROUND(a.EPS, 3) AS `每股收益(元)`, ROUND(a.SUM_TCAP/100000000, 1) AS `总市值(亿)`, ROUND(a.SUM_MKTCAP/100000000, 1) AS `流通市值(亿)` FROM ANA_INDX_VAL_IDX a JOIN GET_INDX_GEN_INFO b ON a.INNER_CODE = b.INNER_CODE WHERE (b.INDX_CODE IN ('000852', '000922') OR b.INDX_CNAME LIKE '%上证180%') AND b.USE_STATUS = '使用' AND b.ISVALID = 1 AND a.ISVALID = 1 AND a.PE IS NOT NULL AND a.TRD_DATE = (SELECT MAX(TRD_DATE) FROM ANA_INDX_VAL_IDX WHERE INNER_CODE = b.INNER_CODE AND TRD_DATE <= '2025-12-31') ORDER BY a.PE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "45.9128"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 78
+ },
+ "first_result_preview": "2023-01-13 00:00:00 上证180相对全收益价值指数 H00031 0.77 7.25 1.068 237075.6 171973.6\n2025-12-31 00:00:00 上证180金融股指数 000018 0.69 7.31 1.248 192160.9 140734.7\n2025-12-31 00:00:00 上证180金融股全收益指数 H00018 0.69 7.31 1",
+ "ex_first": false,
+ "ex_reasons": [
+  "结果范围过大(78行, Gold为1行)"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 78
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "数值",
+  "实体"
+ ],
+ "elapsed_seconds": 37.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_19_7b3860d2.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.24,
+  "llm_seconds_max": 29.83,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3199,
+   "prompt_tokens": 19467,
+   "total_tokens": 22666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2571,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 19467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 217,
+   "prompt_tokens": 11993,
+   "total_tokens": 12210,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31460,
+  "completion": 3416,
+  "total": 34876
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3199,
+   "prompt_tokens": 19467,
+   "total_tokens": 22666,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2571,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 19467,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 217,
+   "prompt_tokens": 11993,
+   "total_tokens": 12210,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_VAL_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

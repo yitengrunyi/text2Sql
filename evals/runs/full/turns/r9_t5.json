@@ -1,0 +1,175 @@
+{
+ "round_id": 9,
+ "index": 5,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股财务",
+ "question": "苹果公司2025财年收入最高的业务板块是哪个？收入多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "entity",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, s.SECTOR_CNAME AS `业务板块`, ROUND(s.F007N / 100, 3) AS `收入(亿美元)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID JOIN VIEW_COM3105 s ON c.FIU_ID = s.FIU_ID AND c.F001D = s.F001D WHERE a.CSNAME LIKE '%苹果%' AND c.F056N = 2025 AND c.F003V = 'FY' AND s.F007N IS NOT NULL AND s.SECTOR_CNAME IS NOT NULL ORDER BY s.F007N DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '业务板块', '收入(亿美元)'], ['苹果', 'AAPL.US', '手机', '2,460.17']]}\n该查询获取了苹果公司2025财年中各业务板块的收入数据，并筛选出收入最高的业务板块以及对应的收入额。查询涉及公司基本信息表、年报数据表和业务板块收入分布表，通过公司名称筛选出苹果公司，并限定为2025年财年和年报类型，确保只统计该期间的有效业务板块数据。查询结果按照收入从高到低排序，仅返回收入最高的板块。收入金额的单位由原始的百万美元换算为亿美元（即除以100），并保留3位小数。本次查询结果能准确指出2025财年苹果公司收入最高的业务板块及具体金额，完全满足用户需求。\n{table:[['股票名称', '股票代码', '业务板块', '收入(亿美元)'], ['苹果', 'AAPL.US', '手机', '2,460.17']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, s.SECTOR_CNAME AS `业务板块`, ROUND(s.F007N / 100, 3) AS `收入(亿美元)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID JOIN VIEW_COM3105 s ON c.FIU_ID = s.FIU_ID AND c.F001D = s.F001D WHERE a.CSNAME LIKE '%苹果%' AND c.F056N = 2025 AND c.F003V = 'FY' AND s.F007N IS NOT NULL AND s.SECTOR_CNAME IS NOT NULL ORDER BY s.F007N DESC LIMIT 1",
+ "final_sql": "SELECT a.CSNAME AS `股票名称`, a.COMB_SYMBOL AS `股票代码`, s.SECTOR_CNAME AS `业务板块`, ROUND(s.F007N / 100, 3) AS `收入(亿美元)` FROM AMERICAN_STOCK_MAIN a JOIN VIEW_COM3103_CUM c ON a.FIU_ID = c.FIU_ID JOIN VIEW_COM3105 s ON c.FIU_ID = s.FIU_ID AND c.F001D = s.F001D WHERE a.CSNAME LIKE '%苹果%' AND c.F056N = 2025 AND c.F003V = 'FY' AND s.F007N IS NOT NULL AND s.SECTOR_CNAME IS NOT NULL ORDER BY s.F007N DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "手机 246017.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "苹果 AAPL.US 手机 2460.172",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过",
+  "(软校验:{'数值': True})"
+ ],
+ "elapsed_seconds": 37.4,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_9_4358d465.5",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 36.43,
+  "llm_seconds_max": 31.33,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3255,
+   "prompt_tokens": 15085,
+   "total_tokens": 18340,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2693,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15085,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 159,
+   "prompt_tokens": 9049,
+   "total_tokens": 9208,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 24134,
+  "completion": 3414,
+  "total": 27548
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3255,
+   "prompt_tokens": 15085,
+   "total_tokens": 18340,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2693,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 15085,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 159,
+   "prompt_tokens": 9049,
+   "total_tokens": 9208,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3105",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

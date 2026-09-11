@@ -1,0 +1,172 @@
+{
+ "round_id": 13,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·分红送转：中国神华分红方案/股息率/除权除息与全市场分红排行",
+ "question": "换个话题，最近三年A股里累计现金分红最多的前五家公司是哪几家？",
+ "labels": {
+  "difficulty": "聚合",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "list",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT c.SEC_SNAME AS `股票简称`, c.SEC_CODE AS `股票代码`, ROUND(SUM(s.TOT_ACCUM_DIV) / 100000000, 2) AS `最近三年累计分红(亿元)` FROM STK_DIV_STAT s JOIN GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1 WHERE s.ISVALID = 1 AND s.DIV_YEAR >= 2023 AND s.DIV_YEAR <= 2025 AND s.TOT_ACCUM_DIV IS NOT NULL GROUP BY c.SEC_SNAME, c.SEC_CODE ORDER BY `最近三年累计分红(亿元)` DESC LIMIT 5;\n200\n{table:[['股票简称', '股票代码', '最近三年累计分红(亿元)'], ['工商银行', '601398', '3,295.69'], ['建设银行', '601939', '3,024.43'], ['农业银行', '601288', '2,527.93'], ['中国石油', '601857', '2,525.69'], ['中国银行', '601988', '2,138.70']]}\n本次查询获取了近三年（2023至2025年）A股市场中累计现金分红金额最多的前五家公司，展示了它们的股票简称、股票代码以及累计分红金额。数据来源于股票基础信息和年度分红统计数据，通过公司关联筛选有效的A股上市公司。筛选条件限定分红年度为2023至2025三年，要求分红数据有效且不为空。查询结果按累计分红金额从高到低排序，仅保留排名前五的公司。累计分红金额是将三年内所有年度现金分红总额累加后，再除以一亿转换为“亿元”，并保留两位小数，方便直观对比。此查询直接使用年度分红总额这一指标，能够准确反映近三年现金分红的实际表现，查询结果完全符合用户需求。\n{table:[['股票简称', '股票代码', '最近三年累计分红(亿元)'], ['工商银行', '601398', '3,295.69'], ['建设银行', '601939', '3,024.43'], ['农业银行', '601288', '2,527.93'], ['中国石油', '601857', '2,525.69'], ['中国银行', '601988', '2,138.70']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT c.SEC_SNAME AS `股票简称`, c.SEC_CODE AS `股票代码`, ROUND(SUM(s.TOT_ACCUM_DIV) / 100000000, 2) AS `最近三年累计分红(亿元)` FROM STK_DIV_STAT s JOIN GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1 WHERE s.ISVALID = 1 AND s.DIV_YEAR >= 2023 AND s.DIV_YEAR <= 2025 AND s.TOT_ACCUM_DIV IS NOT NULL GROUP BY c.SEC_SNAME, c.SEC_CODE ORDER BY `最近三年累计分红(亿元)` DESC LIMIT 5",
+ "final_sql": "SELECT c.SEC_SNAME AS `股票简称`, c.SEC_CODE AS `股票代码`, ROUND(SUM(s.TOT_ACCUM_DIV) / 100000000, 2) AS `最近三年累计分红(亿元)` FROM STK_DIV_STAT s JOIN GET_A_SEC_CODE c ON s.COMCODE = c.COMCODE AND c.ISVALID = 1 WHERE s.ISVALID = 1 AND s.DIV_YEAR >= 2023 AND s.DIV_YEAR <= 2025 AND s.TOT_ACCUM_DIV IS NOT NULL GROUP BY c.SEC_SNAME, c.SEC_CODE ORDER BY `最近三年累计分红(亿元)` DESC LIMIT 5",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 5,
+  "preview": "工商银行 329568865930.198300\n建设银行 302442883194.371300\n农业银行 252792745366.467900\n中国石油 252568949388.840000\n中国银行 213869543239.699000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "first_result_preview": "工商银行 601398 3295.69\n建设银行 601939 3024.43\n农业银行 601288 2527.93\n中国石油 601857 2525.69\n中国银行 601988 2138.70",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 5
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 48.8,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_13_9fca7235.4",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 47.62,
+  "llm_seconds_max": 43.46,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4560,
+   "prompt_tokens": 12338,
+   "total_tokens": 16898,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4046,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12338,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 6424,
+   "total_tokens": 6618,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 18762,
+  "completion": 4754,
+  "total": 23516
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 4560,
+   "prompt_tokens": 12338,
+   "total_tokens": 16898,
+   "completion_tokens_details": {
+    "reasoning_tokens": 4046,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 12338,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 194,
+   "prompt_tokens": 6424,
+   "total_tokens": 6618,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_DIV_STAT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

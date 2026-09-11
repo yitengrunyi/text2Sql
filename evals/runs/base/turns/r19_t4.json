@@ -1,0 +1,153 @@
+{
+ "round_id": 19,
+ "index": 4,
+ "source": "MYSQL-2",
+ "domain": "指数",
+ "theme": "指数估值与财务指标·中证1000市盈率盘点与宽基指数对比",
+ "question": "换个话题，深证100指数2026年半年报的净资产收益率是多少？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "话题切换",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标  \n净资产收益率（Return on Equity，简称ROE）\n\n[2] 可能的计算公式  \n净资产收益率（ROE） = 归属于母公司股东的净利润 ÷ 期末归属于母公司股东的净资产 × 100%\n['深证100指数', '净资产收益率', 'Return on Equity', 'ROE', '归属于母公司股东的净利润', '期末归属于母公司股东的净资产']\n该问题可能涉及到申万一级行业，一级行业名称为\"银行\"，即SW_INDU_CODE_2021_1 LIKE \"%银行%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%银行%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n该问题可能涉及到申万一级行业，一级行业名称为\"房地产\"，即SW_INDU_CODE_2021_1 LIKE \"%房地产%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%房地产%\"\n指数相关\n['境内指数']\n['ANA_INDX_VAL_IDX', 'ANA_INDX_FIN_IDX', 'INDX_SAMP_INFO', 'ANA_STK_EXPR_IDX', 'VIEW_STK_FIN_IDX']\n是否命中召回表：False\n生成查询代码\nSELECT \n    a.ENDDATE AS `报告截止日期`, \n    b.INDX_CNAME AS `指数名称`, \n    b.INDX_CODE AS `指数代码`, \n    ROUND(a.ROE, 2) AS `净资产收益率(%)`\nFROM \n    ANA_INDX_FIN_IDX a\nJOIN \n    (SELECT INNER_CODE, INDX_CNAME, INDX_CODE \n     FROM GET_INDX_GEN_INFO\n     WHERE (INDX_CNAME LIKE '%深证100%' OR INDX_SNAME LIKE '%深证100%' OR INDX_CODE = '399330')\n     LIMIT 1) b\n  ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ENDDATE = '2026-06-30 00:00:00'\n    AND a.ROE IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1\n200\n{table:[['报告截止日期', '指数名称', '净资产收益率(%)'], ['2026-06-30', '深证100全收益指数', '7.40']]}\n该查询的主要目的是获取深证100指数在2026年半年报的净资产收益率数据。通过将净资产收益率的小数保留两位，使用公式“净资产收益率（%）= 指数净资产收益率”，即直接取出已有的财务指标并做保留两位小数的处理。在此查询中，净资产收益率的结果以百分数形式给出。\n\n查询从两个表中提取数据，通过指数内部代码进行关联。一个表是记录指数财务指标信息的表，另一个表是提供指数基本信息的表。选择了报告截止日期、指数名称、指数代码和处理后的净资产收益率等信息。通过模糊筛选方式，确保只获取深证100指数相关记录，并限定报告日期为2026年6月30日，筛选出净资产收益率不为空且记录有效的数据。结果按照报告日期降序并只取一条数据。\n\n查询结果符合要求。",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    a.ENDDATE AS `报告截止日期`, \n    b.INDX_CNAME AS `指数名称`, \n    b.INDX_CODE AS `指数代码`, \n    ROUND(a.ROE, 2) AS `净资产收益率(%)`\nFROM \n    ANA_INDX_FIN_IDX a\nJOIN \n    (SELECT INNER_CODE, INDX_CNAME, INDX_CODE \n     FROM GET_INDX_GEN_INFO\n     WHERE (INDX_CNAME LIKE '%深证100%' OR INDX_SNAME LIKE '%深证100%' OR INDX_CODE = '399330')\n     LIMIT 1) b\n  ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ENDDATE = '2026-06-30 00:00:00'\n    AND a.ROE IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    a.ENDDATE AS `报告截止日期`, \n    b.INDX_CNAME AS `指数名称`, \n    b.INDX_CODE AS `指数代码`, \n    ROUND(a.ROE, 2) AS `净资产收益率(%)`\nFROM \n    ANA_INDX_FIN_IDX a\nJOIN \n    (SELECT INNER_CODE, INDX_CNAME, INDX_CODE \n     FROM GET_INDX_GEN_INFO\n     WHERE (INDX_CNAME LIKE '%深证100%' OR INDX_SNAME LIKE '%深证100%' OR INDX_CODE = '399330')\n     LIMIT 1) b\n  ON a.INNER_CODE = b.INNER_CODE\nWHERE \n    a.ENDDATE = '2026-06-30 00:00:00'\n    AND a.ROE IS NOT NULL\n    AND a.ISVALID = 1\nORDER BY \n    a.ENDDATE DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "7.3965"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-06-30 00:00:00 深证100全收益指数 399004 7.40",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": false,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 62.4,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_19_764cfbe6.4",
+  "llm_call_count": 13,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 60.35,
+  "llm_seconds_max": 9.71,
+  "selected_tables": [
+   "ANA_INDX_FIN_IDX",
+   "ANA_INDX_VAL_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "candidate_tables": [
+   "INDX_MKT",
+   "INDX_SAMP_INFO",
+   "INDX_TCLOSE_WEIGHT",
+   "ANA_STK_EXPR_IDX",
+   "ANA_INDX_VAL_IDX",
+   "VIEW_STK_FIN_IDX",
+   "ANA_INDX_FIN_IDX",
+   "THEME_DAILY_QUOTE"
+  ],
+  "sql_prompt_chars": [
+   34406
+  ],
+  "prompt_columns_raw_len": 10976
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1045,
+   "prompt_tokens": 35018,
+   "total_tokens": 36063,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 35018,
+  "completion": 1045,
+  "total": 36063
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1045,
+   "prompt_tokens": 35018,
+   "total_tokens": 36063,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5120,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "ANA_INDX_FIN_IDX",
+  "GET_INDX_GEN_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "ANA_INDX_FIN_IDX",
+   "ANA_INDX_VAL_IDX",
+   "INDX_SAMP_INFO",
+   "VIEW_STK_FIN_IDX",
+   "GET_INDX_GEN_INFO"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

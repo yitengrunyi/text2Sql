@@ -1,0 +1,160 @@
+{
+ "round_id": 6,
+ "index": 2,
+ "source": "MYSQL-1",
+ "domain": "基金",
+ "theme": "基金持仓与基金经理",
+ "question": "张坤目前在管的基金有几只？管理总规模是多少？",
+ "labels": {
+  "followup_type": "话题切换",
+  "difficulty": "单表",
+  "route_gold": "NEW_QUERY",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "base",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 基金数量（张坤在管的基金只数）  \n- 管理总规模（总资产管理规模，AUM，Assets Under Management）\n\n[2] 可能的计算公式：  \n- 基金数量 = 张坤担任基金经理的所有在管基金数量  \n- 管理总规模 = ∑（每只基金当前资产净值）  \n   即：管理总规模 = 基金1资产净值 + 基金2资产净值 + ... + 基金N资产净值\n['张坤', '基金数量', '在管基金只数', '管理总规模', '总资产管理规模', 'AUM', 'Assets Under Management', '资产净值', '基金经理']\n该问题可能涉及到申万一级行业，一级行业名称为\"非银金融\"，即SW_INDU_CODE_2021_1 LIKE \"%非银金融%\",注意，如果用户询问的是行业相关问题，则优先使用此字段。使用SW_INDU_CODE_2021_1字段时必须使用我指定的匹配值，即 \"%非银金融%\"\n基金相关\n['基金经理基本信息', '基金产品基本信息', '基金产品净值']\n['INDEX_QUOTE_ALL', 'FUND_LIST_FREQUENCY', 'FUND_MANAGER_INFO', 'FUND_NETVALUE_SIMULATE']\n是否命中召回表：False\n生成查询代码\nSELECT \n    PSN_NAME AS `基金经理姓名`,\n    FUND_NUM_ACTUAL AS `在管基金数量`,\n    ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)`,\n    HUPDATETIME AS `数据更新时间`\nFROM \n    FUND_MANAGER_INFO\nWHERE \n    PSN_NAME = '张坤'\n    AND HISVALID = 1\n    AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\nORDER BY \n    HUPDATETIME DESC\nLIMIT 1\n200\n{table:[['基金经理姓名', '在管基金数量', '管理总规模(亿)', '数据更新时间'], ['张坤', '4', '322.85', '2026-09-03']]}\n该查询首先对管理总规模进行了单位转换，采用的公式为：管理总规模（亿）= 管理总规模（元）除以1亿，并保留两位小数。对于在管基金数量，直接展示了同一基金不同分类方式算一个的真实在管数量。\n\n查询从基金经理基本信息表中提取数据，选取了基金经理姓名、在管基金数量、管理总规模以及数据更新时间。通过筛选基金经理姓名为“张坤”以及数据有效的记录。在筛选条件中，仅保留股票投资市值与总规模占比不低于44.7%，且主动股票投资占股票投资市值比例不低于50%的数据。最终结果按照数据更新时间倒序排列，仅返回最新一条数据。\n\n查询结果符合“张坤目前在管的基金有几只？管理总规模是多少？”的要求。",
+ "route_gold": "NEW_QUERY",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT \n    PSN_NAME AS `基金经理姓名`,\n    FUND_NUM_ACTUAL AS `在管基金数量`,\n    ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)`,\n    HUPDATETIME AS `数据更新时间`\nFROM \n    FUND_MANAGER_INFO\nWHERE \n    PSN_NAME = '张坤'\n    AND HISVALID = 1\n    AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\nORDER BY \n    HUPDATETIME DESC\nLIMIT 1",
+ "final_sql": "SELECT \n    PSN_NAME AS `基金经理姓名`,\n    FUND_NUM_ACTUAL AS `在管基金数量`,\n    ROUND(NET_VALUE / 100000000, 2) AS `管理总规模(亿)`,\n    HUPDATETIME AS `数据更新时间`\nFROM \n    FUND_MANAGER_INFO\nWHERE \n    PSN_NAME = '张坤'\n    AND HISVALID = 1\n    AND CASE WHEN NET_VALUE != 0 THEN MV_OF_STOCK / NET_VALUE ELSE 0 END >= 0.447\n    AND CASE WHEN MV_OF_STOCK != 0 THEN (MV_OF_STOCK - MV_OF_STOCK_PASSIVE) / MV_OF_STOCK ELSE 0 END >= 0.5\nORDER BY \n    HUPDATETIME DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "4 32284557164.1000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "张坤 4 322.85 2026-09-03 08:00:31",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 51.7,
+ "error": null,
+ "telemetry": {
+  "key": "base:ev_base_6_55cb83b5.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 56.96,
+  "llm_seconds_max": 9.58,
+  "selected_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_AND_MANAGER_MAPPING",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "candidate_tables": [
+   "FUND_MANAGER_INFO",
+   "FUND_AND_COMPANY_MAPPING",
+   "FUND_AND_MANAGER_MAPPING",
+   "FUND_ASSET_ALLOCATION",
+   "FUND_FRONT_CONTROL",
+   "FUND_LIST_FREQUENCY",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_MANAGER_OPINION",
+   "FUND_MANAGER_TURNOVER_RATE",
+   "FUND_NETVALUE",
+   "FUND_TURNOVER_RATE",
+   "INDEX_QUOTE_ALL",
+   "VW_FUND_LABEL_SERIES",
+   "INDEX_STATISTICS_YEAR",
+   "FUND_NETVALUE_SIMULATE",
+   "ETF_INFO_DETAIL",
+   "ETF_PERFORMANCE_DETAIL",
+   "FUND_STATISTICS_YEAR"
+  ],
+  "sql_prompt_chars": [
+   22371
+  ],
+  "prompt_columns_raw_len": 7574
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1380,
+   "prompt_tokens": 31209,
+   "total_tokens": 32589,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 31209,
+  "completion": 1380,
+  "total": 32589
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1380,
+   "prompt_tokens": 31209,
+   "total_tokens": 32589,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 6400,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "FUND_MANAGER_INFO"
+ ],
+ "table_recall": {
+  "selected": [
+   "FUND_MANAGER_INFO",
+   "FUND_MANAGER_ASSET_ALLOCATION",
+   "FUND_AND_MANAGER_MAPPING",
+   "VW_FUND_LABEL_SERIES"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

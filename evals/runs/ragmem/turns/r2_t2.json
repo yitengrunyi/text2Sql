@@ -1,0 +1,172 @@
+{
+ "round_id": 2,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股金融股对比",
+ "question": "兴业银行2025年的归母净利润是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "单表",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND f.ISVALID = 1 WHERE a.SEC_SNAME LIKE '%兴业银行%' AND a.ISVALID = 1 ORDER BY f.ENDDATE DESC LIMIT 1;\n200\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万)'], ['兴业银行', '601166', '2025-12-31', '7,746,900.00']]}\n该查询提取了兴业银行在2025年年报中的归属于母公司净利润数据，包含公司简称、股票代码、报表截止日期和归母净利润（单位为万元，保留1位小数）。查询从股票基本信息表和财务指标表中获得数据，通过公司标识进行关联，仅筛选公司简称为“兴业银行”的有效记录，要求年报截止日为2025年12月31日且归母净利润数据不为空。归母净利润的金额以原始元为单位，转换为万元显示（即原始数值除以1万，并保留1位小数）。本次查询直接使用了财报披露的归母净利润指标，无需额外计算，结果能够准确反映兴业银行2025年全年归母净利润，查询结果符合用户需求。\n{table:[['股票名称', '股票代码', '报表截止日', '归母净利润(万)'], ['兴业银行', '601166', '2025-12-31', '7,746,900.00']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND f.ISVALID = 1 WHERE a.SEC_SNAME LIKE '%兴业银行%' AND a.ISVALID = 1 ORDER BY f.ENDDATE DESC LIMIT 1",
+ "final_sql": "SELECT a.SEC_SNAME AS `股票名称`, a.SEC_CODE AS `股票代码`, f.ENDDATE AS `报表截止日`, ROUND(f.F110101 / 10000, 1) AS `归母净利润(万)` FROM GET_A_SEC_CODE a INNER JOIN VIEW_STK_FIN_IDX f ON a.COMCODE = f.COMCODE AND f.ENDDATE = '2025-12-31 00:00:00' AND f.F110101 IS NOT NULL AND f.ISVALID = 1 WHERE a.SEC_SNAME LIKE '%兴业银行%' AND a.ISVALID = 1 ORDER BY f.ENDDATE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "77469000000.0000"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "兴业银行 601166 2025-12-31 00:00:00 7746900.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 24.9,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_2_aae0ee9b.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 24.06,
+  "llm_seconds_max": 15.68,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1445,
+   "prompt_tokens": 23249,
+   "total_tokens": 24694,
+   "completion_tokens_details": {
+    "reasoning_tokens": 958,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23249,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 188,
+   "prompt_tokens": 16134,
+   "total_tokens": 16322,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 39383,
+  "completion": 1633,
+  "total": 41016
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 1445,
+   "prompt_tokens": 23249,
+   "total_tokens": 24694,
+   "completion_tokens_details": {
+    "reasoning_tokens": 958,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 23249,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 188,
+   "prompt_tokens": 16134,
+   "total_tokens": 16322,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_STK_FIN_IDX"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

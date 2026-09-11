@@ -1,0 +1,172 @@
+{
+ "round_id": 11,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·主营业务与经营数据——万华化学2025年报营收构成（产品系列/区域拆分）",
+ "question": "它的毛利率大概是什么水平？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "ragmem",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT p.PERIODDATE AS `报表日期`, p.A_STOCKSNAME AS `股票简称`, p.A_STOCKCODE AS `股票代码`, p.ITEM_NAME AS `产品名称`, ROUND(p.INCOME/10000, 3) AS `营业收入(亿元)`, p.PRI_RVNU_PCT AS `收入占营业收入比(%)`, ROUND(p.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT p WHERE p.ISVALID = 1 AND p.RPT_TYPE = '合并' AND p.PERIODDATE = '2025-12-31 00:00:00.000' AND p.A_STOCKSNAME LIKE '%万华化学%' AND p.ITEM_NAME LIKE '%聚氨酯%' AND p.PRI_RVNU_PCT IS NOT NULL AND p.GP_RATIO IS NOT NULL ORDER BY p.PRI_RVNU_PCT DESC;\n200\n{table:[['报表日期', '股票简称', '股票代码', '产品名称', '营业收入(亿元)', '收入占营业收入比(%)', '毛利率(%)'], ['2025-12-31', '万华化学', '600309', '聚氨酯系列', '750.58', '36.93', '26.88']]}\n该查询获取了万华化学在2025年度聚氨酯系列产品相关业务的信息，包括报表日期、公司简称、股票代码、产品名称、营业收入（按亿元显示）、该产品在总营收中的占比，以及该业务的毛利率。数据来自主营业务产品分布财务数据，通过公司名称和产品名称筛选，限定为有效数据、合并报表类型、2025年年报、相关收入和毛利率信息均有披露，并按业务收入占比降序排列。营业收入通过将原始金额除以10000转换为亿元，保留3位小数；毛利率和收入占比均保留2位小数。毛利率直接引用企业披露的财务指标，代表该业务收入与成本之差占收入的比例。查询结果能够准确反映万华化学聚氨酯业务的毛利率水平，满足用户需求。\n{table:[['报表日期', '股票简称', '股票代码', '产品名称', '营业收入(亿元)', '收入占营业收入比(%)', '毛利率(%)'], ['2025-12-31', '万华化学', '600309', '聚氨酯系列', '750.58', '36.93', '26.88']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT p.PERIODDATE AS `报表日期`, p.A_STOCKSNAME AS `股票简称`, p.A_STOCKCODE AS `股票代码`, p.ITEM_NAME AS `产品名称`, ROUND(p.INCOME/10000, 3) AS `营业收入(亿元)`, p.PRI_RVNU_PCT AS `收入占营业收入比(%)`, ROUND(p.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT p WHERE p.ISVALID = 1 AND p.RPT_TYPE = '合并' AND p.PERIODDATE = '2025-12-31 00:00:00.000' AND p.A_STOCKSNAME LIKE '%万华化学%' AND p.ITEM_NAME LIKE '%聚氨酯%' AND p.PRI_RVNU_PCT IS NOT NULL AND p.GP_RATIO IS NOT NULL ORDER BY p.PRI_RVNU_PCT DESC",
+ "final_sql": "SELECT p.PERIODDATE AS `报表日期`, p.A_STOCKSNAME AS `股票简称`, p.A_STOCKCODE AS `股票代码`, p.ITEM_NAME AS `产品名称`, ROUND(p.INCOME/10000, 3) AS `营业收入(亿元)`, p.PRI_RVNU_PCT AS `收入占营业收入比(%)`, ROUND(p.GP_RATIO, 2) AS `毛利率(%)` FROM STK_PRI_INCOME_PRODUCT p WHERE p.ISVALID = 1 AND p.RPT_TYPE = '合并' AND p.PERIODDATE = '2025-12-31 00:00:00.000' AND p.A_STOCKSNAME LIKE '%万华化学%' AND p.ITEM_NAME LIKE '%聚氨酯%' AND p.PRI_RVNU_PCT IS NOT NULL AND p.GP_RATIO IS NOT NULL ORDER BY p.PRI_RVNU_PCT DESC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "26.88"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2025-12-31 00:00:00 万华化学 600309 聚氨酯系列 750.582 36.93 26.88",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 31.8,
+ "error": null,
+ "telemetry": {
+  "key": "ragmem:ev_ragmem_11_134700e3.2",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 29.89,
+  "llm_seconds_max": 23.5,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2558,
+   "prompt_tokens": 10050,
+   "total_tokens": 12608,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2089,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10050,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 207,
+   "prompt_tokens": 3975,
+   "total_tokens": 4182,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 14025,
+  "completion": 2765,
+  "total": 16790
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2558,
+   "prompt_tokens": 10050,
+   "total_tokens": 12608,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2089,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 10050,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 207,
+   "prompt_tokens": 3975,
+   "total_tokens": 4182,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_PRI_INCOME_PRODUCT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}

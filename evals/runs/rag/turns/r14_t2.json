@@ -1,0 +1,157 @@
+{
+ "round_id": 14,
+ "index": 2,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "个股·一致预期与业绩预告：紫金矿业业绩预告与一致预期盈利预测",
+ "question": "去年同期那次预告呢？当时预计2025年上半年能赚多少？",
+ "labels": {
+  "difficulty": "单表",
+  "followup_type": "时间漂移",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "relative"
+ },
+ "judge_type": "numeric",
+ "ablation": "rag",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：  \n- 净利润（Net Profit）\n- 盈利预告/业绩预告（Earnings Forecast）\n\n[2] 可能的计算公式：  \n- 净利润 = 收入 - 成本 - 费用 - 税费\n- 盈利预告区间（2025年上半年）= 公司在去年同期发布的2025年上半年净利润（或扣非净利润）预期值\n\n如果有具体的预告数值，则：  \n- 预告增长率 = （本期预告净利润 - 上期净利润）/ 上期净利润 × 100%\n['净利润', 'Net Profit', '盈利预告', '业绩预告', 'Earnings Forecast', '收入', '成本', '费用', '税费', '扣非净利润', '预告增长率', '预告净利润', '上期净利润', '本期预告净利润', '预期值']\n此问题不涉及到个股、行业或者题材\n个股相关\n['主板业绩预告', '主板基本信息']\n['STK_ACHIEVE_FORECAST', 'STK_COM_PROFILE', 'STK_LIST_PLAN', 'VIEW_STK_STI_LIST_PLAN', 'GET_A_INDUSTRY', 'GET_A_SEC_CODE']\n是否命中召回表：False\n生成查询代码\nSELECT\n    sf.A_STOCKSNAME AS `股票名称`,\n    sf.A_STOCKCODE AS `股票代码`,\n    sf.DECLAREDATE AS `预告发布日期`,\n    sf.ENDDATE AS `业绩预告对应期末日期`,\n    ROUND(sf.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(sf.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    ROUND(sf.DNP_MIN_VAL, 1) AS `扣非净利润预测下限(万)`,\n    ROUND(sf.DNP_MAX_VAL, 1) AS `扣非净利润预测上限(万)`,\n    ROUND(sf.SR_MIN_VAL/10000, 3) AS `营业收入预测下限(亿)`,\n    ROUND(sf.SR_MAX_VAL/10000, 3) AS `营业收入预测上限(亿)`,\n    ROUND(sf.NTINC_GR_FLOR, 2) AS `归母净利润同比增长下限(%)`,\n    ROUND(sf.NTINC_GR_CEIL, 2) AS `归母净利润同比增长上限(%)`,\n    ROUND(sf.SR_GR_FLOR, 2) AS `营业收入同比增长下限(%)`,\n    ROUND(sf.SR_GR_CEIL, 2) AS `营业收入同比增长上限(%)`,\n    sf.SUMMARY AS `业绩摘要`\nFROM\n    STK_ACHIEVE_FORECAST sf\nWHERE\n    sf.ISVALID = 1\n    AND sf.DECLAREDATE >= '2025-01-01' AND sf.DECLAREDATE <= '2025-12-31'\n    AND (sf.ENDDATE = '2025-06-30 00:00:00' OR sf.ENDDATE = '2025-05-31 00:00:00') -- 上半年预告，筛选半年报节点\n    AND sf.A_STOCKCODE IS NOT NULL\nORDER BY\n    sf.DECLAREDATE DESC,\n    sf.A_STOCKCODE ASC\n200\n{table:[['股票名称', '股票代码', '预告发布日期', '业绩预告对应期末日期', '归母净利润预测下限(万)', '归母净利润预测上限(万)', '扣非净利润预测下限(万)', '扣非净利润预测上限(万)', '营业收入预测下限(亿)', '营业收入预测上限(亿)', '归母净利润同比增长下限(%)', '归母净利润同比增长上限(%)', '营业收入同比增长下限(%)', '营业收入同比增长上限(%)', '业绩摘要'], ['*ST金科', '000656', '2025-08-30', '2025-06-30', '-752,250.50', '-752,250.50', '-666,602.40', '-666,602.40', '-', '-', '-', '-', '-', '-', '预计2025年1-6月归属于上市公司股东的净利润亏损:752,250.49万元'], ['茂硕电源', '002660', '2025-08-19', '2025-06-30', '-2,300.00', '-1,700.00', '-2,800.0",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": null,
+ "route_ok": false,
+ "first_sql": "SELECT\n    sf.A_STOCKSNAME AS `股票名称`,\n    sf.A_STOCKCODE AS `股票代码`,\n    sf.DECLAREDATE AS `预告发布日期`,\n    sf.ENDDATE AS `业绩预告对应期末日期`,\n    ROUND(sf.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(sf.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    ROUND(sf.DNP_MIN_VAL, 1) AS `扣非净利润预测下限(万)`,\n    ROUND(sf.DNP_MAX_VAL, 1) AS `扣非净利润预测上限(万)`,\n    ROUND(sf.SR_MIN_VAL/10000, 3) AS `营业收入预测下限(亿)`,\n    ROUND(sf.SR_MAX_VAL/10000, 3) AS `营业收入预测上限(亿)`,\n    ROUND(sf.NTINC_GR_FLOR, 2) AS `归母净利润同比增长下限(%)`,\n    ROUND(sf.NTINC_GR_CEIL, 2) AS `归母净利润同比增长上限(%)`,\n    ROUND(sf.SR_GR_FLOR, 2) AS `营业收入同比增长下限(%)`,\n    ROUND(sf.SR_GR_CEIL, 2) AS `营业收入同比增长上限(%)`,\n    sf.SUMMARY AS `业绩摘要`\nFROM\n    STK_ACHIEVE_FORECAST sf\nWHERE\n    sf.ISVALID = 1\n    AND sf.DECLAREDATE >= '2025-01-01' AND sf.DECLAREDATE <= '2025-12-31'\n    AND (sf.ENDDATE = '2025-06-30 00:00:00' OR sf.ENDDATE = '2025-05-31 00:00:00') -- 上半年预告，筛选半年报节点\n    AND sf.A_STOCKCODE IS NOT NULL\nORDER BY\n    sf.DECLAREDATE DESC,\n    sf.A_STOCKCODE ASC",
+ "final_sql": "SELECT\n    sf.A_STOCKSNAME AS `股票名称`,\n    sf.A_STOCKCODE AS `股票代码`,\n    sf.DECLAREDATE AS `预告发布日期`,\n    sf.ENDDATE AS `业绩预告对应期末日期`,\n    ROUND(sf.MIN_VAL, 1) AS `归母净利润预测下限(万)`,\n    ROUND(sf.MAX_VAL, 1) AS `归母净利润预测上限(万)`,\n    ROUND(sf.DNP_MIN_VAL, 1) AS `扣非净利润预测下限(万)`,\n    ROUND(sf.DNP_MAX_VAL, 1) AS `扣非净利润预测上限(万)`,\n    ROUND(sf.SR_MIN_VAL/10000, 3) AS `营业收入预测下限(亿)`,\n    ROUND(sf.SR_MAX_VAL/10000, 3) AS `营业收入预测上限(亿)`,\n    ROUND(sf.NTINC_GR_FLOR, 2) AS `归母净利润同比增长下限(%)`,\n    ROUND(sf.NTINC_GR_CEIL, 2) AS `归母净利润同比增长上限(%)`,\n    ROUND(sf.SR_GR_FLOR, 2) AS `营业收入同比增长下限(%)`,\n    ROUND(sf.SR_GR_CEIL, 2) AS `营业收入同比增长上限(%)`,\n    sf.SUMMARY AS `业绩摘要`\nFROM\n    STK_ACHIEVE_FORECAST sf\nWHERE\n    sf.ISVALID = 1\n    AND sf.DECLAREDATE >= '2025-01-01' AND sf.DECLAREDATE <= '2025-12-31'\n    AND (sf.ENDDATE = '2025-06-30 00:00:00' OR sf.ENDDATE = '2025-05-31 00:00:00') -- 上半年预告，筛选半年报节点\n    AND sf.A_STOCKCODE IS NOT NULL\nORDER BY\n    sf.DECLAREDATE DESC,\n    sf.A_STOCKCODE ASC",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2320000.0000 2320000.0000 业绩大幅上升"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "first_result_preview": "*ST金科 000656 2025-08-30 00:00:00 2025-06-30 00:00:00 -752250.5 -752250.5 -666602.4 -666602.4       预计2025年1-6月归属于上市公司股东的净利润亏损:752,250.49万元\n茂硕电源 002660 2025-08-19 00:00:00 2025-06-30 00:00:00 -2300.0 -",
+ "ex_first": false,
+ "ex_reasons": [
+  "实体"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1000
+ },
+ "ex_final": false,
+ "answer_ok": false,
+ "answer_reasons": [
+  "实体"
+ ],
+ "elapsed_seconds": 58.1,
+ "error": null,
+ "telemetry": {
+  "key": "rag:ev_rag_14_2d8cb3ed.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1"
+  ],
+  "llm_seconds_total": 61.5,
+  "llm_seconds_max": 8.6,
+  "selected_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "candidate_tables": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_PRE_DISCLOSURE",
+   "STK_HUMAN_RESOURCE",
+   "VW_CONCEPT_STK",
+   "VIEW_CONCEPT_DAILY_QUOTE",
+   "STK_COMSUB_PROFILE",
+   "STK_DS_POST",
+   "STK_LIST_PLAN",
+   "STK_LIST_RESULT",
+   "VIEW_STK_STI_LIST_PLAN"
+  ],
+  "sql_prompt_chars": [
+   46779
+  ],
+  "prompt_columns_raw_len": 20168
+ },
+ "token_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1871,
+   "prompt_tokens": 47543,
+   "total_tokens": 49414,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 47543,
+  "completion": 1871,
+  "total": 49414
+ },
+ "ws_usage": [
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 1871,
+   "prompt_tokens": 47543,
+   "total_tokens": 49414,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 5888,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_ACHIEVE_FORECAST"
+ ],
+ "table_recall": {
+  "selected": [
+   "STK_ACHIEVE_FORECAST",
+   "STK_COM_PROFILE",
+   "STK_LIST_PLAN",
+   "VIEW_STK_STI_LIST_PLAN",
+   "GET_A_INDUSTRY",
+   "GET_A_SEC_CODE"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": null,
+  "has_sql": true
+ }
+}

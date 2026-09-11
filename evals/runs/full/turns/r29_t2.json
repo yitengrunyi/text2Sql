@@ -1,0 +1,230 @@
+{
+ "round_id": 29,
+ "index": 2,
+ "source": "MYSQL-4",
+ "domain": "美股",
+ "theme": "美股·板块与地域收入分布：谷歌A财年收入结构拆解（板块占比/地域收入），话题切换至波音全年营收",
+ "question": "同期它在北美市场实现的销售收入呢？",
+ "labels": {
+  "difficulty": "多表join",
+  "followup_type": "指代继承",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "[1] 关键金融指标：\n\n- 销售收入（Sales Revenue）或营业收入（Operating Revenue）\n\n[2] 可能的计算公式：\n\n销售收入 = 产品或服务销售数量 × 单位销售价格  \n或  \n销售收入 = ∑（各产品销售数量 × 各产品单价），其中统计范围限定为2025财年北美市场\n['谷歌A', '2025财年', '北美市场', '销售收入', 'Sales Revenue', '营业收入', 'Operating Revenue', '产品销售数量', '服务销售数量', '单位销售价格', '产品单价']\n该问题可能涉及美股-'谷歌', 它的美股股票代码为：A，请注意美股筛选的时候使用股票代码进行关联。未找到对应的行业名称。\n美股相关\n['美股基本信息', '美股经营分析']\n['AMERICAN_STOCK_MAIN', 'VIEW_COM3106', 'VIEW_COM3105']\n是否命中召回表：True\n['北美']\nquery抽取的主体词是['北美']\n生成查询代码\ntop30召回:{}\nSELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    v.F001D AS `财政周期结束日期`,\n    v.F005V AS `货币`,\n    v.F006V AS `地域英文`,\n    v.REGION_CNAME AS `地域中文`,\n    ROUND(v.F007N / 100, 3) AS `销售收入/亿`,\n    v.F008N AS `运营收入（百万美元）`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'GOOGL.US'\n    AND (v.F006V LIKE '%North America%' OR v.REGION_CNAME LIKE '%北美%')\n    AND v.F001D >= '2025-01-01'\n    AND v.F001D < '2026-01-01'\n    AND v.F007N IS NOT NULL\nORDER BY\n    v.F001D DESC\nLIMIT 1\n200\n{table:[['股票名称', '股票代码', '财政周期结束日期', '货币', '地域英文', '地域中文', '销售收入/亿', '运营收入（百万美元）'], ['谷歌A', 'GOOGL.US', '2025-12-31', 'USD', 'North America', '北美', '2,456.30', '73,689.00']]}\n该查询的主要目的是获取谷歌A在2025财年北美市场的销售收入。销售收入（单位为“亿”）是通过将原始销售数据（百万美元）除以100并保留三位小数实现单位转换，公式为销售收入（亿）= 销售收入（百万美元） / 100。在此查询中，运营收入数据直接取值，没有进行处理。查询结果符合要求。\n\n该查询从含有美股公司基本信息的表和记录公司地域收入数据的表获取信息，通过内部代码进行关联。选择了股票名称、股票代码、财政周期结束日期、货币、地域相关信息、销售收入和运营收入等内容。筛选条件包括只选取展示代码对应谷歌A的数据、地域为北美（支持英文和中文名称）、财政周期限定为2025年全年、销售收入不为空。按财政周期结束日期降序排列，取最新一条数据。查询返回谷歌A在2025财年北美市场的销售收入及相关运营收入。\n查询谷歌A在2025财年在北美市场的销售收入是多少？",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "NEW_QUERY",
+ "route_ok": false,
+ "first_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    v.F001D AS `财政周期结束日期`,\n    v.F005V AS `货币`,\n    v.F006V AS `地域英文`,\n    v.REGION_CNAME AS `地域中文`,\n    ROUND(v.F007N / 100, 3) AS `销售收入/亿`,\n    v.F008N AS `运营收入（百万美元）`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'GOOGL.US'\n    AND (v.F006V LIKE '%North America%' OR v.REGION_CNAME LIKE '%北美%')\n    AND v.F001D >= '2025-01-01'\n    AND v.F001D < '2026-01-01'\n    AND v.F007N IS NOT NULL\nORDER BY\n    v.F001D DESC\nLIMIT 1",
+ "final_sql": "SELECT\n    m.CSNAME AS `股票名称`,\n    m.COMB_SYMBOL AS `股票代码`,\n    v.F001D AS `财政周期结束日期`,\n    v.F005V AS `货币`,\n    v.F006V AS `地域英文`,\n    v.REGION_CNAME AS `地域中文`,\n    ROUND(v.F007N / 100, 3) AS `销售收入/亿`,\n    v.F008N AS `运营收入（百万美元）`\nFROM\n    AMERICAN_STOCK_MAIN m\nINNER JOIN\n    VIEW_COM3106 v ON m.FIU_ID = v.FIU_ID\nWHERE\n    m.COMB_SYMBOL = 'GOOGL.US'\n    AND (v.F006V LIKE '%North America%' OR v.REGION_CNAME LIKE '%北美%')\n    AND v.F001D >= '2025-01-01'\n    AND v.F001D < '2026-01-01'\n    AND v.F007N IS NOT NULL\nORDER BY\n    v.F001D DESC\nLIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "245630.0"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "谷歌A GOOGL.US 2025-12-31 USD North America 北美 2456.3 73689.0",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 82.1,
+ "error": null,
+ "telemetry": {
+  "key": "full:ev_full_29_36ccbde1.2",
+  "llm_call_count": 14,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-flash",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 79.03,
+  "llm_seconds_max": 25.98,
+  "selected_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3106",
+   "VIEW_COM3105"
+  ],
+  "candidate_tables": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3105",
+   "VIEW_COM3106"
+  ],
+  "sql_prompt_chars": [
+   12138
+  ],
+  "prompt_columns_raw_len": 3241
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2542,
+   "prompt_tokens": 7947,
+   "total_tokens": 10489,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2297,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 7947,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 903,
+   "prompt_tokens": 17380,
+   "total_tokens": 18283,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 516,
+   "total_tokens": 517,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 516,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 25843,
+  "completion": 3446,
+  "total": 29289
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 2542,
+   "prompt_tokens": 7947,
+   "total_tokens": 10489,
+   "completion_tokens_details": {
+    "reasoning_tokens": 2297,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 7947,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 903,
+   "prompt_tokens": 17380,
+   "total_tokens": 18283,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 4992,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "nulls-gemini-2.5-flash",
+   "real_model": "nulls-gemini-2.5-flash",
+   "completion_tokens": 1,
+   "prompt_tokens": 516,
+   "total_tokens": 517,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 1,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 516,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "VIEW_COM3106",
+  "AMERICAN_STOCK_MAIN"
+ ],
+ "table_recall": {
+  "selected": [
+   "AMERICAN_STOCK_MAIN",
+   "VIEW_COM3106",
+   "VIEW_COM3105"
+  ],
+  "selected_hit_all": true,
+  "selected_hit_any": true,
+  "candidate_hit_all": true
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "NEW_QUERY",
+  "has_sql": true
+ }
+}

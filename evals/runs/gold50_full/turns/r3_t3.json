@@ -1,0 +1,173 @@
+{
+ "round_id": 3,
+ "index": 3,
+ "source": "MYSQL-2",
+ "domain": "个股",
+ "theme": "A股行情·固定日期",
+ "question": "美的集团2026年8月收盘价最高的是哪一天？最高收盘价是多少？",
+ "labels": {
+  "followup_type": "条件修改",
+  "difficulty": "聚合",
+  "route_gold": "SQL_GENERATION",
+  "time_sensitivity": "absolute"
+ },
+ "judge_type": "numeric",
+ "ablation": "full",
+ "had_error": false,
+ "answer": "生成查询代码\nSELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE <= '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1;\n200\n{table:[['交易日期', '股票名称', '股票代码', '开盘价', '收盘价', '最高价', '最低价', '成交额(亿)', '成交量(亿股)', '涨跌额', '涨跌幅(%)'], ['2026-08-31', '美的集团', '000333', '86.60', '87.73', '87.98', '86.12', '23.45', '0.27', '1.50', '1.74']]}\n本次查询获取了美的集团在2026年8月份内每日的股票收盘价、开盘价、最高价、最低价、成交金额、成交股数、涨跌及涨跌幅等信息，并精准筛选出该月收盘价最高的具体日期和相关行情数据。查询依据“股票基础信息表”与“日行情数据明细表”进行联结，只保留数据为有效状态的记录，确保结果权威可靠。筛选规则限定于2026年8月1日至8月31日，且股票名称包含“美的集团”；并按当日收盘价从高到低进行排序，仅选取月内收盘价最高的那一天。金额数据从元转换为亿元，成交量从股换算为亿股，所有价格类、变动类数值均按2位小数显示，方便直观比较。此结果直接呈现了美的集团2026年8月内收盘价的最高记录及对应日期，能够满足用户关于“美的集团2026年8月收盘价最高是哪一天、最高价是多少”的查询需求，查询结果符合要求。\n{table:[['交易日期', '股票名称', '股票代码', '开盘价', '收盘价', '最高价', '最低价', '成交额(亿)', '成交量(亿股)', '涨跌额', '涨跌幅(%)'], ['2026-08-31', '美的集团', '000333', '86.60', '87.73', '87.98', '86.12', '23.45', '0.27', '1.50', '1.74']]}",
+ "route_gold": "SQL_GENERATION",
+ "route_pred": "SQL_GENERATION",
+ "route_ok": true,
+ "first_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE <= '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1",
+ "final_sql": "SELECT m.TRADEDATE AS `交易日期`, m.STOCKSNAME AS `股票名称`, m.SECCODE AS `股票代码`, ROUND(m.TOPEN,2) AS `开盘价`, ROUND(m.TCLOSE,2) AS `收盘价`, ROUND(m.THIGH,2) AS `最高价`, ROUND(m.TLOW,2) AS `最低价`, ROUND(m.TVALUE/100000000,2) AS `成交额(亿)`, ROUND(m.TVOLUME/100000000,2) AS `成交量(亿股)`, ROUND(m.CHNG,2) AS `涨跌额`, ROUND(m.CHNG_PCT,2) AS `涨跌幅(%)` FROM STK_MKT m INNER JOIN GET_A_SEC_CODE c ON m.INNER_CODE = c.INNER_CODE WHERE m.STOCKSNAME LIKE '%美的集团%' AND m.TRADEDATE >= '2026-08-01' AND m.TRADEDATE <= '2026-08-31' AND m.ISVALID = 1 AND c.ISVALID = 1 AND m.TCLOSE IS NOT NULL ORDER BY m.TCLOSE DESC LIMIT 1",
+ "reflection_triggered": false,
+ "gold_exec": {
+  "status": 200,
+  "rows": 1,
+  "preview": "2026-08-31 00:00:00 87.7300"
+ },
+ "exec_first": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "first_result_preview": "2026-08-31 00:00:00 美的集团 000333 86.60 87.73 87.98 86.12 23.45 0.27 1.50 1.74",
+ "ex_first": true,
+ "ex_reasons": [
+  "全项通过"
+ ],
+ "exec_final": {
+  "status": 200,
+  "kind": "ok",
+  "rows": 1
+ },
+ "ex_final": true,
+ "answer_ok": true,
+ "answer_reasons": [
+  "全项通过"
+ ],
+ "elapsed_seconds": 126.7,
+ "error": null,
+ "telemetry": {
+  "key": "gold50_full:ev_gold50_full_3_9dab8f00.3",
+  "llm_call_count": 2,
+  "llm_models": [
+   "gpt-4.1",
+   "nulls-gemini-2.5-pro"
+  ],
+  "llm_seconds_total": 44.83,
+  "llm_seconds_max": 37.77,
+  "selected_tables": null,
+  "candidate_tables": null,
+  "sql_prompt_chars": [],
+  "prompt_columns_raw_len": null
+ },
+ "token_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3715,
+   "prompt_tokens": 18042,
+   "total_tokens": 21757,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3084,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18042,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 252,
+   "prompt_tokens": 11144,
+   "total_tokens": 11396,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "token_totals": {
+  "prompt": 29186,
+  "completion": 3967,
+  "total": 33153
+ },
+ "ws_usage": [
+  {
+   "llm_model": "nulls-gemini-2.5-pro",
+   "real_model": "nulls-gemini-2.5-pro",
+   "completion_tokens": 3715,
+   "prompt_tokens": 18042,
+   "total_tokens": 21757,
+   "completion_tokens_details": {
+    "reasoning_tokens": 3084,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 18042,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  },
+  {
+   "llm_model": "gpt-4.1",
+   "real_model": "gpt-4.1",
+   "completion_tokens": 252,
+   "prompt_tokens": 11144,
+   "total_tokens": 11396,
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "text_tokens": 0,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens_details": {
+    "text_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0,
+    "cached_tokens": 0,
+    "cache_creation_tokens": 0
+   }
+  }
+ ],
+ "gold_tables": [
+  "STK_MKT"
+ ],
+ "table_recall": {
+  "selected": [],
+  "candidate_tables": [],
+  "selected_hit_all": false,
+  "selected_hit_any": false,
+  "candidate_hit_all": false
+ },
+ "persist": {
+  "persisted": true,
+  "intent": "SQL_GENERATION",
+  "has_sql": true
+ }
+}
